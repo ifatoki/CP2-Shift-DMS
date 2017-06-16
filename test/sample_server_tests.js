@@ -1,4 +1,5 @@
-const assert = require('assert');
+// const assert = require('assert');
+import assert from 'assert';
 
 describe('Array', () => {
   describe('#indexOf()', () => {
