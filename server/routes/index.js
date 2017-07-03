@@ -1,3 +1,4 @@
+const auth = require('../auth/_helpers');
 const usersController = require('../controllers').users;
 const documentsController = require('../controllers').documents;
 const rolesController = require('../controllers').roles;
@@ -18,6 +19,12 @@ module.exports = (app) => {
   app.post('/api/users/login', usersController.login);
   // creates a new user record
   app.post('/api/users', usersController.create);
+
+  // Middleware that confirms if a user is logged in.
+  app.use((req, res, next) => {
+    console.log('I would now validate your authentication.');
+    auth.confirmAuthentication(req, res, next);
+  });
 
   // logs a user out
   app.post('/api/users/logout', usersController.logout);

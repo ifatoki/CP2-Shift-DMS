@@ -1,5 +1,7 @@
+const auth = require('../auth/_helpers');
 const User = require('../models').User;
 const Document = require('../models').Document;
+const localAuth = require('../auth/local');
 
 module.exports = {
   create: (req, res) => {
@@ -9,12 +11,12 @@ module.exports = {
         email_address: req.body.email,
         first_name: req.body.first_name,
         last_name: req.body.last_name,
-        password: req.body.password,
+        password: auth.encrypt(req.body.password),
         RoleId: req.body.role_id
       })
       .then(user => res.status(201).send({
         status: 'success',
-        user
+        token: localAuth.encodeToken(user.id)
       }))
       .catch(error => res.status(400).send({
         status: 'error',
@@ -22,9 +24,37 @@ module.exports = {
       }));
   },
   login: (req, res) => {
-    res.status(200).jsonp({
-      message: 'Now I will log you in'
-    });
+    User
+      .findOne({
+        where: {
+          $or: [
+            { email_address: req.body.username },
+            { username: req.body.username }
+          ]
+        }
+      })
+      .then((user) => {
+        if (!user) throw new Error('user not found');
+        auth.comparePassword(req.body.password, user.password);
+        return user;
+      })
+      .then(user => localAuth.encodeToken(user.id))
+      .then((token) => {
+        res.status(200).jsonp({
+          status: 'success',
+          token
+        });
+      })
+      .catch((err) => {
+        let status = 500;
+        if (err.message !== 'invalid password') {
+          status = 401;
+        }
+        res.status(status).json({
+          status: 'error',
+          message: err.message
+        });
+      });
   },
   logout: (req, res) => {
     res.status(201).jsonp({ message: 'I am the logout',
