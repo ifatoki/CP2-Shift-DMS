@@ -5,10 +5,6 @@ const rolesController = require('../controllers').roles;
 const rightsController = require('../controllers').rights;
 
 module.exports = (app) => {
-  app.use((req, res, next) => {
-    console.log('Now you knonw I am here');
-    next();
-  });
   app.get('/api', (req, res) => res.status(200).send({
     message: 'Welcome to the Shift-DMS API!',
   }));
@@ -20,64 +16,124 @@ module.exports = (app) => {
   // creates a new user record
   app.post('/api/users', usersController.create);
 
-  // Middleware that confirms if a user is logged in.
-  app.use((req, res, next) => {
-    console.log('I would now validate your authentication.');
-    auth.confirmAuthentication(req, res, next);
-  });
+  // From here on, middleware that confirms if a user is logged in.
 
   // logs a user out
-  app.post('/api/users/logout', usersController.logout);
+  app.post(
+    '/api/users/logout',
+    auth.confirmAuthentication,
+    usersController.logout
+  );
   // find all users
-  app.get('/api/users/', usersController.fetch);
+  app.get(
+    '/api/users/',
+    auth.confirmAuthentication,
+    usersController.fetch
+  );
   // find user with the specified id
-  app.get('/api/users/:id', usersController.fetchUser);
+  app.get(
+    '/api/users/:id',
+    auth.confirmAuthentication,
+    usersController.fetchUser
+  );
   // update the user with the specified id's attributes
-  app.put('/api/users/:id', usersController.updateUser);
+  app.put(
+    '/api/users/:id',
+    auth.confirmAuthentication,
+    usersController.updateUser
+  );
   // delete the specified user
-  app.delete('/api/users/:id', usersController.deleteUser);
+  app.delete(
+    '/api/users/:id',
+    auth.confirmAuthentication,
+    usersController.deleteUser
+  );
   // find all the documents belonging to the specified user
-  app.get('/api/users/:id/documents', usersController.fetchUserDocuments);
+  app.get(
+    '/api/users/:id/documents',
+    auth.confirmAuthentication,
+    usersController.fetchUserDocuments
+  );
   // search for user
-  app.get('/api/search/users/', usersController.search);
+  app.get(
+    '/api/search/users/',
+    auth.confirmAuthentication,
+    usersController.search
+  );
 
 
   // DOCUMENT END-POINTS
 
   // create a new document record
-  app.post('/api/documents', documentsController.create);
+  app.post(
+    '/api/documents',
+    auth.confirmAuthentication,
+    documentsController.create
+  );
   // find all documents
-  app.get('/api/documents/', documentsController.fetch);
+  app.get('/api/documents/',
+    auth.confirmAuthentication,
+    documentsController.fetch
+  );
   // find the specified document
-  app.get('/api/documents/:id', documentsController.fetchDocument);
+  app.get(
+    '/api/documents/:id',
+    auth.confirmAuthentication,
+    documentsController.fetchDocument
+  );
   // update the specified documents attributes
-  app.put('/api/documents/:id', documentsController.updateDocument);
+  app.put(
+    '/api/documents/:id',
+    auth.confirmAuthentication,
+    documentsController.updateDocument
+  );
   // delete the specified document
-  app.delete('/api/documents/:id', documentsController.deleteDocument);
+  app.delete(
+    '/api/documents/:id',
+    auth.confirmAuthentication,
+    documentsController.deleteDocument
+  );
   // search for a document
-  app.get('/api/search/documents/', documentsController.search);
+  app.get(
+    '/api/search/documents/',
+    auth.confirmAuthentication,
+    documentsController.search
+  );
   // add a new role to the specified document
-  app.post('/api/documents/:documentId', documentsController.addUser);
+  app.post(
+    '/api/documents/:documentId',
+    auth.confirmAuthentication,
+    documentsController.addUser
+  );
 
 
   // ROLE END-POINTS
 
   // create a new role record
-  app.post('/api/roles', rolesController.create);
+  app.post(
+    '/api/roles',
+    auth.confirmAuthentication,
+    rolesController.create
+  );
   // find all roles
-  app.get('/api/roles', rolesController.list);
+  app.get(
+    '/api/roles',
+    auth.confirmAuthentication,
+    rolesController.list
+  );
 
   // RIGHT END-POINTS
 
   // create a new right record
-  app.post('/api/rights', rightsController.create);
+  app.post(
+    '/api/rights',
+    auth.confirmAuthentication,
+    rightsController.create
+  );
   // find all rights
-  app.get('/api/rights', rightsController.list);
-
-  // DOCUMENTS_ROLES END-POINTS
-
-  // add a new role to the specified document
-  // app.post('/api/documentsroles/:document_id',
-  //   documentsRolesController.addRole
-  // );
+  app.get(
+    '/api/rights',
+    auth.confirmAuthentication,
+    rightsController.list
+  );
 };

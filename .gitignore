@@ -1,2 +1,3 @@
 node_modules
 coverage
+client/assets/js/client.min.js
