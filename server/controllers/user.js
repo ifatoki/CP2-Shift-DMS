@@ -16,7 +16,10 @@ module.exports = {
       })
       .then(user => res.status(201).send({
         status: 'success',
-        token: localAuth.encodeToken(user.id)
+        payload: {
+          token: localAuth.encodeToken(user.id),
+          user
+        }
       }))
       .catch(error => res.status(400).send({
         status: 'error',
@@ -38,11 +41,14 @@ module.exports = {
         auth.comparePassword(req.body.password, user.password);
         return user;
       })
-      .then(user => localAuth.encodeToken(user.id))
-      .then((token) => {
+      .then((user) => {
+        const token = localAuth.encodeToken(user.id);
         res.status(200).jsonp({
           status: 'success',
-          token
+          payload: {
+            token,
+            user
+          }
         });
       })
       .catch((err) => {
