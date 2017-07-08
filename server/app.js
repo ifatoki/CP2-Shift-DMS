@@ -2,11 +2,23 @@ import express from 'express';
 import logger from 'morgan';
 import path from 'path';
 import bodyParser from 'body-parser';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
 import routeIndex from './routes/index';
+import webpackConfig from '../webpack.config';
 
 // Set up the express app
 const app = express();
 const publicPath = express.static(path.join(__dirname, '../client/assets'));
+const compiler = webpack(webpackConfig);
+
+app.use(webpackDevMiddleware(compiler, {
+  hot: true,
+  publicPath: webpackConfig.output.publicPath,
+  noInfo: true
+}));
+app.use(webpackHotMiddleware(compiler));
 
 // Log requests to the console.
 app.use(logger('dev'));
@@ -21,7 +33,7 @@ app.use('/', publicPath);
 routeIndex(app);
 // Setup a default catch-all route that sends
 // back a welcome message in JSON format.
-app.get('/', (req, res) =>
+app.get('*', (req, res) =>
   res.status(200).sendFile(path.join(__dirname, 'index.html'))
 );
 

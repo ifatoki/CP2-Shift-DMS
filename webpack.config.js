@@ -5,21 +5,19 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   devtool: debug ? 'inline-sourcemap' : null,
-  entry: './client/client.jsx',
+  entry: [
+    'webpack-hot-middleware/client',
+    path.join(__dirname, '/client/client.jsx')
+  ],
   module: {
     loaders: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'node6', 'stage-0'],
-          plugins: [
-            'react-html-attrs',
-            'transform-class-properties',
-            'transform-decorators-legacy'
-          ],
-        },
+        loader: [
+          'react-hot-loader',
+          'babel-loader'
+        ]
       },
       {
         test: /\.json$/, loader: 'json-loader',
@@ -27,7 +25,8 @@ module.exports = {
     ],
   },
   output: {
-    path: `${__dirname}/client/assets/js`,
+    path: path.join(__dirname, '/client/assets/js'),
+    publicPath: '/',
     filename: 'client.min.js',
   },
   node: {
@@ -39,14 +38,18 @@ module.exports = {
   plugins: debug ? [
     new Dotenv({
       path: './.env'
-    })] : [
-      new webpack.optimize.DedupePlugin(),
-      new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
-      new Dotenv({
-        path: './.env'
-      })
-    ],
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin()
+  ] : [
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
+    new Dotenv({
+      path: './.env'
+    })
+  ],
   resolve: {
     extensions: ['.js', '.jsx'],
   },
