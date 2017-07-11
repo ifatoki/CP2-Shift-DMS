@@ -1,12 +1,16 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import HomeContainer from './HomeContainer';
+import DocumentContainer from './DocumentContainer';
+import ProfileContainer from './ProfileContainer';
 
 class UserContainer extends React.Component {
   render() {
     return (
-      <h1>
-        User authenticated component
-      </h1>
+      <div>
+        <h1>Hi there! I am the proud to be the user container</h1>
+        {this.props.children}
+      </div>
     );
   }
 }

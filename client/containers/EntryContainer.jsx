@@ -1,29 +1,18 @@
-class App extends Component {
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import LandingContainer from './LandingContainer';
+import LoginContainer from './LoginContainer';
+import SignupContainer from './SignupContainer';
+
+class EntryContainer extends React.Component {
   render() {
     return (
-      <Switch>
-        <Route
-          exact path="/" render={() => (
-            this.props.isAuthenticated
-            ?
-              <Redirect to="/home" />
-            :
-              <h1>
-                I am the landing page
-              </h1>
-          )}
-        />
-        <Route
-          exact path="/login" render={() => (
-            this.props.isAuthenticated
-            ?
-              <Redirect to="/home" />
-            :
-              (<h1>
-                I am the login page
-              </h1>)
-          )}
-        />
-      </Switch>
+      <div>
+        <h1>Hi everyone, I am the entry EntryContainer</h1>
+        {this.props.children}
+      </div>
     );
   }
+}
+
+export default EntryContainer;

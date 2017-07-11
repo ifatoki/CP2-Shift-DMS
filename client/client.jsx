@@ -1,13 +1,14 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import createBrowserHistory from 'history/createBrowserHistory';
-import reducer from './reducers';
+import appReducer from './reducers/index';
 import App from './containers/App';
+// import routes from './routes';
 
 const history = createBrowserHistory();
 
@@ -21,10 +22,15 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const store = createStore(
-  reducer,
+  appReducer,
   composeEnhancers(
     applyMiddleware(...middleware)
   ));
+
+if (window.localStorage.token) {
+  // if the token is valid, set authorization headers.
+  // confirmAuthentication(window.localStorage.token);
+}
 
 render(
   <Provider store={store}>

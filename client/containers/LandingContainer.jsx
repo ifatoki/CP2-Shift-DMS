@@ -4,10 +4,10 @@ class LandingContainer extends React.Component {
   render() {
     return (
       <h1>
-        This is me in the Landing page
+        Welcome to SHIFT DMS
       </h1>
     );
   }
-};
+}
 
 export default LandingContainer;

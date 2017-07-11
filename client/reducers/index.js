@@ -1,10 +1,10 @@
-export default (state = { isAuthenticated: false }, action) => {
-  switch (action.type) {
-    case 'INCREMENT':
-      return state + 1;
-    case 'DECREMENT':
-      return state - 1;
-    default:
-      return state;
-  }
-};
+import { combineReducers } from 'redux';
+import userReducers from '../reducers/user';
+
+// const appReducer = combineReducers({
+//   userReducers
+// });
+
+const appReducer = userReducers;
+export default appReducer;
+

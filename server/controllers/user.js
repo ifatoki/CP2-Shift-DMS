@@ -9,10 +9,10 @@ module.exports = {
       .create({
         username: req.body.username,
         email_address: req.body.email,
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
+        first_name: req.body.firstname,
+        last_name: req.body.lastname,
         password: auth.encrypt(req.body.password),
-        RoleId: req.body.role_id
+        RoleId: req.body.roleId
       })
       .then(user => res.status(201).send({
         status: 'success',
@@ -63,9 +63,8 @@ module.exports = {
       });
   },
   logout: (req, res) => {
-    res.status(201).jsonp({ message: 'I am the logout',
-      params: req.params,
-      queries: req.query
+    res.status(200).jsonp({
+      status: 'success'
     });
   },
   fetch: (req, res) => {
