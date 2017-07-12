@@ -9,14 +9,20 @@ module.exports = {
       .create({
         username: req.body.username,
         email_address: req.body.email,
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
+        first_name: req.body.firstname,
+        last_name: req.body.lastname,
         password: auth.encrypt(req.body.password),
-        RoleId: req.body.role_id
+        RoleId: req.body.roleId
       })
       .then(user => res.status(201).send({
         status: 'success',
-        token: localAuth.encodeToken(user.id)
+        payload: {
+          token: localAuth.encodeToken({
+            id: user.id,
+            username: user.username
+          }),
+          user
+        }
       }))
       .catch(error => res.status(400).send({
         status: 'error',
@@ -38,11 +44,17 @@ module.exports = {
         auth.comparePassword(req.body.password, user.password);
         return user;
       })
-      .then(user => localAuth.encodeToken(user.id))
-      .then((token) => {
+      .then((user) => {
+        const token = localAuth.encodeToken({
+          id: user.id,
+          username: user.username
+        });
         res.status(200).jsonp({
           status: 'success',
-          token
+          payload: {
+            token,
+            user
+          }
         });
       })
       .catch((err) => {
@@ -57,9 +69,8 @@ module.exports = {
       });
   },
   logout: (req, res) => {
-    res.status(201).jsonp({ message: 'I am the logout',
-      params: req.params,
-      queries: req.query
+    res.status(200).jsonp({
+      status: 'success'
     });
   },
   fetch: (req, res) => {

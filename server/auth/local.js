@@ -4,11 +4,11 @@ const moment = require('moment');
 require('dotenv').config();
 
 module.exports = {
-  encodeToken: (userId) => {
+  encodeToken: (user) => {
     const payload = {
       exp: moment().add(14, 'days').unix(),
       iat: moment().unix(),
-      sub: userId
+      sub: user
     };
     const token = jwt.sign(payload, process.env.SECRET_KEY);
     return token;
