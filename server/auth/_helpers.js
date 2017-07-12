@@ -22,6 +22,7 @@ const confirmAuthentication = (req, res, next) => {
   // decode the token
   const header = req.headers.authorization.split(' ');
   const token = header[1];
+  console.log('token: ', token);
   localAuth.decodeToken(token, (err, payload) => {
     let status;
     let statusMessage;
@@ -30,7 +31,7 @@ const confirmAuthentication = (req, res, next) => {
       statusMessage = 'expired token';
     } else {
       User
-        .findById(parseInt(payload.sub, 10))
+        .findById(parseInt(payload.sub.id, 10))
         .then(() => next())
         .catch(() => {
           status = 500;

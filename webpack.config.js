@@ -13,7 +13,10 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: [
+          /(node_modules|bower_components)/,
+          /joi-browser/
+        ],
         loader: [
           'react-hot-loader',
           'babel-loader'
@@ -52,5 +55,8 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.jsx', '.js'],
+    alias: {
+      joi: 'joi-browser'
+    }
   },
 };

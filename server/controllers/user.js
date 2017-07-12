@@ -17,7 +17,10 @@ module.exports = {
       .then(user => res.status(201).send({
         status: 'success',
         payload: {
-          token: localAuth.encodeToken(user.id),
+          token: localAuth.encodeToken({
+            id: user.id,
+            username: user.username
+          }),
           user
         }
       }))
@@ -42,7 +45,10 @@ module.exports = {
         return user;
       })
       .then((user) => {
-        const token = localAuth.encodeToken(user.id);
+        const token = localAuth.encodeToken({
+          id: user.id,
+          username: user.username
+        });
         res.status(200).jsonp({
           status: 'success',
           payload: {

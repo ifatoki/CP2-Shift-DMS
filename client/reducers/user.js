@@ -19,7 +19,19 @@ function userReducers(state = { isAuthenticated: false }, action) {
       return Object.assign({}, state, {
         isAuthenticated: true,
         result: action.type,
-        user: action.payload.user
+        user: action.payload
+      });
+    case 'ADD_USER':
+      return Object.assign({}, state, {
+        user: action.payload.user,
+        result: action.type,
+        isAuthenticated: true
+      });
+    case 'REMOVE_USER':
+      return Object.assign({}, state, {
+        isAuthenticated: false,
+        result: action.type,
+        user: null
       });
     default:
       return state;

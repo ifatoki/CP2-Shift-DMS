@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actionCreators from '../actions/Index';
+import * as actionCreators from '../actions/user';
 
 class LoginContainer extends React.Component {
   constructor(props) {
@@ -35,7 +35,12 @@ class LoginContainer extends React.Component {
           <p>Lets go ahead and get you signed up.</p>
           <div className="field">
             <label>Username</label>
-            <input placeholder="Username" name="username" type="text" onChange={this.onChange} />
+            <input
+              placeholder="Username"
+              name="username"
+              type="text"
+              onChange={this.onChange}
+            />
           </div>
           <div className="field">
             <label>Password</label>
@@ -47,7 +52,12 @@ class LoginContainer extends React.Component {
               <label>I agree to the Terms and Conditions</label>
             </div>
           </div>
-          <div className="ui primary submit button" onClick={this.onSubmit}>Submit</div>
+          <div
+            className="ui primary submit button"
+            onClick={this.onSubmit}
+          >
+            Submit
+          </div>
         </form>
       </div>
     );
@@ -58,6 +68,7 @@ LoginContainer.propTypes = {
   logUserIn: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators(actionCreators, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(actionCreators, dispatch);
 
 export default connect(null, mapDispatchToProps)(LoginContainer);

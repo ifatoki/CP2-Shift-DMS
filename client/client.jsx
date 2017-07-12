@@ -6,8 +6,10 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import createBrowserHistory from 'history/createBrowserHistory';
+import auth from './utils/authorizationHelpers';
 import appReducer from './reducers/index';
 import App from './containers/App';
+
 // import routes from './routes';
 
 const history = createBrowserHistory();
@@ -27,9 +29,16 @@ const store = createStore(
     applyMiddleware(...middleware)
   ));
 
+// console.log('localstorage: ', window.localStorage.user.id);
 if (window.localStorage.token) {
-  // if the token is valid, set authorization headers.
-  // confirmAuthentication(window.localStorage.token);
+  auth.decodeToken(window.localStorage.token, (error, payload) => {
+    if (!error) {
+      console.log(payload.sub);
+      auth.setUser(payload.sub, window.localStorage.token);
+    } else {
+      console.log(error);
+    }
+  });
 }
 
 render(
@@ -40,3 +49,5 @@ render(
   </Provider>,
   document.getElementById('app')
 );
+
+export default store;

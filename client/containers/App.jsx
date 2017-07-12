@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter, IndexRoute, Route, Redirect } from 'react-router';
-import UserContainer from './UserContainer';
-import EntryContainer from './EntryContainer';
+import { withRouter, Route, Redirect } from 'react-router';
 import LandingContainer from './LandingContainer';
 import LoginContainer from './LoginContainer';
 import SignupContainer from './SignupContainer';
@@ -16,13 +14,25 @@ class App extends Component {
     return (
       <div>
         <Route
-          exact path="/" component={LandingContainer}
+          exact path="/" component={
+            this.props.isAuthenticated ?
+            () => <Redirect to="/home" /> :
+            LandingContainer
+          }
         />
         <Route
-          exact path="/login" component={LoginContainer}
+          exact path="/login" component={
+            this.props.isAuthenticated ?
+            () => <Redirect to="/home" /> :
+            LoginContainer
+          }
         />
         <Route
-          exact path="/signup" component={SignupContainer}
+          exact path="/signup" component={
+            this.props.isAuthenticated ?
+            () => <Redirect to="/home" /> :
+            SignupContainer
+          }
         />
         <Route
           exact path="/home" component={
@@ -54,10 +64,8 @@ App.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => (
-  {
-    isAuthenticated: state.isAuthenticated
-  }
-);
+const mapStateToProps = state => ({
+  isAuthenticated: state.isAuthenticated
+});
 
 export default withRouter(connect(mapStateToProps)(App));

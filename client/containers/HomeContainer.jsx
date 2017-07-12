@@ -10,6 +10,6 @@ class LoginContainer extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default LoginContainer;

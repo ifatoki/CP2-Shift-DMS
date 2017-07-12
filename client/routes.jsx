@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Router, IndexRoute } from 'react-router-dom';
+import { Route, IndexRoute } from 'react-router-dom';
 import LandingContainer from './containers/LandingContainer';
 import LoginContainer from './containers/LoginContainer';
 import SignupContainer from './containers/SignupContainer';
