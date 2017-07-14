@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actionCreators from '../actions/user';
+// import { bindActionCreators } from 'redux';
+import { logUserIn } from '../actions/users';
+// import * as actionCreators from '../actions/user';
 
 class LoginContainer extends React.Component {
   constructor(props) {
@@ -68,7 +69,9 @@ LoginContainer.propTypes = {
   logUserIn: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(actionCreators, dispatch);
+// const mapDispatchToProps = dispatch =>
+//   bindActionCreators(actionCreators, dispatch);
 
-export default connect(null, mapDispatchToProps)(LoginContainer);
+export default connect(null, {
+  logUserIn
+})(LoginContainer);
