@@ -1,21 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { logUserOut } from '../actions/users';
 import { fetchDocuments } from '../actions/documents';
 import DocumentList from '../components/DocumentList';
+import Document from '../components/Document';
 
 class HomeContainer extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentDidMount() {
-    this.props.fetchDocuments(this.props.id);
+    this.props.fetchDocuments(this.props.user.id);
+    $('.ui.dropdown')
+      .dropdown();
   }
-  
+
   onSubmit(event) {
     event.preventDefault();
     this.props.logUserOut();
@@ -23,20 +25,47 @@ class HomeContainer extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="ui large top fixed hidden secondary menu">
+      <div style={{ height: '100%' }} >
+        <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
-            <a className="active item">Home</a><a className="item">Work</a><a className="item">Company</a><a className="item">Careers</a>
+            <a className="active item">Home</a>
             <div className="right menu">
-              <div className="item">
-                <a className="ui button" name="logout" onClick={this.onSubmit}>Log Out</a>
+              <i className="big icons" style={{ margin: 'auto' }}>
+                <i className="file text icon blue" />
+                <i className="inverted corner add icon" />
+              </i>
+              <div className="ui dropdown" style={{ margin: 'auto' }}>
+                <div className="text">
+                  <i className="user circle outline big blue icon" />
+                  @{this.props.user.username}
+                </div>
+                <i className="dropdown icon" />
+                <div className="menu">
+                  <div className="item">
+                    <a
+                      className="ui button"
+                      name="logout"
+                      onClick={this.onSubmit}
+                      role="button"
+                    >
+                      Log Out
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="ui grid container" style={{ paddingTop: '60px', marginTop: '0px' }}>
+        <div
+          className="ui grid container"
+          style={{
+            paddingTop: '40px',
+            marginTop: '0px',
+            height: '100%'
+          }}
+        >
           <div className="three wide column fixed">
-            <i className="dropbox huge blue icon"></i>
+            <i className="dropbox huge blue icon" />
             <div className="ui divided items">
               <div className="item">
                 <div className="middle aligned content">
@@ -57,9 +86,9 @@ class HomeContainer extends React.Component {
           </div>
           <div className="thirteen wide column">
             <h1 className="center header">
-              Yayyyy!!! Successfully logged in as @{ this.props.username }
+              Yayyyy!!! Successfully logged in as @{ this.props.user.username }
             </h1>
-            <DocumentList />
+            <DocumentList documents={this.props.documents.authored} />
           </div>
         </div>
       </div>
@@ -69,7 +98,20 @@ class HomeContainer extends React.Component {
 
 HomeContainer.propTypes = {
   logUserOut: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired
+  user: PropTypes.shape({
+    isAuthenticated: PropTypes.bool.isRequired,
+    id: PropTypes.number.isRequired,
+    email: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    firstname: PropTypes.string.isRequired,
+    lastname: PropTypes.string.isRequired,
+    result: PropTypes.string.isRequired
+  }).isRequired,
+  fetchDocuments: PropTypes.func.isRequired,
+  documents: PropTypes.shape({
+    authored: PropTypes.arrayOf(Document).isRequired,
+    isFetching: PropTypes.bool.isRequired
+  }).isRequired
 };
 
 const mapDispatchToProps = {
@@ -78,13 +120,9 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = state => ({
-  id: state.user.id,
-  username: state.user.username,
-  email: state.user.email,
-  firstname: state.user.firstname,
-  lastname: state.user.lastname,
+  user: state.user,
   isAuthenticated: state.user.isAuthenticated,
-  authoredDocuments: state.documents
+  documents: state.documents
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

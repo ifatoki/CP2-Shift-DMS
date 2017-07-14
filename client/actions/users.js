@@ -29,13 +29,14 @@ export function addUser(user, token) {
           user: response.data
         }
       })));
+  } else {
+    store.dispatch({
+      type: ADD_USER,
+      payload: {
+        user
+      }
+    });
   }
-  store.dispatch({
-    type: ADD_USER,
-    payload: {
-      user
-    }
-  });
 }
 
 const removeUser = () => {
