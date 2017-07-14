@@ -18,11 +18,10 @@ const config = {
 };
 
 export function addUser(user, token) {
-  console.log('token', token);
-  console.log(store);
+  console.log('user', user);
   axios.defaults.headers.common.Authorization = `bearer ${token}`;
   if (Object.keys(user).length < 3) {
-    axios.get(`/api/users/${user.id}`)
+    axios.get(`/api/v1/users/${user.id}`)
     .then(response => (
       store.dispatch({
         type: ADD_USER,
@@ -31,10 +30,12 @@ export function addUser(user, token) {
         }
       })));
   }
-  return {
+  store.dispatch({
     type: ADD_USER,
-    payload: user
-  };
+    payload: {
+      user
+    }
+  });
 }
 
 const removeUser = () => {
@@ -50,9 +51,8 @@ const requestSignup = username => ({
   payload: username
 });
 
-const signupSuccessful = payload => ({
-  type: SIGNUP_SUCCESSFUL,
-  payload
+const signupSuccessful = () => ({
+  type: SIGNUP_SUCCESSFUL
 });
 
 const signupFailed = message => ({
@@ -65,9 +65,8 @@ const requestLogin = username => ({
   payload: username
 });
 
-const loginSuccessful = payload => ({
-  type: LOGIN_SUCCESSFUL,
-  payload
+const loginSuccessful = () => ({
+  type: LOGIN_SUCCESSFUL
 });
 
 const loginFailed = message => ({
@@ -89,14 +88,12 @@ const logoutFailed = message => ({
 });
 
 function setTokenToLocalStorage(user, token) {
-  console.log('token is here', token);
   window.localStorage.setItem('token', token);
-  window.localStorage.setItem('user', user);
+  window.localStorage.setItem('user', JSON.stringify(user));
   addUser(user, token);
 }
 
-export function
-  signUserUp(userDetails) {
+export function signUserUp(userDetails) {
   const userdata = {
     firstname: userDetails.firstname,
     lastname: userDetails.lastname,
@@ -111,13 +108,13 @@ export function
     } else {
       dispatch(requestSignup(userdata.username));
       return axios
-        .post('/api/users', userdata, config)
+        .post('/api/v1/users', userdata, config)
         .then((response) => {
           setTokenToLocalStorage(
             response.data.payload.user,
             response.data.payload.token
           );
-          dispatch(signupSuccessful(response.data.payload.user));
+          dispatch(signupSuccessful());
         })
         .catch((error) => {
           dispatch(signupFailed(error.message));
@@ -134,14 +131,13 @@ export function logUserIn(userDetails) {
   return (dispatch) => {
     dispatch(requestLogin(userdata.username));
     return axios
-      .post('/api/users/login', userdata, config)
+      .post('/api/v1/users/login', userdata, config)
       .then((response) => {
-        console.log(response);
         setTokenToLocalStorage(
           response.data.payload.user,
           response.data.payload.token
         );
-        dispatch(loginSuccessful(response.data.payload.user));
+        dispatch(loginSuccessful());
       })
       .catch((error) => {
         dispatch(loginFailed(error.message));
@@ -153,7 +149,7 @@ export function logUserOut() {
   return (dispatch) => {
     dispatch(logoutRequest());
     return axios
-      .post('/api/users/logout', config)
+      .post('/api/v1/users/logout', config)
       .then(() => {
         dispatch(removeUser());
         dispatch(logoutSuccessful());

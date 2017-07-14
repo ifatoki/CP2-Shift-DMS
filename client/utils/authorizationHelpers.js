@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
-import { addUser } from '../actions/user';
+import { addUser } from '../actions/users';
 
 export default{
   decodeToken: (token, callback) => {
