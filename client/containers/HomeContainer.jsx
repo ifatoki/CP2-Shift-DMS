@@ -2,14 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logUserOut } from '../actions/users';
-import { fetchDocuments } from '../actions/documents';
+import { fetchDocuments, createNewDocument } from '../actions/documents';
 import DocumentList from '../components/DocumentList';
 import Document from '../components/Document';
+import DocumentCreator from '../components/DocumentCreator';
 
 class HomeContainer extends React.Component {
   constructor() {
     super();
-    this.onSubmit = this.onSubmit.bind(this);
+    this.logOut = this.logOut.bind(this);
+    this.initializeNewDocument = this.initializeNewDocument.bind(this);
   }
 
   componentDidMount() {
@@ -17,22 +19,40 @@ class HomeContainer extends React.Component {
     $('.ui.dropdown')
       .dropdown();
   }
+  
+  initializeNewDocument(event) {
+    event.preventDefault();
+    $('.ui.modal')
+      .modal('show');
+  }
 
-  onSubmit(event) {
+  logOut(event) {
     event.preventDefault();
     this.props.logUserOut();
+  }
+  newDocument(event) {
+    event.preventDefault();
+    this.props.createNewDocument();
   }
 
   render() {
     return (
       <div style={{ height: '100%' }} >
+        <DocumentCreator initializeNewDocument={this.initializeNewDocument} />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
             <a className="active item">Home</a>
             <div className="right menu">
-              <i className="big icons" style={{ margin: 'auto' }}>
+              <i
+                className="big icons"
+                style={{
+                  margin: 'auto', cursor: 'pointer'
+                }}
+                role="button"
+                onClick={this.initializeNewDocument}
+              >
                 <i className="file text icon blue" />
-                <i className="inverted corner add icon" />
+                <i className="corner inverted add icon" />
               </i>
               <div className="ui dropdown" style={{ margin: 'auto' }}>
                 <div className="text">
@@ -45,7 +65,7 @@ class HomeContainer extends React.Component {
                     <a
                       className="ui button"
                       name="logout"
-                      onClick={this.onSubmit}
+                      onClick={this.logOut}
                       role="button"
                     >
                       Log Out
@@ -116,7 +136,8 @@ HomeContainer.propTypes = {
 
 const mapDispatchToProps = {
   logUserOut,
-  fetchDocuments
+  fetchDocuments,
+  createNewDocument
 };
 
 const mapStateToProps = state => ({
