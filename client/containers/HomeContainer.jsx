@@ -2,14 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logUserOut } from '../actions/users';
-import { fetchDocuments } from '../actions/documents';
+import { fetchDocuments, createNewDocument } from '../actions/documents';
 import DocumentList from '../components/DocumentList';
 import Document from '../components/Document';
+import DocumentCreator from '../components/DocumentCreator';
 
 class HomeContainer extends React.Component {
   constructor() {
     super();
-    this.onSubmit = this.onSubmit.bind(this);
+    this.logOut = this.logOut.bind(this);
+    this.initializeNewDocument = this.initializeNewDocument.bind(this);
+    this.createNewDocument = this.createNewDocument.bind(this);
   }
 
   componentDidMount() {
@@ -18,21 +21,47 @@ class HomeContainer extends React.Component {
       .dropdown();
   }
 
-  onSubmit(event) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.documents.documentCreated === true) {
+      this.props.fetchDocuments(this.props.user.id);
+    }
+  }
+
+  initializeNewDocument(event) {
+    event.preventDefault();
+    $('.ui.modal')
+      .modal('show');
+  }
+
+  logOut(event) {
     event.preventDefault();
     this.props.logUserOut();
+  }
+  createNewDocument(documentDetails) {
+    this.props.createNewDocument(documentDetails);
   }
 
   render() {
     return (
       <div style={{ height: '100%' }} >
+        <DocumentCreator
+          saveNewDocument={this.createNewDocument}
+          ownerId={this.props.user.id}
+        />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
             <a className="active item">Home</a>
             <div className="right menu">
-              <i className="big icons" style={{ margin: 'auto' }}>
+              <i
+                className="big icons"
+                style={{
+                  margin: 'auto', cursor: 'pointer'
+                }}
+                role="button"
+                onClick={this.initializeNewDocument}
+              >
                 <i className="file text icon blue" />
-                <i className="inverted corner add icon" />
+                <i className="corner inverted add icon" />
               </i>
               <div className="ui dropdown" style={{ margin: 'auto' }}>
                 <div className="text">
@@ -45,7 +74,7 @@ class HomeContainer extends React.Component {
                     <a
                       className="ui button"
                       name="logout"
-                      onClick={this.onSubmit}
+                      onClick={this.logOut}
                       role="button"
                     >
                       Log Out
@@ -108,15 +137,24 @@ HomeContainer.propTypes = {
     result: PropTypes.string.isRequired
   }).isRequired,
   fetchDocuments: PropTypes.func.isRequired,
+  createNewDocument: PropTypes.func.isRequired,
   documents: PropTypes.shape({
     authored: PropTypes.arrayOf(Document).isRequired,
-    isFetching: PropTypes.bool.isRequired
+    isFetching: PropTypes.bool.isRequired,
+    documentCreated: PropTypes.bool
   }).isRequired
+};
+
+HomeContainer.defaultProps = {
+  documents: PropTypes.shape({
+    documentCreated: false
+  })
 };
 
 const mapDispatchToProps = {
   logUserOut,
-  fetchDocuments
+  fetchDocuments,
+  createNewDocument
 };
 
 const mapStateToProps = state => ({
