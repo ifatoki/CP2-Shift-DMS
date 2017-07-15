@@ -22,7 +22,6 @@ class LoginContainer extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    console.log(this.state);
     this.props.logUserIn(this.state);
   }
 
@@ -35,7 +34,7 @@ class LoginContainer extends React.Component {
         <form className="ui form segment">
           <p>Lets go ahead and get you signed up.</p>
           <div className="field">
-            <label>Username</label>
+            <label htmlFor="username">Username</label>
             <input
               placeholder="Username"
               name="username"
@@ -44,7 +43,7 @@ class LoginContainer extends React.Component {
             />
           </div>
           <div className="field">
-            <label>Password</label>
+            <label htmlFor="password">Password</label>
             <input type="password" name="password" onChange={this.onChange} />
           </div>
           <div className="inline field">

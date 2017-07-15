@@ -12,6 +12,7 @@ class HomeContainer extends React.Component {
     super();
     this.logOut = this.logOut.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
+    this.createNewDocument = this.createNewDocument.bind(this);
   }
 
   componentDidMount() {
@@ -19,7 +20,13 @@ class HomeContainer extends React.Component {
     $('.ui.dropdown')
       .dropdown();
   }
-  
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.documents.documentCreated === true) {
+      this.props.fetchDocuments(this.props.user.id);
+    }
+  }
+
   initializeNewDocument(event) {
     event.preventDefault();
     $('.ui.modal')
@@ -30,15 +37,17 @@ class HomeContainer extends React.Component {
     event.preventDefault();
     this.props.logUserOut();
   }
-  newDocument(event) {
-    event.preventDefault();
-    this.props.createNewDocument();
+  createNewDocument(documentDetails) {
+    this.props.createNewDocument(documentDetails);
   }
 
   render() {
     return (
       <div style={{ height: '100%' }} >
-        <DocumentCreator initializeNewDocument={this.initializeNewDocument} />
+        <DocumentCreator
+          saveNewDocument={this.createNewDocument}
+          ownerId={this.props.user.id}
+        />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
             <a className="active item">Home</a>
@@ -128,10 +137,18 @@ HomeContainer.propTypes = {
     result: PropTypes.string.isRequired
   }).isRequired,
   fetchDocuments: PropTypes.func.isRequired,
+  createNewDocument: PropTypes.func.isRequired,
   documents: PropTypes.shape({
     authored: PropTypes.arrayOf(Document).isRequired,
-    isFetching: PropTypes.bool.isRequired
+    isFetching: PropTypes.bool.isRequired,
+    documentCreated: PropTypes.bool
   }).isRequired
+};
+
+HomeContainer.defaultProps = {
+  documents: PropTypes.shape({
+    documentCreated: false
+  })
 };
 
 const mapDispatchToProps = {

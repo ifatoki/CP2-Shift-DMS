@@ -9,6 +9,7 @@ function documentReducers(state = defaultState, action) {
     case 'DOCUMENTS_FETCH_REQUEST':
       return Object.assign({}, state, {
         isFetching: true,
+        documentCreated: false,
         result: action.type
       });
     case 'DOCUMENTS_FETCH_SUCCESSFUL':
