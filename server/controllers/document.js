@@ -9,7 +9,8 @@ const documentController = {
       .create({
         title: req.body.title,
         content: req.body.content,
-        OwnerId: req.body.owner_id
+        OwnerId: req.body.owner_id,
+        AccessId: req.body.accessId
       })
       .then(todo => res.status(201).send(todo))
       .catch(error => res.status(400).send(error));

@@ -4,13 +4,19 @@ module.exports = {
       'Accesses', [
         {
           id: 1,
-          title: 'private'
+          title: 'private',
+          createdAt: new Date(),
+          updatedAt: new Date()
         }, {
           id: 2,
-          title: 'public'
+          title: 'public',
+          createdAt: new Date(),
+          updatedAt: new Date()
         }, {
           id: 3,
-          title: 'shared'
+          title: 'shared',
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ]
     );
