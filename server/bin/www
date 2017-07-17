@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import debug from 'debug';
 import http from 'http';
 import app from '../app';
+import models from '../models';
 
 dotenv.config();
 debug('init:server');
@@ -55,7 +56,13 @@ const onListening = () => {
   debug(`🚧 Application is Listening on ${bind}`);
 };
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-console.log('Database connection to ', port, ' successful');
+models.sequelize.sync().then(() => {
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+  console.log('Database connection to ', port, ' successful');
+});
+

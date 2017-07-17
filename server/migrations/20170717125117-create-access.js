@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    queryInterface.createTable('Documents', {
+    queryInterface.createTable('Accesses', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -8,19 +8,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       title: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      content: {
-        type: Sequelize.STRING,
-      },
-      OwnerId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      AccessId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -33,5 +21,5 @@ module.exports = {
     });
   },
   down: queryInterface =>
-    queryInterface.dropTable('Documents')
+    queryInterface.dropTable('Accesses')
 };

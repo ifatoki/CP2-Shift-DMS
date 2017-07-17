@@ -10,6 +10,10 @@ export default (sequelize, DataTypes) => {
     OwnerId: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    AccessId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   }, {
     classMethods: {
@@ -25,6 +29,9 @@ export default (sequelize, DataTypes) => {
         });
         Document.belongsTo(models.User, {
           foreignKey: 'OwnerId',
+        });
+        Document.belongsTo(models.Access, {
+          foreignKey: 'AccessId',
         });
       }
     }
