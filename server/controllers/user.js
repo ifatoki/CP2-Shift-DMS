@@ -78,7 +78,9 @@ module.exports = {
       .findAll({
         include: [{
           model: Document,
-          as: 'userDocuments'
+          as: 'myDocuments'
+        }, {
+          model: Document
         }],
         offset: req.query.offset,
         limit: req.query.limit || null
@@ -116,8 +118,10 @@ module.exports = {
         },
         include: [{
           model: Document,
-          as: 'userDocuments',
-        }]
+          as: 'myDocuments'
+        }, {
+          model: Document
+        }],
       })
       .then((user) => {
         if (!user) {
@@ -125,7 +129,29 @@ module.exports = {
             message: 'user not found'
           });
         } else {
-          res.status(201).send(user.userDocuments);
+          res.status(200).send({
+            authoredDocuments: user.myDocuments,
+            sharedDocuments: user.Documents
+          });
+        }
+      })
+      .catch(error => res.status(400).send(error));
+  },
+  fetchPrivateDocuments(req, res) {
+    Document
+      .findAll({
+        where: {
+          AccessId: 1,
+          OwnerId: req.params.id
+        }
+      })
+      .then((documents) => {
+        if (!documents) {
+          res.status(404).send({
+            message: 'user has no private documents'
+          });
+        } else {
+          res.status(200).send(documents);
         }
       })
       .catch(error => res.status(400).send(error));

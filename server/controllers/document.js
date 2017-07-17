@@ -9,7 +9,8 @@ const documentController = {
       .create({
         title: req.body.title,
         content: req.body.content,
-        OwnerId: req.body.owner_id
+        OwnerId: req.body.owner_id,
+        AccessId: req.body.accessId
       })
       .then(todo => res.status(201).send(todo))
       .catch(error => res.status(400).send(error));
@@ -36,6 +37,24 @@ const documentController = {
           });
         } else {
           res.status(200).send(document);
+        }
+      })
+      .catch(error => res.status(400).send(error));
+  },
+  fetchPublicDocuments: (req, res) => {
+    Document
+      .findAll({
+        where: {
+          AccessId: 2
+        }
+      })
+      .then((documents) => {
+        if (!documents) {
+          res.status(404).send({
+            message: 'no public documents found'
+          });
+        } else {
+          res.status(200).send(documents);
         }
       })
       .catch(error => res.status(400).send(error));
