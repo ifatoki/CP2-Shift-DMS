@@ -2,6 +2,7 @@ import Models from '../models';
 
 const User = Models.User;
 const Document = Models.Document;
+const Role = Models.Role;
 
 const documentController = {
   create: (req, res) => {
@@ -16,16 +17,57 @@ const documentController = {
       .catch(error => res.status(400).send(error));
   },
   fetch: (req, res) => {
-    Document
-      .findAll({
-        include: [{
-          model: User,
-        }],
-        limit: req.query.limit || null,
-        offset: req.query.offset
-      })
-      .then(documents => res.status(200).send(documents))
-      .catch(error => res.status(400).send(error));
+    const query = {};
+    switch (req.query.type) {
+      case 'public':
+        query.AccessId = 2;
+        break;
+      case 'role':
+      case 'shared':
+        query.OwnerId = req.query.userId;
+        break;
+      default:
+        query.AccessId = 1;
+        query.OwnerId = req.query.userId;
+        break;
+    }
+    if (!query.AccessId) {
+      console.log('I actually fetched the right thing');
+      User
+        .findById(req.query.userId)
+        .then((user) => {
+          if (req.query.type === 'role') {
+            Role.findById(user.RoleId)
+            .then((role) => {
+              role.getDocuments()
+              .then((documents) => {
+                res.status(200).send(documents);
+              })
+              .catch((error) => {
+                res.status(400).send(error);
+              });
+            });
+          } else {
+            user.getDocuments()
+            .then((documents) => {
+              res.status(200).send(documents);
+            })
+            .catch((error) => {
+              res.status(400).send(error);
+            });
+          }
+        })
+        .catch(error => res.status(400).send(error));
+    } else {
+      Document
+        .findAndCountAll({
+          where: query,
+          limit: req.query.limit || null,
+          offset: req.query.offset
+        })
+        .then(documents => res.status(200).send(documents.rows))
+        .catch(error => res.status(400).send(error));
+    }
   },
   fetchDocument: (req, res) => {
     Document

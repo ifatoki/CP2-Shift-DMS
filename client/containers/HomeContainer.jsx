@@ -11,8 +11,7 @@ class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      documents: this.props.documents.authored,
-      currentDocuments: 'authored'
+      type: 'private'
     };
     this.logOut = this.logOut.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
@@ -21,37 +20,19 @@ class HomeContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchDocuments(this.props.user.id);
+    this.props.fetchDocuments(this.props.user.id, 'private');
     $('.ui.dropdown')
       .dropdown();
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('nextprops', nextProps);
-    if (nextProps.documents.documentCreated === true) {
-      this.props.fetchDocuments(this.props.user.id);
-    }
-    // this.setState({
-    //   documents: 
-    // })
-  }
-
   handleDocumentTypeChange(event) {
     event.preventDefault();
-    console.log('I just got called baby');
-    const { documents } = this.props;
     const newState = {
-      currentDocuments: event.target.name
+      type: event.target.name
     };
-    switch (event.target.name) {
-      case 'shared':
-        newState.documents = documents.shared;
-        break;
-      default:
-        newState.documents = documents.authored;
-        break;
-    }
-    this.setState(newState);
+    this.setState(newState, () => {
+      this.props.fetchDocuments(this.props.user.id, this.state.type);
+    });
   }
 
   initializeNewDocument(event) {
@@ -69,8 +50,8 @@ class HomeContainer extends React.Component {
   }
 
   render() {
-    // const role = this.props.user.role.charAt(0).toUpperCase()
-    //   + this.props.user.role.slice(1);
+    const role = this.props.user.role.charAt(0).toUpperCase()
+      + this.props.user.role.slice(1);
     return (
       <div style={{ height: '100%' }} >
         <DocumentCreator
@@ -127,22 +108,17 @@ class HomeContainer extends React.Component {
             <div className="ui divided items">
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item" name="authored" onClick={this.handleDocumentTypeChange}>My Documents</a>
+                  <a className="item" name="private" onClick={this.handleDocumentTypeChange}>Private Documents</a>
                 </div>
               </div>
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item">Private Documents</a>
+                  <a className="item" name="public" onClick={this.handleDocumentTypeChange}>Public Documents</a>
                 </div>
               </div>
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item">Public Documents</a>
-                </div>
-              </div>
-              <div className="item">
-                <div className="middle aligned content">
-                  <a className="item">Ducment role</a>
+                  <a className="item" name="role" onClick={this.handleDocumentTypeChange}>{role} Documents</a>
                 </div>
               </div>
               <div className="item">
@@ -153,10 +129,7 @@ class HomeContainer extends React.Component {
             </div>
           </div>
           <div className="thirteen wide column">
-            <h1 className="center header">
-              Yayyyy!!! Successfully logged in as @{ this.props.user.username }
-            </h1>
-            <DocumentList documents={this.state.documents} />
+            <DocumentList documents={this.props.documents.documents} />
           </div>
         </div>
       </div>
@@ -179,7 +152,7 @@ HomeContainer.propTypes = {
   fetchDocuments: PropTypes.func.isRequired,
   createNewDocument: PropTypes.func.isRequired,
   documents: PropTypes.shape({
-    authored: PropTypes.arrayOf(Document).isRequired,
+    documents: PropTypes.arrayOf(Document).isRequired,
     isFetching: PropTypes.bool.isRequired,
     documentCreated: PropTypes.bool
   }).isRequired
