@@ -8,11 +8,16 @@ import Document from '../components/Document';
 import DocumentCreator from '../components/DocumentCreator';
 
 class HomeContainer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.state = {
+      documents: this.props.documents.authored,
+      currentDocuments: 'authored'
+    };
     this.logOut = this.logOut.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
     this.createNewDocument = this.createNewDocument.bind(this);
+    this.handleDocumentTypeChange = this.handleDocumentTypeChange.bind(this);
   }
 
   componentDidMount() {
@@ -22,9 +27,31 @@ class HomeContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('nextprops', nextProps);
     if (nextProps.documents.documentCreated === true) {
       this.props.fetchDocuments(this.props.user.id);
     }
+    // this.setState({
+    //   documents: 
+    // })
+  }
+
+  handleDocumentTypeChange(event) {
+    event.preventDefault();
+    console.log('I just got called baby');
+    const { documents } = this.props;
+    const newState = {
+      currentDocuments: event.target.name
+    };
+    switch (event.target.name) {
+      case 'shared':
+        newState.documents = documents.shared;
+        break;
+      default:
+        newState.documents = documents.authored;
+        break;
+    }
+    this.setState(newState);
   }
 
   initializeNewDocument(event) {
@@ -42,6 +69,8 @@ class HomeContainer extends React.Component {
   }
 
   render() {
+    // const role = this.props.user.role.charAt(0).toUpperCase()
+    //   + this.props.user.role.slice(1);
     return (
       <div style={{ height: '100%' }} >
         <DocumentCreator
@@ -98,7 +127,7 @@ class HomeContainer extends React.Component {
             <div className="ui divided items">
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item">My Documents</a>
+                  <a className="item" name="authored" onClick={this.handleDocumentTypeChange}>My Documents</a>
                 </div>
               </div>
               <div className="item">
@@ -111,13 +140,23 @@ class HomeContainer extends React.Component {
                   <a className="item">Public Documents</a>
                 </div>
               </div>
+              <div className="item">
+                <div className="middle aligned content">
+                  <a className="item">Ducment role</a>
+                </div>
+              </div>
+              <div className="item">
+                <div className="middle aligned content">
+                  <a className="item" name="shared" onClick={this.handleDocumentTypeChange}>Shared with me</a>
+                </div>
+              </div>
             </div>
           </div>
           <div className="thirteen wide column">
             <h1 className="center header">
               Yayyyy!!! Successfully logged in as @{ this.props.user.username }
             </h1>
-            <DocumentList documents={this.props.documents.authored} />
+            <DocumentList documents={this.state.documents} />
           </div>
         </div>
       </div>
@@ -134,7 +173,8 @@ HomeContainer.propTypes = {
     username: PropTypes.string.isRequired,
     firstname: PropTypes.string.isRequired,
     lastname: PropTypes.string.isRequired,
-    result: PropTypes.string.isRequired
+    result: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired
   }).isRequired,
   fetchDocuments: PropTypes.func.isRequired,
   createNewDocument: PropTypes.func.isRequired,
