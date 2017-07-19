@@ -17,7 +17,7 @@ const config = {
   headers: { 'Content-Type': 'application/json' }
 };
 
-export function addUser(user, token) {
+export function addUser(user, token, role) {
   console.log('user', user);
   axios.defaults.headers.common.Authorization = `bearer ${token}`;
   if (Object.keys(user).length < 3) {
@@ -26,14 +26,16 @@ export function addUser(user, token) {
       store.dispatch({
         type: ADD_USER,
         payload: {
-          user: response.data
+          user: response.data.user,
+          role: response.data.role
         }
       })));
   } else {
     store.dispatch({
       type: ADD_USER,
       payload: {
-        user
+        user,
+        role
       }
     });
   }
@@ -88,10 +90,10 @@ const logoutFailed = message => ({
   payload: message
 });
 
-function setTokenToLocalStorage(user, token) {
+function setTokenToLocalStorage(user, token, role) {
   window.localStorage.setItem('token', token);
   window.localStorage.setItem('user', JSON.stringify(user));
-  addUser(user, token);
+  addUser(user, token, role);
 }
 
 export function signUserUp(userDetails) {
@@ -111,9 +113,11 @@ export function signUserUp(userDetails) {
       return axios
         .post('/api/v1/users', userdata, config)
         .then((response) => {
+          console.log(response.data);
           setTokenToLocalStorage(
             response.data.payload.user,
-            response.data.payload.token
+            response.data.payload.token,
+            response.data.payload.role
           );
           dispatch(signupSuccessful());
         })
@@ -136,7 +140,8 @@ export function logUserIn(userDetails) {
       .then((response) => {
         setTokenToLocalStorage(
           response.data.payload.user,
-          response.data.payload.token
+          response.data.payload.token,
+          response.data.payload.role
         );
         dispatch(loginSuccessful());
       })

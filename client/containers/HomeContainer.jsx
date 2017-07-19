@@ -8,23 +8,31 @@ import Document from '../components/Document';
 import DocumentCreator from '../components/DocumentCreator';
 
 class HomeContainer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.state = {
+      type: 'private'
+    };
     this.logOut = this.logOut.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
     this.createNewDocument = this.createNewDocument.bind(this);
+    this.handleDocumentTypeChange = this.handleDocumentTypeChange.bind(this);
   }
 
   componentDidMount() {
-    this.props.fetchDocuments(this.props.user.id);
+    this.props.fetchDocuments(this.props.user.id, 'private');
     $('.ui.dropdown')
       .dropdown();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.documents.documentCreated === true) {
-      this.props.fetchDocuments(this.props.user.id);
-    }
+  handleDocumentTypeChange(event) {
+    event.preventDefault();
+    const newState = {
+      type: event.target.name
+    };
+    this.setState(newState, () => {
+      this.props.fetchDocuments(this.props.user.id, this.state.type);
+    });
   }
 
   initializeNewDocument(event) {
@@ -42,6 +50,8 @@ class HomeContainer extends React.Component {
   }
 
   render() {
+    const role = this.props.user.role.charAt(0).toUpperCase()
+      + this.props.user.role.slice(1);
     return (
       <div style={{ height: '100%' }} >
         <DocumentCreator
@@ -98,26 +108,28 @@ class HomeContainer extends React.Component {
             <div className="ui divided items">
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item">My Documents</a>
+                  <a className="item" name="private" onClick={this.handleDocumentTypeChange}>Private Documents</a>
                 </div>
               </div>
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item">Private Documents</a>
+                  <a className="item" name="public" onClick={this.handleDocumentTypeChange}>Public Documents</a>
                 </div>
               </div>
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item">Public Documents</a>
+                  <a className="item" name="role" onClick={this.handleDocumentTypeChange}>{role} Documents</a>
+                </div>
+              </div>
+              <div className="item">
+                <div className="middle aligned content">
+                  <a className="item" name="shared" onClick={this.handleDocumentTypeChange}>Shared with me</a>
                 </div>
               </div>
             </div>
           </div>
           <div className="thirteen wide column">
-            <h1 className="center header">
-              Yayyyy!!! Successfully logged in as @{ this.props.user.username }
-            </h1>
-            <DocumentList documents={this.props.documents.authored} />
+            <DocumentList documents={this.props.documents.documents} />
           </div>
         </div>
       </div>
@@ -134,12 +146,13 @@ HomeContainer.propTypes = {
     username: PropTypes.string.isRequired,
     firstname: PropTypes.string.isRequired,
     lastname: PropTypes.string.isRequired,
-    result: PropTypes.string.isRequired
+    result: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired
   }).isRequired,
   fetchDocuments: PropTypes.func.isRequired,
   createNewDocument: PropTypes.func.isRequired,
   documents: PropTypes.shape({
-    authored: PropTypes.arrayOf(Document).isRequired,
+    documents: PropTypes.arrayOf(Document).isRequired,
     isFetching: PropTypes.bool.isRequired,
     documentCreated: PropTypes.bool
   }).isRequired

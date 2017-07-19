@@ -1,8 +1,7 @@
 const defaultState = {
-  authored: [],
-  shared: [],
   isFetching: false,
-  creatingDocument: false
+  creatingDocument: false,
+  documents: []
 };
 
 function documentReducers(state = defaultState, action) {
@@ -17,8 +16,8 @@ function documentReducers(state = defaultState, action) {
       return Object.assign({}, state, {
         isFetching: false,
         fetchSuccessful: true,
-        authored: action.payload.authoredDocuments,
-        shared: action.payload.sharedDocuments,
+        documents: action.payload,
+        documentType: action.documentType,
         result: action.type
       });
     case 'DOCUMENTS_FETCH_FAILED':

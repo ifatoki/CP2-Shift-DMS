@@ -20,8 +20,9 @@ const documentsFetchRequest = () => ({
   type: DOCUMENTS_FETCH_REQUEST
 });
 
-const documentsFetchSuccessful = payload => ({
+const documentsFetchSuccessful = (payload, type) => ({
   type: DOCUMENTS_FETCH_SUCCESSFUL,
+  documentType: type,
   payload
 });
 
@@ -43,13 +44,18 @@ const documentCreateFailed = payload => ({
   payload
 });
 
-export function fetchDocuments(userId) {
+export function fetchDocuments(userId, type) {
   return (dispatch) => {
     dispatch(documentsFetchRequest());
     return axios
-      .get(`/api/v1/users/${userId}/documents`, config)
+      .get('/api/v1/documents', {
+        params: {
+          userId,
+          type
+        }
+      })
       .then((response) => {
-        dispatch(documentsFetchSuccessful(response.data));
+        dispatch(documentsFetchSuccessful(response.data, type));
       })
       .catch((error) => {
         dispatch(documentsFetchFailed(error.message));
