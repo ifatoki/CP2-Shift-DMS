@@ -1,6 +1,8 @@
 import React from 'react';
 import PropType from 'prop-types';
+import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
+import { createNewDocument } from '../actions/documents';
 
 class DocumentCreator extends React.Component {
   constructor(props) {
@@ -25,10 +27,10 @@ class DocumentCreator extends React.Component {
 
   saveDocument(event) {
     event.preventDefault();
-    this.props.saveNewDocument({
+    this.props.createNewDocument({
       title: this.state.title,
       content: this.state.content,
-      owner_id: this.props.ownerId,
+      owner_id: this.props.user.id,
       accessId: this.state.accessId
     });
   }
@@ -36,13 +38,13 @@ class DocumentCreator extends React.Component {
   render() {
     const { accessId } = this.state;
     return (
-      <div className="ui modal">
+      <div className="ui longer fullscreen modal">
         <div className="header">
-          <div className="ui container text">
+          <div className="ui container">
             Create your document here
           </div>
         </div>
-        <div className="ui container text">
+        <div className="ui container">
           <div className="ui form">
             <div className="field">
               <textarea
@@ -93,11 +95,12 @@ class DocumentCreator extends React.Component {
                 placeholder="Enter your content"
                 name="content"
                 onChange={this.onChange}
+                style={{ height: '600px' }}
               />
             </div>
           </div>
         </div>
-        <div className="actions ui container text">
+        <div className="actions ui container">
           <div className="ui cancel button">
             Cancel
           </div>
@@ -114,9 +117,26 @@ class DocumentCreator extends React.Component {
 }
 
 DocumentCreator.propTypes = {
-  saveNewDocument: PropType.func.isRequired,
-  ownerId: PropType.number.isRequired
+  createNewDocument: PropType.func.isRequired,
+  user: PropType.shape({
+    isAuthenticated: PropType.bool.isRequired,
+    id: PropType.number.isRequired,
+    email: PropType.string.isRequired,
+    username: PropType.string.isRequired,
+    firstname: PropType.string.isRequired,
+    lastname: PropType.string.isRequired,
+    result: PropType.string.isRequired,
+    role: PropType.string.isRequired
+  }).isRequired
 };
 
-export default DocumentCreator;
+const mapDispatchToProps = {
+  createNewDocument
+};
+
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentCreator);
 

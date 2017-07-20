@@ -32,7 +32,6 @@ const documentController = {
         break;
     }
     if (!query.AccessId) {
-      console.log('I actually fetched the right thing');
       User
         .findById(req.query.userId)
         .then((user) => {
@@ -159,7 +158,9 @@ const documentController = {
           .findById(req.query.userId)
           .then((user) => {
             document.addUser(user)
-            .then(res.status(200).send({ message: 'user added successfully' }));
+            .then(res.status(200).send({
+              message: 'user added successfully'
+            }));
           })
           .catch(error => res.status(400).send(error));
       })

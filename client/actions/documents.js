@@ -2,9 +2,9 @@ import axios from 'axios';
 
 // const ADD_USER = 'ADD_USER';
 // const REMOVE_USER = 'REMOVE_USER';
-// const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
-// const SIGNUP_SUCCESSFUL = 'SIGNUP_SUCCESSFUL';
-// const SIGNUP_FAILED = 'SIGNUP_FAILED';
+const DOCUMENT_GET_REQUEST = 'DOCUMENT_GET_REQUEST';
+const DOCUMENT_GET_SUCCESSFUL = 'DOCUMENT_GET_SUCCESSFUL';
+const DOCUMENT_GET_FAILED = 'DOCUMENT_GET_FAILED';
 const DOCUMENT_CREATE_REQUEST = 'DOCUMENT_CREATE_REQUEST';
 const DOCUMENT_CREATE_SUCCESSFUL = 'DOCUMENT_CREATE_SUCCESSFUL';
 const DOCUMENT_CREATE_FAILED = 'DOCUMENT_CREATE_FAILED';
@@ -16,18 +16,33 @@ const config = {
   headers: { 'Content-Type': 'application/json' }
 };
 
+const documentGetRequest = () => ({
+  type: DOCUMENT_GET_REQUEST
+});
+
+const documentGetSuccessful = payload => ({
+  type: DOCUMENT_GET_SUCCESSFUL,
+  payload
+});
+
+const documentGetFailed = payload => ({
+  type: DOCUMENT_GET_FAILED,
+  payload
+});
+
 const documentsFetchRequest = () => ({
   type: DOCUMENTS_FETCH_REQUEST
 });
 
 const documentsFetchSuccessful = (payload, type) => ({
   type: DOCUMENTS_FETCH_SUCCESSFUL,
-  documentType: type,
+  documentsType: type,
   payload
 });
 
-const documentsFetchFailed = () => ({
-  type: DOCUMENTS_FETCH_FAILED
+const documentsFetchFailed = payload => ({
+  type: DOCUMENTS_FETCH_FAILED,
+  payload
 });
 
 const documentCreateRequest = () => ({
@@ -43,6 +58,20 @@ const documentCreateFailed = payload => ({
   type: DOCUMENT_CREATE_FAILED,
   payload
 });
+
+export function getDocument(documentId) {
+  return (dispatch) => {
+    dispatch(documentGetRequest());
+    return axios
+      .get(`api/v1/documents/${documentId}`)
+      .then((response) => {
+        dispatch(documentGetSuccessful(response.data));
+      })
+      .catch((error) => {
+        dispatch(documentGetFailed(error.message));
+      });
+  };
+}
 
 export function fetchDocuments(userId, type) {
   return (dispatch) => {
