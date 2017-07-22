@@ -2,9 +2,9 @@ import React from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { logUserOut } from '../actions/users';
-import { fetchDocuments } from '../actions/documents';
+import { fetchDocuments, createNewDocument } from '../actions/documents';
 import DocumentList from '../components/DocumentList';
-import DocumentCreator from '../components/DocumentCreator';
+import DocumentManager from '../components/DocumentManager';
 
 class HomeContainer extends React.Component {
   constructor(props) {
@@ -14,7 +14,6 @@ class HomeContainer extends React.Component {
     };
     this.logOut = this.logOut.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
-    // this.createNewDocument = this.createNewDocument.bind(this);
     this.handleDocumentTypeChange = this.handleDocumentTypeChange.bind(this);
   }
 
@@ -22,6 +21,18 @@ class HomeContainer extends React.Component {
     this.props.fetchDocuments(this.props.user.id, 'private');
     $('.ui.dropdown')
       .dropdown();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.createNew || nextProps.currentDocument) {
+      event.preventDefault();
+      $('.ui.modal')
+        .modal({
+          closable: false,
+          detachable: false
+        })
+        .modal('show');
+    }
   }
 
   handleDocumentTypeChange(event) {
@@ -34,10 +45,8 @@ class HomeContainer extends React.Component {
     });
   }
 
-  initializeNewDocument(event) {
-    event.preventDefault();
-    $('.ui.modal')
-      .modal('show');
+  initializeNewDocument() {
+    this.props.createNewDocument();
   }
 
   logOut(event) {
@@ -50,7 +59,7 @@ class HomeContainer extends React.Component {
       + this.props.user.role.slice(1);
     return (
       <div style={{ height: '100%' }} >
-        <DocumentCreator />
+        <DocumentManager />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
             <a className="active item" href="/document">Home</a>
@@ -166,22 +175,34 @@ HomeContainer.propTypes = {
     result: PropType.string.isRequired,
     role: PropType.string.isRequired
   }).isRequired,
-  fetchDocuments: PropType.func.isRequired
+  fetchDocuments: PropType.func.isRequired,
+  createNew: PropType.bool.isRequired,
+  currentDocument: PropType.shape({
+    id: PropType.number,
+    title: PropType.string,
+    content: PropType.string,
+    OwnerId: PropType.number,
+    AccessId: PropType.number
+  })
 };
 
 HomeContainer.defaultProps = {
   documents: PropType.shape({
     documentCreated: false
-  })
+  }),
+  currentDocument: null
 };
 
 const mapDispatchToProps = {
   logUserOut,
-  fetchDocuments
+  fetchDocuments,
+  createNewDocument
 };
 
 const mapStateToProps = state => ({
   user: state.user,
+  createNew: state.documents.createNew,
+  currentDocument: state.documents.currentDocument
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

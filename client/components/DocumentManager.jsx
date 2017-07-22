@@ -1,24 +1,49 @@
 import React from 'react';
 import PropType from 'prop-types';
+import TinyMCE from 'react-tinymce';
+// import tinymce from 'tinymce/tinymce';
+// import 'tinymce/themes/modern/theme';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
-import { createNewDocument } from '../actions/documents';
+import { saveNewDocument, cancelNewDocument } from '../actions/documents';
 
-class DocumentCreator extends React.Component {
+class DocumentManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       title: '',
-      content: '',
-      accessId: 1
+      content: 'Itunuloluwa',
+      accessId: 1,
+      accessMode: this.props.createNew ?
+        'READ' : 'NEW'
     };
     this.onChange = this.onChange.bind(this);
     this.saveDocument = this.saveDocument.bind(this);
     this.handleRadioButtonChange = this.handleRadioButtonChange.bind(this);
+    this.cancelNewDocument = this.cancelNewDocument.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      accessMode: nextProps.createNew ?
+        'NEW' : 'READ',
+    }, () => {
+      if (!(nextProps.currentDocument === null)) {
+        this.setState({
+          title: nextProps.currentDocument.title,
+          content: nextProps.currentDocument.content,
+          accessId: nextProps.currentDocument.AccessId
+        });
+      }
+    });
   }
 
   onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+    event.preventDefault();
+    this.setState(event.target.name !== 'title' ?
+      { content: event.target.getContent() } :
+      { [event.target.name]: event.target.value }
+    );
   }
 
   handleRadioButtonChange(event, { value }) {
@@ -27,12 +52,17 @@ class DocumentCreator extends React.Component {
 
   saveDocument(event) {
     event.preventDefault();
-    this.props.createNewDocument({
+    this.props.saveNewDocument({
       title: this.state.title,
       content: this.state.content,
       owner_id: this.props.user.id,
       accessId: this.state.accessId
     });
+  }
+
+  cancelNewDocument(event) {
+    event.preventDefault();
+    this.props.cancelNewDocument();
   }
 
   render() {
@@ -41,7 +71,15 @@ class DocumentCreator extends React.Component {
       <div className="ui longer fullscreen modal">
         <div className="header">
           <div className="ui container">
-            Create your document here
+            {this.props.createNew ?
+            'Create your document here' :
+            this.state.title}
+            <textarea
+              rows="1" placeholder="Title"
+              name="title"
+              onChange={this.onChange}
+              value={this.state.title}
+            />
           </div>
         </div>
         <div className="ui container">
@@ -51,6 +89,7 @@ class DocumentCreator extends React.Component {
                 rows="1" placeholder="Title"
                 name="title"
                 onChange={this.onChange}
+                value={this.state.title}
               />
             </div>
             <div className="two fields">
@@ -91,24 +130,27 @@ class DocumentCreator extends React.Component {
               </Form.Field>
             </div>
             <div className="field">
-              <textarea
-                placeholder="Enter your content"
-                name="content"
+              <TinyMCE
+                content={this.state.content}
+                config={{
+                  plugins: 'autolink link image lists print preview',
+                  toolbar:
+                    'undo redo | bold italic | alignleft aligncenter alignright'
+                }}
                 onChange={this.onChange}
-                style={{ height: '600px' }}
               />
             </div>
           </div>
         </div>
-        <div className="actions ui container">
+        <div className="actions ui container" onClick={this.cancelNewDocument}>
           <div className="ui cancel button">
             Cancel
           </div>
-          <div className="ui primary icon button">
-            <i
-              className="save icon"
-              onClick={this.saveDocument}
-            />
+          <div
+            className="ui primary approve icon button"
+            onClick={this.saveDocument}
+          >
+            <i className="save icon" />
           </div>
         </div>
       </div>
@@ -116,8 +158,8 @@ class DocumentCreator extends React.Component {
   }
 }
 
-DocumentCreator.propTypes = {
-  createNewDocument: PropType.func.isRequired,
+DocumentManager.propTypes = {
+  saveNewDocument: PropType.func.isRequired,
   user: PropType.shape({
     isAuthenticated: PropType.bool.isRequired,
     id: PropType.number.isRequired,
@@ -127,16 +169,32 @@ DocumentCreator.propTypes = {
     lastname: PropType.string.isRequired,
     result: PropType.string.isRequired,
     role: PropType.string.isRequired
-  }).isRequired
+  }).isRequired,
+  createNew: PropType.bool.isRequired,
+  currentDocument: PropType.shape({
+    id: PropType.number,
+    title: PropType.string,
+    content: PropType.string,
+    OwnerId: PropType.number,
+    AccessId: PropType.number
+  }),
+  cancelNewDocument: PropType.func.isRequired
+};
+
+DocumentManager.defaultProps = {
+  currentDocument: {}
 };
 
 const mapDispatchToProps = {
-  createNewDocument
+  saveNewDocument,
+  cancelNewDocument
 };
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  currentDocument: state.documents.currentDocument,
+  createNew: state.documents.createNew
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentCreator);
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentManager);
 
