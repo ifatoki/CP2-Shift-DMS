@@ -1,8 +1,6 @@
 import { expect } from 'chai';
 import localAuth from '../../auth/local';
 
-process.env.NODE_ENV = 'test';
-
 describe('auth : local', () => {
   describe('encodeToken()', () => {
     it('should return a token', (done) => {

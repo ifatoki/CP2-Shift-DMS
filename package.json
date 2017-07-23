@@ -4,11 +4,32 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test-server": "cross-env NODE_ENV=test mocha --compilers js:babel-register server/test/*",
+    "test-server": "cross-env NODE_ENV=test nyc mocha --compilers js:babel-register --recursive ./server/test --timeout 10000",
     "test-client": "cross-env NODE_ENV=test jest",
     "test": "npm run test-server && npm run test-client",
     "dev": "nodemon --watch server ./server/bin/www --exec babel-node",
     "build": "cross-env NODE_ENV=production node ./server/bin/www"
+  },
+  "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "reporter": [
+      "lcov",
+      "text",
+      "html"
+    ],
+    "include": [
+      "server/"
+    ],
+    "sourceMap": false,
+    "instrument": false,
+    "exclude": [
+      "server/seeders",
+      "server/migrations",
+      "server/test"
+    ],
+    "all": true
   },
   "jest": {
     "moduleFileExtensions": [
@@ -37,6 +58,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-jest": "^20.0.3",
+    "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-react-html-attrs": "^2.0.0",
     "babel-preset-env": "^1.5.2",
     "babel-preset-es2015": "^6.24.1",
@@ -44,7 +66,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.24.1",
-    "chai": "^4.1.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
@@ -53,8 +74,10 @@
     "jest": "^20.0.4",
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
+    "nyc": "^11.0.3",
     "react-hot-loader": "^1.3.1",
-    "sinon": "^2.3.5"
+    "sinon": "^2.3.5",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -64,6 +87,7 @@
     "babel-preset-react": "^6.24.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
+    "chai": "^4.1.0",
     "chai-http": "^3.0.0",
     "cross-env": "^5.0.1",
     "debug": "^2.6.8",

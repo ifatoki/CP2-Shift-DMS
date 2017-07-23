@@ -22,13 +22,12 @@ const confirmAuthentication = (req, res, next) => {
   // decode the token
   const header = req.headers.authorization.split(' ');
   const token = header[1];
-  console.log('token: ', token);
   localAuth.decodeToken(token, (err, payload) => {
     let status;
     let statusMessage;
     if (err) {
       status = 401;
-      statusMessage = 'expired token';
+      statusMessage = err;
     } else {
       User
         .findById(parseInt(payload.sub.id, 10))
