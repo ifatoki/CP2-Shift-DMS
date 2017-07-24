@@ -30,20 +30,25 @@ describe('auth : _helpers', () => {
         .to.throw('invalid password');
     });
     it('should return TRUE', () => {
-      expect(authHelpers.comparePassword(password, encryptedPassword)).to.be.true;
+      expect(authHelpers.comparePassword(password, encryptedPassword))
+        .to.be.true;
     });
   });
 
   describe('confirmAuthentication', () => {
-    it('should respond with json and status 200', () =>
+    it('should respond with json and status 200', (done) => {
       request(app)
         .get('/api')
         .expect('Content-Type', /json/)
         .expect(200)
-        .then(res =>
-          expect(res.body.message).to.equal('Welcome to the Shift-DMS API!')
-        )
-    );
+        .then((res) => {
+          expect(res.body.message).to.equal('Welcome to the Shift-DMS API!');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
 
     const newApp = express();
     newApp.get('/home', authHelpers.confirmAuthentication, (req, res) => {
@@ -51,41 +56,53 @@ describe('auth : _helpers', () => {
         status: 'successful'
       });
     });
-    it("should fail with status 401 and message 'please log login'", () => {
+    it("should fail with status 401 and message 'please log login'", (done) => {
       request(newApp)
         .get('/home')
         .expect('Content-Type', /json/)
         .expect(401)
-        .then(res =>
-          expect(res.body.status).to.equal('please log in')
-        );
+        .then((res) => {
+          expect(res.body.status).to.equal('please log in');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
     });
 
     const headers = {
       authorization: 'bearer 8239892adjlkjadf89983298flkdaj'
     };
-    it("should fail with status 401 and message 'jwt malformed'", () => {
+    it("should fail with status 401 and message 'jwt malformed'", (done) => {
       request(newApp)
         .get('/home')
         .set('authorization', headers.authorization)
         .expect(401)
-        .then(res =>
-          expect(res.body.status).to.equal('jwt malformed')
-        );
+        .then((res) => {
+          expect(res.body.status).to.equal('jwt malformed');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
     });
 
     const expiredToken = local.encodeToken({
       id: 1,
       name: 'obama'
     }, true);
-    it("should fail with status 401 and message 'jwt expired'", () => {
+    it("should fail with status 401 and message 'jwt expired'", (done) => {
       request(newApp)
         .get('/home')
         .set('authorization', `bearer ${expiredToken}`)
         .expect(401)
-        .then(res =>
-          expect(res.body.status).to.equal('jwt expired')
-        );
+        .then((res) => {
+          expect(res.body.status).to.equal('jwt expired');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
     });
   });
 });
