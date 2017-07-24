@@ -1,3 +1,5 @@
+import * as actionTypes from '../actions/actionTypes';
+
 const defaultState = {
   isFetching: false,
   isGetting: false,
@@ -9,7 +11,7 @@ const defaultState = {
 
 function documentReducers(state = defaultState, action) {
   switch (action.type) {
-    case 'DOCUMENTS_FETCH_REQUEST':
+    case actionTypes.DOCUMENTS_FETCH_REQUEST:
       return Object.assign({}, state, {
         isFetching: true,
         currentDocument: null,
@@ -17,7 +19,7 @@ function documentReducers(state = defaultState, action) {
         documentSaved: false,
         result: action.type
       });
-    case 'DOCUMENTS_FETCH_SUCCESSFUL':
+    case actionTypes.DOCUMENTS_FETCH_SUCCESSFUL:
       return Object.assign({}, state, {
         isFetching: false,
         getSuccessful: false,
@@ -26,13 +28,13 @@ function documentReducers(state = defaultState, action) {
         documentsType: action.documentsType,
         result: action.type
       });
-    case 'DOCUMENTS_FETCH_FAILED':
+    case actionTypes.DOCUMENTS_FETCH_FAILED:
       return Object.assign({}, state, {
         isFetching: false,
         fetchSuccessful: false,
         result: action.type
       });
-    case 'DOCUMENT_SAVE_REQUEST':
+    case actionTypes.DOCUMENT_SAVE_REQUEST:
       return Object.assign({}, state, {
         savingDocument: true,
         fetchSuccessful: false,
@@ -41,21 +43,21 @@ function documentReducers(state = defaultState, action) {
         getSuccessful: false,
         result: action.type
       });
-    case 'DOCUMENT_SAVE_SUCCESSFUL':
+    case actionTypes.DOCUMENT_SAVE_SUCCESSFUL:
       return Object.assign({}, state, {
         savingDocument: false,
         documentSaved: true,
         createNew: false,
         result: action.type
       });
-    case 'DOCUMENT_SAVE_FAILED':
+    case actionTypes.DOCUMENT_SAVE_FAILED:
       return Object.assign({}, state, {
         savingDocument: false,
         createNew: false,
         documentSaved: false,
         result: action.type
       });
-    case 'DOCUMENT_GET_REQUEST':
+    case actionTypes.DOCUMENT_GET_REQUEST:
       return Object.assign({}, state, {
         documentSaved: false,
         fetchSuccessful: false,
@@ -64,25 +66,25 @@ function documentReducers(state = defaultState, action) {
         currentDocument: null,
         result: action.type
       });
-    case 'DOCUMENT_GET_SUCCESSFUL':
+    case actionTypes.DOCUMENT_GET_SUCCESSFUL:
       return Object.assign({}, state, {
         currentDocument: action.payload,
         getSuccessful: true,
         isGetting: false,
         result: action.type
       });
-    case 'DOCUMENT_GET_FAILED':
+    case actionTypes.DOCUMENT_GET_FAILED:
       return Object.assign({}, state, {
         isGetting: false,
         getSuccessful: false,
         result: action.type
       });
-    case 'NEW_DOCUMENT':
+    case actionTypes.NEW_DOCUMENT:
       return Object.assign({}, state, {
         createNew: true,
         currentDocument: null
       });
-    case 'DOCUMENT_CANCELLED':
+    case actionTypes.DOCUMENT_CANCELLED:
       return Object.assign({}, state, {
         createNew: false,
         currentDocument: null
