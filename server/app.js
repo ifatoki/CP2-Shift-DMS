@@ -14,7 +14,7 @@ const publicPath = express.static(path.join(__dirname, '../client/assets'));
 const compiler = webpack(webpackConfig);
 
 app.use(webpackDevMiddleware(compiler, {
-  // hot: true,
+  hot: true,
   publicPath: webpackConfig.output.publicPath,
   noInfo: true
 }));

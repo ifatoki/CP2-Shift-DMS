@@ -1,8 +1,5 @@
 import React from 'react';
 import PropType from 'prop-types';
-import TinyMCE from 'react-tinymce';
-// import tinymce from 'tinymce/tinymce';
-// import 'tinymce/themes/modern/theme';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
 import { saveNewDocument, cancelNewDocument } from '../actions/documents';
@@ -12,10 +9,10 @@ class DocumentManager extends React.Component {
     super(props);
     this.state = {
       title: '',
-      content: 'Itunuloluwa',
+      content: '',
       accessId: 1,
       accessMode: this.props.createNew ?
-        'READ' : 'NEW'
+       'NEW' : 'READ'
     };
     this.onChange = this.onChange.bind(this);
     this.saveDocument = this.saveDocument.bind(this);
@@ -23,19 +20,31 @@ class DocumentManager extends React.Component {
     this.cancelNewDocument = this.cancelNewDocument.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      accessMode: nextProps.createNew ?
-        'NEW' : 'READ',
-    }, () => {
-      if (!(nextProps.currentDocument === null)) {
-        this.setState({
-          title: nextProps.currentDocument.title,
-          content: nextProps.currentDocument.content,
-          accessId: nextProps.currentDocument.AccessId
-        });
+  componentDidMount() {
+    tinymce.init({
+      selector: '.tinymcepanel',
+      init_instance_callback: (editor) => {
+        editor.setContent('Loading.....');
       }
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentDocument || nextProps.createNew) {
+      this.setState({
+        accessMode: nextProps.createNew ?
+          'NEW' : 'READ',
+      }, () => {
+        const isNew = nextProps.currentDocument === null;
+        this.setState({
+          title: isNew ? '' : nextProps.currentDocument.title,
+          content: isNew ? '' : nextProps.currentDocument.content,
+          accessId: isNew ? '' : nextProps.currentDocument.AccessId
+        }, () => {
+          tinymce.activeEditor.setContent(this.state.content);
+        });
+      });
+    }
   }
 
   onChange(event) {
@@ -130,19 +139,17 @@ class DocumentManager extends React.Component {
               </Form.Field>
             </div>
             <div className="field">
-              <TinyMCE
-                content={this.state.content}
-                config={{
-                  plugins: 'autolink link image lists print preview',
-                  toolbar:
-                    'undo redo | bold italic | alignleft aligncenter alignright'
-                }}
-                onChange={this.onChange}
+              <textarea 
+                className="tinymcepanel"
+                style={{ height: '300px' }}
               />
             </div>
           </div>
         </div>
-        <div className="actions ui container" onClick={this.cancelNewDocument}>
+        <div
+          className="actions ui container"
+          onClick={this.cancelNewDocument}
+        >
           <div className="ui cancel button">
             Cancel
           </div>
@@ -182,7 +189,7 @@ DocumentManager.propTypes = {
 };
 
 DocumentManager.defaultProps = {
-  currentDocument: {}
+  currentDocument: null
 };
 
 const mapDispatchToProps = {
