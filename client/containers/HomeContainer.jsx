@@ -30,7 +30,10 @@ class HomeContainer extends React.Component {
       $('.ui.modal')
         .modal({
           closable: false,
-          detachable: false
+          detachable: false,
+          selector: {
+            close: '.cancel, .close'
+          },
         })
         .modal('show');
     }
@@ -159,9 +162,16 @@ class HomeContainer extends React.Component {
             <Grid>
               <Grid.Row>
                 <Grid.Column width={8}>
-                  <Header size='huge'>{role} Documents</Header>
+                  <Header size="huge">
+                    {this.props.documentsType === 'role' ?
+                      role.toUpperCase() :
+                      this.props.documentsType.toUpperCase()
+                    } DOCUMENTS
+                  </Header>
                 </Grid.Column>
-                <Grid.Column width={8} style={{textAligned: 'right'}}>
+                <Grid.Column
+                  width={8}
+                >
                   <Search />
                 </Grid.Column>
               </Grid.Row>
@@ -188,6 +198,7 @@ HomeContainer.propTypes = {
   }).isRequired,
   fetchDocuments: PropType.func.isRequired,
   createNew: PropType.bool.isRequired,
+  documentsType: PropType.string,
   currentDocument: PropType.shape({
     id: PropType.number,
     title: PropType.string,
@@ -201,7 +212,8 @@ HomeContainer.defaultProps = {
   documents: PropType.shape({
     documentCreated: false
   }),
-  currentDocument: null
+  currentDocument: null,
+  documentsType: 'private'
 };
 
 const mapDispatchToProps = {
@@ -213,7 +225,8 @@ const mapDispatchToProps = {
 const mapStateToProps = state => ({
   user: state.user,
   createNew: state.documents.createNew,
-  currentDocument: state.documents.currentDocument
+  currentDocument: state.documents.currentDocument,
+  documentsType: state.documents.documentsType
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

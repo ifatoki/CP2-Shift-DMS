@@ -14,7 +14,9 @@ const documentController = {
         AccessId: req.body.accessId
       })
       .then(todo => res.status(201).send(todo))
-      .catch(error => res.status(400).send(error));
+      .catch(error => {
+        res.status(400).send(error);
+      });
   },
   fetch: (req, res) => {
     const query = {};

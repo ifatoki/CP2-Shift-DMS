@@ -23,6 +23,7 @@ class DocumentManager extends React.Component {
     };
     this.onChange = this.onChange.bind(this);
     this.saveDocument = this.saveDocument.bind(this);
+    this.editDocument = this.editDocument.bind(this);
     this.handleRadioButtonChange = this.handleRadioButtonChange.bind(this);
     this.cancelNewDocument = this.cancelNewDocument.bind(this);
   }
@@ -74,6 +75,8 @@ class DocumentManager extends React.Component {
           content: isNew ? '' : nextProps.currentDocument.content,
           accessId: isNew ? '' : nextProps.currentDocument.AccessId
         }, () => {
+          $('#contentHolder').children().remove();
+          $(this.state.content).prependTo('#contentHolder');
           tinymce.activeEditor.setContent(this.state.content);
         });
       });
@@ -106,7 +109,7 @@ class DocumentManager extends React.Component {
     event.preventDefault();
     if (this.props.rightId < 3) {
       this.setState({
-        accessMode: 'EDIT'
+        accessMode: editModes.WRITE
       });
     }
   }
@@ -127,7 +130,8 @@ class DocumentManager extends React.Component {
             this.state.title}
             <textarea
               style={{
-                display: this.state.accessMode === editModes.WRITE ? 'block' : 'none'
+                display: this.state.accessMode === editModes.WRITE ?
+                  'block' : 'none'
               }}
               rows="1" placeholder="Title"
               name="title"
@@ -142,7 +146,10 @@ class DocumentManager extends React.Component {
           <div
             className="ui form"
             style={{
-              display: (this.state.accessMode === editModes.WRITE || this.state.accessMode === editModes.NEW) ? 'block' : 'none'
+              display: (
+                this.state.accessMode === editModes.WRITE ||
+                this.state.accessMode === editModes.NEW
+              ) ? 'block' : 'none'
             }}
           >
             <div className="field">
@@ -199,36 +206,56 @@ class DocumentManager extends React.Component {
           <div
             id="contentHolder"
             style={{
-              display: this.state.accessMode === editModes.READ ? 'block' : 'none'
+              display: this.state.accessMode === editModes.READ ?
+                'block' : 'none',
+              height: '500px'
             }}
-          >
-            {this.state.content}
-          </div>
+          />
         </div>
         <div
-          className="actions ui container"
-          onClick={this.cancelNewDocument}
+          className="ui actions container"
         >
           <div
-            className="ui primary approve icon button"
+            className="ui primary edit icon button"
             onClick={this.editDocument}
             style={{
-              display: this.state.accessMode === editModes.READ && this.state.rightId !== 3 ? 'inline-block' : 'none'
+              display: (
+                (this.state.accessMode === editModes.READ) &&
+                (this.state.rightId !== 3)
+              ) ? 'inline-block' : 'none'
             }}
           >
             <i className="edit icon" />
           </div>
           <div
-            className="ui primary approve icon button"
+            className="ui primary save icon button"
             onClick={this.saveDocument}
             style={{
-              display: this.state.accessMode === editModes.READ ? 'none' : 'inline-block'
+              display: this.state.accessMode === editModes.READ ?
+                'none' : 'inline-block'
             }}
           >
             <i className="save icon" />
           </div>
-          <div className="ui cancel button">
+          <div
+            className="ui cancel button"
+            onClick={this.cancelNewDocument}
+            style={{
+              display: (this.state.accessMode !== editModes.READ) ?
+                'inline-block' : 'none'
+            }}
+          >
             Cancel
+          </div>
+          <div
+            className="ui close button"
+            onClick={this.cancelNewDocument}
+            style={{
+              display: (this.state.accessMode === editModes.READ) ?
+                'inline-block' : 'none'
+            }}
+          >
+            Close
           </div>
         </div>
       </div>

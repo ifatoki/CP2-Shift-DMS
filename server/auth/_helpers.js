@@ -32,7 +32,10 @@ const confirmAuthentication = (req, res, next) => {
     } else {
       User
         .findById(parseInt(payload.sub.id, 10))
-        .then(() => next())
+        .then((user) => {
+          req.userId = user.id;
+          next();
+        })
         .catch(() => {
           status = 500;
           statusMessage = 'error';
