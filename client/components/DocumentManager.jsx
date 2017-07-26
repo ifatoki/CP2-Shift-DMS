@@ -4,6 +4,12 @@ import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
 import { saveNewDocument, cancelNewDocument } from '../actions/documents';
 
+const editModes = {
+  READ: 'READ',
+  WRITE: 'WRITE',
+  NEW: 'NEW'
+};
+
 class DocumentManager extends React.Component {
   constructor(props) {
     super(props);
@@ -11,8 +17,9 @@ class DocumentManager extends React.Component {
       title: '',
       content: '',
       accessId: 1,
+      rightId: 3, // Read access
       accessMode: this.props.createNew ?
-       'NEW' : 'READ'
+       editModes.NEW : editModes.READ
     };
     this.onChange = this.onChange.bind(this);
     this.saveDocument = this.saveDocument.bind(this);
@@ -24,7 +31,33 @@ class DocumentManager extends React.Component {
     tinymce.init({
       selector: '.tinymcepanel',
       init_instance_callback: (editor) => {
-        editor.setContent('Loading.....');
+        editor.on('keyup', () => {
+          this.setState({
+            content: editor.getContent()
+          });
+        });
+        editor.on('undo', () => {
+          this.setState({
+            content: editor.getContent()
+          });
+        });
+        editor.on('redo', () => {
+          this.setState({
+            content: editor.getContent()
+          });
+        });
+        editor.on('Change', () => {
+          this.setState({
+            content: editor.getContent()
+          });
+        });
+        editor.on('dirty', () => {
+          console.log('Just got dirty. You may now enable save button');
+        });
+      },
+      onchange_callback: (event) => {
+        console.log('Hullos, I am changing... Hahahahha');
+        this.onChange(event);
       }
     });
   }
@@ -33,7 +66,7 @@ class DocumentManager extends React.Component {
     if (nextProps.currentDocument || nextProps.createNew) {
       this.setState({
         accessMode: nextProps.createNew ?
-          'NEW' : 'READ',
+          editModes.NEW : editModes.READ,
       }, () => {
         const isNew = nextProps.currentDocument === null;
         this.setState({
@@ -69,6 +102,15 @@ class DocumentManager extends React.Component {
     });
   }
 
+  editDocument(event) {
+    event.preventDefault();
+    if (this.props.rightId < 3) {
+      this.setState({
+        accessMode: 'EDIT'
+      });
+    }
+  }
+
   cancelNewDocument(event) {
     event.preventDefault();
     this.props.cancelNewDocument();
@@ -84,15 +126,25 @@ class DocumentManager extends React.Component {
             'Create your document here' :
             this.state.title}
             <textarea
+              style={{
+                display: this.state.accessMode === editModes.WRITE ? 'block' : 'none'
+              }}
               rows="1" placeholder="Title"
               name="title"
               onChange={this.onChange}
               value={this.state.title}
             />
-          </div>
+          </div>                                                                                                    
         </div>
-        <div className="ui container">
-          <div className="ui form">
+        <div
+          className="ui container"
+        >
+          <div
+            className="ui form"
+            style={{
+              display: (this.state.accessMode === editModes.WRITE || this.state.accessMode === editModes.NEW) ? 'block' : 'none'
+            }}
+          >
             <div className="field">
               <textarea
                 rows="1" placeholder="Title"
@@ -139,25 +191,44 @@ class DocumentManager extends React.Component {
               </Form.Field>
             </div>
             <div className="field">
-              <textarea 
+              <textarea
                 className="tinymcepanel"
-                style={{ height: '300px' }}
               />
             </div>
+          </div>
+          <div
+            id="contentHolder"
+            style={{
+              display: this.state.accessMode === editModes.READ ? 'block' : 'none'
+            }}
+          >
+            {this.state.content}
           </div>
         </div>
         <div
           className="actions ui container"
           onClick={this.cancelNewDocument}
         >
-          <div className="ui cancel button">
-            Cancel
+          <div
+            className="ui primary approve icon button"
+            onClick={this.editDocument}
+            style={{
+              display: this.state.accessMode === editModes.READ && this.state.rightId !== 3 ? 'inline-block' : 'none'
+            }}
+          >
+            <i className="edit icon" />
           </div>
           <div
             className="ui primary approve icon button"
             onClick={this.saveDocument}
+            style={{
+              display: this.state.accessMode === editModes.READ ? 'none' : 'inline-block'
+            }}
           >
             <i className="save icon" />
+          </div>
+          <div className="ui cancel button">
+            Cancel
           </div>
         </div>
       </div>

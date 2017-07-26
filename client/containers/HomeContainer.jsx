@@ -1,4 +1,5 @@
 import React from 'react';
+import { Search, Grid, Header } from 'semantic-ui-react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { logUserOut } from '../actions/users';
@@ -155,6 +156,16 @@ class HomeContainer extends React.Component {
             </div>
           </div>
           <div className="thirteen wide column">
+            <Grid>
+              <Grid.Row>
+                <Grid.Column width={8}>
+                  <Header size='huge'>{role} Documents</Header>
+                </Grid.Column>
+                <Grid.Column width={8} style={{textAligned: 'right'}}>
+                  <Search />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
             <DocumentList />
           </div>
         </div>
