@@ -1,6 +1,7 @@
 const auth = require('../auth/_helpers');
 const User = require('../models').User;
 const Document = require('../models').Document;
+const Role = require('../models').Role;
 const localAuth = require('../auth/local');
 
 module.exports = {
@@ -14,16 +15,23 @@ module.exports = {
         password: auth.encrypt(req.body.password),
         RoleId: req.body.roleId
       })
-      .then(user => res.status(201).send({
-        status: 'success',
-        payload: {
-          token: localAuth.encodeToken({
-            id: user.id,
-            username: user.username
-          }),
-          user
-        }
-      }))
+      .then((user) => {
+        const token = localAuth.encodeToken({
+          id: user.id,
+          username: user.username
+        });
+        Role.findById(user.RoleId)
+          .then((role) => {
+            res.status(201).jsonp({
+              status: 'success',
+              payload: {
+                token,
+                user,
+                role: role.title
+              }
+            });
+          });
+      })
       .catch(error => res.status(400).send({
         status: 'error',
         message: error.message
@@ -49,13 +57,17 @@ module.exports = {
           id: user.id,
           username: user.username
         });
-        res.status(200).jsonp({
-          status: 'success',
-          payload: {
-            token,
-            user
-          }
-        });
+        Role.findById(user.RoleId)
+          .then((role) => {
+            res.status(200).jsonp({
+              status: 'success',
+              payload: {
+                token,
+                user,
+                role: role.title
+              }
+            });
+          });
       })
       .catch((err) => {
         let status = 500;
@@ -78,7 +90,9 @@ module.exports = {
       .findAll({
         include: [{
           model: Document,
-          as: 'userDocuments'
+          as: 'myDocuments'
+        }, {
+          model: Document
         }],
         offset: req.query.offset,
         limit: req.query.limit || null
@@ -103,7 +117,13 @@ module.exports = {
             message: 'user not found'
           });
         } else {
-          res.status(200).send(user);
+          Role.findById(user.RoleId)
+            .then((role) => {
+              res.status(200).send({
+                user,
+                role: role.title
+              });
+            });
         }
       })
       .catch(error => res.status(400).send(error));
@@ -116,8 +136,10 @@ module.exports = {
         },
         include: [{
           model: Document,
-          as: 'userDocuments',
-        }]
+          as: 'myDocuments'
+        }, {
+          model: Document
+        }],
       })
       .then((user) => {
         if (!user) {
@@ -125,7 +147,29 @@ module.exports = {
             message: 'user not found'
           });
         } else {
-          res.status(201).send(user.userDocuments);
+          res.status(200).send({
+            authoredDocuments: user.myDocuments,
+            sharedDocuments: user.Documents
+          });
+        }
+      })
+      .catch(error => res.status(400).send(error));
+  },
+  fetchPrivateDocuments(req, res) {
+    Document
+      .findAll({
+        where: {
+          AccessId: 1,
+          OwnerId: req.params.id
+        }
+      })
+      .then((documents) => {
+        if (!documents) {
+          res.status(404).send({
+            message: 'user has no private documents'
+          });
+        } else {
+          res.status(200).send(documents);
         }
       })
       .catch(error => res.status(400).send(error));

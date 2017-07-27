@@ -1,39 +1,30 @@
 import axios from 'axios';
 import store from '../client';
-
-const ADD_USER = 'ADD_USER';
-const REMOVE_USER = 'REMOVE_USER';
-const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
-const SIGNUP_SUCCESSFUL = 'SIGNUP_SUCCESSFUL';
-const SIGNUP_FAILED = 'SIGNUP_FAILED';
-const LOGIN_REQUEST = 'LOGIN_REQUEST';
-const LOGIN_SUCCESSFUL = 'LOGIN_SUCCESSFUL';
-const LOGIN_FAILED = 'LOGIN_FAILED';
-const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
-const LOGOUT_SUCCESSFUL = 'LOGOUT_SUCCESSFUL';
-const LOGOUT_FAILED = 'LOGOUT_FAILED';
+import * as actionTypes from './actionTypes';
 
 const config = {
   headers: { 'Content-Type': 'application/json' }
 };
 
-export function addUser(user, token) {
+export function addUser(user, token, role) {
   console.log('user', user);
   axios.defaults.headers.common.Authorization = `bearer ${token}`;
   if (Object.keys(user).length < 3) {
     axios.get(`/api/v1/users/${user.id}`)
     .then(response => (
       store.dispatch({
-        type: ADD_USER,
+        type: actionTypes.ADD_USER,
         payload: {
-          user: response.data
+          user: response.data.user,
+          role: response.data.role
         }
       })));
   } else {
     store.dispatch({
-      type: ADD_USER,
+      type: actionTypes.ADD_USER,
       payload: {
-        user
+        user,
+        role
       }
     });
   }
@@ -43,55 +34,55 @@ const removeUser = () => {
   window.localStorage.removeItem('token');
   window.localStorage.removeItem('user');
   return {
-    type: REMOVE_USER
+    type: actionTypes.REMOVE_USER
   };
 };
 
 const requestSignup = username => ({
-  type: SIGNUP_REQUEST,
+  type: actionTypes.SIGNUP_REQUEST,
   payload: username
 });
 
 const signupSuccessful = () => ({
-  type: SIGNUP_SUCCESSFUL
+  type: actionTypes.SIGNUP_SUCCESSFUL
 });
 
 const signupFailed = message => ({
-  type: SIGNUP_FAILED,
+  type: actionTypes.SIGNUP_FAILED,
   payload: message
 });
 
 const requestLogin = username => ({
-  type: LOGIN_REQUEST,
+  type: actionTypes.LOGIN_REQUEST,
   payload: username
 });
 
 const loginSuccessful = () => ({
-  type: LOGIN_SUCCESSFUL
+  type: actionTypes.LOGIN_SUCCESSFUL
 });
 
 const loginFailed = message => ({
-  type: LOGIN_FAILED,
+  type: actionTypes.LOGIN_FAILED,
   payload: message
 });
 
 const logoutRequest = () => ({
-  type: LOGOUT_REQUEST
+  type: actionTypes.LOGOUT_REQUEST
 });
 
 const logoutSuccessful = () => ({
-  type: LOGOUT_SUCCESSFUL
+  type: actionTypes.LOGOUT_SUCCESSFUL
 });
 
 const logoutFailed = message => ({
-  type: LOGOUT_FAILED,
+  type: actionTypes.LOGOUT_FAILED,
   payload: message
 });
 
-function setTokenToLocalStorage(user, token) {
+function setTokenToLocalStorage(user, token, role) {
   window.localStorage.setItem('token', token);
   window.localStorage.setItem('user', JSON.stringify(user));
-  addUser(user, token);
+  addUser(user, token, role);
 }
 
 export function signUserUp(userDetails) {
@@ -111,9 +102,11 @@ export function signUserUp(userDetails) {
       return axios
         .post('/api/v1/users', userdata, config)
         .then((response) => {
+          console.log(response.data);
           setTokenToLocalStorage(
             response.data.payload.user,
-            response.data.payload.token
+            response.data.payload.token,
+            response.data.payload.role
           );
           dispatch(signupSuccessful());
         })
@@ -136,7 +129,8 @@ export function logUserIn(userDetails) {
       .then((response) => {
         setTokenToLocalStorage(
           response.data.payload.user,
-          response.data.payload.token
+          response.data.payload.token,
+          response.data.payload.role
         );
         dispatch(loginSuccessful());
       })

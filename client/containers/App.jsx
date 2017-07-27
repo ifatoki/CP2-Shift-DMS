@@ -12,7 +12,7 @@ import ProfileContainer from './ProfileContainer';
 class App extends Component {
   render() {
     return (
-      <div>
+      <div style={{ height: '100%' }} >
         <Route
           exact path="/" component={
             this.props.isAuthenticated ?

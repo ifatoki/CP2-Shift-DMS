@@ -25,7 +25,8 @@ function userReducers(state = { isAuthenticated: false }, action) {
         firstname: action.payload.user.first_name,
         lastname: action.payload.user.last_name,
         result: action.type,
-        isAuthenticated: true
+        isAuthenticated: true,
+        role: action.payload.role
       });
     default:
       return state;

@@ -26,12 +26,12 @@ export default (sequelize, DataTypes) => {
 
         User.hasMany(models.Document, {
           foreignKey: 'OwnerId',
-          as: 'userDocuments'
+          as: 'myDocuments'
         });
 
         User.belongsToMany(models.Document, {
           through: 'DocumentUser',
-          foreignKey: 'userId',
+          foreignKey: 'userId'
         });
       }
     }

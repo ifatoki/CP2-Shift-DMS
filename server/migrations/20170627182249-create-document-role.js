@@ -8,7 +8,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       rightId: {
-        type: Sequelize.INT
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

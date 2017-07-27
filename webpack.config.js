@@ -4,7 +4,7 @@ const path = require('path');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-  devtool: debug ? 'inline-sourcemap' : null,
+  devtool: debug ? 'inline-sourcemap' : false,
   entry: [
     'webpack-hot-middleware/client',
     path.join(__dirname, '/client/client.jsx')
@@ -47,7 +47,7 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin()
   ] : [
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
+    // new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
     new Dotenv({
       path: './.env'
