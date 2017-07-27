@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Document from './Document';
 
 const DocumentList = props => (
@@ -17,13 +18,18 @@ const DocumentList = props => (
         title={document.title}
         content={document.content}
         created={document.createdAt}
+        documentId={document.id}
       />
     ))}
   </div>
 );
 
 DocumentList.propTypes = {
-  documents: PropTypes.arrayOf(Document).isRequired
+  documents: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
-export default DocumentList;
+const mapStateToProps = state => ({
+  documents: state.documents.documents
+});
+
+export default connect(mapStateToProps)(DocumentList);

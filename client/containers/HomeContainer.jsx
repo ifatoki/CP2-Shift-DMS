@@ -1,11 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Search, Grid, Header } from 'semantic-ui-react';
+import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { logUserOut } from '../actions/users';
 import { fetchDocuments, createNewDocument } from '../actions/documents';
 import DocumentList from '../components/DocumentList';
-import Document from '../components/Document';
-import DocumentCreator from '../components/DocumentCreator';
+import DocumentManager from '../components/DocumentManager';
 
 class HomeContainer extends React.Component {
   constructor(props) {
@@ -15,7 +15,6 @@ class HomeContainer extends React.Component {
     };
     this.logOut = this.logOut.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
-    this.createNewDocument = this.createNewDocument.bind(this);
     this.handleDocumentTypeChange = this.handleDocumentTypeChange.bind(this);
   }
 
@@ -23,6 +22,21 @@ class HomeContainer extends React.Component {
     this.props.fetchDocuments(this.props.user.id, 'private');
     $('.ui.dropdown')
       .dropdown();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.createNew || nextProps.currentDocument) {
+      event.preventDefault();
+      $('.ui.modal')
+        .modal({
+          closable: false,
+          detachable: false,
+          selector: {
+            close: '.cancel, .close'
+          },
+        })
+        .modal('show');
+    }
   }
 
   handleDocumentTypeChange(event) {
@@ -35,18 +49,13 @@ class HomeContainer extends React.Component {
     });
   }
 
-  initializeNewDocument(event) {
-    event.preventDefault();
-    $('.ui.modal')
-      .modal('show');
+  initializeNewDocument() {
+    this.props.createNewDocument();
   }
 
   logOut(event) {
     event.preventDefault();
     this.props.logUserOut();
-  }
-  createNewDocument(documentDetails) {
-    this.props.createNewDocument(documentDetails);
   }
 
   render() {
@@ -54,13 +63,10 @@ class HomeContainer extends React.Component {
       + this.props.user.role.slice(1);
     return (
       <div style={{ height: '100%' }} >
-        <DocumentCreator
-          saveNewDocument={this.createNewDocument}
-          ownerId={this.props.user.id}
-        />
+        <DocumentManager />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
-            <a className="active item">Home</a>
+            <a className="active item" href="/document">Home</a>
             <div className="right menu">
               <i
                 className="big icons"
@@ -108,28 +114,69 @@ class HomeContainer extends React.Component {
             <div className="ui divided items">
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item" name="private" onClick={this.handleDocumentTypeChange}>Private Documents</a>
+                  <a
+                    className="item"
+                    name="private"
+                    onClick={this.handleDocumentTypeChange}
+                  >
+                    Private Documents
+                  </a>
                 </div>
               </div>
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item" name="public" onClick={this.handleDocumentTypeChange}>Public Documents</a>
+                  <a
+                    className="item"
+                    name="public"
+                    onClick={this.handleDocumentTypeChange}
+                  >
+                    Public Documents
+                  </a>
                 </div>
               </div>
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item" name="role" onClick={this.handleDocumentTypeChange}>{role} Documents</a>
+                  <a
+                    className="item"
+                    name="role"
+                    onClick={this.handleDocumentTypeChange}
+                  >
+                    {role} Documents
+                  </a>
                 </div>
               </div>
               <div className="item">
                 <div className="middle aligned content">
-                  <a className="item" name="shared" onClick={this.handleDocumentTypeChange}>Shared with me</a>
+                  <a
+                    className="item"
+                    name="shared"
+                    onClick={this.handleDocumentTypeChange}
+                  >
+                    Shared with me
+                  </a>
                 </div>
               </div>
             </div>
           </div>
           <div className="thirteen wide column">
-            <DocumentList documents={this.props.documents.documents} />
+            <Grid>
+              <Grid.Row>
+                <Grid.Column width={8}>
+                  <Header size="huge">
+                    {this.props.documentsType === 'role' ?
+                      role.toUpperCase() :
+                      this.props.documentsType.toUpperCase()
+                    } DOCUMENTS
+                  </Header>
+                </Grid.Column>
+                <Grid.Column
+                  width={8}
+                >
+                  <Search />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+            <DocumentList />
           </div>
         </div>
       </div>
@@ -138,30 +185,36 @@ class HomeContainer extends React.Component {
 }
 
 HomeContainer.propTypes = {
-  logUserOut: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    isAuthenticated: PropTypes.bool.isRequired,
-    id: PropTypes.number.isRequired,
-    email: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    firstname: PropTypes.string.isRequired,
-    lastname: PropTypes.string.isRequired,
-    result: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired
+  logUserOut: PropType.func.isRequired,
+  user: PropType.shape({
+    isAuthenticated: PropType.bool.isRequired,
+    id: PropType.number.isRequired,
+    email: PropType.string.isRequired,
+    username: PropType.string.isRequired,
+    firstname: PropType.string.isRequired,
+    lastname: PropType.string.isRequired,
+    result: PropType.string.isRequired,
+    role: PropType.string.isRequired
   }).isRequired,
-  fetchDocuments: PropTypes.func.isRequired,
-  createNewDocument: PropTypes.func.isRequired,
-  documents: PropTypes.shape({
-    documents: PropTypes.arrayOf(Document).isRequired,
-    isFetching: PropTypes.bool.isRequired,
-    documentCreated: PropTypes.bool
-  }).isRequired
+  fetchDocuments: PropType.func.isRequired,
+  createNew: PropType.bool.isRequired,
+  createNewDocument: PropType.func.isRequired,
+  documentsType: PropType.string,
+  currentDocument: PropType.shape({
+    id: PropType.number,
+    title: PropType.string,
+    content: PropType.string,
+    OwnerId: PropType.number,
+    AccessId: PropType.number
+  })
 };
 
 HomeContainer.defaultProps = {
-  documents: PropTypes.shape({
+  documents: PropType.shape({
     documentCreated: false
-  })
+  }),
+  currentDocument: null,
+  documentsType: 'private'
 };
 
 const mapDispatchToProps = {
@@ -172,8 +225,9 @@ const mapDispatchToProps = {
 
 const mapStateToProps = state => ({
   user: state.user,
-  isAuthenticated: state.user.isAuthenticated,
-  documents: state.documents
+  createNew: state.documents.createNew,
+  currentDocument: state.documents.currentDocument,
+  documentsType: state.documents.documentsType
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

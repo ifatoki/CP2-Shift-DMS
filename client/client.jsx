@@ -10,8 +10,6 @@ import auth from './utils/authorizationHelpers';
 import appReducer from './reducers/index';
 import App from './containers/App';
 
-// import routes from './routes';
-
 const history = createBrowserHistory();
 
 /* eslint-disable no-underscore-dangle */
@@ -33,7 +31,6 @@ const store = createStore(
 if (window.localStorage.token) {
   auth.decodeToken(window.localStorage.token, (error, payload) => {
     if (!error) {
-      console.log(payload.sub);
       auth.setUser(payload.sub, window.localStorage.token);
     } else {
       console.log(error);

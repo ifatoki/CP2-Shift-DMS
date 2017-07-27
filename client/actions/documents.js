@@ -1,48 +1,66 @@
 import axios from 'axios';
-
-// const ADD_USER = 'ADD_USER';
-// const REMOVE_USER = 'REMOVE_USER';
-// const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
-// const SIGNUP_SUCCESSFUL = 'SIGNUP_SUCCESSFUL';
-// const SIGNUP_FAILED = 'SIGNUP_FAILED';
-const DOCUMENT_CREATE_REQUEST = 'DOCUMENT_CREATE_REQUEST';
-const DOCUMENT_CREATE_SUCCESSFUL = 'DOCUMENT_CREATE_SUCCESSFUL';
-const DOCUMENT_CREATE_FAILED = 'DOCUMENT_CREATE_FAILED';
-const DOCUMENTS_FETCH_REQUEST = 'DOCUMENTS_FETCH_REQUEST';
-const DOCUMENTS_FETCH_SUCCESSFUL = 'DOCUMENTS_FETCH_SUCCESSFUL';
-const DOCUMENTS_FETCH_FAILED = 'DOCUMENTS_FETCH_FAILED';
+import * as actionTypes from './actionTypes';
 
 const config = {
   headers: { 'Content-Type': 'application/json' }
 };
 
+const documentGetRequest = () => ({
+  type: actionTypes.DOCUMENT_GET_REQUEST
+});
+
+const documentGetSuccessful = payload => ({
+  type: actionTypes.DOCUMENT_GET_SUCCESSFUL,
+  payload
+});
+
+const documentGetFailed = payload => ({
+  type: actionTypes.DOCUMENT_GET_FAILED,
+  payload
+});
+
 const documentsFetchRequest = () => ({
-  type: DOCUMENTS_FETCH_REQUEST
+  type: actionTypes.DOCUMENTS_FETCH_REQUEST
 });
 
 const documentsFetchSuccessful = (payload, type) => ({
-  type: DOCUMENTS_FETCH_SUCCESSFUL,
-  documentType: type,
+  type: actionTypes.DOCUMENTS_FETCH_SUCCESSFUL,
+  documentsType: type,
   payload
 });
 
-const documentsFetchFailed = () => ({
-  type: DOCUMENTS_FETCH_FAILED
-});
-
-const documentCreateRequest = () => ({
-  type: DOCUMENT_CREATE_REQUEST
-});
-
-const documentCreateSuccessful = payload => ({
-  type: DOCUMENT_CREATE_SUCCESSFUL,
+const documentsFetchFailed = payload => ({
+  type: actionTypes.DOCUMENTS_FETCH_FAILED,
   payload
 });
 
-const documentCreateFailed = payload => ({
-  type: DOCUMENT_CREATE_FAILED,
+const documentSaveRequest = () => ({
+  type: actionTypes.DOCUMENT_SAVE_REQUEST
+});
+
+const documentSaveSuccessful = payload => ({
+  type: actionTypes.DOCUMENT_SAVE_SUCCESSFUL,
   payload
 });
+
+const documentSaveFailed = payload => ({
+  type: actionTypes.DOCUMENT_SAVE_FAILED,
+  payload
+});
+
+export function getDocument(documentId) {
+  return (dispatch) => {
+    dispatch(documentGetRequest());
+    return axios
+      .get(`api/v1/documents/${documentId}`)
+      .then((response) => {
+        dispatch(documentGetSuccessful(response.data));
+      })
+      .catch((error) => {
+        dispatch(documentGetFailed(error.message));
+      });
+  };
+}
 
 export function fetchDocuments(userId, type) {
   return (dispatch) => {
@@ -64,16 +82,30 @@ export function fetchDocuments(userId, type) {
   };
 }
 
-export function createNewDocument(documentData) {
+export function createNewDocument() {
+  return dispatch =>
+    dispatch({
+      type: actionTypes.NEW_DOCUMENT
+    });
+}
+
+export function cancelNewDocument() {
+  return dispatch =>
+    dispatch({
+      type: actionTypes.DOCUMENT_CANCELLED
+    });
+}
+
+export function saveNewDocument(documentData) {
   return (dispatch) => {
-    dispatch(documentCreateRequest());
+    dispatch(documentSaveRequest());
     return axios
       .post('api/v1/documents', documentData, config)
       .then((response) => {
-        dispatch(documentCreateSuccessful(response.data));
+        dispatch(documentSaveSuccessful(response.data));
       })
       .catch((error) => {
-        dispatch(documentCreateFailed(error.message));
+        dispatch(documentSaveFailed(error.message));
       }
     );
   };

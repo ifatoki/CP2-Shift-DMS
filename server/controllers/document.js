@@ -32,7 +32,6 @@ const documentController = {
         break;
     }
     if (!query.AccessId) {
-      console.log('I actually fetched the right thing');
       User
         .findById(req.query.userId)
         .then((user) => {
@@ -78,7 +77,48 @@ const documentController = {
             message: 'document not found'
           });
         } else {
-          res.status(200).send(document);
+          const response = { document };
+          if (document.OwnerId === req.userId) {
+            response.rightId = 1;
+            res.status(200).send(response);
+          } else if (document.AccessId === 2) {
+            response.rightId = 3;
+            res.status(200).send(response);
+          } else {
+            document.getUsers({
+              where: {
+                id: req.userId
+              },
+              joinTableAttributes: ['RightId']
+            })
+            .then((user) => {
+              if (user.length < 1) {
+                document.getRoles({
+                  where: {
+                    id: req.roleId
+                  },
+                  joinTableAttributes: ['RightId']
+                })
+                .then((role) => {
+                  if (role.length < 1) {
+                    res.status(401).send({
+                      message: 'you are not authorized to access this document'
+                    });
+                  } else {
+                    response.rightId =
+                      role[0].dataValues.DocumentRole.dataValues.RightId;
+                    res.status(200).send(response);
+                  }
+                })
+                .catch(error => res.status(500).send(error));
+              } else {
+                response.rightId =
+                  user[0].dataValues.DocumentUser.dataValues.RightId;
+                res.status(200).send(response);
+              }
+            })
+            .catch(error => res.status(400).send(error));
+          }
         }
       })
       .catch(error => res.status(400).send(error));
@@ -159,7 +199,9 @@ const documentController = {
           .findById(req.query.userId)
           .then((user) => {
             document.addUser(user)
-            .then(res.status(200).send({ message: 'user added successfully' }));
+            .then(res.status(200).send({
+              message: 'user added successfully'
+            }));
           })
           .catch(error => res.status(400).send(error));
       })
