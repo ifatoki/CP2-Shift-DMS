@@ -55,10 +55,6 @@ class DocumentManager extends React.Component {
         editor.on('dirty', () => {
           console.log('Just got dirty. You may now enable save button');
         });
-      },
-      onchange_callback: (event) => {
-        console.log('Hullos, I am changing... Hahahahha');
-        this.onChange(event);
       }
     });
   }
@@ -66,6 +62,7 @@ class DocumentManager extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.currentDocument || nextProps.createNew) {
       this.setState({
+        rightId: nextProps.rightId,
         accessMode: nextProps.createNew ?
           editModes.NEW : editModes.READ,
       }, () => {
@@ -110,6 +107,8 @@ class DocumentManager extends React.Component {
     if (this.props.rightId < 3) {
       this.setState({
         accessMode: editModes.WRITE
+      }, () => {
+        tinymce.activeEditor.setContent(this.state.content);
       });
     }
   }
@@ -133,12 +132,13 @@ class DocumentManager extends React.Component {
                 display: this.state.accessMode === editModes.WRITE ?
                   'block' : 'none'
               }}
-              rows="1" placeholder="Title"
+              rows="1"
+              placeholder="Title"
               name="title"
               onChange={this.onChange}
               value={this.state.title}
             />
-          </div>                                                                                                    
+          </div>
         </div>
         <div
           className="ui container"
@@ -154,7 +154,8 @@ class DocumentManager extends React.Component {
           >
             <div className="field">
               <textarea
-                rows="1" placeholder="Title"
+                rows="1"
+                placeholder="Title"
                 name="title"
                 onChange={this.onChange}
                 value={this.state.title}
@@ -276,6 +277,7 @@ DocumentManager.propTypes = {
     role: PropType.string.isRequired
   }).isRequired,
   createNew: PropType.bool.isRequired,
+  rightId: PropType.number.isRequired,
   currentDocument: PropType.shape({
     id: PropType.number,
     title: PropType.string,
@@ -298,6 +300,7 @@ const mapDispatchToProps = {
 const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,
+  rightId: state.documents.currentRightId,
   createNew: state.documents.createNew
 });
 

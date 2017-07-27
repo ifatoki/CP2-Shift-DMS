@@ -198,6 +198,7 @@ HomeContainer.propTypes = {
   }).isRequired,
   fetchDocuments: PropType.func.isRequired,
   createNew: PropType.bool.isRequired,
+  createNewDocument: PropType.func.isRequired,
   documentsType: PropType.string,
   currentDocument: PropType.shape({
     id: PropType.number,
