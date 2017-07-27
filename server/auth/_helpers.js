@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
-const localAuth = require('./local');
-const User = require('../models').User;
+import bcrypt from 'bcryptjs';
+import localAuth from './local';
+import { User } from '../models';
 
 const encrypt = (password) => {
   const salt = bcrypt.genSaltSync();
@@ -27,7 +27,7 @@ const confirmAuthentication = (req, res, next) => {
     let statusMessage;
     if (err) {
       status = 401;
-      statusMessage = 'expired token';
+      statusMessage = err;
     } else {
       User
         .findById(parseInt(payload.sub.id, 10))
