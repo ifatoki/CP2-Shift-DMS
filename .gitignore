@@ -3,3 +3,4 @@ coverage
 client/assets/js/client.min.js
 .DS_Store
 .nyc_output
+.env

@@ -8,20 +8,25 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import routeIndex from './routes/index';
 import webpackConfig from '../webpack.config';
 
+const debug = process.env.NODE_ENV !== 'production';
+
 // Set up the express app
 const app = express();
 const publicPath = express.static(path.join(__dirname, '../client/assets'));
 const compiler = webpack(webpackConfig);
 
+if (debug) {
+  app.use(webpackHotMiddleware(compiler));
+
+  // Log requests to the console.
+  app.use(logger('dev'));
+}
+
 app.use(webpackDevMiddleware(compiler, {
-  hot: true,
+  // hot: true,
   publicPath: webpackConfig.output.publicPath,
   noInfo: true
 }));
-app.use(webpackHotMiddleware(compiler));
-
-// Log requests to the console.
-app.use(logger('dev'));
 
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.json());
