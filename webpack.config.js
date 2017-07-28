@@ -3,12 +3,32 @@ const webpack = require('webpack');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
 
+const entry = [
+  path.join(__dirname, '/client/client.jsx')
+];
+const plugins = [
+  new Dotenv({
+    path: './.env'
+  }),
+  new webpack.optimize.OccurrenceOrderPlugin(),
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+    },
+  }),
+];
+if (debug) {
+  entry.push('webpack-hot-middleware/client');
+  plugins.push(new webpack.HotModuleReplacementPlugin());
+  plugins.push(new webpack.NoEmitOnErrorsPlugin());
+} else {
+  plugins.push(new webpack.optimize.UglifyJsPlugin());
+}
+
+
 module.exports = {
   devtool: debug ? 'inline-sourcemap' : false,
-  entry: [
-    'webpack-hot-middleware/client',
-    path.join(__dirname, '/client/client.jsx')
-  ],
+  entry,
   module: {
     loaders: [
       {
@@ -38,21 +58,7 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
   },
-  plugins: debug ? [
-    new Dotenv({
-      path: './.env'
-    }),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.OccurrenceOrderPlugin()
-  ] : [
-    new webpack.optimize.DedupePlugin(),
-    // new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
-    new Dotenv({
-      path: './.env'
-    })
-  ],
+  plugins,
   resolve: {
     extensions: ['.jsx', '.js'],
     alias: {
