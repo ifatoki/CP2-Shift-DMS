@@ -1,5 +1,4 @@
 const Role = require('../models').Role;
-const User = require('../models').User;
 
 module.exports = {
   create: (req, res) => {
@@ -14,9 +13,11 @@ module.exports = {
   list: (req, res) => {
     Role
       .findAll({
-        include: [{
-          model: User,
-        }],
+        where: {
+          id: {
+            $ne: 1
+          }
+        }
       })
       .then(roles => res.status(200).send(roles))
       .catch(error => res.status(400).send(error));

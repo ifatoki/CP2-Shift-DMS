@@ -22,7 +22,7 @@ module.exports = {
         });
         Role.findById(user.RoleId)
           .then((role) => {
-            res.status(201).jsonp({
+            res.status(201).json({
               status: 'success',
               payload: {
                 token,
@@ -94,6 +94,11 @@ module.exports = {
         }, {
           model: Document
         }],
+        where: {
+          RoleId: {
+            $ne: 1
+          }
+        },
         offset: req.query.offset,
         limit: req.query.limit || null
       })
