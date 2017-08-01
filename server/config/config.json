@@ -8,15 +8,15 @@
     "dialect": "postgres"
   },
   "test": {
-    "username": "",
-    "password": null,
-    "database": "shift-dms-test",
-    "host": "localhost",
+    "username": "gisrmoqn",
+    "password": "gRVsbpZ0gwkbC9p0sE10-DvhReEGVXBG",
+    "database": "gisrmoqn",
+    "host": "stampy.db.elephantsql.com",
     "port": 5432,
     "dialect": "postgres"
   },
   "production": {
-    "use_env_variable": "DATABASE_URL",
+    "use_env_variable": "PROD_DATABASE_URL",
     "dialect": "postgres"
   }
 }
