@@ -79,6 +79,34 @@ const logoutFailed = message => ({
   payload: message
 });
 
+const fetchAllUsersRequest = () => ({
+  type: actionTypes.FETCH_USERS_REQUEST
+});
+
+const fetchAllUsersSuccessful = users => ({
+  type: actionTypes.FETCH_USERS_SUCCESSFUL,
+  payload: users
+});
+
+const fetchAllUsersFailed = message => ({
+  type: actionTypes.FETCH_USERS_FAILED,
+  payload: message
+});
+
+const fetchAllRolesRequest = () => ({
+  type: actionTypes.FETCH_ROLES_REQUEST
+});
+
+const fetchAllRolesSuccessful = roles => ({
+  type: actionTypes.FETCH_ROLES_SUCCESSFUL,
+  payload: roles
+});
+
+const fetchAllRolesFailed = message => ({
+  type: actionTypes.FETCH_ROLES_FAILED,
+  payload: message
+});
+
 function setTokenToLocalStorage(user, token, role) {
   window.localStorage.setItem('token', token);
   window.localStorage.setItem('user', JSON.stringify(user));
@@ -153,5 +181,33 @@ export function logUserOut() {
         dispatch(logoutFailed(error.message));
       }
     );
+  };
+}
+
+export function fetchAllUsers() {
+  return (dispatch) => {
+    dispatch(fetchAllUsersRequest());
+    return axios
+      .get('/api/v1/users/', config)
+      .then((users) => {
+        dispatch(fetchAllUsersSuccessful(users.data));
+      })
+      .catch((error) => {
+        dispatch(fetchAllUsersFailed(error.message));
+      });
+  };
+}
+
+export function fetchAllRoles() {
+  return (dispatch) => {
+    dispatch(fetchAllRolesRequest());
+    return axios
+      .get('/api/v1/roles/', config)
+      .then((roles) => {
+        dispatch(fetchAllRolesSuccessful(roles.data));
+      })
+      .catch((error) => {
+        dispatch(fetchAllRolesFailed(error.message));
+      });
   };
 }

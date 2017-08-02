@@ -1,3 +1,5 @@
+import confirmRole from '../controllers/middleware/confirmRole';
+
 const auth = require('../auth/_helpers');
 const usersController = require('../controllers').users;
 const documentsController = require('../controllers').documents;
@@ -14,7 +16,7 @@ module.exports = (app) => {
   // logs a user in
   app.post('/api/v1/users/login', usersController.login);
   // creates a new user record
-  app.post('/api/v1/users', usersController.create);
+  app.post('/api/v1/users', confirmRole, usersController.create);
 
   // From here on, middleware that confirms if a user is logged in.
 

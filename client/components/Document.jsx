@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Card, Icon } from 'semantic-ui-react';
 import { getDocument } from '../actions/documents';
 
 class Document extends React.Component {
@@ -15,31 +16,22 @@ class Document extends React.Component {
 
   render() {
     return (
-      <div className="item" onClick={this.clickHander}>
-        <div className="image">
-          <img src="/images/wireframe/image.png" alt="The document" />
-        </div>
-        <div className="content">
-          <a className="header">{this.props.title}</a>
-          <div className="meta">
-            <span className="cinema">
-              <small>
-                <i>Created on: {this.props.created}</i>
-              </small>
-            </span>
+      <Card onClick={this.clickHander}>
+        <Card.Content>
+          <Card.Header>
+            {this.props.title}
+          </Card.Header>
+          <Card.Meta content={this.props.created} />
+          <Card.Description content={this.props.content} />
+        </Card.Content>
+        <Card.Content extra>
+          <Icon name="user" color="blue" />
+          @itunuworks
+          <div className="right floated">
+            <Icon name="trash" color="blue" />
           </div>
-          <div className="description">
-            <p>{this.props.content}</p>
-          </div>
-          <div className="extra">
-            <div className="ui label">IMAX</div>
-            <div className="ui label">
-              <i className="globe icon" />
-              Additional Languages
-            </div>
-          </div>
-        </div>
-      </div>
+        </Card.Content>
+      </Card>
     );
   }
 }
