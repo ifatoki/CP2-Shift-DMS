@@ -70,7 +70,7 @@ class DocumentManager extends React.Component {
         this.setState({
           title: isNew ? '' : nextProps.currentDocument.title,
           content: isNew ? '' : nextProps.currentDocument.content,
-          accessId: isNew ? '' : nextProps.currentDocument.AccessId
+          accessId: isNew ? '' : nextProps.currentDocument.accessId
         }, () => {
           $('#contentHolder').children().remove();
           $(this.state.content).prependTo('#contentHolder');
@@ -97,7 +97,7 @@ class DocumentManager extends React.Component {
     this.props.saveNewDocument({
       title: this.state.title,
       content: this.state.content,
-      owner_id: this.props.user.id,
+      ownerId: this.props.user.id,
       accessId: this.state.accessId
     });
   }
@@ -282,8 +282,8 @@ DocumentManager.propTypes = {
     id: PropType.number,
     title: PropType.string,
     content: PropType.string,
-    OwnerId: PropType.number,
-    AccessId: PropType.number
+    ownerId: PropType.number,
+    accessId: PropType.number
   }),
   cancelNewDocument: PropType.func.isRequired
 };
