@@ -11,20 +11,20 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true
       },
-      email_address: {
+      email: {
         type: Sequelize.STRING,
         unique: true
       },
-      first_name: {
+      firstname: {
         type: Sequelize.STRING
       },
-      last_name: {
+      lastname: {
         type: Sequelize.STRING
       },
       password: {
         type: Sequelize.STRING
       },
-      RoleId: {
+      roleId: {
         type: Sequelize.INTEGER,
         allowNull: false
       },

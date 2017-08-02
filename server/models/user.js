@@ -5,15 +5,15 @@ export default (sequelize, DataTypes) => {
       allowNull: false,
       unique: true
     },
-    email_address: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true
     },
-    first_name: DataTypes.STRING,
-    last_name: DataTypes.STRING,
+    firstname: DataTypes.STRING,
+    lastname: DataTypes.STRING,
     password: DataTypes.STRING,
-    RoleId: {
+    roleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     }
@@ -21,11 +21,11 @@ export default (sequelize, DataTypes) => {
     classMethods: {
       associate(models) {
         User.belongsTo(models.Role, {
-          foreignKey: 'RoleId',
+          foreignKey: 'roleId',
         });
 
         User.hasMany(models.Document, {
-          foreignKey: 'OwnerId',
+          foreignKey: 'ownerId',
           as: 'myDocuments'
         });
 

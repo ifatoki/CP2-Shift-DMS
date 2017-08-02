@@ -2,19 +2,19 @@ module.exports = {
   up(queryInterface) {
     return queryInterface.bulkInsert('DocumentRoles', [
       {
-        RightId: 1,
+        rightId: 1,
         roleId: 1,
         documentId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
       }, {
-        RightId: 2,
+        rightId: 2,
         roleId: 2,
         documentId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
       }, {
-        RightId: 3,
+        rightId: 3,
         roleId: 1,
         documentId: 2,
         createdAt: new Date(),

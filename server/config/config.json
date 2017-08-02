@@ -2,16 +2,16 @@
   "development": {
     "username": "",
     "password": null,
-    "database": "shift-dms-dev",
+    "database": "shift-dms-test",
     "host": "localhost",
     "port": 5432,
     "dialect": "postgres"
   },
   "test": {
-    "username": "gisrmoqn",
-    "password": "gRVsbpZ0gwkbC9p0sE10-DvhReEGVXBG",
-    "database": "gisrmoqn",
-    "host": "stampy.db.elephantsql.com",
+    "username": "",
+    "password": null,
+    "database": "shift-dms-test",
+    "host": "localhost",
     "port": 5432,
     "dialect": "postgres"
   },

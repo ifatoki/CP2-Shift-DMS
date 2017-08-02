@@ -10,8 +10,8 @@ const documentController = {
       .create({
         title: req.body.title,
         content: req.body.content,
-        OwnerId: req.body.owner_id,
-        AccessId: req.body.accessId
+        ownerId: req.body.ownerId,
+        accessId: req.body.accessId
       })
       .then(todo => res.status(201).send(todo))
       .catch(error => res.status(400).send(error));
@@ -20,23 +20,23 @@ const documentController = {
     const query = {};
     switch (req.query.type) {
       case 'public':
-        query.AccessId = 2;
+        query.accessId = 2;
         break;
       case 'role':
       case 'shared':
-        query.OwnerId = req.query.userId;
+        query.ownerId = req.query.userId;
         break;
       default:
-        query.AccessId = 1;
-        query.OwnerId = req.query.userId;
+        query.accessId = 1;
+        query.ownerId = req.query.userId;
         break;
     }
-    if (!query.AccessId) {
+    if (!query.accessId) {
       User
         .findById(req.query.userId)
         .then((user) => {
           if (req.query.type === 'role') {
-            Role.findById(user.RoleId)
+            Role.findById(user.roleId)
             .then((role) => {
               role.getDocuments()
               .then((documents) => {
@@ -78,10 +78,10 @@ const documentController = {
           });
         } else {
           const response = { document };
-          if (document.OwnerId === req.userId) {
+          if (document.ownerId === req.userId) {
             response.rightId = 1;
             res.status(200).send(response);
-          } else if (document.AccessId === 2) {
+          } else if (document.accessId === 2) {
             response.rightId = 3;
             res.status(200).send(response);
           } else {
@@ -97,7 +97,7 @@ const documentController = {
                   where: {
                     id: req.roleId
                   },
-                  joinTableAttributes: ['RightId']
+                  joinTableAttributes: ['rightId']
                 })
                 .then((role) => {
                   if (role.length < 1) {
@@ -106,14 +106,14 @@ const documentController = {
                     });
                   } else {
                     response.rightId =
-                      role[0].dataValues.DocumentRole.dataValues.RightId;
+                      role[0].dataValues.DocumentRole.dataValues.rightId;
                     res.status(200).send(response);
                   }
                 })
                 .catch(error => res.status(500).send(error));
               } else {
                 response.rightId =
-                  user[0].dataValues.DocumentUser.dataValues.RightId;
+                  user[0].dataValues.DocumentUser.dataValues.rightId;
                 res.status(200).send(response);
               }
             })
@@ -127,7 +127,7 @@ const documentController = {
     Document
       .findAll({
         where: {
-          AccessId: 2
+          accessId: 2
         }
       })
       .then((documents) => {

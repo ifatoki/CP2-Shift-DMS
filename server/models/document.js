@@ -7,11 +7,11 @@ export default (sequelize, DataTypes) => {
     content: {
       type: DataTypes.TEXT,
     },
-    OwnerId: {
+    ownerId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    AccessId: {
+    accessId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }
@@ -28,10 +28,10 @@ export default (sequelize, DataTypes) => {
           foreignKey: 'documentId'
         });
         Document.belongsTo(models.User, {
-          foreignKey: 'OwnerId',
+          foreignKey: 'ownerId',
         });
         Document.belongsTo(models.Access, {
-          foreignKey: 'AccessId',
+          foreignKey: 'accessId',
         });
       }
     }

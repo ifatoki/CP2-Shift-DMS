@@ -6,10 +6,10 @@ export default (sequelize, DataTypes) => {
     classMethods: {
       associate(models) {
         Right.hasMany(models.DocumentUser, {
-          foreignKey: 'RightId'
+          foreignKey: 'rightId'
         });
         Right.hasMany(models.DocumentRole, {
-          foreignKey: 'RightId'
+          foreignKey: 'rightId'
         });
       }
     }

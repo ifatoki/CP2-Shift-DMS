@@ -1,12 +1,12 @@
 export default (sequelize, DataTypes) => {
   const DocumentUser = sequelize.define('DocumentUser', {
-    RightId: DataTypes.INTEGER
+    rightId: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: (models) => {
         // associations can be defined here
         DocumentUser.belongsTo(models.Right, {
-          foreignKey: 'RightId'
+          foreignKey: 'rightId'
         });
       }
     }
