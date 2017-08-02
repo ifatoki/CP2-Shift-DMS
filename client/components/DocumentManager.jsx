@@ -276,7 +276,7 @@ DocumentManager.propTypes = {
     result: PropType.string.isRequired,
     role: PropType.string.isRequired
   }).isRequired,
-  createNew: PropType.bool.isRequired,
+  // createNew: PropType.bool.isRequired,
   rightId: PropType.number.isRequired,
   currentDocument: PropType.shape({
     id: PropType.number,
@@ -301,7 +301,7 @@ const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,
   rightId: state.documents.currentRightId,
-  createNew: state.documents.createNew
+  // createNew: state.documents.createNew
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentManager);

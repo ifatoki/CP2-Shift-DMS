@@ -32,7 +32,7 @@ class HomeContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.createNew || nextProps.currentDocument) {
+    if (nextProps.currentDocument) {
       event.preventDefault();
       $('.ui.modal')
         .modal({
@@ -262,7 +262,7 @@ HomeContainer.propTypes = {
   fetchDocuments: PropType.func.isRequired,
   fetchAllUsers: PropType.func.isRequired,
   fetchAllRoles: PropType.func.isRequired,
-  createNew: PropType.bool.isRequired,
+  // createNew: PropType.bool.isRequired,
   createNewDocument: PropType.func.isRequired,
   documentsType: PropType.string,
   currentDocument: PropType.shape({
@@ -292,7 +292,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = state => ({
   user: state.user,
-  createNew: state.documents.createNew,
+  // createNew: state.documents.createNew,
   currentDocument: state.documents.currentDocument,
   documentsType: state.documents.documentsType
 });
