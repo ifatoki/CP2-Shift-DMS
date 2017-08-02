@@ -97,32 +97,32 @@ module.exports = {
     });
   },
   fetch: (req, res) => {
-    User
-      .findAll({
-        include: [{
-          model: Document,
-          as: 'myDocuments'
-        }, {
-          model: Document
-        }],
-        where: {
-          RoleId: {
-            $ne: 1
+    if (req.userId === 1) {
+      User
+        .findAll({
+          where: {
+            RoleId: {
+              $ne: 1
+            }
+          },
+          offset: req.query.offset,
+          limit: req.query.limit || null
+        })
+        .then((users) => {
+          if (!users) {
+            res.status(404).send({
+              message: 'no users in database'
+            });
+          } else {
+            res.status(200).send(users);
           }
-        },
-        offset: req.query.offset,
-        limit: req.query.limit || null
-      })
-      .then((users) => {
-        if (!users) {
-          res.status(404).send({
-            message: 'no users in database'
-          });
-        } else {
-          res.status(200).send(users);
-        }
-      })
-      .catch(error => res.status(400).send(error));
+        })
+        .catch(error => res.status(400).send(error));
+    } else {
+      res.status(403).send({
+        message: 'only overlord can view all users'
+      });
+    }
   },
   fetchUser: (req, res) => {
     User

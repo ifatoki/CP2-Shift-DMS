@@ -19,7 +19,6 @@ class Document extends React.Component {
       <Card onClick={this.clickHander}>
         <Card.Content>
           <Card.Header>
-            <Icon name="trash" color="blue" />
             {this.props.title}
           </Card.Header>
           <Card.Meta content={this.props.created} />
@@ -28,6 +27,9 @@ class Document extends React.Component {
         <Card.Content extra>
           <Icon name="user" color="blue" />
           @itunuworks
+          <div className="right floated">
+            <Icon name="trash" color="blue" />
+          </div>
         </Card.Content>
       </Card>
     );

@@ -10,7 +10,8 @@ const DocumentList = props => (
       paddingTop: '10px',
       marginTop: '0px',
       overflowY: 'scroll',
-      height: '90%'
+      height: '90%',
+      display: props.show ? 'block' : 'none'
     }}
   >
     <Card.Group>
@@ -28,11 +29,12 @@ const DocumentList = props => (
 );
 
 DocumentList.propTypes = {
-  documents: PropTypes.arrayOf(PropTypes.object).isRequired
+  documents: PropTypes.arrayOf(PropTypes.object).isRequired,
+  show: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  documents: state.documents.documents
+  documents: state.documents.documents,
 });
 
 export default connect(mapStateToProps)(DocumentList);

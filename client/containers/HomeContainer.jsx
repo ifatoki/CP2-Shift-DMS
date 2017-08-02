@@ -2,16 +2,18 @@ import React from 'react';
 import { Search, Grid, Header } from 'semantic-ui-react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import { logUserOut } from '../actions/users';
+import { logUserOut, fetchAllUsers, fetchAllRoles } from '../actions/users';
 import { fetchDocuments, createNewDocument } from '../actions/documents';
 import DocumentList from '../components/DocumentList';
+import UserList from '../components/UserList';
 import DocumentManager from '../components/DocumentManager';
 
 class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: 'private'
+      type: 'private',
+      showUsers: false
     };
     this.logOut = this.logOut.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
@@ -19,7 +21,12 @@ class HomeContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchDocuments(this.props.user.id, 'private');
+    let type = 'private';
+
+    if (this.props.user.id === 1) {
+      type = 'public';
+    }
+    this.props.fetchDocuments(this.props.user.id, type);
     $('.ui.dropdown')
       .dropdown();
   }
@@ -42,10 +49,16 @@ class HomeContainer extends React.Component {
   handleDocumentTypeChange(event) {
     event.preventDefault();
     const newState = {
-      type: event.target.name
+      type: event.target.name,
+      showUsers: event.target.name === 'users'
     };
     this.setState(newState, () => {
-      this.props.fetchDocuments(this.props.user.id, this.state.type);
+      if (newState.type === 'users') {
+        this.props.fetchAllUsers();
+        this.props.fetchAllRoles();
+      } else {
+        this.props.fetchDocuments(this.props.user.id, this.state.type);
+      }
     });
   }
 
@@ -112,7 +125,13 @@ class HomeContainer extends React.Component {
           <div className="three wide column fixed">
             <i className="dropbox huge blue icon" />
             <div className="ui divided items">
-              <div className="item">
+              <div
+                className="item"
+                style={{
+                  display: this.props.user.role === 'overlord' ?
+                  'none' : 'block'
+                }}
+              >
                 <div className="middle aligned content">
                   <a
                     className="item"
@@ -134,7 +153,13 @@ class HomeContainer extends React.Component {
                   </a>
                 </div>
               </div>
-              <div className="item">
+              <div
+                className="item"
+                style={{
+                  display: this.props.user.role === 'overlord' ?
+                  'none' : 'block'
+                }}
+              >
                 <div className="middle aligned content">
                   <a
                     className="item"
@@ -145,7 +170,30 @@ class HomeContainer extends React.Component {
                   </a>
                 </div>
               </div>
-              <div className="item">
+              <div
+                className="item"
+                style={{
+                  display: this.props.user.role === 'overlord' ?
+                  'block' : 'none'
+                }}
+              >
+                <div className="middle aligned content">
+                  <a
+                    className="item"
+                    name="users"
+                    onClick={this.handleDocumentTypeChange}
+                  >
+                    Manage Users
+                  </a>
+                </div>
+              </div>
+              <div
+                className="item"
+                style={{
+                  display: this.props.user.role === 'overlord' ?
+                  'none' : 'block'
+                }}
+              >
                 <div className="middle aligned content">
                   <a
                     className="item"
@@ -162,12 +210,25 @@ class HomeContainer extends React.Component {
             <Grid>
               <Grid.Row>
                 <Grid.Column width={8}>
-                  <Header size="huge">
+                  <h1
+                    className="ui huge header"
+                    style={{
+                      display: this.state.showUsers ? 'none' : 'block'
+                    }}
+                  >
                     {this.props.documentsType === 'role' ?
-                      role.toUpperCase() :
-                      this.props.documentsType.toUpperCase()
-                    } DOCUMENTS
-                  </Header>
+                      `${role.toUpperCase()} DOCUMENTS` :
+                      `${this.props.documentsType.toUpperCase()} DOCUMENTS`
+                    }
+                  </h1>
+                  <h1
+                    className="ui huge header"
+                    style={{
+                      display: this.state.showUsers ? 'block' : 'none'
+                    }}
+                  >
+                   MANAGE USERS
+                  </h1>
                 </Grid.Column>
                 <Grid.Column
                   width={8}
@@ -176,7 +237,8 @@ class HomeContainer extends React.Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            <DocumentList />
+            <UserList show={this.state.showUsers} />
+            <DocumentList show={!this.state.showUsers} />
           </div>
         </div>
       </div>
@@ -194,9 +256,12 @@ HomeContainer.propTypes = {
     firstname: PropType.string.isRequired,
     lastname: PropType.string.isRequired,
     result: PropType.string.isRequired,
-    role: PropType.string.isRequired
+    role: PropType.string.isRequired,
+    userUpdateSuccessful: PropType.bool
   }).isRequired,
   fetchDocuments: PropType.func.isRequired,
+  fetchAllUsers: PropType.func.isRequired,
+  fetchAllRoles: PropType.func.isRequired,
   createNew: PropType.bool.isRequired,
   createNewDocument: PropType.func.isRequired,
   documentsType: PropType.string,
@@ -220,7 +285,9 @@ HomeContainer.defaultProps = {
 const mapDispatchToProps = {
   logUserOut,
   fetchDocuments,
-  createNewDocument
+  createNewDocument,
+  fetchAllUsers,
+  fetchAllRoles
 };
 
 const mapStateToProps = state => ({
