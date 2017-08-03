@@ -1,10 +1,11 @@
 import React from 'react';
-import { Search, Grid, Header } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { logUserOut, fetchAllUsers, fetchAllRoles } from '../actions/users';
-import { fetchDocuments, createNewDocument } from '../actions/documents';
+import { fetchDocuments } from '../actions/documents';
 import DocumentList from '../components/DocumentList';
+import SearchComponent from '../components/SearchComponent';
 import UserList from '../components/UserList';
 import DocumentManager from '../components/DocumentManager';
 
@@ -33,7 +34,9 @@ class HomeContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentDocumentUpdated) {
+    const { currentDocumentUpdated } = nextProps;
+
+    if (currentDocumentUpdated) {
       event.preventDefault();
       $('.ui.modal')
         .modal({
@@ -234,7 +237,7 @@ class HomeContainer extends React.Component {
             <Grid>
               <Grid.Row>
                 <Grid.Column width={8}>
-                  <h1
+                  <div
                     className="ui huge header"
                     style={{
                       display: this.state.showUsers ? 'none' : 'block'
@@ -244,20 +247,20 @@ class HomeContainer extends React.Component {
                       `${role.toUpperCase()} DOCUMENTS` :
                       `${this.props.documentsType.toUpperCase()} DOCUMENTS`
                     }
-                  </h1>
-                  <h1
+                  </div>
+                  <div
                     className="ui huge header"
                     style={{
-                      display: this.state.showUsers ? 'block' : 'none'
+                      display: this.state.showUsers ? 'block' : 'none',
                     }}
                   >
                    MANAGE USERS
-                  </h1>
+                  </div>
                 </Grid.Column>
                 <Grid.Column
                   width={8}
                 >
-                  <Search />
+                  <SearchComponent />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -287,15 +290,7 @@ HomeContainer.propTypes = {
   fetchAllUsers: PropType.func.isRequired,
   fetchAllRoles: PropType.func.isRequired,
   currentDocumentUpdated: PropType.bool.isRequired,
-  createNewDocument: PropType.func.isRequired,
-  documentsType: PropType.string,
-  currentDocument: PropType.shape({
-    id: PropType.number,
-    title: PropType.string,
-    content: PropType.string,
-    OwnerId: PropType.number,
-    AccessId: PropType.number
-  })
+  documentsType: PropType.string
 };
 
 HomeContainer.defaultProps = {
@@ -309,7 +304,6 @@ HomeContainer.defaultProps = {
 const mapDispatchToProps = {
   logUserOut,
   fetchDocuments,
-  createNewDocument,
   fetchAllUsers,
   fetchAllRoles
 };

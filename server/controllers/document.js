@@ -16,7 +16,7 @@ const documentController = {
       .then(todo => res.status(201).send(todo))
       .catch(error => res.status(400).send(error));
   },
-  fetch: (req, res) => {
+  fetchAll: (req, res) => {
     const query = {};
     switch (req.query.type) {
     case 'public':
@@ -68,7 +68,7 @@ const documentController = {
         .catch(error => res.status(400).send(error));
     }
   },
-  fetchDocument: (req, res) => {
+  fetchOne: (req, res) => {
     Document
       .findById(req.params.id)
       .then((document) => {
@@ -89,7 +89,7 @@ const documentController = {
               where: {
                 id: req.userId
               },
-              joinTableAttributes: ['RightId']
+              joinTableAttributes: ['rightId']
             })
             .then((user) => {
               if (user.length < 1) {
@@ -123,7 +123,7 @@ const documentController = {
       })
       .catch(error => res.status(400).send(error));
   },
-  fetchPublicDocuments: (req, res) => {
+  fetchPublic: (req, res) => {
     Document
       .findAll({
         where: {
@@ -141,7 +141,7 @@ const documentController = {
       })
       .catch(error => res.status(400).send(error));
   },
-  updateDocument: (req, res) => {
+  update: (req, res) => {
     Document
       .findById(req.params.id)
       .then((document) => {
@@ -160,7 +160,7 @@ const documentController = {
       })
       .catch(error => res.status(400).send(error));
   },
-  deleteDocument: (req, res) => {
+  delete: (req, res) => {
     Document
       .findById(req.params.id)
       .then((document) => {
@@ -190,7 +190,9 @@ const documentController = {
               title: {
                 $ilike: `%${req.query.q}%`
               }
-            }
+            },
+            attributes: ['id', 'title'],
+            joinTableAttributes: []
           })
             .then((sharedDocuments) => {
               if (sharedDocuments.length) {
@@ -204,7 +206,8 @@ const documentController = {
                   title: {
                     $ilike: `%${req.query.q}%`
                   }
-                }
+                },
+                attributes: ['id', 'title']
               })
                 .then((myDocuments) => {
                   if (myDocuments.length) {
@@ -222,7 +225,9 @@ const documentController = {
                             title: {
                               $ilike: `%${req.query.q}%`
                             }
-                          }
+                          },
+                          attributes: ['id', 'title'],
+                          joinTableAttributes: []
                         })
                           .then((roleDocuments) => {
                             if (roleDocuments.length) {
@@ -236,7 +241,8 @@ const documentController = {
                                 where: {
                                   accessId: 2,
                                   title: { $ilike: `%${req.query.q}%` }
-                                }
+                                },
+                                attributes: ['id', 'title']
                               })
                               .then((publicDocuments) => {
                                 if (publicDocuments.length) {

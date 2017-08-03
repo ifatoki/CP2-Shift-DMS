@@ -80,30 +80,30 @@ module.exports = (app) => {
   // find all documents
   app.get('/api/v1/documents/',
     auth.confirmAuthentication,
-    documentsController.fetch
+    documentsController.fetchAll
   );
   // find all public documents
   app.get('/api/v1/documents/public',
     auth.confirmAuthentication,
-    documentsController.fetchPublicDocuments
+    documentsController.fetchPublic
   );
   // find the specified document
   app.get(
     '/api/v1/documents/:id',
     auth.confirmAuthentication,
-    documentsController.fetchDocument
+    documentsController.fetchOne
   );
   // update the specified documents attributes
   app.put(
     '/api/v1/documents/:id',
     auth.confirmAuthentication,
-    documentsController.updateDocument
+    documentsController.update
   );
   // delete the specified document
   app.delete(
     '/api/v1/documents/:id',
     auth.confirmAuthentication,
-    documentsController.deleteDocument
+    documentsController.delete
   );
   // search for a document
   app.get(
