@@ -13,7 +13,8 @@ class HomeContainer extends React.Component {
     super(props);
     this.state = {
       type: 'private',
-      showUsers: false
+      showUsers: false,
+      createNew: false
     };
     this.logOut = this.logOut.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
@@ -32,7 +33,7 @@ class HomeContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentDocument) {
+    if (nextProps.currentDocumentUpdated) {
       event.preventDefault();
       $('.ui.modal')
         .modal({
@@ -41,6 +42,12 @@ class HomeContainer extends React.Component {
           selector: {
             close: '.cancel, .close'
           },
+          onHide: () => {
+            this.setState({
+              createNew: false,
+              currentDocumentupdated: false
+            });
+          }
         })
         .modal('show');
     }
@@ -63,7 +70,24 @@ class HomeContainer extends React.Component {
   }
 
   initializeNewDocument() {
-    this.props.createNewDocument();
+    this.setState({
+      createNew: true
+    }, () => {
+      $('.ui.modal')
+        .modal({
+          closable: false,
+          detachable: false,
+          selector: {
+            close: '.cancel, .close'
+          },
+          onHide: () => {
+            this.setState({
+              createNew: false
+            });
+          }
+        })
+        .modal('show');
+    });
   }
 
   logOut(event) {
@@ -76,7 +100,7 @@ class HomeContainer extends React.Component {
       + this.props.user.role.slice(1);
     return (
       <div style={{ height: '100%' }} >
-        <DocumentManager />
+        <DocumentManager createNew={this.state.createNew} />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
             <a className="active item" href="/document">Home</a>
@@ -262,7 +286,7 @@ HomeContainer.propTypes = {
   fetchDocuments: PropType.func.isRequired,
   fetchAllUsers: PropType.func.isRequired,
   fetchAllRoles: PropType.func.isRequired,
-  // createNew: PropType.bool.isRequired,
+  currentDocumentUpdated: PropType.bool.isRequired,
   createNewDocument: PropType.func.isRequired,
   documentsType: PropType.string,
   currentDocument: PropType.shape({
@@ -292,9 +316,9 @@ const mapDispatchToProps = {
 
 const mapStateToProps = state => ({
   user: state.user,
-  // createNew: state.documents.createNew,
   currentDocument: state.documents.currentDocument,
-  documentsType: state.documents.documentsType
+  documentsType: state.documents.documentsType,
+  currentDocumentUpdated: state.documents.currentDocumentUpdated
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

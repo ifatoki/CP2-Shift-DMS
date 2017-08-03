@@ -3,7 +3,10 @@ import * as actionTypes from '../actions/actionTypes';
 const defaultState = {
   currentDocument: null,
   currentRightId: 3,
-  documents: []
+  documents: [],
+  currentDocumentUpdated: false,
+  documentsUpdated: false,
+  documentSaved: false
 };
 
 function documentReducers(state = defaultState, action) {
@@ -62,6 +65,12 @@ function documentReducers(state = defaultState, action) {
       return Object.assign({}, state, {
         currentDocumentUpdating: false,
         currentDocumentUpdated: false
+      });
+    case actionTypes.DOCUMENT_CANCELLED:
+      return Object.assign({}, state, {
+        currentDocumentUpdated: false,
+        documentsUpdated: false,
+        documentSaved: false,
       });
     default:
       return state;
