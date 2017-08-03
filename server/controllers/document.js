@@ -19,17 +19,17 @@ const documentController = {
   fetch: (req, res) => {
     const query = {};
     switch (req.query.type) {
-      case 'public':
-        query.accessId = 2;
-        break;
-      case 'role':
-      case 'shared':
-        query.ownerId = req.query.userId;
-        break;
-      default:
-        query.accessId = 1;
-        query.ownerId = req.query.userId;
-        break;
+    case 'public':
+      query.accessId = 2;
+      break;
+    case 'role':
+    case 'shared':
+      query.ownerId = req.query.userId;
+      break;
+    default:
+      query.accessId = 1;
+      query.ownerId = req.query.userId;
+      break;
     }
     if (!query.accessId) {
       User
@@ -180,15 +180,92 @@ const documentController = {
       });
   },
   search: (req, res) => {
-    Document
-      .findAll({
-        where: {
-          title: {
-            $ilike: `${req.query.q}%`
-          }
+    const searchResults = {};
+    User
+      .findById(req.userId)
+      .then((user) => {
+        if (user) {
+          user.getDocuments({
+            where: {
+              title: {
+                $ilike: `%${req.query.q}%`
+              }
+            }
+          })
+            .then((sharedDocuments) => {
+              if (sharedDocuments.length) {
+                searchResults.shared = {
+                  name: 'shared',
+                  results: sharedDocuments
+                };
+              }
+              user.getMyDocuments({
+                where: {
+                  title: {
+                    $ilike: `%${req.query.q}%`
+                  }
+                }
+              })
+                .then((myDocuments) => {
+                  if (myDocuments.length) {
+                    searchResults.authored = {
+                      name: 'authored',
+                      results: myDocuments
+                    };
+                  }
+                  Role
+                    .findById(req.roleId)
+                    .then((role) => {
+                      if (role) {
+                        role.getDocuments({
+                          where: {
+                            title: {
+                              $ilike: `%${req.query.q}%`
+                            }
+                          }
+                        })
+                          .then((roleDocuments) => {
+                            if (roleDocuments.length) {
+                              searchResults.role = {
+                                name: 'role',
+                                results: roleDocuments
+                              };
+                            }
+                            Document
+                              .findAll({
+                                where: {
+                                  accessId: 2,
+                                  title: { $ilike: `%${req.query.q}%` }
+                                }
+                              })
+                              .then((publicDocuments) => {
+                                if (publicDocuments.length) {
+                                  searchResults.public = {
+                                    name: 'public',
+                                    results: publicDocuments
+                                  };
+                                }
+                                res.status(200).send(searchResults);
+                              })
+                              .catch(error => res.status(400).send(error));
+                          });
+                      } else {
+                        res.status(404).send({
+                          message: 'role not found'
+                        });
+                      }
+                    })
+                    .catch(error => res.status(400).send(error));
+                })
+                .catch(error => res.status(500).send(error));
+            })
+            .catch(error => res.status(500).send(error));
+        } else {
+          res.status(404).send({
+            message: 'invalid user'
+          });
         }
       })
-      .then(user => res.status(200).send(user))
       .catch(error => res.status(400).send(error));
   },
   addUser: (req, res) => {
