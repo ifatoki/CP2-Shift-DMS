@@ -9,6 +9,9 @@
     "mocha": true,
     "jquery": true
   },
+  "globals": {
+    "tinymce": true
+  },
   "rules": {
     "one-var": 0,
     "max-len": [2, 80, 2],

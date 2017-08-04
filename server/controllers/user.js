@@ -260,20 +260,28 @@ module.exports = {
   },
   search: (req, res) => {
     User
-      .findAll({
-        where: {
-          $or: [{
-            username: {
-              $ilike: `${req.query.q}%`
-            }
-          }, {
-            email: {
-              $ilike: `${req.query.q}%`
-            }
-          }]
-        }
-      })
-      .then(user => res.status(200).send(user))
-      .catch(error => res.status(400).send(error));
+    .findAll({
+      where: {
+        $or: [{
+          username: {
+            $ilike: `%${req.query.q}%`
+          }
+        }, {
+          email: {
+            $ilike: `%${req.query.q}%`
+          }
+        }, {
+          firstname: {
+            $ilike: `%${req.query.q}%`
+          }
+        }, {
+          lastname: {
+            $ilike: `%${req.query.q}%`
+          }
+        }]
+      }
+    })
+    .then(user => res.status(200).send(user))
+    .catch(error => res.status(400).send(error));
   }
 };

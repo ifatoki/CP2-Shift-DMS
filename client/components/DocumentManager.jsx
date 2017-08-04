@@ -60,17 +60,20 @@ class DocumentManager extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentDocument || nextProps.createNew) {
+    const { currentDocument, createNew } = nextProps;
+
+    if (currentDocument || createNew) {
       this.setState({
         rightId: nextProps.rightId,
-        accessMode: nextProps.createNew ?
+        accessMode: createNew ?
           editModes.NEW : editModes.READ,
       }, () => {
-        const isNew = nextProps.currentDocument === null;
+        const isNew = createNew;
+
         this.setState({
-          title: isNew ? '' : nextProps.currentDocument.title,
-          content: isNew ? '' : nextProps.currentDocument.content,
-          accessId: isNew ? '' : nextProps.currentDocument.accessId
+          title: isNew ? '' : currentDocument.title,
+          content: isNew ? '' : currentDocument.content,
+          accessId: isNew ? '' : currentDocument.accessId
         }, () => {
           $('#contentHolder').children().remove();
           $(this.state.content).prependTo('#contentHolder');
@@ -276,7 +279,7 @@ DocumentManager.propTypes = {
     result: PropType.string.isRequired,
     role: PropType.string.isRequired
   }).isRequired,
-  // createNew: PropType.bool.isRequired,
+  createNew: PropType.bool.isRequired,
   rightId: PropType.number.isRequired,
   currentDocument: PropType.shape({
     id: PropType.number,
@@ -300,8 +303,7 @@ const mapDispatchToProps = {
 const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,
-  rightId: state.documents.currentRightId,
-  // createNew: state.documents.createNew
+  rightId: state.documents.currentRightId
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentManager);
