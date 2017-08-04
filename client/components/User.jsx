@@ -22,7 +22,7 @@ class User extends React.Component {
             content={`${this.props.firstname} ${this.props.lastname}`}
           />
           <Card.Meta>
-            <a href="">{this.props.email}</a>
+            <a href={`mailto:${this.props.email}`}>{this.props.email}</a>
           </Card.Meta>
           <Card.Meta content={`@${this.props.username}`} />
           <Card.Description content={this.props.created} />

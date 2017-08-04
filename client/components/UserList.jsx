@@ -11,10 +11,11 @@ const normalizeUsers = (roles, users) => {
   }, {});
 
   const myUsers = users.reduce((accumulator, currentValue) => {
-    const num = currentValue.RoleId;
+    const num = currentValue.roleId;
     currentValue.role = myRoles[num];
     return accumulator.concat(currentValue);
   }, []);
+
   return myUsers;
 };
 
@@ -35,9 +36,9 @@ const UserList = (props) => {
           <User
             key={user.id}
             username={user.username}
-            email={user.email_address}
-            firstname={user.first_name}
-            lastname={user.last_name}
+            email={user.email}
+            firstname={user.firstname}
+            lastname={user.lastname}
             created={user.createdAt}
             role={user.role || ''}
           />

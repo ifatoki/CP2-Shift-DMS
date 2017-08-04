@@ -7,7 +7,7 @@ function confirmUserDetails(req, res, next) {
         $or: [{
           username: req.body.username
         }, {
-          email_address: req.body.email
+          email: req.body.email
         }]
       }
     })
@@ -32,7 +32,7 @@ export default function confirmRole(req, res, next) {
     User
       .findOne({
         where: {
-          RoleId: req.body.roleId
+          roleId: req.body.roleId
         }
       })
       .then((overlord) => {

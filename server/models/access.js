@@ -9,7 +9,7 @@ export default (sequelize, DataTypes) => {
       associate: (models) => {
         // associations can be defined here
         Access.hasMany(models.Document, {
-          foreignKey: 'AccessId',
+          foreignKey: 'accessId',
         });
       }
     }

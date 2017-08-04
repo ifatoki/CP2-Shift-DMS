@@ -4,25 +4,25 @@ module.exports = {
       {
         id: 1,
         title: 'The best book I never wrote',
-        content: 'My first book ever!!!',
-        OwnerId: 2,
-        AccessId: 1,
+        content: '<p>My first book ever!!!</p>',
+        ownerId: 2,
+        accessId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
       }, {
         id: 2,
         title: 'The travails of a Nigerian child',
-        content: 'Simply stunning and astounding',
-        OwnerId: 2,
-        AccessId: 1,
+        content: '<p>Simply stunning and astounding</p>',
+        ownerId: 2,
+        accessId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
       }, {
         id: 3,
         title: 'The President that would never be',
-        content: 'Summary of the events of June 12 1994',
-        OwnerId: 3,
-        AccessId: 2,
+        content: '<p>Summary of the events of June 12 1994</p>',
+        ownerId: 3,
+        accessId: 2,
         createdAt: new Date(),
         updatedAt: new Date()
       }

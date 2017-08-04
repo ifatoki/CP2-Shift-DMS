@@ -1,10 +1,11 @@
 import React from 'react';
-import { Search, Grid, Header } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { logUserOut, fetchAllUsers, fetchAllRoles } from '../actions/users';
-import { fetchDocuments, createNewDocument } from '../actions/documents';
+import { fetchDocuments } from '../actions/documents';
 import DocumentList from '../components/DocumentList';
+import SearchComponent from '../components/SearchComponent';
 import UserList from '../components/UserList';
 import DocumentManager from '../components/DocumentManager';
 
@@ -13,7 +14,8 @@ class HomeContainer extends React.Component {
     super(props);
     this.state = {
       type: 'private',
-      showUsers: false
+      showUsers: false,
+      createNew: false
     };
     this.logOut = this.logOut.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
@@ -32,7 +34,9 @@ class HomeContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.createNew || nextProps.currentDocument) {
+    const { currentDocumentUpdated } = nextProps;
+
+    if (currentDocumentUpdated) {
       event.preventDefault();
       $('.ui.modal')
         .modal({
@@ -41,6 +45,12 @@ class HomeContainer extends React.Component {
           selector: {
             close: '.cancel, .close'
           },
+          onHide: () => {
+            this.setState({
+              createNew: false,
+              currentDocumentupdated: false
+            });
+          }
         })
         .modal('show');
     }
@@ -63,7 +73,24 @@ class HomeContainer extends React.Component {
   }
 
   initializeNewDocument() {
-    this.props.createNewDocument();
+    this.setState({
+      createNew: true
+    }, () => {
+      $('.ui.modal')
+        .modal({
+          closable: false,
+          detachable: false,
+          selector: {
+            close: '.cancel, .close'
+          },
+          onHide: () => {
+            this.setState({
+              createNew: false
+            });
+          }
+        })
+        .modal('show');
+    });
   }
 
   logOut(event) {
@@ -76,7 +103,7 @@ class HomeContainer extends React.Component {
       + this.props.user.role.slice(1);
     return (
       <div style={{ height: '100%' }} >
-        <DocumentManager />
+        <DocumentManager createNew={this.state.createNew} />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
             <a className="active item" href="/document">Home</a>
@@ -210,7 +237,7 @@ class HomeContainer extends React.Component {
             <Grid>
               <Grid.Row>
                 <Grid.Column width={8}>
-                  <h1
+                  <div
                     className="ui huge header"
                     style={{
                       display: this.state.showUsers ? 'none' : 'block'
@@ -220,20 +247,20 @@ class HomeContainer extends React.Component {
                       `${role.toUpperCase()} DOCUMENTS` :
                       `${this.props.documentsType.toUpperCase()} DOCUMENTS`
                     }
-                  </h1>
-                  <h1
+                  </div>
+                  <div
                     className="ui huge header"
                     style={{
-                      display: this.state.showUsers ? 'block' : 'none'
+                      display: this.state.showUsers ? 'block' : 'none',
                     }}
                   >
                    MANAGE USERS
-                  </h1>
+                  </div>
                 </Grid.Column>
                 <Grid.Column
                   width={8}
                 >
-                  <Search />
+                  <SearchComponent />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -262,16 +289,8 @@ HomeContainer.propTypes = {
   fetchDocuments: PropType.func.isRequired,
   fetchAllUsers: PropType.func.isRequired,
   fetchAllRoles: PropType.func.isRequired,
-  createNew: PropType.bool.isRequired,
-  createNewDocument: PropType.func.isRequired,
-  documentsType: PropType.string,
-  currentDocument: PropType.shape({
-    id: PropType.number,
-    title: PropType.string,
-    content: PropType.string,
-    OwnerId: PropType.number,
-    AccessId: PropType.number
-  })
+  currentDocumentUpdated: PropType.bool.isRequired,
+  documentsType: PropType.string
 };
 
 HomeContainer.defaultProps = {
@@ -285,16 +304,15 @@ HomeContainer.defaultProps = {
 const mapDispatchToProps = {
   logUserOut,
   fetchDocuments,
-  createNewDocument,
   fetchAllUsers,
   fetchAllRoles
 };
 
 const mapStateToProps = state => ({
   user: state.user,
-  createNew: state.documents.createNew,
   currentDocument: state.documents.currentDocument,
-  documentsType: state.documents.documentsType
+  documentsType: state.documents.documentsType,
+  currentDocumentUpdated: state.documents.currentDocumentUpdated
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

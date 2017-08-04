@@ -33,7 +33,7 @@ const confirmAuthentication = (req, res, next) => {
         .findById(parseInt(payload.sub.id, 10))
         .then((user) => {
           req.userId = user.id;
-          req.roleId = user.RoleId;
+          req.roleId = user.roleId;
           next();
         })
         .catch(() => {

@@ -8,9 +8,9 @@
     "dialect": "postgres"
   },
   "test": {
-    "username": "gisrmoqn",
-    "password": "gRVsbpZ0gwkbC9p0sE10-DvhReEGVXBG",
-    "database": "gisrmoqn",
+    "username": "wtgvyalj",
+    "password": "HrSPNSOb6dByUNjzbN4YzBPJQ8rob3yr",
+    "database": "wtgvyalj",
     "host": "stampy.db.elephantsql.com",
     "port": 5432,
     "dialect": "postgres"

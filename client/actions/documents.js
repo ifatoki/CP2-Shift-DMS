@@ -48,6 +48,20 @@ const documentSaveFailed = payload => ({
   payload
 });
 
+const documentsSearchRequest = () => ({
+  type: actionTypes.DOCUMENTS_SEARCH_REQUEST
+});
+
+const documentsSearchSuccessful = payload => ({
+  type: actionTypes.DOCUMENTS_SEARCH_SUCCESSFUL,
+  payload
+});
+
+const documentsSearchFailed = payload => ({
+  type: actionTypes.DOCUMENTS_SEARCH_FAILED,
+  payload
+});
+
 export function getDocument(documentId) {
   return (dispatch) => {
     dispatch(documentGetRequest());
@@ -82,13 +96,6 @@ export function fetchDocuments(userId, type) {
   };
 }
 
-export function createNewDocument() {
-  return dispatch =>
-    dispatch({
-      type: actionTypes.NEW_DOCUMENT
-    });
-}
-
 export function cancelNewDocument() {
   return dispatch =>
     dispatch({
@@ -106,6 +113,21 @@ export function saveNewDocument(documentData) {
       })
       .catch((error) => {
         dispatch(documentSaveFailed(error.message));
+      }
+    );
+  };
+}
+
+export function searchDocuments(query) {
+  return (dispatch) => {
+    dispatch(documentsSearchRequest());
+    return axios
+      .get(`api/v1/search/documents?q=${query}`, config)
+      .then((response) => {
+        dispatch(documentsSearchSuccessful(response.data));
+      })
+      .catch((error) => {
+        dispatch(documentsSearchFailed(error.message));
       }
     );
   };

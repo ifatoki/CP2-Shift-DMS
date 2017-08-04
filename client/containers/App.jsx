@@ -6,8 +6,6 @@ import LandingContainer from './LandingContainer';
 import LoginContainer from './LoginContainer';
 import SignupContainer from './SignupContainer';
 import HomeContainer from './HomeContainer';
-import DocumentContainer from './DocumentContainer';
-import ProfileContainer from './ProfileContainer';
 
 class App extends Component {
   render() {
@@ -38,20 +36,6 @@ class App extends Component {
           exact path="/home" component={
             this.props.isAuthenticated ?
             HomeContainer :
-            () => <Redirect to="/login" />
-          }
-        />
-        <Route
-          exact path="/document" component={
-            this.props.isAuthenticated ?
-            DocumentContainer :
-            () => <Redirect to="/login" />
-          }
-        />
-        <Route
-          exact path="/myprofile" component={
-            this.props.isAuthenticated ?
-            ProfileContainer :
             () => <Redirect to="/login" />
           }
         />

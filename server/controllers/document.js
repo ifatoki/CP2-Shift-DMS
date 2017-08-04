@@ -10,33 +10,33 @@ const documentController = {
       .create({
         title: req.body.title,
         content: req.body.content,
-        OwnerId: req.body.owner_id,
-        AccessId: req.body.accessId
+        ownerId: req.body.ownerId,
+        accessId: req.body.accessId
       })
       .then(todo => res.status(201).send(todo))
       .catch(error => res.status(400).send(error));
   },
-  fetch: (req, res) => {
+  fetchAll: (req, res) => {
     const query = {};
     switch (req.query.type) {
-      case 'public':
-        query.AccessId = 2;
-        break;
-      case 'role':
-      case 'shared':
-        query.OwnerId = req.query.userId;
-        break;
-      default:
-        query.AccessId = 1;
-        query.OwnerId = req.query.userId;
-        break;
+    case 'public':
+      query.accessId = 2;
+      break;
+    case 'role':
+    case 'shared':
+      query.ownerId = req.query.userId;
+      break;
+    default:
+      query.accessId = 1;
+      query.ownerId = req.query.userId;
+      break;
     }
-    if (!query.AccessId) {
+    if (!query.accessId) {
       User
         .findById(req.query.userId)
         .then((user) => {
           if (req.query.type === 'role') {
-            Role.findById(user.RoleId)
+            Role.findById(user.roleId)
             .then((role) => {
               role.getDocuments()
               .then((documents) => {
@@ -68,7 +68,7 @@ const documentController = {
         .catch(error => res.status(400).send(error));
     }
   },
-  fetchDocument: (req, res) => {
+  fetchOne: (req, res) => {
     Document
       .findById(req.params.id)
       .then((document) => {
@@ -78,10 +78,10 @@ const documentController = {
           });
         } else {
           const response = { document };
-          if (document.OwnerId === req.userId) {
+          if (document.ownerId === req.userId) {
             response.rightId = 1;
             res.status(200).send(response);
-          } else if (document.AccessId === 2) {
+          } else if (document.accessId === 2) {
             response.rightId = 3;
             res.status(200).send(response);
           } else {
@@ -89,7 +89,7 @@ const documentController = {
               where: {
                 id: req.userId
               },
-              joinTableAttributes: ['RightId']
+              joinTableAttributes: ['rightId']
             })
             .then((user) => {
               if (user.length < 1) {
@@ -97,7 +97,7 @@ const documentController = {
                   where: {
                     id: req.roleId
                   },
-                  joinTableAttributes: ['RightId']
+                  joinTableAttributes: ['rightId']
                 })
                 .then((role) => {
                   if (role.length < 1) {
@@ -106,14 +106,14 @@ const documentController = {
                     });
                   } else {
                     response.rightId =
-                      role[0].dataValues.DocumentRole.dataValues.RightId;
+                      role[0].dataValues.DocumentRole.dataValues.rightId;
                     res.status(200).send(response);
                   }
                 })
                 .catch(error => res.status(500).send(error));
               } else {
                 response.rightId =
-                  user[0].dataValues.DocumentUser.dataValues.RightId;
+                  user[0].dataValues.DocumentUser.dataValues.rightId;
                 res.status(200).send(response);
               }
             })
@@ -123,11 +123,11 @@ const documentController = {
       })
       .catch(error => res.status(400).send(error));
   },
-  fetchPublicDocuments: (req, res) => {
+  fetchPublic: (req, res) => {
     Document
       .findAll({
         where: {
-          AccessId: 2
+          accessId: 2
         }
       })
       .then((documents) => {
@@ -141,7 +141,7 @@ const documentController = {
       })
       .catch(error => res.status(400).send(error));
   },
-  updateDocument: (req, res) => {
+  update: (req, res) => {
     Document
       .findById(req.params.id)
       .then((document) => {
@@ -160,7 +160,7 @@ const documentController = {
       })
       .catch(error => res.status(400).send(error));
   },
-  deleteDocument: (req, res) => {
+  delete: (req, res) => {
     Document
       .findById(req.params.id)
       .then((document) => {
@@ -180,15 +180,98 @@ const documentController = {
       });
   },
   search: (req, res) => {
-    Document
-      .findAll({
-        where: {
-          title: {
-            $ilike: `${req.query.q}%`
-          }
+    const searchResults = {};
+    User
+      .findById(req.userId)
+      .then((user) => {
+        if (user) {
+          user.getDocuments({
+            where: {
+              title: {
+                $ilike: `%${req.query.q}%`
+              }
+            },
+            attributes: ['id', 'title'],
+            joinTableAttributes: []
+          })
+            .then((sharedDocuments) => {
+              if (sharedDocuments.length) {
+                searchResults.shared = {
+                  name: 'shared',
+                  results: sharedDocuments
+                };
+              }
+              user.getMyDocuments({
+                where: {
+                  title: {
+                    $ilike: `%${req.query.q}%`
+                  }
+                },
+                attributes: ['id', 'title']
+              })
+                .then((myDocuments) => {
+                  if (myDocuments.length) {
+                    searchResults.authored = {
+                      name: 'authored',
+                      results: myDocuments
+                    };
+                  }
+                  Role
+                    .findById(req.roleId)
+                    .then((role) => {
+                      if (role) {
+                        role.getDocuments({
+                          where: {
+                            title: {
+                              $ilike: `%${req.query.q}%`
+                            }
+                          },
+                          attributes: ['id', 'title'],
+                          joinTableAttributes: []
+                        })
+                          .then((roleDocuments) => {
+                            if (roleDocuments.length) {
+                              searchResults.role = {
+                                name: 'role',
+                                results: roleDocuments
+                              };
+                            }
+                            Document
+                              .findAll({
+                                where: {
+                                  accessId: 2,
+                                  title: { $ilike: `%${req.query.q}%` }
+                                },
+                                attributes: ['id', 'title']
+                              })
+                              .then((publicDocuments) => {
+                                if (publicDocuments.length) {
+                                  searchResults.public = {
+                                    name: 'public',
+                                    results: publicDocuments
+                                  };
+                                }
+                                res.status(200).send(searchResults);
+                              })
+                              .catch(error => res.status(400).send(error));
+                          });
+                      } else {
+                        res.status(404).send({
+                          message: 'role not found'
+                        });
+                      }
+                    })
+                    .catch(error => res.status(400).send(error));
+                })
+                .catch(error => res.status(500).send(error));
+            })
+            .catch(error => res.status(500).send(error));
+        } else {
+          res.status(404).send({
+            message: 'invalid user'
+          });
         }
       })
-      .then(user => res.status(200).send(user))
       .catch(error => res.status(400).send(error));
   },
   addUser: (req, res) => {

@@ -60,17 +60,20 @@ class DocumentManager extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentDocument || nextProps.createNew) {
+    const { currentDocument, createNew } = nextProps;
+
+    if (currentDocument || createNew) {
       this.setState({
         rightId: nextProps.rightId,
-        accessMode: nextProps.createNew ?
+        accessMode: createNew ?
           editModes.NEW : editModes.READ,
       }, () => {
-        const isNew = nextProps.currentDocument === null;
+        const isNew = createNew;
+
         this.setState({
-          title: isNew ? '' : nextProps.currentDocument.title,
-          content: isNew ? '' : nextProps.currentDocument.content,
-          accessId: isNew ? '' : nextProps.currentDocument.AccessId
+          title: isNew ? '' : currentDocument.title,
+          content: isNew ? '' : currentDocument.content,
+          accessId: isNew ? '' : currentDocument.accessId
         }, () => {
           $('#contentHolder').children().remove();
           $(this.state.content).prependTo('#contentHolder');
@@ -97,7 +100,7 @@ class DocumentManager extends React.Component {
     this.props.saveNewDocument({
       title: this.state.title,
       content: this.state.content,
-      owner_id: this.props.user.id,
+      ownerId: this.props.user.id,
       accessId: this.state.accessId
     });
   }
@@ -282,8 +285,8 @@ DocumentManager.propTypes = {
     id: PropType.number,
     title: PropType.string,
     content: PropType.string,
-    OwnerId: PropType.number,
-    AccessId: PropType.number
+    ownerId: PropType.number,
+    accessId: PropType.number
   }),
   cancelNewDocument: PropType.func.isRequired
 };
@@ -300,8 +303,7 @@ const mapDispatchToProps = {
 const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,
-  rightId: state.documents.currentRightId,
-  createNew: state.documents.createNew
+  rightId: state.documents.currentRightId
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentManager);

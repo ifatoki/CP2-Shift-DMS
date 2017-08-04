@@ -26,10 +26,10 @@ function userReducers(state = {
     case actionTypes.ADD_USER:
       return Object.assign({}, state, {
         id: action.payload.user.id,
-        email: action.payload.user.email_address,
+        email: action.payload.user.email,
         username: action.payload.user.username,
-        firstname: action.payload.user.first_name,
-        lastname: action.payload.user.last_name,
+        firstname: action.payload.user.firstname,
+        lastname: action.payload.user.lastname,
         result: action.type,
         isAuthenticated: true,
         role: action.payload.role,

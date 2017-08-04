@@ -6,10 +6,10 @@ const localAuth = require('../auth/local');
 
 const updateUser = (req, res, user) => {
   user.update({
-    first_name: req.body.first_name || user.first_name,
-    last_name: req.body.last_name || user.last_name,
+    firstname: req.body.firstname || user.firstname,
+    lastname: req.body.lastname || user.lastname,
     password: req.body.password || user.password,
-    role_id: req.body.role_id || user.role_id,
+    roleId: req.body.roleId || user.roleId,
   })
   .then(updatedUser => res.status(200).send(updatedUser))
   .catch(error => res.status(400).send(error));
@@ -20,18 +20,18 @@ module.exports = {
     User
       .create({
         username: req.body.username,
-        email_address: req.body.email,
-        first_name: req.body.firstname,
-        last_name: req.body.lastname,
+        email: req.body.email,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
         password: auth.encrypt(req.body.password),
-        RoleId: req.body.roleId
+        roleId: req.body.roleId
       })
       .then((user) => {
         const token = localAuth.encodeToken({
           id: user.id,
           username: user.username
         });
-        Role.findById(user.RoleId)
+        Role.findById(user.roleId)
           .then((role) => {
             res.status(201).json({
               status: 'success',
@@ -53,7 +53,7 @@ module.exports = {
       .findOne({
         where: {
           $or: [
-            { email_address: req.body.username },
+            { email: req.body.username },
             { username: req.body.username }
           ]
         }
@@ -68,7 +68,7 @@ module.exports = {
           id: user.id,
           username: user.username
         });
-        Role.findById(user.RoleId)
+        Role.findById(user.roleId)
           .then((role) => {
             res.status(200).jsonp({
               status: 'success',
@@ -101,7 +101,7 @@ module.exports = {
       User
         .findAll({
           where: {
-            RoleId: {
+            roleId: {
               $ne: 1
             }
           },
@@ -133,7 +133,7 @@ module.exports = {
             message: 'user not found'
           });
         } else {
-          Role.findById(user.RoleId)
+          Role.findById(user.roleId)
             .then((role) => {
               res.status(200).send({
                 user,
@@ -150,12 +150,6 @@ module.exports = {
         where: {
           id: req.params.id
         },
-        include: [{
-          model: Document,
-          as: 'myDocuments'
-        }, {
-          model: Document
-        }],
       })
       .then((user) => {
         if (!user) {
@@ -175,8 +169,8 @@ module.exports = {
     Document
       .findAll({
         where: {
-          AccessId: 1,
-          OwnerId: req.params.id
+          accessId: 1,
+          ownerId: req.params.id
         }
       })
       .then((documents) => {
@@ -204,7 +198,7 @@ module.exports = {
               User.find({
                 where: {
                   $or: [{
-                    email_address: req.body.email,
+                    email: req.body.email,
                   }, {
                     username: req.body.username
                   }]
@@ -266,20 +260,28 @@ module.exports = {
   },
   search: (req, res) => {
     User
-      .findAll({
-        where: {
-          $or: [{
-            username: {
-              $ilike: `${req.query.q}%`
-            }
-          }, {
-            email_address: {
-              $ilike: `${req.query.q}%`
-            }
-          }]
-        }
-      })
-      .then(user => res.status(200).send(user))
-      .catch(error => res.status(400).send(error));
+    .findAll({
+      where: {
+        $or: [{
+          username: {
+            $ilike: `%${req.query.q}%`
+          }
+        }, {
+          email: {
+            $ilike: `%${req.query.q}%`
+          }
+        }, {
+          firstname: {
+            $ilike: `%${req.query.q}%`
+          }
+        }, {
+          lastname: {
+            $ilike: `%${req.query.q}%`
+          }
+        }]
+      }
+    })
+    .then(user => res.status(200).send(user))
+    .catch(error => res.status(400).send(error));
   }
 };

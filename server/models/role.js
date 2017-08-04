@@ -10,7 +10,7 @@ export default (sequelize, DataTypes) => {
       associate(models) {
         // associations can be defined here
         Role.hasMany(models.User, {
-          foreignKey: 'RoleId',
+          foreignKey: 'roleId',
         });
 
         Role.belongsToMany(models.Document, {
