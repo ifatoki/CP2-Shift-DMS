@@ -18,7 +18,7 @@ function documentReducers(state = defaultState, action) {
       documentsUpdating: true,
       documentsUpdated: false,
       documentSaved: false,
-      currentDocumentUpdate: false,
+      currentDocumentUpdated: false,
       documentsSearchResultUpdated: false
     });
   case actionTypes.DOCUMENTS_FETCH_SUCCESSFUL:
@@ -38,7 +38,7 @@ function documentReducers(state = defaultState, action) {
       savingDocument: true,
       documentSaved: false,
       documentsUpdated: false,
-      currentDocumentUpdate: false,
+      currentDocumentUpdated: false,
       documentsSearchResultUpdated: false
     });
   case actionTypes.DOCUMENT_SAVE_SUCCESSFUL:

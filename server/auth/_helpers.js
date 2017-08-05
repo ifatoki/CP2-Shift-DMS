@@ -4,13 +4,20 @@ import { User } from '../models';
 
 const encrypt = (password) => {
   const salt = bcrypt.genSaltSync();
-  return bcrypt.hashSync(password, salt);
+  if (password) {
+    return bcrypt.hashSync(password, salt);
+  }
+  return null;
 };
 
 const comparePassword = (userPassword, databasePassword) => {
-  const match = bcrypt.compareSync(userPassword, databasePassword);
-  if (!match) throw new Error('invalid password');
-  else return true;
+  try {
+    const match = bcrypt.compareSync(userPassword, databasePassword);
+    if (!match) throw new Error('invalid password');
+    else return true;
+  } catch (e) {
+    throw new Error('invalid password');
+  }
 };
 
 const confirmAuthentication = (req, res, next) => {
@@ -32,9 +39,15 @@ const confirmAuthentication = (req, res, next) => {
       User
         .findById(parseInt(payload.sub.id, 10))
         .then((user) => {
-          req.userId = user.id;
-          req.roleId = user.roleId;
-          next();
+          if (user) {
+            req.userId = user.id;
+            req.roleId = user.roleId;
+            next();
+          } else {
+            res.status(404).send({
+              message: 'user not found'
+            });
+          }
         })
         .catch(() => {
           status = 500;

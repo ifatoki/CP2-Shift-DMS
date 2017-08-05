@@ -124,7 +124,7 @@ class DocumentManager extends React.Component {
   render() {
     const { accessId } = this.state;
     return (
-      <div className="ui longer fullscreen modal">
+      <div className="ui longer fullscreen document modal">
         <div className="header">
           <div className="ui container">
             {this.props.createNew ?
