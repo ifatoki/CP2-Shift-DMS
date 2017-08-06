@@ -4,6 +4,15 @@ const User = Models.User;
 const Document = Models.Document;
 const Role = Models.Role;
 
+const updateDocument = (document, req, res) => {
+  document.update({
+    title: req.body.title || document.title,
+    content: req.body.content || document.content,
+  })
+  .then(updatedDocument => res.status(200).send(updatedDocument))
+  .catch(error => res.status(400).send(error));
+};
+
 const documentController = {
   create: (req, res) => {
     Document
@@ -165,15 +174,77 @@ const documentController = {
             message: 'document not found'
           });
         } else {
-          document.update({
-            title: req.body.title || document.title,
-            content: req.body.content || document.content,
-          })
-          .then(updatedDocument => res.status(200).send(updatedDocument))
-          .catch(error => res.status(400).send(error));
+          Document
+            .findOne({
+              where: {
+                title: req.body.title,
+                id: {
+                  $ne: document.id
+                }
+              }
+            })
+            .then((duplicateDocument) => {
+              if (duplicateDocument) {
+                res.status(403).send({
+                  message: 'a document with that title already exists'
+                });
+              } else if (document.ownerId === req.userId) {
+                updateDocument(document, req, res);
+              } else if (document.accessId === 2) {
+                res.status(403).send({
+                  message: "you don't have the rights to edit this document"
+                });
+              } else {
+                document.getUsers({
+                  where: {
+                    id: req.userId
+                  },
+                  joinTableAttributes: ['rightId']
+                })
+                .then((user) => {
+                  if (user.length < 1) {
+                    document.getRoles({
+                      where: {
+                        id: req.roleId
+                      },
+                      joinTableAttributes: ['rightId']
+                    })
+                    .then((role) => {
+                      if (role.length < 1) {
+                        res.status(401).send({
+                          message:
+                            'you are not authorized to access this document'
+                        });
+                      } else if (
+                        role[0].dataValues.DocumentRole.dataValues.rightId < 3
+                      ) {
+                        updateDocument(document, req, res);
+                      } else {
+                        res.status(403).send({
+                          message:
+                            "you don't have the rights to edit this document"
+                        });
+                      }
+                    })
+                    .catch(error => res.status(500).send(error));
+                  } else if (
+                    user[0].dataValues.DocumentUser.dataValues.rightId < 3
+                  ) {
+                    updateDocument(document, req, res);
+                  } else {
+                    res.status(403).send({
+                      message:
+                        "you don't have the rights to edit this document"
+                    });
+                  }
+                })
+                .catch(error => res.status(400).send(error));
+              }
+            })
+            .catch(error => res.status(500).send(error.message));
         }
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send(error.message));
   },
   delete: (req, res) => {
     Document
