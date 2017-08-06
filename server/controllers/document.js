@@ -7,14 +7,29 @@ const Role = Models.Role;
 const documentController = {
   create: (req, res) => {
     Document
-      .create({
-        title: req.body.title,
-        content: req.body.content,
-        ownerId: req.body.ownerId,
-        accessId: req.body.accessId
+      .findOne({
+        where: {
+          title: req.body.title
+        }
       })
-      .then(todo => res.status(201).send(todo))
-      .catch(error => res.status(400).send(error));
+      .then((document) => {
+        if (document) {
+          res.status(403).send({
+            message: 'a document with that title already exists'
+          });
+        } else {
+          Document
+            .create({
+              title: req.body.title,
+              content: req.body.content,
+              ownerId: req.body.ownerId,
+              accessId: req.body.accessId
+            })
+            .then(todo => res.status(201).send(todo))
+            .catch(error => res.status(400).send(error.message));
+        }
+      })
+      .catch(error => res.status(500).send(error.message));
   },
   fetchAll: (req, res) => {
     const query = {};
