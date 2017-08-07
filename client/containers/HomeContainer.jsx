@@ -53,8 +53,17 @@ class HomeContainer extends React.Component {
       currentUserUpdated,
       documentSaved,
       documentsUpdated,
-      currentDocumentModified
+      currentDocumentModified,
+      documentDeleted
     } = nextProps;
+    if (this.props.documentDeleting) {
+      if (documentDeleted) {
+        toastr.success('Document Deleted');
+        this.props.fetchDocuments(this.props.user.id, this.state.type);
+      } else {
+        toastr.error("Couldn't delete document");
+      }
+    }
     if (this.props.savingDocument || this.props.currentDocumentModifying) {
       if (documentSaved || currentDocumentModified) {
         toastr.success('Document Saved');
@@ -154,7 +163,9 @@ class HomeContainer extends React.Component {
       + this.props.user.role.slice(1);
     return (
       <div style={{ height: '100%' }} >
-        <DocumentManager createNew={this.state.createNewDocument} />
+        <DocumentManager
+          createNew={this.state.createNewDocument}
+        />
         <UserManager />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
@@ -358,6 +369,8 @@ HomeContainer.propTypes = {
   documentSaved: PropType.bool.isRequired,
   savingDocument: PropType.bool.isRequired,
   currentDocumentModifying: PropType.bool.isRequired,
+  documentDeleted: PropType.bool.isRequired,
+  documentDeleting: PropType.bool.isRequired,
   documentsType: PropType.string
 };
 
@@ -388,7 +401,9 @@ const mapStateToProps = state => ({
   documentSaved: state.documents.documentSaved,
   documentsUpdated: state.documents.documentsUpdated,
   savingDocument: state.documents.savingDocument,
-  currentDocumentModifying: state.documents.currentDocumentModifying
+  currentDocumentModifying: state.documents.currentDocumentModifying,
+  documentDeleted: state.documents.documentDeleted,
+  documentDeleting: state.documents.documentDeleting
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

@@ -11,7 +11,9 @@ const defaultState = {
   documentsSearchResult: {},
   documentsSearchResultUpdated: false,
   savingDocument: false,
-  currentDocumentModifying: false
+  currentDocumentModifying: false,
+  documentDeleting: false,
+  documentDeleted: false
 };
 
 function documentReducers(state = defaultState, action) {
@@ -23,6 +25,7 @@ function documentReducers(state = defaultState, action) {
       documentsUpdated: false,
       documentsSearchResultUpdated: false,
       currentDocumentModified: false,
+      documentDeleted: false,
       documentsUpdating: true,
     });
   case actionTypes.DOCUMENTS_FETCH_SUCCESSFUL:
@@ -43,6 +46,7 @@ function documentReducers(state = defaultState, action) {
       currentDocumentUpdated: false,
       documentsSearchResultUpdated: false,
       currentDocumentModified: false,
+      documentDeleted: false,
       documentSaved: false,
       savingDocument: true,
     });
@@ -62,6 +66,7 @@ function documentReducers(state = defaultState, action) {
       documentsUpdated: false,
       documentsSearchResultUpdated: false,
       documentSaved: false,
+      documentDeleted: false,
       currentDocumentUpdated: false,
       currentDocumentModifying: true
     });
@@ -83,6 +88,7 @@ function documentReducers(state = defaultState, action) {
       documentSaved: false,
       documentsSearchResultUpdated: false,
       currentDocumentModified: false,
+      documentDeleted: false,
       currentDocumentUpdated: false,
       currentDocumentUpdating: true,
     });
@@ -98,12 +104,33 @@ function documentReducers(state = defaultState, action) {
       currentDocumentUpdated: false,
       currentDocumentUpdating: false,
     });
+  case actionTypes.DOCUMENT_DELETE_REQUEST:
+    return Object.assign({}, state, {
+      documentsUpdated: false,
+      documentSaved: false,
+      documentsSearchResultUpdated: false,
+      currentDocumentModified: false,
+      currentDocumentUpdated: false,
+      documentDeleted: false,
+      documentDeleting: true,
+    });
+  case actionTypes.DOCUMENT_DELETE_SUCCESSFUL:
+    return Object.assign({}, state, {
+      documentDeleted: true,
+      documentDeleting: false,
+    });
+  case actionTypes.DOCUMENT_DELETE_FAILED:
+    return Object.assign({}, state, {
+      documentDeleted: false,
+      documentDeleting: false,
+    });
   case actionTypes.DOCUMENTS_SEARCH_REQUEST:
     return Object.assign({}, state, {
       currentDocumentUpdated: false,
       documentsUpdated: false,
       documentSaved: false,
       currentDocumentModified: false,
+      documentDeleted: false,
       documentsSearchResultUpdated: false,
       documentsSearchResultUpdating: true,
     });

@@ -2,16 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card, Icon } from 'semantic-ui-react';
-import { getDocument } from '../actions/documents';
+import { getDocument, deleteDocument } from '../actions/documents';
 
 class Document extends React.Component {
   constructor(props) {
     super(props);
+    this.isDelete = false;
     this.clickHander = this.clickHander.bind(this);
+    this.deleteDocument = this.deleteDocument.bind(this);
   }
 
   clickHander() {
-    this.props.getDocument(this.props.documentId);
+    if (!this.isDelete) {
+      this.props.getDocument(this.props.documentId);
+    }
+    this.isDelete = false;
+  }
+
+  deleteDocument() {
+    this.isDelete = true;
+    this.props.deleteDocument(this.props.documentId);
   }
 
   render() {
@@ -28,7 +38,7 @@ class Document extends React.Component {
           <Icon name="user" color="blue" />
           @itunuworks
           <div className="right floated">
-            <Icon name="trash" color="blue" />
+            <Icon name="trash" color="blue" onClick={this.deleteDocument} />
           </div>
         </Card.Content>
       </Card>
@@ -41,11 +51,13 @@ Document.propTypes = {
   content: PropTypes.string.isRequired,
   created: PropTypes.string.isRequired,
   getDocument: PropTypes.func.isRequired,
+  deleteDocument: PropTypes.func.isRequired,
   documentId: PropTypes.number.isRequired
 };
 
 const mapDispatchToProps = {
-  getDocument
+  getDocument,
+  deleteDocument
 };
 
 export default connect(null, mapDispatchToProps)(Document);
