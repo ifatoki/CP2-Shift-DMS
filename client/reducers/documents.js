@@ -52,6 +52,8 @@ function documentReducers(state = defaultState, action) {
     });
   case actionTypes.DOCUMENT_SAVE_SUCCESSFUL:
     return Object.assign({}, state, {
+      currentDocument: action.payload,
+      currentRightId: 1,
       documentSaved: true,
       savingDocument: false,
     });
