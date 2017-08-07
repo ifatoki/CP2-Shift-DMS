@@ -19,6 +19,20 @@ const documentGetFailed = payload => ({
   payload
 });
 
+const documentDeleteRequest = () => ({
+  type: actionTypes.DOCUMENT_DELETE_REQUEST
+});
+
+const documentDeleteSuccessful = payload => ({
+  type: actionTypes.DOCUMENT_DELETE_SUCCESSFUL,
+  payload
+});
+
+const documentDeleteFailed = payload => ({
+  type: actionTypes.DOCUMENT_DELETE_FAILED,
+  payload
+});
+
 const documentsFetchRequest = () => ({
   type: actionTypes.DOCUMENTS_FETCH_REQUEST
 });
@@ -86,6 +100,20 @@ export function getDocument(documentId) {
       })
       .catch((error) => {
         dispatch(documentGetFailed(error.message));
+      });
+  };
+}
+
+export function deleteDocument(documentId) {
+  return (dispatch) => {
+    dispatch(documentDeleteRequest());
+    return axios
+      .delete(`api/v1/documents/${documentId}`)
+      .then((response) => {
+        dispatch(documentDeleteSuccessful(response.data));
+      })
+      .catch((error) => {
+        dispatch(documentDeleteFailed(error.message));
       });
   };
 }
