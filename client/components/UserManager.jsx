@@ -1,5 +1,6 @@
 import React from 'react';
 import PropType from 'prop-types';
+import toastr from 'toastr';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { modifyUser, cancelUser } from '../actions/users';
@@ -26,6 +27,12 @@ const initialState = {
   edited: false
 };
 
+toastr.options = {
+  positionClass: 'toast-top-center',
+  showMethod: 'slideDown',
+  timeOut: 2000
+};
+
 class UserManager extends React.Component {
   constructor(props) {
     super(props);
@@ -38,7 +45,16 @@ class UserManager extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentUser, signedInRole } = nextProps;
+    const { currentUser, signedInRole, currentUserModified } = nextProps;
+    if (this.props.currentUserModifying) {
+      if (currentUserModified) {
+        this.setState({
+          accessMode: editModes.READ
+        }, () => toastr.success('User details modified successfully'));
+      } else {
+        toastr.error('User modification failed');
+      }
+    }
     if (currentUser) {
       this.setState({
         username: currentUser.username,
@@ -256,7 +272,9 @@ UserManager.propTypes = {
   currentUser: PropType.object,
   cancelUser: PropType.func.isRequired,
   modifyUser: PropType.func.isRequired,
-  signedInRole: PropType.string.isRequired
+  signedInRole: PropType.string.isRequired,
+  currentUserModifying: PropType.bool.isRequired,
+  currentUserModified: PropType.bool.isRequired
 };
 
 UserManager.defaultProps = {
@@ -270,7 +288,9 @@ const mapDispatchToProps = {
 
 const mapStateToProps = state => ({
   currentUser: state.user.currentUser,
-  signedInRole: state.user.role
+  signedInRole: state.user.role,
+  currentUserModifying: state.user.currentUserModifying,
+  currentUserModified: state.user.currentUserModifying
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManager);

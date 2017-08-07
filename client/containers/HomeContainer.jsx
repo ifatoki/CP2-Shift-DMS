@@ -16,6 +16,12 @@ import UserList from '../components/UserList';
 import DocumentManager from '../components/DocumentManager';
 import UserManager from '../components/UserManager';
 
+toastr.options = {
+  positionClass: 'toast-top-center',
+  showMethod: 'slideDown',
+  timeOut: 2000
+};
+
 class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -46,11 +52,16 @@ class HomeContainer extends React.Component {
       currentDocumentUpdated,
       currentUserUpdated,
       documentSaved,
-      documentsUpdated
+      documentsUpdated,
+      currentDocumentModified
     } = nextProps;
-    if (documentSaved) {
-      toastr.success('Document Saved');
-      this.props.fetchDocuments(this.props.user.id, this.state.type);
+    if (this.props.savingDocument || this.props.currentDocumentModifying) {
+      if (documentSaved || currentDocumentModified) {
+        toastr.success('Document Saved');
+        this.props.fetchDocuments(this.props.user.id, this.state.type);
+      } else {
+        toastr.error('Document Save Failed');
+      }
     }
     if (documentsUpdated) {
       this.setState({
@@ -341,9 +352,12 @@ HomeContainer.propTypes = {
   fetchAllRoles: PropType.func.isRequired,
   getUser: PropType.func.isRequired,
   currentDocumentUpdated: PropType.bool.isRequired,
+  currentDocumentModified: PropType.bool.isRequired,
   currentUserUpdated: PropType.bool.isRequired,
   documentsUpdated: PropType.bool.isRequired,
   documentSaved: PropType.bool.isRequired,
+  savingDocument: PropType.bool.isRequired,
+  currentDocumentModifying: PropType.bool.isRequired,
   documentsType: PropType.string
 };
 
@@ -368,10 +382,13 @@ const mapStateToProps = state => ({
   currentDocument: state.documents.currentDocument,
   documentsType: state.documents.documentsType,
   currentDocumentUpdated: state.documents.currentDocumentUpdated,
+  currentDocumentModified: state.documents.currentDocumentModified,
   currentUser: state.user.currentUser,
   currentUserUpdated: state.user.currentUserUpdated,
   documentSaved: state.documents.documentSaved,
-  documentsUpdated: state.documents.documentsUpdated
+  documentsUpdated: state.documents.documentsUpdated,
+  savingDocument: state.documents.savingDocument,
+  currentDocumentModifying: state.documents.currentDocumentModifying
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

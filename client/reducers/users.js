@@ -5,7 +5,9 @@ function userReducers(state = {
   users: [],
   roles: [],
   currentUser: {},
-  currentUserUpdated: false
+  currentUserUpdated: false,
+  currentUserModifying: false,
+  currentUserModified: false
 }, action) {
   switch (action.type) {
   case actionTypes.LOGOUT_REQUEST:
@@ -39,81 +41,80 @@ function userReducers(state = {
     });
   case actionTypes.FETCH_USERS_REQUEST:
     return Object.assign({}, state, {
-      usersUpdating: true,
       usersUpdated: false,
       currentUserUpdated: false,
       currentUserModified: false,
+      usersUpdating: true
     });
   case actionTypes.FETCH_USERS_SUCCESSFUL:
     return Object.assign({}, state, {
-      usersUpdating: false,
+      users: action.payload,
       usersUpdated: true,
-      users: action.payload
+      usersUpdating: false,
     });
   case actionTypes.FETCH_USERS_FAILED:
     return Object.assign({}, state, {
-      usersUpdating: false,
-      usersUpdated: false
+      usersUpdated: false,
+      usersUpdating: false
     });
   case actionTypes.USER_MODIFY_REQUEST:
     return Object.assign({}, state, {
-      currentUserModifying: true,
       currentUserModified: false,
       rolesUpdated: false,
       usersUpdated: false,
-      currentUserUpdated: false
+      currentUserUpdated: false,
+      currentUserModifying: true
     });
   case actionTypes.USER_MODIFY_SUCCESSFUL:
     return Object.assign({}, state, {
-      currentUserModifying: false,
-      currentUserModified: true,
-      currentUserUpdated: true,
       email: action.payload.email,
       username: action.payload.username,
       firstname: action.payload.firstname,
       lastname: action.payload.lastname,
-      currentUser: action.payload
+      currentUser: action.payload,
+      currentUserModified: true,
+      currentUserUpdated: true,
+      currentUserModifying: false,
     });
   case actionTypes.USER_MODIFY_FAILED:
     return Object.assign({}, state, {
-      currentUserModifying: false,
       currentUserModified: false,
+      currentUserModifying: false,
     });
   case actionTypes.USER_GET_REQUEST:
     return Object.assign({}, state, {
-      currentUserUpdating: true,
       rolesUpdated: false,
       usersUpdated: false,
       currentUserUpdated: false,
       currentUserModified: false,
+      currentUserUpdating: true,
     });
   case actionTypes.USER_GET_SUCCESSFUL:
     return Object.assign({}, state, {
-      currentUserUpdating: false,
+      currentUser: action.payload,
       currentUserUpdated: true,
-      currentUser: action.payload
+      currentUserUpdating: false,
     });
   case actionTypes.USER_GET_FAILED:
     return Object.assign({}, state, {
+      currentUserUpdated: false,
       currentUserUpdating: false,
-      currentUserUpdated: false
     });
   case actionTypes.FETCH_ROLES_REQUEST:
     return Object.assign({}, state, {
-      updatingRoles: true,
       rolesUpdated: false,
-      usersUpdated: false
+      usersUpdated: false,
+      updatingRoles: true,
     });
   case actionTypes.FETCH_ROLES_SUCCESSFUL:
     return Object.assign({}, state, {
-      updatingRoles: false,
       rolesUpdated: true,
       roles: action.payload
     });
   case actionTypes.FETCH_ROLES_FAILED:
     return Object.assign({}, state, {
+      rolesUpdated: false,
       updatingRoles: false,
-      rolesUpdated: false
     });
   case actionTypes.USER_CANCELLED:
     return Object.assign({}, state, {
