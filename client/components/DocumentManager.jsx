@@ -1,13 +1,24 @@
 import React from 'react';
 import PropType from 'prop-types';
+import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
-import { saveNewDocument, cancelNewDocument } from '../actions/documents';
+import {
+  saveNewDocument,
+  modifyDocument,
+  cancelNewDocument
+} from '../actions/documents';
 
 const editModes = {
   READ: 'READ',
   WRITE: 'WRITE',
   NEW: 'NEW'
+};
+
+toastr.options = {
+  positionClass: 'toast-top-center',
+  showMethod: 'slideDown',
+  timeOut: 2000
 };
 
 class DocumentManager extends React.Component {
@@ -16,7 +27,7 @@ class DocumentManager extends React.Component {
     this.state = {
       title: '',
       content: '',
-      accessId: 1,
+      accessId: 2,
       rightId: 3, // Read access
       accessMode: this.props.createNew ?
        editModes.NEW : editModes.READ
@@ -73,7 +84,7 @@ class DocumentManager extends React.Component {
         this.setState({
           title: isNew ? '' : currentDocument.title,
           content: isNew ? '' : currentDocument.content,
-          accessId: isNew ? '' : currentDocument.accessId
+          accessId: isNew ? 2 : currentDocument.accessId
         }, () => {
           $('#contentHolder').children().remove();
           $(this.state.content).prependTo('#contentHolder');
@@ -97,12 +108,20 @@ class DocumentManager extends React.Component {
 
   saveDocument(event) {
     event.preventDefault();
-    this.props.saveNewDocument({
-      title: this.state.title,
-      content: this.state.content,
-      ownerId: this.props.user.id,
-      accessId: this.state.accessId
-    });
+    if (this.state.accessMode === editModes.NEW) {
+      this.props.saveNewDocument({
+        title: this.state.title,
+        content: this.state.content,
+        ownerId: this.props.user.id,
+        accessId: this.state.accessId
+      });
+    } else {
+      this.props.modifyDocument(this.props.currentDocument.id, {
+        title: this.state.title,
+        content: this.state.content,
+        accessId: this.state.accessId
+      });
+    }
   }
 
   editDocument(event) {
@@ -288,7 +307,8 @@ DocumentManager.propTypes = {
     ownerId: PropType.number,
     accessId: PropType.number
   }),
-  cancelNewDocument: PropType.func.isRequired
+  cancelNewDocument: PropType.func.isRequired,
+  modifyDocument: PropType.func.isRequired
 };
 
 DocumentManager.defaultProps = {
@@ -297,7 +317,8 @@ DocumentManager.defaultProps = {
 
 const mapDispatchToProps = {
   saveNewDocument,
-  cancelNewDocument
+  cancelNewDocument,
+  modifyDocument
 };
 
 const mapStateToProps = state => ({
