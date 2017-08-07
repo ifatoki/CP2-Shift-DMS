@@ -48,6 +48,20 @@ const documentSaveFailed = payload => ({
   payload
 });
 
+const documentModifyRequest = () => ({
+  type: actionTypes.DOCUMENT_MODIFY_REQUEST
+});
+
+const documentModifySuccessful = payload => ({
+  type: actionTypes.DOCUMENT_MODIFY_SUCCESSFUL,
+  payload
+});
+
+const documentModifyFailed = payload => ({
+  type: actionTypes.DOCUMENT_MODIFY_FAILED,
+  payload
+});
+
 const documentsSearchRequest = () => ({
   type: actionTypes.DOCUMENTS_SEARCH_REQUEST
 });
@@ -113,6 +127,21 @@ export function saveNewDocument(documentData) {
       })
       .catch((error) => {
         dispatch(documentSaveFailed(error.message));
+      }
+    );
+  };
+}
+
+export function modifyDocument(documentId, documentData) {
+  return (dispatch) => {
+    dispatch(documentModifyRequest());
+    return axios
+      .put(`api/v1/documents/${documentId}`, documentData, config)
+      .then((response) => {
+        dispatch(documentModifySuccessful(response.data));
+      })
+      .catch((error) => {
+        dispatch(documentModifyFailed(error.message));
       }
     );
   };

@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const auth = require('../auth/_helpers');
 const User = require('../models').User;
 const Document = require('../models').Document;
