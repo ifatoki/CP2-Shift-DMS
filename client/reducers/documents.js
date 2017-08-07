@@ -5,96 +5,125 @@ const defaultState = {
   currentRightId: 3,
   documents: [],
   currentDocumentUpdated: false,
+  currentDocumentModified: false,
   documentsUpdated: false,
   documentSaved: false,
   documentsSearchResult: {},
-  documentsSearchResultUpdated: false
+  documentsSearchResultUpdated: false,
+  savingDocument: false,
+  currentDocumentModifying: false
 };
 
 function documentReducers(state = defaultState, action) {
   switch (action.type) {
   case actionTypes.DOCUMENTS_FETCH_REQUEST:
     return Object.assign({}, state, {
-      documentsUpdating: true,
-      documentsUpdated: false,
       documentSaved: false,
-      currentDocumentUpdate: false,
-      documentsSearchResultUpdated: false
+      currentDocumentUpdated: false,
+      documentsUpdated: false,
+      documentsSearchResultUpdated: false,
+      currentDocumentModified: false,
+      documentsUpdating: true,
     });
   case actionTypes.DOCUMENTS_FETCH_SUCCESSFUL:
     return Object.assign({}, state, {
-      documentsUpdating: false,
-      documentsUpdated: true,
       documents: action.payload,
-      documentsType: action.documentsType
+      documentsType: action.documentsType,
+      documentsUpdated: true,
+      documentsUpdating: false,
     });
   case actionTypes.DOCUMENTS_FETCH_FAILED:
     return Object.assign({}, state, {
+      documentsUpdated: false,
       documentsUpdating: false,
-      documentsUpdated: false
     });
   case actionTypes.DOCUMENT_SAVE_REQUEST:
     return Object.assign({}, state, {
-      savingDocument: true,
-      documentSaved: false,
       documentsUpdated: false,
-      currentDocumentUpdate: false,
-      documentsSearchResultUpdated: false
+      currentDocumentUpdated: false,
+      documentsSearchResultUpdated: false,
+      currentDocumentModified: false,
+      documentSaved: false,
+      savingDocument: true,
     });
   case actionTypes.DOCUMENT_SAVE_SUCCESSFUL:
     return Object.assign({}, state, {
+      documentSaved: true,
       savingDocument: false,
-      documentSaved: true
     });
   case actionTypes.DOCUMENT_SAVE_FAILED:
     return Object.assign({}, state, {
+      documentSaved: false,
       savingDocument: false,
-      documentSaved: false
+    });
+  case actionTypes.DOCUMENT_MODIFY_REQUEST:
+    return Object.assign({}, state, {
+      currentDocumentModified: false,
+      documentsUpdated: false,
+      documentsSearchResultUpdated: false,
+      documentSaved: false,
+      currentDocumentUpdated: false,
+      currentDocumentModifying: true
+    });
+  case actionTypes.DOCUMENT_MODIFY_SUCCESSFUL:
+    return Object.assign({}, state, {
+      currentDocument: action.payload,
+      currentDocumentModified: true,
+      currentDocumentUpdated: true,
+      currentDocumentModifying: false
+    });
+  case actionTypes.DOCUMENT_MODIFY_FAILED:
+    return Object.assign({}, state, {
+      currentDocumentModified: false,
+      currentDocumentModifying: false
     });
   case actionTypes.DOCUMENT_GET_REQUEST:
     return Object.assign({}, state, {
-      currentDocumentUpdating: true,
-      currentDocumentUpdated: false,
       documentsUpdated: false,
       documentSaved: false,
-      documentsSearchResultUpdated: false
+      documentsSearchResultUpdated: false,
+      currentDocumentModified: false,
+      currentDocumentUpdated: false,
+      currentDocumentUpdating: true,
     });
   case actionTypes.DOCUMENT_GET_SUCCESSFUL:
     return Object.assign({}, state, {
       currentDocument: action.payload.document,
       currentRightId: action.payload.rightId,
+      currentDocumentUpdated: true,
       currentDocumentUpdating: false,
-      currentDocumentUpdated: true
     });
   case actionTypes.DOCUMENT_GET_FAILED:
     return Object.assign({}, state, {
+      currentDocumentUpdated: false,
       currentDocumentUpdating: false,
-      currentDocumentUpdated: false
     });
   case actionTypes.DOCUMENTS_SEARCH_REQUEST:
     return Object.assign({}, state, {
-      documentsSearchResultUpdating: true,
-      documentsSearchResultUpdated: false,
       currentDocumentUpdated: false,
       documentsUpdated: false,
       documentSaved: false,
+      currentDocumentModified: false,
+      documentsSearchResultUpdated: false,
+      documentsSearchResultUpdating: true,
     });
   case actionTypes.DOCUMENTS_SEARCH_SUCCESSFUL:
     return Object.assign({}, state, {
       documentsSearchResult: action.payload,
-      documentsSearchResultUpdating: false,
       documentsSearchResultUpdated: true,
+      documentsSearchResultUpdating: false,
     });
   case actionTypes.DOCUMENTS_SEARCH_FAILED:
     return Object.assign({}, state, {
-      documentsSearchResultUpdating: false,
       documentsSearchResultUpdated: false,
+      documentsSearchResultUpdating: false,
     });
   case actionTypes.DOCUMENT_CANCELLED:
     return Object.assign({}, state, {
       currentDocumentUpdated: false,
       documentsUpdated: false,
       documentSaved: false,
+      currentDocumentModified: false,
     });
   default:
     return state;

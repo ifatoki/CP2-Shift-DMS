@@ -1,22 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Card, Icon } from 'semantic-ui-react';
-// import { getUser } from '../actions/Users';
+import { getUser } from '../actions/users';
 
-class User extends React.Component {
+class UserComponent extends React.Component {
   constructor(props) {
     super(props);
-    // this.clickHander = this.clickHander.bind(this);
+    this.clickHandler = this.clickHandler.bind(this);
   }
 
   clickHandler() {
-    // this.props.getUser(this.props.UserId);
+    this.props.getUser(this.props.id);
   }
 
   render() {
     return (
-      <Card raised>
+      <Card onClick={this.clickHandler} raised>
         <Card.Content>
           <Card.Header
             content={`${this.props.firstname} ${this.props.lastname}`}
@@ -39,13 +39,19 @@ class User extends React.Component {
   }
 }
 
-User.propTypes = {
+UserComponent.propTypes = {
+  id: PropTypes.number.isRequired,
   firstname: PropTypes.string.isRequired,
   lastname: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   created: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
-  role: PropTypes.string.isRequired
+  role: PropTypes.string.isRequired,
+  getUser: PropTypes.func.isRequired
 };
 
-export default User;
+const mapDispatchToProps = {
+  getUser
+};
+
+export default connect(null, mapDispatchToProps)(UserComponent);

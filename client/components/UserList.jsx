@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import User from './User';
+import UserComponent from './UserComponent';
 
 const normalizeUsers = (roles, users) => {
   const myRoles = roles.reduce((accumulator, currentValue) => {
@@ -33,8 +33,9 @@ const UserList = (props) => {
     >
       <Card.Group>
         {users.map(user => (
-          <User
+          <UserComponent
             key={user.id}
+            id={user.id}
             username={user.username}
             email={user.email}
             firstname={user.firstname}

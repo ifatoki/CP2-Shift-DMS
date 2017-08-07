@@ -6,26 +6,19 @@ const config = {
   headers: { 'Content-Type': 'application/json' }
 };
 
-export function addUser(user, token, role) {
-  console.log('user', user);
+export function addUser(user, token) {
   axios.defaults.headers.common.Authorization = `bearer ${token}`;
   if (Object.keys(user).length < 3) {
     axios.get(`/api/v1/users/${user.id}`)
     .then(response => (
       store.dispatch({
         type: actionTypes.ADD_USER,
-        payload: {
-          user: response.data.user,
-          role: response.data.role
-        }
+        payload: response.data
       })));
   } else {
     store.dispatch({
       type: actionTypes.ADD_USER,
-      payload: {
-        user,
-        role
-      }
+      payload: user
     });
   }
 }
@@ -107,10 +100,38 @@ const fetchAllRolesFailed = message => ({
   payload: message
 });
 
-function setTokenToLocalStorage(user, token, role) {
+const userGetRequest = () => ({
+  type: actionTypes.USER_GET_REQUEST
+});
+
+const userGetSuccessful = payload => ({
+  type: actionTypes.USER_GET_SUCCESSFUL,
+  payload
+});
+
+const userGetFailed = payload => ({
+  type: actionTypes.USER_GET_FAILED,
+  payload
+});
+
+const userModifyRequest = () => ({
+  type: actionTypes.USER_MODIFY_REQUEST
+});
+
+const userModifySuccessful = payload => ({
+  type: actionTypes.USER_MODIFY_SUCCESSFUL,
+  payload
+});
+
+const userModifyFailed = payload => ({
+  type: actionTypes.USER_MODIFY_FAILED,
+  payload
+});
+
+function setTokenToLocalStorage(user, token) {
   window.localStorage.setItem('token', token);
   window.localStorage.setItem('user', JSON.stringify(user));
-  addUser(user, token, role);
+  addUser(user, token);
 }
 
 export function signUserUp(userDetails) {
@@ -130,11 +151,9 @@ export function signUserUp(userDetails) {
       return axios
         .post('/api/v1/users', userdata, config)
         .then((response) => {
-          console.log(response.data);
           setTokenToLocalStorage(
             response.data.payload.user,
-            response.data.payload.token,
-            response.data.payload.role
+            response.data.payload.token
           );
           dispatch(signupSuccessful());
         })
@@ -210,4 +229,38 @@ export function fetchAllRoles() {
         dispatch(fetchAllRolesFailed(error.message));
       });
   };
+}
+
+export function getUser(userId) {
+  return (dispatch) => {
+    dispatch(userGetRequest());
+    return axios
+      .get(`api/v1/users/${userId}`)
+      .then((response) => {
+        dispatch(userGetSuccessful(response.data));
+      })
+      .catch((error) => {
+        dispatch(userGetFailed(error.message));
+      });
+  };
+}
+
+export function modifyUser(userId, userData) {
+  return (dispatch) => {
+    dispatch(userModifyRequest());
+    return axios
+      .put(`api/v1/users/${userId}`, userData, config)
+      .then((response) => {
+        dispatch(userModifySuccessful(response.data));
+      })
+      .catch((error) => {
+        dispatch(userModifyFailed(error.message));
+      });
+  };
+}
+
+export function cancelUser() {
+  return dispatch => dispatch({
+    type: actionTypes.USER_CANCELLED,
+  });
 }

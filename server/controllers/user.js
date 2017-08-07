@@ -1,18 +1,42 @@
+import _ from 'lodash';
+
 const auth = require('../auth/_helpers');
 const User = require('../models').User;
 const Document = require('../models').Document;
 const Role = require('../models').Role;
 const localAuth = require('../auth/local');
+const authHelpers = require('../auth/_helpers');
 
+const filterUser = (user) => {
+  const { id, username, email, firstname, lastname, roleId } = user;
+  return ({
+    id,
+    username,
+    firstname,
+    lastname,
+    email,
+    roleId
+  });
+};
 const updateUser = (req, res, user) => {
   user.update({
+    username: req.body.username || user.username,
     firstname: req.body.firstname || user.firstname,
     lastname: req.body.lastname || user.lastname,
-    password: req.body.password || user.password,
+    password: authHelpers.encrypt(req.body.newPassword) || user.password,
     roleId: req.body.roleId || user.roleId,
+    email: req.body.email || user.email
   })
-  .then(updatedUser => res.status(200).send(updatedUser))
-  .catch(error => res.status(400).send(error));
+  .then((updatedUser) => {
+    Role.findById(updatedUser.roleId)
+      .then((role) => {
+        const returnedUser = filterUser(user);
+
+        returnedUser.role = role.title;
+        res.status(200).send(returnedUser);
+      });
+  })
+  .catch(error => res.status(500).send(error));
 };
 
 module.exports = {
@@ -37,7 +61,7 @@ module.exports = {
               status: 'success',
               payload: {
                 token,
-                user,
+                user: filterUser(user),
                 role: role.title
               }
             });
@@ -70,12 +94,13 @@ module.exports = {
         });
         Role.findById(user.roleId)
           .then((role) => {
+            const returnedUser = filterUser(user);
+            returnedUser.role = role.title;
             res.status(200).jsonp({
               status: 'success',
               payload: {
                 token,
-                user,
-                role: role.title
+                user: returnedUser
               }
             });
           });
@@ -135,10 +160,10 @@ module.exports = {
         } else {
           Role.findById(user.roleId)
             .then((role) => {
-              res.status(200).send({
-                user,
-                role: role.title
-              });
+              const returnedUser = filterUser(user);
+
+              returnedUser.role = role.title;
+              res.status(200).send(returnedUser);
             });
         }
       })
@@ -185,7 +210,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
   updateUser: (req, res) => {
-    if (req.roleId === 1 || req.userId === parseInt(req.params.id, 10)) {
+    if (req.userId === parseInt(req.params.id, 10)) {
       User
         .findById(req.params.id)
         .then((user) => {
@@ -194,7 +219,12 @@ module.exports = {
               message: 'user not found'
             });
           } else {
-            if (req.body.email) {
+            if (req.body.newPassword) {
+              authHelpers.comparePassword(
+                req.body.currentPassword, user.password
+              );
+            }
+            if (req.body.email || req.body.username) {
               User.find({
                 where: {
                   $or: [{
@@ -213,15 +243,16 @@ module.exports = {
                   updateUser(req, res, user);
                 }
               })
-              .catch(error => res.status(400).send(error));
+              .catch(error => res.status(400).send(error.message));
+            } else {
+              updateUser(req, res, user);
             }
-            updateUser(req, res, user);
           }
         })
-        .catch(error => res.status(400).send(error));
+        .catch(error => res.status(400).send(error.message));
     } else {
       res.status(403).send({
-        message: 'only overlord or a user can edit his details'
+        message: 'only a user can edit his details'
       });
     }
   },

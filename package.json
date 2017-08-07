@@ -97,6 +97,7 @@
     "express": "^4.15.3",
     "history": "^4.6.3",
     "joi-browser": "^10.6.0",
+    "jquery": "^3.2.1",
     "jsonwebtoken": "^7.4.1",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
@@ -118,6 +119,7 @@
     "sequelize": "^3.3.4",
     "supertest": "^3.0.0",
     "tinymce": "^4.6.4",
+    "toastr": "^2.1.2",
     "webpack": "^3.0.0",
     "webpack-dev-middleware": "^1.11.0",
     "webpack-hot-middleware": "^2.18.2"

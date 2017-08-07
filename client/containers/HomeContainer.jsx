@@ -1,13 +1,26 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
+import toastr from 'toastr';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import { logUserOut, fetchAllUsers, fetchAllRoles } from '../actions/users';
+import {
+  logUserOut,
+  fetchAllUsers,
+  fetchAllRoles,
+  getUser
+} from '../actions/users';
 import { fetchDocuments } from '../actions/documents';
 import DocumentList from '../components/DocumentList';
 import SearchComponent from '../components/SearchComponent';
 import UserList from '../components/UserList';
 import DocumentManager from '../components/DocumentManager';
+import UserManager from '../components/UserManager';
+
+toastr.options = {
+  positionClass: 'toast-top-center',
+  showMethod: 'slideDown',
+  timeOut: 2000
+};
 
 class HomeContainer extends React.Component {
   constructor(props) {
@@ -15,9 +28,10 @@ class HomeContainer extends React.Component {
     this.state = {
       type: 'private',
       showUsers: false,
-      createNew: false
+      createNewDocument: false,
     };
     this.logOut = this.logOut.bind(this);
+    this.showUserProfile = this.showUserProfile.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
     this.handleDocumentTypeChange = this.handleDocumentTypeChange.bind(this);
   }
@@ -34,11 +48,28 @@ class HomeContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentDocumentUpdated } = nextProps;
-
+    const {
+      currentDocumentUpdated,
+      currentUserUpdated,
+      documentSaved,
+      documentsUpdated,
+      currentDocumentModified
+    } = nextProps;
+    if (this.props.savingDocument || this.props.currentDocumentModifying) {
+      if (documentSaved || currentDocumentModified) {
+        toastr.success('Document Saved');
+        this.props.fetchDocuments(this.props.user.id, this.state.type);
+      } else {
+        toastr.error('Document Save Failed');
+      }
+    }
+    if (documentsUpdated) {
+      this.setState({
+        type: nextProps.documentsType
+      });
+    }
     if (currentDocumentUpdated) {
-      event.preventDefault();
-      $('.ui.modal')
+      $('.ui.document.modal')
         .modal({
           closable: false,
           detachable: false,
@@ -47,8 +78,23 @@ class HomeContainer extends React.Component {
           },
           onHide: () => {
             this.setState({
-              createNew: false,
-              currentDocumentupdated: false
+              createNewDocument: false,
+              currentDocumentUpdated: false
+            });
+          }
+        })
+        .modal('show');
+    } else if (currentUserUpdated) {
+      $('.ui.user.modal')
+        .modal({
+          closable: false,
+          detachable: false,
+          selector: {
+            close: '.cancel, .close'
+          },
+          onHide: () => {
+            this.setState({
+              currentUserUpdated: false
             });
           }
         })
@@ -58,6 +104,7 @@ class HomeContainer extends React.Component {
 
   handleDocumentTypeChange(event) {
     event.preventDefault();
+    toastr.info(`You are now viewing ${event.target.name} documents`);
     const newState = {
       type: event.target.name,
       showUsers: event.target.name === 'users'
@@ -72,11 +119,15 @@ class HomeContainer extends React.Component {
     });
   }
 
+  showUserProfile() {
+    this.props.getUser(this.props.user.id);
+  }
+
   initializeNewDocument() {
     this.setState({
-      createNew: true
+      createNewDocument: true
     }, () => {
-      $('.ui.modal')
+      $('.ui.document.modal')
         .modal({
           closable: false,
           detachable: false,
@@ -85,7 +136,7 @@ class HomeContainer extends React.Component {
           },
           onHide: () => {
             this.setState({
-              createNew: false
+              createNewDocument: false
             });
           }
         })
@@ -103,7 +154,8 @@ class HomeContainer extends React.Component {
       + this.props.user.role.slice(1);
     return (
       <div style={{ height: '100%' }} >
-        <DocumentManager createNew={this.state.createNew} />
+        <DocumentManager createNew={this.state.createNewDocument} />
+        <UserManager />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
             <a className="active item" href="/document">Home</a>
@@ -119,9 +171,18 @@ class HomeContainer extends React.Component {
                 <i className="file text icon blue" />
                 <i className="corner inverted add icon" />
               </i>
+              <i
+                className="big icons"
+                style={{
+                  margin: '10px', cursor: 'pointer'
+                }}
+                role="button"
+                onClick={this.showUserProfile}
+              >
+                <i className="user circle outline blue icon" />
+              </i>
               <div className="ui dropdown" style={{ margin: 'auto' }}>
                 <div className="text">
-                  <i className="user circle outline big blue icon" />
                   @{this.props.user.username}
                 </div>
                 <i className="dropdown icon" />
@@ -289,7 +350,14 @@ HomeContainer.propTypes = {
   fetchDocuments: PropType.func.isRequired,
   fetchAllUsers: PropType.func.isRequired,
   fetchAllRoles: PropType.func.isRequired,
+  getUser: PropType.func.isRequired,
   currentDocumentUpdated: PropType.bool.isRequired,
+  currentDocumentModified: PropType.bool.isRequired,
+  currentUserUpdated: PropType.bool.isRequired,
+  documentsUpdated: PropType.bool.isRequired,
+  documentSaved: PropType.bool.isRequired,
+  savingDocument: PropType.bool.isRequired,
+  currentDocumentModifying: PropType.bool.isRequired,
   documentsType: PropType.string
 };
 
@@ -305,14 +373,22 @@ const mapDispatchToProps = {
   logUserOut,
   fetchDocuments,
   fetchAllUsers,
-  fetchAllRoles
+  fetchAllRoles,
+  getUser
 };
 
 const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,
   documentsType: state.documents.documentsType,
-  currentDocumentUpdated: state.documents.currentDocumentUpdated
+  currentDocumentUpdated: state.documents.currentDocumentUpdated,
+  currentDocumentModified: state.documents.currentDocumentModified,
+  currentUser: state.user.currentUser,
+  currentUserUpdated: state.user.currentUserUpdated,
+  documentSaved: state.documents.documentSaved,
+  documentsUpdated: state.documents.documentsUpdated,
+  savingDocument: state.documents.savingDocument,
+  currentDocumentModifying: state.documents.currentDocumentModifying
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
