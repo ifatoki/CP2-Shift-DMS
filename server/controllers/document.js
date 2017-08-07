@@ -13,6 +13,16 @@ const updateDocument = (document, req, res) => {
   .catch(error => res.status(400).send(error));
 };
 
+const deleteDocument = (document, req, res) => {
+  document.destroy({
+    cascade: true
+  })
+  .then(() => res.status(200).send({
+    message: 'document deleted successfully'
+  }))
+  .catch(error => res.status(400).send(error));
+};
+
 const documentController = {
   create: (req, res) => {
     Document
@@ -254,16 +264,60 @@ const documentController = {
           res.status(404).send({
             message: 'document not found'
           });
+        } else if (document.ownerId === req.userId) {
+          deleteDocument(document, req, res);
+        } else if (document.accessId === 2) {
+          res.status(403).send({
+            message: "you don't have the rights to delete this document"
+          });
         } else {
-          document.destroy({
-            cascade: true
+          document.getUsers({
+            where: {
+              id: req.userId
+            },
+            joinTableAttributes: ['rightId']
           })
-          .then(() => res.status(200).send({
-            message: 'document deleted successfully'
-          }))
+          .then((user) => {
+            if (user.length < 1) {
+              document.getRoles({
+                where: {
+                  id: req.roleId
+                },
+                joinTableAttributes: ['rightId']
+              })
+              .then((role) => {
+                if (role.length < 1) {
+                  res.status(401).send({
+                    message:
+                      'you are not authorized to access this document'
+                  });
+                } else if (
+                  role[0].dataValues.DocumentRole.dataValues.rightId === 1
+                ) {
+                  deleteDocument(document, req, res);
+                } else {
+                  res.status(403).send({
+                    message:
+                      "you don't have the rights to delete this document"
+                  });
+                }
+              })
+              .catch(error => res.status(500).send(error));
+            } else if (
+              user[0].dataValues.DocumentUser.dataValues.rightId === 1
+            ) {
+              deleteDocument(document, req, res);
+            } else {
+              res.status(403).send({
+                message:
+                  "you don't have the rights to delete this document"
+              });
+            }
+          })
           .catch(error => res.status(400).send(error));
         }
-      });
+      })
+      .catch(error => res.status(400).send(error.message));
   },
   search: (req, res) => {
     const searchResults = {};
