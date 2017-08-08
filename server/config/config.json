@@ -8,18 +8,18 @@
     "dialect": "postgres"
   },
   "test": {
-    "username": "",
-    "password": null,
-    "database": "shift-dms-test",
-    "host": "localhost",
+    "username": "wtgvyalj",
+    "password": "HrSPNSOb6dByUNjzbN4YzBPJQ8rob3yr",
+    "database": "wtgvyalj",
+    "host": "stampy.db.elephantsql.com",
     "port": 5432,
     "dialect": "postgres"
   },
   "production": {
-    "username": "",
-    "password": null,
-    "database": "shift-dms",
-    "host": "localhost",
+    "username": "glrqmkod",
+    "password": "XZL1Oe0yEVayDYOXR0Q2B1ZP2pQK48Zu",
+    "database": "glrqmkod",
+    "host": "stampy.db.elephantsql.com",
     "port": 5432,
     "dialect": "postgres"
   }

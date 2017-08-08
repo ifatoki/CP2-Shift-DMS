@@ -56,11 +56,6 @@ module.exports = (app) => {
     auth.confirmAuthentication,
     usersController.fetchUserDocuments
   );
-   // find private documents belonging to the user
-  app.get('/api/v1/users/:id/documents/private',
-    auth.confirmAuthentication,
-    usersController.fetchPrivateDocuments
-  );
   // search for user
   app.get(
     '/api/v1/search/users/',

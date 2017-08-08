@@ -1,6 +1,5 @@
 const auth = require('../auth/_helpers');
 const User = require('../models').User;
-const Document = require('../models').Document;
 const Role = require('../models').Role;
 const localAuth = require('../auth/local');
 const authHelpers = require('../auth/_helpers');
@@ -39,36 +38,44 @@ const updateUser = (req, res, user) => {
 
 module.exports = {
   create: (req, res) => {
-    User
-      .create({
-        username: req.body.username,
-        email: req.body.email,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        password: auth.encrypt(req.body.password),
-        roleId: req.body.roleId
-      })
-      .then((user) => {
-        const token = localAuth.encodeToken({
-          id: user.id,
-          username: user.username
-        });
-        Role.findById(user.roleId)
-          .then((role) => {
-            res.status(201).json({
-              status: 'success',
-              payload: {
-                token,
-                user: filterUser(user),
-                role: role.title
-              }
-            });
+    Role.findById(req.body.roleId)
+      .then((role) => {
+        if (role) {
+          User
+            .create({
+              username: req.body.username,
+              email: req.body.email,
+              firstname: req.body.firstname,
+              lastname: req.body.lastname,
+              password: auth.encrypt(req.body.password),
+              roleId: req.body.roleId
+            })
+            .then((user) => {
+              const token = localAuth.encodeToken({
+                id: user.id,
+                username: user.username
+              });
+              const returnedUser = filterUser(user);
+              returnedUser.role = role.title;
+              res.status(201).send({
+                status: 'success',
+                payload: {
+                  token,
+                  user: returnedUser
+                }
+              });
+            })
+            .catch(error => res.status(400).send({
+              status: 'error',
+              message: error.message
+            }));
+        } else {
+          res.status(404).send({
+            message: "role doesn't exist"
           });
+        }
       })
-      .catch(error => res.status(400).send({
-        status: 'error',
-        message: error.message
-      }));
+      .catch(error => res.status(500).send(error.message));
   },
   login: (req, res) => {
     User
@@ -94,8 +101,7 @@ module.exports = {
           .then((role) => {
             const returnedUser = filterUser(user);
             returnedUser.role = role.title;
-            res.status(200).jsonp({
-              status: 'success',
+            res.status(200).send({
               payload: {
                 token,
                 user: returnedUser
@@ -105,18 +111,19 @@ module.exports = {
       })
       .catch((err) => {
         let status = 500;
-        if (err.message !== 'invalid password') {
+        if (err.message === 'invalid password') {
           status = 401;
+        } else if (err.message === 'user not found') {
+          status = 404;
         }
-        res.status(status).json({
-          status: 'error',
+        res.status(status).send({
           message: err.message
         });
       });
   },
   logout: (req, res) => {
-    res.status(200).jsonp({
-      status: 'success'
+    res.status(200).send({
+      message: 'user signed out'
     });
   },
   fetch: (req, res) => {
@@ -179,30 +186,22 @@ module.exports = {
           res.status(404).send({
             message: 'user not found'
           });
-        } else {
-          res.status(200).send({
-            authoredDocuments: user.myDocuments,
-            sharedDocuments: user.Documents
-          });
-        }
-      })
-      .catch(error => res.status(400).send(error));
-  },
-  fetchPrivateDocuments(req, res) {
-    Document
-      .findAll({
-        where: {
-          accessId: 1,
-          ownerId: req.params.id
-        }
-      })
-      .then((documents) => {
-        if (!documents) {
-          res.status(404).send({
-            message: 'user has no private documents'
+        } else if (parseInt(req.params.id, 10) !== req.userId) {
+          res.status(403).send({
+            message: "you can't fetch another users documents"
           });
         } else {
-          res.status(200).send(documents);
+          user.getMyDocuments()
+            .then((documents) => {
+              res.status(200).send(
+                documents
+              );
+            })
+            .catch((error) => {
+              res.status(500).send({
+                message: error.message
+              });
+            });
         }
       })
       .catch(error => res.status(400).send(error));
@@ -241,13 +240,23 @@ module.exports = {
                   updateUser(req, res, user);
                 }
               })
-              .catch(error => res.status(400).send(error.message));
+              .catch(error => res.status(400).send({
+                message: error.message
+              }));
             } else {
               updateUser(req, res, user);
             }
           }
         })
-        .catch(error => res.status(400).send(error.message));
+        .catch((error) => {
+          let status = 400;
+          if (error.message === 'invalid password') {
+            status = 403;
+          }
+          res.status(status).send({
+            message: error.message
+          });
+        });
     } else {
       res.status(403).send({
         message: 'only a user can edit his details'
@@ -310,7 +319,7 @@ module.exports = {
         }]
       }
     })
-    .then(user => res.status(200).send(user))
+    .then(users => res.status(200).send(users))
     .catch(error => res.status(400).send(error));
   }
 };
