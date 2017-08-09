@@ -4,3 +4,4 @@ client/assets/js/client.min.js
 .DS_Store
 .nyc_output
 .env
+server/config/config.json.sample

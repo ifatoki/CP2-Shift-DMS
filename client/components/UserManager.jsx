@@ -290,7 +290,7 @@ const mapStateToProps = state => ({
   currentUser: state.user.currentUser,
   signedInRole: state.user.role,
   currentUserModifying: state.user.currentUserModifying,
-  currentUserModified: state.user.currentUserModifying
+  currentUserModified: state.user.currentUserModified
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManager);

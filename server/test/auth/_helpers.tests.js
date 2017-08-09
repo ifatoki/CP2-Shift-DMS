@@ -21,6 +21,10 @@ describe('auth : _helpers', () => {
     it('should return a string', () => {
       expect(authHelpers.encrypt(password)).to.be.a('string');
     });
+    it('show return null, when a null password or empty string is passed', () => {
+      expect(authHelpers.encrypt(null)).to.be.null;
+      expect(authHelpers.encrypt('')).to.be.null;
+    });
   });
 
   describe('Compare Password', () => {

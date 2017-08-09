@@ -67,7 +67,11 @@ class HomeContainer extends React.Component {
     if (this.props.savingDocument || this.props.currentDocumentModifying) {
       if (documentSaved || currentDocumentModified) {
         toastr.success('Document Saved');
-        this.props.fetchDocuments(this.props.user.id, this.state.type);
+        this.setState({
+          createNewDocument: false
+        }, () => {
+          this.props.fetchDocuments(this.props.user.id, this.state.type);
+        });
       } else {
         toastr.error('Document Save Failed');
       }
