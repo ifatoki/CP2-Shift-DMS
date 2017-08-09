@@ -1,29 +1,25 @@
+import _ from 'lodash';
 import Models from '../models';
+import Validator from '../utils/Validator';
 
 const User = Models.User;
 const Document = Models.Document;
 const Role = Models.Role;
 
+const getValidatorErrorMessage = errors => (
+  _.reduce(errors, (result, error) =>
+    `${error}\n${result}`
+  , '')
+);
+
 const filterDocument = document => ({
+  id: document.id,
   title: document.title,
   content: document.content,
   updatedAt: document.updatedAt,
   ownerId: document.ownerId,
   accessId: document.accessId
 });
-
-const updateDocument = (document, req, res) => {
-  document.update({
-    title: req.body.title || document.title,
-    content: req.body.content || document.content,
-  })
-  .then((updatedDocument) => {
-    res.status(200).send(filterDocument(updatedDocument));
-  })
-  .catch(error => res.status(500).send({
-    message: error.message
-  }));
-};
 
 const deleteDocument = (document, req, res) => {
   document.destroy({
@@ -32,12 +28,121 @@ const deleteDocument = (document, req, res) => {
   .then(() => res.status(200).send({
     message: 'document deleted successfully'
   }))
-  .catch(error => res.status(500).send(error));
+  .catch(error => res.status(500).send({
+    message: error.message
+  }));
+};
+
+const addRolesToDocument = (req, res, newDocument, documentData) => {
+  Role
+  .findAll({
+    where: {
+      id: {
+        $and: {
+          $in: documentData.rolesIds,
+          $ne: 1
+        }
+      }
+    }
+  })
+  .then((roles) => {
+    _.map(roles, (role) => {
+      role.DocumentRole = {
+        rightId: documentData.roles[role.id]
+      };
+      return role;
+    });
+    if (roles.length) {
+      newDocument.setRoles(roles)
+      .then(() => {
+        res.status(201).send({
+          document: filterDocument(newDocument),
+          roles: _.map(roles, role => ({
+            id: role.id,
+            title: role.title
+          }))
+        });
+      })
+      .catch((error) => {
+        res.status(500).send({
+          message: error.message
+        });
+      });
+    } else {
+      res.status(201).send({
+        document: filterDocument(newDocument)
+      });
+    }
+  })
+  .catch((error) => {
+    res.status(500).send({
+      message: error.message
+    });
+  });
+};
+
+const updateDocument = (document, req, res) => {
+  const formerAccessId = document.accessId;
+  const documentData = {
+    title: req.body.title || document.title,
+    content: req.body.content || document.content,
+    accessId: req.body.accessId || document.accessId
+  };
+  if (req.body.roles) {
+    documentData.accessId =
+      Object.keys(req.body.roles).length ? 3 : req.body.accessId;
+    documentData.rolesIds = Object.keys(req.body.roles);
+    documentData.roles = req.body.roles;
+  }
+  document.update(documentData)
+  .then((updatedDocument) => {
+    console.log('At least I got here', updatedDocument);
+    console.log('and document', document);
+    if (updatedDocument.accessId === 3 &&
+      documentData.roles &&
+      documentData.rolesIds > 0
+    ) {
+      addRolesToDocument(req, res, updatedDocument, documentData);
+    } else if (formerAccessId === 3 && updatedDocument.accessId !== 3) {
+      console.log('i got in here');
+      updatedDocument.setRoles([])
+      .then(() => {
+        console.log('previous connects removed');
+        res.status(200).send({
+          document: filterDocument(updatedDocument)
+        });
+      })
+      .catch((err) => {
+        console.log('error', err);
+      });
+    } else {
+      res.status(200).send({
+        document: filterDocument(updatedDocument)
+      });
+    }
+  })
+  .catch(error => res.status(500).send({
+    message: error.message
+  }));
 };
 
 const documentController = {
   create: (req, res) => {
-    Document
+    const documentData = {
+      title: req.body.title,
+      content: req.body.content,
+      ownerId: req.userId,
+      accessId: req.body.accessId
+    };
+    if (req.body.roles) {
+      documentData.accessId =
+        Object.keys(req.body.roles).length ? 3 : req.body.accessId;
+      documentData.rolesIds = Object.keys(req.body.roles);
+      documentData.roles = req.body.roles;
+    }
+    const validation = Validator.validateNewDocument(documentData);
+    if (validation.isValid) {
+      Document
       .findOne({
         where: {
           title: req.body.title
@@ -50,14 +155,15 @@ const documentController = {
           });
         } else {
           Document
-            .create({
-              title: req.body.title,
-              content: req.body.content,
-              ownerId: req.userId,
-              accessId: req.body.accessId
-            })
+            .create(documentData)
             .then((newDocument) => {
-              res.status(201).send(filterDocument(newDocument));
+              if (documentData.accessId === 3 && documentData.roles && documentData.rolesIds > 0) {
+                addRolesToDocument(req, res, newDocument, documentData);
+              } else {
+                res.status(201).send({
+                  document: filterDocument(newDocument)
+                });
+              }
             })
             .catch((error) => {
               res.status(500).send({
@@ -69,6 +175,11 @@ const documentController = {
       .catch(error => res.status(500).send({
         message: error.message
       }));
+    } else {
+      res.status(400).send({
+        message: getValidatorErrorMessage(validation.errors)
+      });
+    }
   },
   fetchAll: (req, res) => {
     const query = {};
@@ -94,7 +205,7 @@ const documentController = {
             .then((role) => {
               role.getDocuments()
               .then((documents) => {
-                res.status(200).send(documents);
+                res.status(200).send({ documents });
               })
               .catch((error) => {
                 res.status(500).send({
@@ -105,7 +216,7 @@ const documentController = {
           } else {
             user.getDocuments()
             .then((documents) => {
-              res.status(200).send(documents);
+              res.status(200).send({ documents });
             })
             .catch((error) => {
               res.status(500).send({
@@ -124,7 +235,9 @@ const documentController = {
           limit: req.query.limit || null,
           offset: req.query.offset
         })
-        .then(documents => res.status(200).send(documents.rows))
+        .then(documents => res.status(200).send({
+          documents: documents.rows
+        }))
         .catch(error => res.status(400).send({
           message: error.message
         }));
@@ -139,7 +252,7 @@ const documentController = {
             message: 'document not found'
           });
         } else {
-          const response = { document };
+          const response = { document: filterDocument(document) };
           if (document.ownerId === req.userId) {
             response.rightId = 1;
             res.status(200).send(response);
@@ -192,7 +305,15 @@ const documentController = {
       }));
   },
   update: (req, res) => {
-    Document
+    const documentData = {
+      title: req.body.title,
+      content: req.body.content,
+      accessId: req.body.accessId
+    };
+
+    const validation = Validator.validateDocumentEdit(documentData);
+    if (validation.isValid) {
+      Document
       .findById(req.params.id)
       .then((document) => {
         if (!document) {
@@ -279,6 +400,11 @@ const documentController = {
       .catch(error => res.status(500).send({
         message: error.message
       }));
+    } else {
+      res.status(400).send({
+        message: getValidatorErrorMessage(validation.errors)
+      });
+    }
   },
   delete: (req, res) => {
     Document
@@ -291,9 +417,13 @@ const documentController = {
         } else if (document.ownerId === req.userId) {
           deleteDocument(document, req, res);
         } else if (document.accessId === 2) {
-          res.status(403).send({
-            message: "you don't have the rights to delete this document"
-          });
+          if (req.roleId === 1) {
+            deleteDocument(document, req, res);
+          } else {
+            res.status(403).send({
+              message: "you don't have the rights to delete this document"
+            });
+          }
         } else {
           document.getUsers({
             where: {
@@ -454,6 +584,26 @@ const documentController = {
         message: error.message
       }));
   },
+  // addRole: (req, res) => {
+  //   Document
+  //     .findById(req.params.documentId)
+  //     .then((document) => {
+  //       User
+  //         .findById(req.userId)
+  //         .then((user) => {
+  //           document.addUser(user)
+  //           .then(res.status(200).send({
+  //             message: 'user added successfully'
+  //           }));
+  //         })
+  //         .catch(error => res.status(500).send({
+  //           message: error.message
+  //         }));
+  //     })
+  //     .catch(error => res.status(500).send({
+  //       message: error.message
+  //     }));
+  // },
   addUser: (req, res) => {
     Document
       .findById(req.params.documentId)

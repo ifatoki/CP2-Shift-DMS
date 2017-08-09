@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import UserComponent from './UserComponent';
+import User from './User';
 
 const normalizeUsers = (roles, users) => {
   const myRoles = roles.reduce((accumulator, currentValue) => {
@@ -19,11 +19,12 @@ const normalizeUsers = (roles, users) => {
   return myUsers;
 };
 
-const UserList = (props) => {
+export const UserList = (props) => {
   const users = normalizeUsers(props.roles, props.users);
   return (
     <div
-      className="ui divided items" style={{
+      className="ui divided items userList"
+      style={{
         paddingTop: '10px',
         marginTop: '0px',
         overflowY: 'scroll',
@@ -33,7 +34,7 @@ const UserList = (props) => {
     >
       <Card.Group>
         {users.map(user => (
-          <UserComponent
+          <User
             key={user.id}
             id={user.id}
             username={user.username}

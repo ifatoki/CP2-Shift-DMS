@@ -3,7 +3,9 @@ import PropType from 'prop-types';
 import toastr from 'toastr';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { modifyUser, cancelUser } from '../actions/users';
+import UsersActions from '../actions/UsersActions';
+
+const { modifyUser, cancelUser } = UsersActions;
 
 const editModes = {
   READ: 'READ',
@@ -33,7 +35,7 @@ toastr.options = {
   timeOut: 2000
 };
 
-class UserManager extends React.Component {
+export class UserManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -45,14 +47,18 @@ class UserManager extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentUser, signedInRole, currentUserModified } = nextProps;
-    if (this.props.currentUserModifying) {
+    const {
+      currentUser, signedInRole, currentUserModified, currentUserErrorMessage
+    } = nextProps;
+    if (currentUserErrorMessage) {
+      toastr.error(currentUserErrorMessage, 'Validation Error');
+    } else if (this.props.currentUserModifying) {
       if (currentUserModified) {
         this.setState({
           accessMode: editModes.READ
-        }, () => toastr.success('User details modified successfully'));
-      } else {
-        toastr.error('User modification failed');
+        }, () => toastr.success(
+          'User details modified successfully', 'Success'
+        ));
       }
     }
     if (currentUser) {
@@ -69,10 +75,6 @@ class UserManager extends React.Component {
     }
   }
 
-  resetModal() {
-    this.setState(initialState);
-  }
-
   onChange(event) {
     event.preventDefault();
     this.setState({
@@ -82,6 +84,10 @@ class UserManager extends React.Component {
           event.target.value,
       edited: true
     });
+  }
+
+  resetModal() {
+    this.setState(initialState);
   }
 
   handleSelectionChange(event, { checked }) {
@@ -107,6 +113,7 @@ class UserManager extends React.Component {
     if (this.state.changePassword) {
       newUserData.currentPassword = this.state.currentPassword;
       newUserData.newPassword = this.state.newPassword;
+      newUserData.confirmPassword = this.state.confirmPassword;
     }
     this.props.modifyUser(currentUser.id, newUserData);
   }
@@ -125,7 +132,7 @@ class UserManager extends React.Component {
 
   render() {
     return (
-      <div className="ui user mini modal">
+      <div className="ui user mini modal userManager">
         <Modal.Header>
           {this.state.accessMode === editModes.WRITE ?
             'Make your changes here' :
@@ -144,6 +151,7 @@ class UserManager extends React.Component {
             <Form>
               <Form.Group widths="equal">
                 <Form.Input
+                  className="firstname"
                   label="First name"
                   placeholder="First name"
                   name="firstname"
@@ -151,6 +159,7 @@ class UserManager extends React.Component {
                   onChange={this.onChange}
                 />
                 <Form.Input
+                  id="lastname"
                   label="Last name"
                   placeholder="Last name"
                   name="lastname"
@@ -160,14 +169,14 @@ class UserManager extends React.Component {
               </Form.Group>
               <Form.Group widths="equal">
                 <Form.Input
-                  label="First name"
+                  label="Username"
                   placeholder="Username"
                   name="username"
                   value={`@${this.state.username}`}
                   onChange={this.onChange}
                 />
                 <Form.Input
-                  label="Last name"
+                  label="Email"
                   placeholder="Email"
                   name="email"
                   value={this.state.email}
@@ -177,7 +186,8 @@ class UserManager extends React.Component {
               <Form.Checkbox
                 label="Change my password"
                 checked={this.state.changePassword}
-                onChange={this.handleSelectionChange} />
+                onChange={this.handleSelectionChange}
+              />
               <div
                 style={{
                   display:
@@ -254,7 +264,8 @@ class UserManager extends React.Component {
             onClick={this.saveUser}
             style={{
               display:
-                this.state.edited ? 'inline-block' : 'none'
+                this.state.edited && this.state.accessMode === editModes.WRITE ?
+                'inline-block' : 'none'
             }}
           >
             <i className="save icon" />
@@ -274,7 +285,8 @@ UserManager.propTypes = {
   modifyUser: PropType.func.isRequired,
   signedInRole: PropType.string.isRequired,
   currentUserModifying: PropType.bool.isRequired,
-  currentUserModified: PropType.bool.isRequired
+  currentUserModified: PropType.bool.isRequired,
+  currentUserErrorMessage: PropType.string.isRequired
 };
 
 UserManager.defaultProps = {
@@ -290,7 +302,8 @@ const mapStateToProps = state => ({
   currentUser: state.user.currentUser,
   signedInRole: state.user.role,
   currentUserModifying: state.user.currentUserModifying,
-  currentUserModified: state.user.currentUserModified
+  currentUserModified: state.user.currentUserModified,
+  currentUserErrorMessage: state.user.currentUserErrorMessage
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManager);

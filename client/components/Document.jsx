@@ -2,9 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card, Icon } from 'semantic-ui-react';
-import { getDocument, deleteDocument } from '../actions/documents';
+import ReactHtmlParser from 'react-html-parser';
+import Timeago from 'timeago-react';
+import DocumentActions from '../actions/DocumentActions';
 
-class Document extends React.Component {
+const { getDocument, deleteDocument } = DocumentActions;
+
+export class Document extends React.Component {
   constructor(props) {
     super(props);
     this.isDelete = false;
@@ -26,19 +30,29 @@ class Document extends React.Component {
 
   render() {
     return (
-      <Card onClick={this.clickHander}>
-        <Card.Content>
+      <Card className="singleDocument" onClick={this.clickHander}>
+        <div className="ui content" style={{ paddingBottom: 0 }}>
           <Card.Header>
             {this.props.title}
           </Card.Header>
-          <Card.Meta content={this.props.created} />
-          <Card.Description content={this.props.content} />
-        </Card.Content>
+          <Card.Meta>
+            Created <Timeago datetime={this.props.created} />
+          </Card.Meta>
+          <div
+            className="description"
+            style={{ height: '80px', overflowY: 'scroll' }}
+          >
+            { ReactHtmlParser(this.props.content) }
+          </div>
+        </div>
         <Card.Content extra>
           <Icon name="user" color="blue" />
-          @itunuworks
           <div className="right floated">
-            <Icon name="trash" color="blue" onClick={this.deleteDocument} />
+            <Icon
+              className="deleteDocument"
+              name="trash" color="blue"
+              onClick={this.deleteDocument}
+            />
           </div>
         </Card.Content>
       </Card>

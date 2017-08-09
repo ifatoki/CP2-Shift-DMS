@@ -5,3 +5,4 @@ client/assets/js/client.min.js
 .nyc_output
 .env
 server/config/config.json.sample
+dist

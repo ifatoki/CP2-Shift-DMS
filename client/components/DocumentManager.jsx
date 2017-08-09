@@ -1,13 +1,18 @@
 import React from 'react';
 import PropType from 'prop-types';
 import toastr from 'toastr';
+import _ from 'lodash';
+import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
-import {
+import RoleSearchComponent from '../components/RoleSearchComponent';
+import DocumentActions from '../actions/DocumentActions';
+
+const {
   saveNewDocument,
   modifyDocument,
   cancelNewDocument
-} from '../actions/documents';
+} = DocumentActions;
 
 const editModes = {
   READ: 'READ',
@@ -21,7 +26,7 @@ toastr.options = {
   timeOut: 2000
 };
 
-class DocumentManager extends React.Component {
+export class DocumentManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,13 +35,15 @@ class DocumentManager extends React.Component {
       accessId: 2,
       rightId: 3, // Read access
       accessMode: this.props.createNew ?
-       editModes.NEW : editModes.READ
+       editModes.NEW : editModes.READ,
+      roles: {}
     };
     this.onChange = this.onChange.bind(this);
     this.saveDocument = this.saveDocument.bind(this);
     this.editDocument = this.editDocument.bind(this);
     this.handleRadioButtonChange = this.handleRadioButtonChange.bind(this);
     this.cancelNewDocument = this.cancelNewDocument.bind(this);
+    this.onRolesChange = this.onRolesChange.bind(this);
   }
 
   componentDidMount() {
@@ -63,9 +70,6 @@ class DocumentManager extends React.Component {
             content: editor.getContent()
           });
         });
-        editor.on('dirty', () => {
-          console.log('Just got dirty. You may now enable save button');
-        });
       }
     });
   }
@@ -86,12 +90,19 @@ class DocumentManager extends React.Component {
           content: isNew ? '' : currentDocument.content,
           accessId: isNew ? 2 : currentDocument.accessId
         }, () => {
-          $('#contentHolder').children().remove();
-          $(this.state.content).prependTo('#contentHolder');
           tinymce.activeEditor.setContent(this.state.content);
         });
       });
     }
+  }
+
+  onRolesChange(event, data) {
+    this.setState({
+      roles: _.reduce(data.value, (cummulator, value) => {
+        cummulator[value] = 3;
+        return cummulator;
+      }, {})
+    });
   }
 
   onChange(event) {
@@ -107,20 +118,29 @@ class DocumentManager extends React.Component {
   }
 
   saveDocument(event) {
+    const { currentDocument } = this.props;
     event.preventDefault();
     if (this.state.accessMode === editModes.NEW) {
       this.props.saveNewDocument({
         title: this.state.title,
         content: this.state.content,
         ownerId: this.props.user.id,
-        accessId: this.state.accessId
+        accessId: this.state.accessId,
+        roles: this.state.roles
       });
     } else {
-      this.props.modifyDocument(this.props.currentDocument.id, {
-        title: this.state.title,
-        content: this.state.content,
-        accessId: this.state.accessId
-      });
+      const editData = {};
+      if (this.state.title !== currentDocument.title) {
+        editData.title = this.state.title;
+      }
+      if (this.state.content !== currentDocument.content) {
+        editData.content = this.state.content;
+      }
+      if (this.state.accessId !== currentDocument.accessId) {
+        editData.accessId = this.state.accessId;
+        editData.roles = this.state.roles;
+      }
+      this.props.modifyDocument(currentDocument.id, editData);
     }
   }
 
@@ -143,23 +163,12 @@ class DocumentManager extends React.Component {
   render() {
     const { accessId } = this.state;
     return (
-      <div className="ui longer fullscreen document modal">
+      <div className="ui longer fullscreen document modal documentManager">
         <div className="header">
           <div className="ui container">
             {this.props.createNew ?
             'Create your document here' :
             this.state.title}
-            <textarea
-              style={{
-                display: this.state.accessMode === editModes.WRITE ?
-                  'block' : 'none'
-              }}
-              rows="1"
-              placeholder="Title"
-              name="title"
-              onChange={this.onChange}
-              value={this.state.title}
-            />
           </div>
         </div>
         <div
@@ -183,7 +192,14 @@ class DocumentManager extends React.Component {
                 value={this.state.title}
               />
             </div>
-            <div className="two fields">
+            <div
+              className="two fields"
+              style={{
+                display: this.props.user.role === 'overlord' ||
+                (this.props.currentDocument && this.props.user.id !== this.props.currentDocument.ownerId) ?
+                  'none' : 'block'
+              }}
+            >
               <Form.Field width={3}>
                 <Form.Field>
                   <Checkbox
@@ -217,23 +233,28 @@ class DocumentManager extends React.Component {
                 </Form.Field>
               </Form.Field>
               <Form.Field disabled={accessId !== 3} width={13}>
-                <h1>Itunuloluwa</h1>
+                <RoleSearchComponent fluid roles={this.props.user.roles} onChange={this.onRolesChange} />
               </Form.Field>
             </div>
             <div className="field">
               <textarea
                 className="tinymcepanel"
+                style={{ height: '50%' }}
               />
             </div>
           </div>
           <div
             id="contentHolder"
+            className="scrolling content"
             style={{
               display: this.state.accessMode === editModes.READ ?
                 'block' : 'none',
-              height: '500px'
+              height: '500px',
+              overflowY: 'scroll'
             }}
-          />
+          >
+            { ReactHtmlParser(this.state.content) }
+          </div>
         </div>
         <div
           className="ui actions container"

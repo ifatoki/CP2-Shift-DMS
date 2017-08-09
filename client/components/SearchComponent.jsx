@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { Search, Grid } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { searchDocuments, getDocument } from '../actions/documents';
+import DocumentActions from '../actions/DocumentActions';
 
-class SearchComponent extends Component {
+const { searchDocuments, getDocument } = DocumentActions;
+
+export class SearchComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,18 +54,15 @@ class SearchComponent extends Component {
     const { isLoading, value, results } = this.state;
 
     return (
-      <Grid>
-        <Grid.Column width={8}>
-          <Search
-            category
-            loading={isLoading}
-            onResultSelect={this.handleResultSelect}
-            onSearchChange={this.handleSearchChange}
-            results={results}
-            value={value}
-          />
-        </Grid.Column>
-      </Grid>
+      <Search
+        category
+        fluid
+        loading={isLoading}
+        onResultSelect={this.handleResultSelect}
+        onSearchChange={this.handleSearchChange}
+        results={results}
+        value={value}
+      />
     );
   }
 }
