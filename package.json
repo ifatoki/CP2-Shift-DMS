@@ -9,6 +9,7 @@
     "test-client": "cross-env NODE_ENV=test jest",
     "test": "npm run test-server && npm run test-client",
     "dev": "nodemon --watch server ./server/bin/www --exec babel-node",
+    "prestart": "npm run build",
     "start": "node ./dist/bin/www",
     "build": "rimraf ./dist && babel ./server -d ./dist --copy-files"
   },
@@ -116,6 +117,7 @@
     "redux": "^3.7.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
+    "rimraf": "^2.6.1",
     "semantic-ui-react": "^0.71.0",
     "sequelize": "^3.3.4",
     "supertest": "^3.0.0",
