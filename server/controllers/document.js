@@ -4,13 +4,25 @@ const User = Models.User;
 const Document = Models.Document;
 const Role = Models.Role;
 
+const filterDocument = document => ({
+  title: document.title,
+  content: document.content,
+  updatedAt: document.updatedAt,
+  ownerId: document.ownerId,
+  accessId: document.accessId
+});
+
 const updateDocument = (document, req, res) => {
   document.update({
     title: req.body.title || document.title,
     content: req.body.content || document.content,
   })
-  .then(updatedDocument => res.status(200).send(updatedDocument))
-  .catch(error => res.status(400).send(error));
+  .then((updatedDocument) => {
+    res.status(200).send(filterDocument(updatedDocument));
+  })
+  .catch(error => res.status(500).send({
+    message: error.message
+  }));
 };
 
 const deleteDocument = (document, req, res) => {
@@ -20,7 +32,7 @@ const deleteDocument = (document, req, res) => {
   .then(() => res.status(200).send({
     message: 'document deleted successfully'
   }))
-  .catch(error => res.status(400).send(error));
+  .catch(error => res.status(500).send(error));
 };
 
 const documentController = {
@@ -41,14 +53,22 @@ const documentController = {
             .create({
               title: req.body.title,
               content: req.body.content,
-              ownerId: req.body.ownerId,
+              ownerId: req.userId,
               accessId: req.body.accessId
             })
-            .then(todo => res.status(201).send(todo))
-            .catch(error => res.status(400).send(error.message));
+            .then((newDocument) => {
+              res.status(201).send(filterDocument(newDocument));
+            })
+            .catch((error) => {
+              res.status(500).send({
+                message: error.message
+              });
+            });
         }
       })
-      .catch(error => res.status(500).send(error.message));
+      .catch(error => res.status(500).send({
+        message: error.message
+      }));
   },
   fetchAll: (req, res) => {
     const query = {};
@@ -58,16 +78,16 @@ const documentController = {
       break;
     case 'role':
     case 'shared':
-      query.ownerId = req.query.userId;
+      query.ownerId = req.userId;
       break;
     default:
       query.accessId = 1;
-      query.ownerId = req.query.userId;
+      query.ownerId = req.userId;
       break;
     }
     if (!query.accessId) {
       User
-        .findById(req.query.userId)
+        .findById(req.userId)
         .then((user) => {
           if (req.query.type === 'role') {
             Role.findById(user.roleId)
@@ -77,7 +97,9 @@ const documentController = {
                 res.status(200).send(documents);
               })
               .catch((error) => {
-                res.status(400).send(error);
+                res.status(500).send({
+                  message: error.message
+                });
               });
             });
           } else {
@@ -86,11 +108,15 @@ const documentController = {
               res.status(200).send(documents);
             })
             .catch((error) => {
-              res.status(400).send(error);
+              res.status(500).send({
+                message: error.message
+              });
             });
           }
         })
-        .catch(error => res.status(400).send(error));
+        .catch(error => res.status(500).send({
+          message: error.message
+        }));
     } else {
       Document
         .findAndCountAll({
@@ -99,7 +125,9 @@ const documentController = {
           offset: req.query.offset
         })
         .then(documents => res.status(200).send(documents.rows))
-        .catch(error => res.status(400).send(error));
+        .catch(error => res.status(400).send({
+          message: error.message
+        }));
     }
   },
   fetchOne: (req, res) => {
@@ -144,36 +172,24 @@ const documentController = {
                     res.status(200).send(response);
                   }
                 })
-                .catch(error => res.status(500).send(error));
+                .catch(error => res.status(500).send({
+                  message: error.message
+                }));
               } else {
                 response.rightId =
                   user[0].dataValues.DocumentUser.dataValues.rightId;
                 res.status(200).send(response);
               }
             })
-            .catch(error => res.status(400).send(error));
+            .catch(error => res.status(500).send({
+              message: error.message
+            }));
           }
         }
       })
-      .catch(error => res.status(400).send(error));
-  },
-  fetchPublic: (req, res) => {
-    Document
-      .findAll({
-        where: {
-          accessId: 2
-        }
-      })
-      .then((documents) => {
-        if (!documents) {
-          res.status(404).send({
-            message: 'no public documents found'
-          });
-        } else {
-          res.status(200).send(documents);
-        }
-      })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        message: error.message
+      }));
   },
   update: (req, res) => {
     Document
@@ -236,7 +252,9 @@ const documentController = {
                         });
                       }
                     })
-                    .catch(error => res.status(500).send(error));
+                    .catch(error => res.status(500).send({
+                      message: error.message
+                    }));
                   } else if (
                     user[0].dataValues.DocumentUser.dataValues.rightId < 3
                   ) {
@@ -248,13 +266,19 @@ const documentController = {
                     });
                   }
                 })
-                .catch(error => res.status(400).send(error));
+                .catch(error => res.status(400).send({
+                  message: error.message
+                }));
               }
             })
-            .catch(error => res.status(500).send(error.message));
+            .catch(error => res.status(500).send({
+              message: error.message
+            }));
         }
       })
-      .catch(error => res.status(400).send(error.message));
+      .catch(error => res.status(500).send({
+        message: error.message
+      }));
   },
   delete: (req, res) => {
     Document
@@ -302,7 +326,9 @@ const documentController = {
                   });
                 }
               })
-              .catch(error => res.status(500).send(error));
+              .catch(error => res.status(500).send({
+                message: error.message
+              }));
             } else if (
               user[0].dataValues.DocumentUser.dataValues.rightId === 1
             ) {
@@ -314,10 +340,14 @@ const documentController = {
               });
             }
           })
-          .catch(error => res.status(400).send(error));
+          .catch(error => res.status(500).send({
+            message: error.message
+          }));
         }
       })
-      .catch(error => res.status(400).send(error.message));
+      .catch(error => res.status(500).send({
+        message: error.message
+      }));
   },
   search: (req, res) => {
     const searchResults = {};
@@ -393,7 +423,9 @@ const documentController = {
                                 }
                                 res.status(200).send(searchResults);
                               })
-                              .catch(error => res.status(400).send(error));
+                              .catch(error => res.status(500).send({
+                                message: error.message
+                              }));
                           });
                       } else {
                         res.status(404).send({
@@ -401,34 +433,46 @@ const documentController = {
                         });
                       }
                     })
-                    .catch(error => res.status(400).send(error));
+                    .catch(error => res.status(400).send({
+                      message: error.message
+                    }));
                 })
-                .catch(error => res.status(500).send(error));
+                .catch(error => res.status(500).send({
+                  message: error.message
+                }));
             })
-            .catch(error => res.status(500).send(error));
+            .catch(error => res.status(500).send({
+              message: error.message
+            }));
         } else {
           res.status(404).send({
             message: 'invalid user'
           });
         }
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        message: error.message
+      }));
   },
   addUser: (req, res) => {
     Document
       .findById(req.params.documentId)
       .then((document) => {
         User
-          .findById(req.query.userId)
+          .findById(req.userId)
           .then((user) => {
             document.addUser(user)
             .then(res.status(200).send({
               message: 'user added successfully'
             }));
           })
-          .catch(error => res.status(400).send(error));
+          .catch(error => res.status(500).send({
+            message: error.message
+          }));
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send({
+        message: error.message
+      }));
   }
 };
 

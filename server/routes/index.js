@@ -77,11 +77,6 @@ module.exports = (app) => {
     auth.confirmAuthentication,
     documentsController.fetchAll
   );
-  // find all public documents
-  app.get('/api/v1/documents/public',
-    auth.confirmAuthentication,
-    documentsController.fetchPublic
-  );
   // find the specified document
   app.get(
     '/api/v1/documents/:id',
