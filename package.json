@@ -9,8 +9,8 @@
     "test-client": "cross-env NODE_ENV=test jest",
     "test": "npm run test-server && npm run test-client",
     "dev": "nodemon --watch server ./server/bin/www --exec babel-node",
-    "start": "babel-node ./server/bin/www",
-    "build": "cross-env NODE_ENV=production node ./server/bin/www"
+    "start": "node ./dist/bin/www",
+    "build": "rimraf ./dist && babel ./server -d ./dist --copy-files"
   },
   "nyc": {
     "require": [
