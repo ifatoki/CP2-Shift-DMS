@@ -86,6 +86,7 @@ class HomeContainer extends React.Component {
         .modal({
           closable: false,
           detachable: false,
+          observeChanges: false,
           selector: {
             close: '.cancel, .close'
           },
@@ -102,6 +103,7 @@ class HomeContainer extends React.Component {
         .modal({
           closable: false,
           detachable: false,
+          observeChanges: false,
           selector: {
             close: '.cancel, .close'
           },

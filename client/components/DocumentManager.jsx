@@ -223,6 +223,7 @@ class DocumentManager extends React.Component {
             <div className="field">
               <textarea
                 className="tinymcepanel"
+                style={{ height: '50%' }}
               />
             </div>
           </div>
