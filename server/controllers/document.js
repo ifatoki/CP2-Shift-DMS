@@ -291,9 +291,13 @@ const documentController = {
         } else if (document.ownerId === req.userId) {
           deleteDocument(document, req, res);
         } else if (document.accessId === 2) {
-          res.status(403).send({
-            message: "you don't have the rights to delete this document"
-          });
+          if (req.userId === 1) {
+            deleteDocument(document, req, res);
+          } else {
+            res.status(403).send({
+              message: "you don't have the rights to delete this document"
+            });
+          }
         } else {
           document.getUsers({
             where: {
