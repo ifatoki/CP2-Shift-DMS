@@ -99,7 +99,7 @@ export function getDocument(documentId) {
         dispatch(documentGetSuccessful(response.data));
       })
       .catch((error) => {
-        dispatch(documentGetFailed(error.message));
+        dispatch(documentGetFailed(error.response.data.message));
       });
   };
 }
@@ -113,7 +113,7 @@ export function deleteDocument(documentId) {
         dispatch(documentDeleteSuccessful(response.data));
       })
       .catch((error) => {
-        dispatch(documentDeleteFailed(error.message));
+        dispatch(documentDeleteFailed(error.response.data.message));
       });
   };
 }
@@ -132,7 +132,7 @@ export function fetchDocuments(userId, type) {
         dispatch(documentsFetchSuccessful(response.data, type));
       })
       .catch((error) => {
-        dispatch(documentsFetchFailed(error.message));
+        dispatch(documentsFetchFailed(error.response.data.message));
       }
     );
   };
@@ -154,7 +154,7 @@ export function saveNewDocument(documentData) {
         dispatch(documentSaveSuccessful(response.data));
       })
       .catch((error) => {
-        dispatch(documentSaveFailed(error.message));
+        dispatch(documentSaveFailed(error.response.data.message));
       }
     );
   };
@@ -169,7 +169,7 @@ export function modifyDocument(documentId, documentData) {
         dispatch(documentModifySuccessful(response.data));
       })
       .catch((error) => {
-        dispatch(documentModifyFailed(error.message));
+        dispatch(documentModifyFailed(error.response.data.message));
       }
     );
   };
@@ -184,7 +184,7 @@ export function searchDocuments(query) {
         dispatch(documentsSearchSuccessful(response.data));
       })
       .catch((error) => {
-        dispatch(documentsSearchFailed(error.message));
+        dispatch(documentsSearchFailed(error.response.data.message));
       }
     );
   };

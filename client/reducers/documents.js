@@ -13,7 +13,8 @@ const defaultState = {
   savingDocument: false,
   currentDocumentModifying: false,
   documentDeleting: false,
-  documentDeleted: false
+  documentDeleted: false,
+  currentDocumentErrorMessage: ''
 };
 
 function documentReducers(state = defaultState, action) {
@@ -28,6 +29,7 @@ function documentReducers(state = defaultState, action) {
       currentDocumentModified: false,
       documentDeleted: false,
       documentsUpdating: true,
+      currentDocumentErrorMessage: ''
     };
   case actionTypes.DOCUMENTS_FETCH_SUCCESSFUL:
     return {
@@ -42,6 +44,7 @@ function documentReducers(state = defaultState, action) {
       ...state,
       documentsUpdated: false,
       documentsUpdating: false,
+      currentDocumentErrorMessage: action.payload
     };
   case actionTypes.DOCUMENT_SAVE_REQUEST:
     return {
@@ -53,6 +56,7 @@ function documentReducers(state = defaultState, action) {
       documentDeleted: false,
       documentSaved: false,
       savingDocument: true,
+      currentDocumentErrorMessage: ''
     };
   case actionTypes.DOCUMENT_SAVE_SUCCESSFUL:
     return {
@@ -67,6 +71,7 @@ function documentReducers(state = defaultState, action) {
       ...state,
       documentSaved: false,
       savingDocument: false,
+      currentDocumentErrorMessage: action.payload
     };
   case actionTypes.DOCUMENT_MODIFY_REQUEST:
     return {
@@ -77,7 +82,8 @@ function documentReducers(state = defaultState, action) {
       documentSaved: false,
       documentDeleted: false,
       currentDocumentUpdated: false,
-      currentDocumentModifying: true
+      currentDocumentModifying: true,
+      currentDocumentErrorMessage: ''
     };
   case actionTypes.DOCUMENT_MODIFY_SUCCESSFUL:
     return {
@@ -91,7 +97,8 @@ function documentReducers(state = defaultState, action) {
     return {
       ...state,
       currentDocumentModified: false,
-      currentDocumentModifying: false
+      currentDocumentModifying: false,
+      currentDocumentErrorMessage: action.payload
     };
   case actionTypes.DOCUMENT_GET_REQUEST:
     return {
@@ -103,6 +110,7 @@ function documentReducers(state = defaultState, action) {
       documentDeleted: false,
       currentDocumentUpdated: false,
       currentDocumentUpdating: true,
+      currentDocumentErrorMessage: ''
     };
   case actionTypes.DOCUMENT_GET_SUCCESSFUL:
     return {
@@ -117,6 +125,7 @@ function documentReducers(state = defaultState, action) {
       ...state,
       currentDocumentUpdated: false,
       currentDocumentUpdating: false,
+      currentDocumentErrorMessage: action.payload
     };
   case actionTypes.DOCUMENT_DELETE_REQUEST:
     return {
@@ -128,6 +137,7 @@ function documentReducers(state = defaultState, action) {
       currentDocumentUpdated: false,
       documentDeleted: false,
       documentDeleting: true,
+      currentDocumentErrorMessage: ''
     };
   case actionTypes.DOCUMENT_DELETE_SUCCESSFUL:
     return {
@@ -140,6 +150,7 @@ function documentReducers(state = defaultState, action) {
       ...state,
       documentDeleted: false,
       documentDeleting: false,
+      currentDocumentErrorMessage: action.payload
     };
   case actionTypes.DOCUMENTS_SEARCH_REQUEST:
     return {
@@ -151,6 +162,7 @@ function documentReducers(state = defaultState, action) {
       documentDeleted: false,
       documentsSearchResultUpdated: false,
       documentsSearchResultUpdating: true,
+      currentDocumentErrorMessage: ''
     };
   case actionTypes.DOCUMENTS_SEARCH_SUCCESSFUL:
     return {
@@ -164,6 +176,7 @@ function documentReducers(state = defaultState, action) {
       ...state,
       documentsSearchResultUpdated: false,
       documentsSearchResultUpdating: false,
+      currentDocumentErrorMessage: action.payload
     };
   case actionTypes.DOCUMENT_CANCELLED:
     return {
@@ -172,6 +185,7 @@ function documentReducers(state = defaultState, action) {
       documentsUpdated: false,
       documentSaved: false,
       currentDocumentModified: false,
+      currentDocumentErrorMessage: ''
     };
   default:
     return state;

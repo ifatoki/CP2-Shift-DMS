@@ -1,14 +1,17 @@
 import * as actionTypes from '../actions/actionTypes';
 
-function userReducers(state = {
+const initialState = {
   isAuthenticated: false,
   users: [],
   roles: [],
   currentUser: {},
   currentUserUpdated: false,
   currentUserModifying: false,
-  currentUserModified: false
-}, action) {
+  currentUserModified: false,
+  currentUserErrorMessage: ''
+};
+
+function userReducers(state = initialState, action) {
   switch (action.type) {
   case actionTypes.LOGOUT_REQUEST:
   case actionTypes.SIGNUP_REQUEST:
@@ -35,7 +38,8 @@ function userReducers(state = {
       role: '',
       result: action.type,
       isAuthenticated: false,
-      currentUserUpdated: false
+      currentUserUpdated: false,
+      currentUserErrorMessage: ''
     };
   case actionTypes.ADD_USER:
     return {
@@ -48,7 +52,8 @@ function userReducers(state = {
       role: action.payload.role,
       result: action.type,
       isAuthenticated: true,
-      currentUserUpdated: false
+      currentUserUpdated: false,
+      currentUserErrorMessage: ''
     };
   case actionTypes.FETCH_USERS_REQUEST:
     return {
@@ -56,7 +61,8 @@ function userReducers(state = {
       usersUpdated: false,
       currentUserUpdated: false,
       currentUserModified: false,
-      usersUpdating: true
+      usersUpdating: true,
+      currentUserErrorMessage: ''
     };
   case actionTypes.FETCH_USERS_SUCCESSFUL:
     return {
@@ -69,7 +75,8 @@ function userReducers(state = {
     return {
       ...state,
       usersUpdated: false,
-      usersUpdating: false
+      usersUpdating: false,
+      currentUserErrorMessage: action.payload
     };
   case actionTypes.USER_MODIFY_REQUEST:
     return {
@@ -78,7 +85,8 @@ function userReducers(state = {
       rolesUpdated: false,
       usersUpdated: false,
       currentUserUpdated: false,
-      currentUserModifying: true
+      currentUserModifying: true,
+      currentUserErrorMessage: ''
     };
   case actionTypes.USER_MODIFY_SUCCESSFUL:
     return {
@@ -97,6 +105,7 @@ function userReducers(state = {
       ...state,
       currentUserModified: false,
       currentUserModifying: false,
+      currentUserErrorMessage: action.payload
     };
   case actionTypes.USER_GET_REQUEST:
     return {
@@ -106,6 +115,7 @@ function userReducers(state = {
       currentUserUpdated: false,
       currentUserModified: false,
       currentUserUpdating: true,
+      currentUserErrorMessage: ''
     };
   case actionTypes.USER_GET_SUCCESSFUL:
     return {
@@ -119,6 +129,7 @@ function userReducers(state = {
       ...state,
       currentUserUpdated: false,
       currentUserUpdating: false,
+      currentUserErrorMessage: action.payload
     };
   case actionTypes.FETCH_ROLES_REQUEST:
     return {
@@ -126,6 +137,7 @@ function userReducers(state = {
       rolesUpdated: false,
       usersUpdated: false,
       updatingRoles: true,
+      currentUserErrorMessage: ''
     };
   case actionTypes.FETCH_ROLES_SUCCESSFUL:
     return {
@@ -138,6 +150,7 @@ function userReducers(state = {
       ...state,
       rolesUpdated: false,
       updatingRoles: false,
+      currentUserErrorMessage: action.payload
     };
   case actionTypes.USER_CANCELLED:
     return {
@@ -145,7 +158,8 @@ function userReducers(state = {
       currentUserUpdated: false,
       currentUserModified: false,
       rolesUpdated: false,
-      usersUpdated: false
+      usersUpdated: false,
+      currentUserErrorMessage: ''
     };
   default:
     return state;

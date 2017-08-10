@@ -31,32 +31,32 @@ const removeUser = () => {
   };
 };
 
-const requestSignup = username => ({
+const requestSignup = payload => ({
   type: actionTypes.SIGNUP_REQUEST,
-  payload: username
+  payload
 });
 
 const signupSuccessful = () => ({
   type: actionTypes.SIGNUP_SUCCESSFUL
 });
 
-const signupFailed = message => ({
+const signupFailed = payload => ({
   type: actionTypes.SIGNUP_FAILED,
-  payload: message
+  payload
 });
 
-const requestLogin = username => ({
+const requestLogin = payload => ({
   type: actionTypes.LOGIN_REQUEST,
-  payload: username
+  payload
 });
 
 const loginSuccessful = () => ({
   type: actionTypes.LOGIN_SUCCESSFUL
 });
 
-const loginFailed = message => ({
+const loginFailed = payload => ({
   type: actionTypes.LOGIN_FAILED,
-  payload: message
+  payload
 });
 
 const logoutRequest = () => ({
@@ -67,37 +67,37 @@ const logoutSuccessful = () => ({
   type: actionTypes.LOGOUT_SUCCESSFUL
 });
 
-const logoutFailed = message => ({
+const logoutFailed = payload => ({
   type: actionTypes.LOGOUT_FAILED,
-  payload: message
+  payload
 });
 
 const fetchAllUsersRequest = () => ({
   type: actionTypes.FETCH_USERS_REQUEST
 });
 
-const fetchAllUsersSuccessful = users => ({
+const fetchAllUsersSuccessful = payload => ({
   type: actionTypes.FETCH_USERS_SUCCESSFUL,
-  payload: users
+  payload
 });
 
-const fetchAllUsersFailed = message => ({
+const fetchAllUsersFailed = payload => ({
   type: actionTypes.FETCH_USERS_FAILED,
-  payload: message
+  payload
 });
 
 const fetchAllRolesRequest = () => ({
   type: actionTypes.FETCH_ROLES_REQUEST
 });
 
-const fetchAllRolesSuccessful = roles => ({
+const fetchAllRolesSuccessful = payload => ({
   type: actionTypes.FETCH_ROLES_SUCCESSFUL,
-  payload: roles
+  payload
 });
 
-const fetchAllRolesFailed = message => ({
+const fetchAllRolesFailed = payload => ({
   type: actionTypes.FETCH_ROLES_FAILED,
-  payload: message
+  payload
 });
 
 const userGetRequest = () => ({
@@ -158,7 +158,7 @@ export function signUserUp(userDetails) {
           dispatch(signupSuccessful());
         })
         .catch((error) => {
-          dispatch(signupFailed(error.message));
+          dispatch(signupFailed(error.response.data.message));
         });
     }
   };
@@ -182,7 +182,7 @@ export function logUserIn(userDetails) {
         dispatch(loginSuccessful());
       })
       .catch((error) => {
-        dispatch(loginFailed(error.message));
+        dispatch(loginFailed(error.response.data.message));
       });
   };
 }
@@ -197,7 +197,7 @@ export function logUserOut() {
         dispatch(logoutSuccessful());
       })
       .catch((error) => {
-        dispatch(logoutFailed(error.message));
+        dispatch(logoutFailed(error.response.data.message));
       }
     );
   };
@@ -212,7 +212,7 @@ export function fetchAllUsers() {
         dispatch(fetchAllUsersSuccessful(users.data));
       })
       .catch((error) => {
-        dispatch(fetchAllUsersFailed(error.message));
+        dispatch(fetchAllUsersFailed(error.response.data.message));
       });
   };
 }
@@ -226,7 +226,7 @@ export function fetchAllRoles() {
         dispatch(fetchAllRolesSuccessful(roles.data));
       })
       .catch((error) => {
-        dispatch(fetchAllRolesFailed(error.message));
+        dispatch(fetchAllRolesFailed(error.response.data.message));
       });
   };
 }
@@ -240,7 +240,7 @@ export function getUser(userId) {
         dispatch(userGetSuccessful(response.data));
       })
       .catch((error) => {
-        dispatch(userGetFailed(error.message));
+        dispatch(userGetFailed(error.response.data.message));
       });
   };
 }
@@ -254,7 +254,7 @@ export function modifyUser(userId, userData) {
         dispatch(userModifySuccessful(response.data));
       })
       .catch((error) => {
-        dispatch(userModifyFailed(error.message));
+        dispatch(userModifyFailed(error.response.data.message));
       });
   };
 }

@@ -45,14 +45,14 @@ class UserManager extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentUser, signedInRole, currentUserModified } = nextProps;
+    const { currentUser, signedInRole, currentUserModified, currentUserErrorMessage } = nextProps;
     if (this.props.currentUserModifying) {
       if (currentUserModified) {
         this.setState({
           accessMode: editModes.READ
         }, () => toastr.success('User details modified successfully'));
       } else {
-        toastr.error('User modification failed');
+        toastr.error(currentUserErrorMessage);
       }
     }
     if (currentUser) {
@@ -274,7 +274,8 @@ UserManager.propTypes = {
   modifyUser: PropType.func.isRequired,
   signedInRole: PropType.string.isRequired,
   currentUserModifying: PropType.bool.isRequired,
-  currentUserModified: PropType.bool.isRequired
+  currentUserModified: PropType.bool.isRequired,
+  currentUserErrorMessage: PropType.string.isRequired
 };
 
 UserManager.defaultProps = {
@@ -290,7 +291,8 @@ const mapStateToProps = state => ({
   currentUser: state.user.currentUser,
   signedInRole: state.user.role,
   currentUserModifying: state.user.currentUserModifying,
-  currentUserModified: state.user.currentUserModified
+  currentUserModified: state.user.currentUserModified,
+  currentUserErrorMessage: state.user.currentUserErrorMessage
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManager);

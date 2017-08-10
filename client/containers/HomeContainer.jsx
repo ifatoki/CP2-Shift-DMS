@@ -54,14 +54,15 @@ class HomeContainer extends React.Component {
       documentSaved,
       documentsUpdated,
       currentDocumentModified,
-      documentDeleted
+      documentDeleted,
+      currentDocumentErrorMessage
     } = nextProps;
     if (this.props.documentDeleting) {
       if (documentDeleted) {
         toastr.success('Document Deleted');
         this.props.fetchDocuments(this.props.user.id, this.state.type);
       } else {
-        toastr.error("Couldn't delete document");
+        toastr.error(currentDocumentErrorMessage);
       }
     }
     if (this.props.savingDocument || this.props.currentDocumentModifying) {
@@ -73,7 +74,7 @@ class HomeContainer extends React.Component {
           this.props.fetchDocuments(this.props.user.id, this.state.type);
         });
       } else {
-        toastr.error('Document Save Failed');
+        toastr.error(currentDocumentErrorMessage);
       }
     }
     if (documentsUpdated) {
@@ -377,7 +378,8 @@ HomeContainer.propTypes = {
   currentDocumentModifying: PropType.bool.isRequired,
   documentDeleted: PropType.bool.isRequired,
   documentDeleting: PropType.bool.isRequired,
-  documentsType: PropType.string
+  documentsType: PropType.string,
+  currentDocumentErrorMessage: PropType.string.isRequired
 };
 
 HomeContainer.defaultProps = {
@@ -409,7 +411,8 @@ const mapStateToProps = state => ({
   savingDocument: state.documents.savingDocument,
   currentDocumentModifying: state.documents.currentDocumentModifying,
   documentDeleted: state.documents.documentDeleted,
-  documentDeleting: state.documents.documentDeleting
+  documentDeleting: state.documents.documentDeleting,
+  currentDocumentErrorMessage: state.documents.currentDocumentErrorMessage
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
