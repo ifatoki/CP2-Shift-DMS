@@ -28,7 +28,7 @@ function confirmUserDetails(req, res, next) {
 }
 
 export default function confirmRole(req, res, next) {
-  if (req.body.roleId === '1') {
+  if (parseInt(req.body.roleId, 10) === 1) {
     User
       .findOne({
         where: {
