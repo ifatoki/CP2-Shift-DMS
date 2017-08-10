@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { withRouter, Route, Redirect } from 'react-router';
 import LandingContainer from './LandingContainer';
 import LoginContainer from './LoginContainer';
-import SignupContainer from './SignupContainer';
 import HomeContainer from './HomeContainer';
 
 class App extends Component {
@@ -23,13 +22,6 @@ class App extends Component {
             this.props.isAuthenticated ?
             () => <Redirect to="/home" /> :
             LoginContainer
-          }
-        />
-        <Route
-          exact path="/signup" component={
-            this.props.isAuthenticated ?
-            () => <Redirect to="/home" /> :
-            SignupContainer
           }
         />
         <Route

@@ -2,75 +2,127 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { bindActionCreators } from 'redux';
-import { logUserIn } from '../actions/users';
+import { logUserIn, signUserUp } from '../actions/users';
 // import * as actionCreators from '../actions/user';
 
 class LoginContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      firstname: '',
+      lastname: '',
       username: '',
-      password: ''
+      email: '',
+      password: '',
+      confirmPassword: '',
+      roleId: 1
     };
     this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.onLoginSubmit = this.onLoginSubmit.bind(this);
+    this.onSignUpSubmit = this.onSignUpSubmit.bind(this);
   }
 
   onChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  onSubmit(event) {
+  onLoginSubmit(event) {
     event.preventDefault();
     this.props.logUserIn(this.state);
   }
 
+  onSignUpSubmit(event) {
+    event.preventDefault();
+    this.props.signUserUp(this.state);
+  }
+
   render() {
     return (
-      <div>
-        <h1>
-          This is me in the Login page
-        </h1>
-        <form className="ui form segment">
-          <p>Lets go ahead and get you signed up.</p>
-          <div className="field">
-            <label htmlFor="username">Username</label>
-            <input
-              placeholder="Username"
-              name="username"
-              type="text"
-              onChange={this.onChange}
-            />
+      <div style={{ height: 'inherit', background: 'aliceblue' }}>
+        <div className="ui middle aligned center aligned grid" style={{ height: 'inherit' }}>
+          <div className="column" style={{ width: '400px' }}>
+            <form className="ui form segment">
+              <p>Lets get you signed in</p>
+              <div className="field">
+                <input
+                  placeholder="Username"
+                  name="username"
+                  type="text"
+                  onChange={this.onChange}
+                />
+              </div>
+              <div className="field">
+                <input
+                  placeholder="Password"
+                  type="password"
+                  name="password"
+                  onChange={this.onChange} />
+              </div>
+              <div
+                className="ui primary fluid submit button"
+                name="login"
+                onClick={this.onLoginSubmit}
+              >
+                Sign in
+              </div>
+            </form>
           </div>
-          <div className="field">
-            <label htmlFor="password">Password</label>
-            <input type="password" name="password" onChange={this.onChange} />
+          <div className="column" style={{ width: '400px', verticalAlign: 'middle' }}>
+            <form className="ui form segment">
+              <div className="field">
+                Create your account
+              </div>
+              <div className="field">
+                <input placeholder="First Name" name="firstname" type="text" onChange={this.onChange} />
+              </div>
+              <div className="field">
+                <input placeholder="Last Name" name="lastname" type="text" onChange={this.onChange} />
+              </div>
+              <div className="field">
+                <input placeholder="Email Address" name="email" type="email" onChange={this.onChange} />
+              </div>
+              <div className="field">
+                <input placeholder="Username" name="username" type="text" onChange={this.onChange} />
+              </div>
+              <div className="field">
+                <select className="ui dropdown">
+                  <option value="1">Administrator</option>
+                  <option value="2">Editor</option>
+                  <option value="3">Reader</option>
+                </select>
+              </div>
+              <div className="two fields">
+                <div className="field">
+                  <input placeholder="Password" type="password" name="password" onChange={this.onChange} />
+                </div>
+                <div className="field">
+                  <input placeholder="Confirm Password" type="password" name="confirmPassword" onChange={this.onChange} />
+                </div>
+              </div>
+              <div
+                className="ui primary fluid submit button"
+                name="signup"
+                onClick={this.onSignUpSubmit}
+              >
+                Create and account
+              </div>
+            </form>
           </div>
-          <div className="inline field">
-            <div className="ui checkbox">
-              <input type="checkbox" name="terms" />
-              <label>I agree to the Terms and Conditions</label>
-            </div>
-          </div>
-          <div
-            className="ui primary submit button"
-            onClick={this.onSubmit}
-          >
-            Submit
-          </div>
-        </form>
+        </div>
       </div>
     );
   }
 }
 
 LoginContainer.propTypes = {
-  logUserIn: PropTypes.func.isRequired
+  logUserIn: PropTypes.func.isRequired,
+  signUserUp: PropTypes.func.isRequired
 };
 
 // const mapDispatchToProps = dispatch =>
 //   bindActionCreators(actionCreators, dispatch);
 
 export default connect(null, {
-  logUserIn
+  logUserIn,
+  signUserUp
 })(LoginContainer);
