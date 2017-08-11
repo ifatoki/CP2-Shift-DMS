@@ -29,6 +29,7 @@ export default (sequelize, DataTypes) => {
         });
         Document.belongsTo(models.User, {
           foreignKey: 'ownerId',
+          onDelete: 'CASCADE'
         });
         Document.belongsTo(models.Access, {
           foreignKey: 'accessId',

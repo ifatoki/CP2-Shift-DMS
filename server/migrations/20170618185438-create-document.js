@@ -16,7 +16,8 @@ module.exports = {
       },
       ownerId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        onDelete: 'cascade'
       },
       accessId: {
         type: Sequelize.INTEGER,

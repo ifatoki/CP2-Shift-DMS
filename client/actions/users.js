@@ -130,6 +130,20 @@ const userModifyFailed = payload => ({
   payload
 });
 
+const userDeleteRequest = () => ({
+  type: actionTypes.USER_DELETE_REQUEST
+});
+
+const userDeleteSuccessful = payload => ({
+  type: actionTypes.USER_DELETE_SUCCESSFUL,
+  payload
+});
+
+const userDeleteFailed = payload => ({
+  type: actionTypes.USER_DELETE_FAILED,
+  payload
+});
+
 function setTokenToLocalStorage(user, token) {
   window.localStorage.setItem('token', token);
   window.localStorage.setItem('user', JSON.stringify(user));
@@ -268,6 +282,20 @@ export function modifyUser(userId, userData) {
         });
     }
     dispatch(userModifyFailed(getErrorMessage(validation.errors)));
+  };
+}
+
+export function deleteUser(userId) {
+  return (dispatch) => {
+    dispatch(userDeleteRequest());
+    return axios
+      .delete(`api/v1/users/${userId}`, config)
+      .then((response) => {
+        dispatch(userDeleteSuccessful(response.data));
+      })
+      .catch((error) => {
+        dispatch(userDeleteFailed(error.response.data.message));
+      });
   };
 }
 

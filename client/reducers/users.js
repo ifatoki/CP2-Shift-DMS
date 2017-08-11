@@ -6,6 +6,8 @@ const initialState = {
   roles: [],
   currentUser: {},
   currentUserUpdated: false,
+  userDeleted: false,
+  userDeleting: false,
   currentUserModifying: false,
   currentUserModified: false,
   currentUserErrorMessage: ''
@@ -67,6 +69,7 @@ function userReducers(state = initialState, action) {
       usersUpdated: false,
       currentUserUpdated: false,
       currentUserModified: false,
+      userDeleted: false,
       usersUpdating: true,
       currentUserErrorMessage: ''
     };
@@ -91,6 +94,7 @@ function userReducers(state = initialState, action) {
       rolesUpdated: false,
       usersUpdated: false,
       currentUserUpdated: false,
+      userDeleted: false,
       currentUserModifying: true,
       currentUserErrorMessage: ''
     };
@@ -121,6 +125,7 @@ function userReducers(state = initialState, action) {
       usersUpdated: false,
       currentUserUpdated: false,
       currentUserModified: false,
+      userDeleted: false,
       currentUserUpdating: true,
       currentUserErrorMessage: ''
     };
@@ -138,11 +143,36 @@ function userReducers(state = initialState, action) {
       currentUserUpdating: false,
       currentUserErrorMessage: action.payload
     };
+  case actionTypes.USER_DELETE_REQUEST:
+    return {
+      ...state,
+      rolesUpdated: false,
+      usersUpdated: false,
+      currentUserUpdated: false,
+      currentUserModified: false,
+      userDeleted: false,
+      userDeleting: true,
+      currentUserErrorMessage: ''
+    };
+  case actionTypes.USER_DELETE_SUCCESSFUL:
+    return {
+      ...state,
+      userDeleted: true,
+      userDeleting: false,
+    };
+  case actionTypes.USER_DELETE_FAILED:
+    return {
+      ...state,
+      userDeleted: false,
+      userDeleting: false,
+      currentUserErrorMessage: action.payload
+    };
   case actionTypes.FETCH_ROLES_REQUEST:
     return {
       ...state,
       rolesUpdated: false,
       usersUpdated: false,
+      userDeleted: false,
       updatingRoles: true,
       currentUserErrorMessage: ''
     };
@@ -166,6 +196,7 @@ function userReducers(state = initialState, action) {
       currentUserModified: false,
       rolesUpdated: false,
       usersUpdated: false,
+      userDeleted: false,
       currentUserErrorMessage: ''
     };
   default:

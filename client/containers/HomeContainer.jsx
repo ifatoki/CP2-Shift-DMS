@@ -55,6 +55,7 @@ class HomeContainer extends React.Component {
       documentsUpdated,
       currentDocumentModified,
       documentDeleted,
+      userDeleted,
       currentDocumentErrorMessage
     } = nextProps;
     if (currentDocumentErrorMessage) {
@@ -64,6 +65,13 @@ class HomeContainer extends React.Component {
         if (documentDeleted) {
           toastr.success('Document Deleted', 'Success');
           this.props.fetchDocuments(this.props.user.id, this.state.type);
+        }
+      }
+      if (this.props.userDeleting) {
+        if (userDeleted) {
+          toastr.success('User Deleted', 'Success');
+          this.props.fetchAllUsers();
+          this.props.fetchAllRoles();
         }
       }
       if (this.props.savingDocument || this.props.currentDocumentModifying) {
@@ -378,6 +386,8 @@ HomeContainer.propTypes = {
   currentDocumentModifying: PropType.bool.isRequired,
   documentDeleted: PropType.bool.isRequired,
   documentDeleting: PropType.bool.isRequired,
+  userDeleted: PropType.bool.isRequired,
+  userDeleting: PropType.bool.isRequired,
   documentsType: PropType.string,
   currentDocumentErrorMessage: PropType.string.isRequired
 };
@@ -412,6 +422,8 @@ const mapStateToProps = state => ({
   currentDocumentModifying: state.documents.currentDocumentModifying,
   documentDeleted: state.documents.documentDeleted,
   documentDeleting: state.documents.documentDeleting,
+  userDeleted: state.user.userDeleted,
+  userDeleting: state.user.userDeleting,
   currentDocumentErrorMessage: state.documents.currentDocumentErrorMessage
 });
 

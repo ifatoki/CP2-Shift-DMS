@@ -2,16 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card, Icon } from 'semantic-ui-react';
-import { getUser } from '../actions/users';
+import { getUser, deleteUser } from '../actions/users';
 
 class UserComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.isDelete = false;
     this.clickHandler = this.clickHandler.bind(this);
+    this.deleteUser = this.deleteUser.bind(this);
   }
 
   clickHandler() {
-    this.props.getUser(this.props.id);
+    if (!this.isDelete) {
+      this.props.getUser(this.props.id);
+    }
+    this.isDelete = false;
+  }
+
+  deleteUser() {
+    this.isDelete = true;
+    this.props.deleteUser(this.props.id);
   }
 
   render() {
@@ -31,7 +41,7 @@ class UserComponent extends React.Component {
           <Icon name="user" color="blue" />
           {this.props.role}
           <div className="right floated">
-            <Icon name="trash" color="blue" />
+            <Icon name="trash" color="blue" onClick={this.deleteUser} />
           </div>
         </Card.Content>
       </Card>
@@ -47,11 +57,13 @@ UserComponent.propTypes = {
   created: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   role: PropTypes.string.isRequired,
-  getUser: PropTypes.func.isRequired
+  getUser: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = {
-  getUser
+  getUser,
+  deleteUser
 };
 
 export default connect(null, mapDispatchToProps)(UserComponent);
