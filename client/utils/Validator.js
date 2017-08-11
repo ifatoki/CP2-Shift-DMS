@@ -14,7 +14,7 @@ export default class Validator {
   }
 
   static validateSignUp({
-    username, firstname, lastname, email, password, comparePassword
+    username, firstname, lastname, email, password, confirmPassword
   }) {
     this.errors = {};
     if (validator.isEmpty(username.toString()) || username === undefined) {
@@ -33,7 +33,7 @@ export default class Validator {
     }
     if (validator.isEmpty(password.toString()) || password === undefined) {
       this.errors.password = 'password is required';
-    } else if (password !== comparePassword) {
+    } else if (password !== confirmPassword) {
       this.errors.password = "passwords don't match";
     }
     return this.reconcileErrors();

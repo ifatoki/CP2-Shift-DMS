@@ -158,9 +158,11 @@ const getErrorMessage = (errors) => {
 };
 
 export function signUserUp({
-  firstname, lastname, username, email, password, roleId
+  firstname, lastname, username, email, password, roleId, confirmPassword
 }) {
-  const userdata = { firstname, lastname, username, email, password, roleId };
+  const userdata = {
+    firstname, lastname, username, email, password, roleId, confirmPassword
+  };
   const validation = Validator.validateSignUp(userdata);
 
   return (dispatch) => {
