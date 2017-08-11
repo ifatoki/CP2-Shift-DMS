@@ -1,5 +1,12 @@
 const Role = require('../models').Role;
 
+const filterRole = role => ({
+  id: role.id,
+  description: role.description,
+  title: role.title,
+  createdAt: role.createdAt
+});
+
 module.exports = {
   create: (req, res) => {
     if (req.userId === 1) {
@@ -8,7 +15,7 @@ module.exports = {
           title: req.body.title,
           description: req.body.description
         })
-        .then(role => res.status(201).send(role))
+        .then(role => res.status(201).send(filterRole(role)))
         .catch(error => res.status(400).send(error));
     } else {
       res.status(401).send({
@@ -23,9 +30,12 @@ module.exports = {
           id: {
             $ne: 1
           }
-        }
+        },
+        attributes: ['id', 'title', 'description', 'createdAt']
       })
-      .then(roles => res.status(200).send(roles))
+      .then((roles) => {
+        res.status(200).send(roles);
+      })
       .catch(error => res.status(400).send(error));
   }
 };

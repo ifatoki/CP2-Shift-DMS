@@ -1,19 +1,21 @@
+import _ from 'lodash';
+
 const auth = require('../auth/_helpers');
 const User = require('../models').User;
 const Role = require('../models').Role;
 const localAuth = require('../auth/local');
 const authHelpers = require('../auth/_helpers');
 
-const filterUser = (user) => {
-  const { id, username, email, firstname, lastname, roleId } = user;
-  return ({
+const filterUser = ({ id, username, email, firstname, lastname, roleId, createdAt }) => {
+  return {
     id,
     username,
     firstname,
     lastname,
     email,
-    roleId
-  });
+    roleId,
+    createdAt
+  };
 };
 const updateUser = (req, res, user) => {
   user.update({
@@ -144,7 +146,10 @@ module.exports = {
               message: 'no users in database'
             });
           } else {
-            res.status(200).send(users);
+            const filteredUsers = _.reduce(users, (accumulator, user) => {
+              return accumulator.concat(filterUser(user));
+            }, []);
+            res.status(200).send(filteredUsers);
           }
         })
         .catch(error => res.status(400).send(error));
@@ -264,9 +269,8 @@ module.exports = {
     }
   },
   deleteUser: (req, res) => {
-     // WHAT IS LEFT: Actual destruction of user with casdading
     if (req.roleId === 1) {
-      if (req.params.id === '1') {
+      if (parseInt(req.params.id, 10) === 1) {
         res.status(403).send({
           message: 'you cannot delete the overlord'
         });
@@ -285,10 +289,14 @@ module.exports = {
               .then(() => res.status(200).send({
                 message: 'user deleted successfully'
               }))
-              .catch(error => res.status(400).send(error));
+              .catch(error => res.status(400).send({
+                message: error.message
+              }));
             }
           })
-          .catch(error => res.status(400).send(error));
+          .catch(error => res.status(400).send({
+            message: error.message
+          }));
       }
     } else {
       res.status(403).send({
