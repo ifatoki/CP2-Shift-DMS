@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { logUserIn, signUserUp } from '../actions/users';
 
@@ -18,6 +19,12 @@ class LoginContainer extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onLoginSubmit = this.onLoginSubmit.bind(this);
     this.onSignUpSubmit = this.onSignUpSubmit.bind(this);
+  }
+
+  componentWillReceiveProps({ currentUserErrorMessage }) {
+    if (currentUserErrorMessage) {
+      toastr.error(currentUserErrorMessage, 'Validation Error');
+    }
   }
 
   onChange(event) {
@@ -114,7 +121,8 @@ class LoginContainer extends React.Component {
 
 LoginContainer.propTypes = {
   logUserIn: PropTypes.func.isRequired,
-  signUserUp: PropTypes.func.isRequired
+  signUserUp: PropTypes.func.isRequired,
+  currentUserErrorMessage: PropTypes.string.isRequired
 };
 
 const mapDispatchToProps = {
@@ -122,4 +130,8 @@ const mapDispatchToProps = {
   signUserUp
 };
 
-export default connect(null, mapDispatchToProps)(LoginContainer);
+const mapStateToProps = state => ({
+  currentUserErrorMessage: state.user.currentUserErrorMessage
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);

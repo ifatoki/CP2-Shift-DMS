@@ -107,6 +107,7 @@ class DocumentManager extends React.Component {
   }
 
   saveDocument(event) {
+    const { currentDocument } = this.props;
     event.preventDefault();
     if (this.state.accessMode === editModes.NEW) {
       this.props.saveNewDocument({
@@ -116,11 +117,17 @@ class DocumentManager extends React.Component {
         accessId: this.state.accessId
       });
     } else {
-      this.props.modifyDocument(this.props.currentDocument.id, {
-        title: this.state.title,
-        content: this.state.content,
-        accessId: this.state.accessId
-      });
+      const editData = {};
+      if (this.state.title !== currentDocument.title) {
+        editData.title = this.state.title;
+      }
+      if (this.state.content !== currentDocument.content) {
+        editData.content = this.state.content;
+      }
+      if (this.state.accessId !== currentDocument.accessId) {
+        editData.accessId = this.state.accessId;
+      }
+      this.props.modifyDocument(currentDocument.id, editData);
     }
   }
 

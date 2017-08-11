@@ -57,24 +57,24 @@ class HomeContainer extends React.Component {
       documentDeleted,
       currentDocumentErrorMessage
     } = nextProps;
-    if (this.props.documentDeleting) {
-      if (documentDeleted) {
-        toastr.success('Document Deleted');
-        this.props.fetchDocuments(this.props.user.id, this.state.type);
-      } else {
-        toastr.error(currentDocumentErrorMessage);
-      }
-    }
-    if (this.props.savingDocument || this.props.currentDocumentModifying) {
-      if (documentSaved || currentDocumentModified) {
-        toastr.success('Document Saved');
-        this.setState({
-          createNewDocument: false
-        }, () => {
+    if (currentDocumentErrorMessage) {
+      toastr.error(currentDocumentErrorMessage, 'Error');
+    } else {
+      if (this.props.documentDeleting) {
+        if (documentDeleted) {
+          toastr.success('Document Deleted', 'Success');
           this.props.fetchDocuments(this.props.user.id, this.state.type);
-        });
-      } else {
-        toastr.error(currentDocumentErrorMessage);
+        }
+      }
+      if (this.props.savingDocument || this.props.currentDocumentModifying) {
+        if (documentSaved || currentDocumentModified) {
+          toastr.success('Document Saved', 'Success');
+          this.setState({
+            createNewDocument: false
+          }, () => {
+            this.props.fetchDocuments(this.props.user.id, this.state.type);
+          });
+        }
       }
     }
     if (documentsUpdated) {

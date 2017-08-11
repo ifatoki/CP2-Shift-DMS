@@ -1,5 +1,7 @@
 import axios from 'axios';
+import _ from 'lodash';
 import * as actionTypes from './actionTypes';
+import validator from '../utils/Validator';
 
 const config = {
   headers: { 'Content-Type': 'application/json' }
@@ -90,6 +92,13 @@ const documentsSearchFailed = payload => ({
   payload
 });
 
+const getErrorMessage = (errors) => {
+  const errorMessage = _.reduce(errors, (result, error) => {
+    return `${error}<br/>${result}`;
+  }, '');
+  return errorMessage;
+};
+
 export function getDocument(documentId) {
   return (dispatch) => {
     dispatch(documentGetRequest());
@@ -146,32 +155,41 @@ export function cancelNewDocument() {
 }
 
 export function saveNewDocument(documentData) {
+  const validation = validator.validateNewDocument(documentData);
   return (dispatch) => {
     dispatch(documentSaveRequest());
-    return axios
-      .post('api/v1/documents', documentData, config)
-      .then((response) => {
-        dispatch(documentSaveSuccessful(response.data));
-      })
-      .catch((error) => {
-        dispatch(documentSaveFailed(error.response.data.message));
-      }
-    );
+    if (validation.isValid) {
+      dispatch(documentSaveRequest());
+      return axios
+        .post('api/v1/documents', documentData, config)
+        .then((response) => {
+          dispatch(documentSaveSuccessful(response.data));
+        })
+        .catch((error) => {
+          dispatch(documentSaveFailed(error.response.data.message));
+        });
+    }
+    dispatch(documentSaveFailed(getErrorMessage(validation.errors)));
   };
 }
 
 export function modifyDocument(documentId, documentData) {
+  const validation = validator.validateDocumentEdit(documentData);
   return (dispatch) => {
     dispatch(documentModifyRequest());
-    return axios
-      .put(`api/v1/documents/${documentId}`, documentData, config)
-      .then((response) => {
-        dispatch(documentModifySuccessful(response.data));
-      })
-      .catch((error) => {
-        dispatch(documentModifyFailed(error.response.data.message));
-      }
-    );
+    if (validation.isValid) {
+      dispatch(documentModifyRequest());
+      return axios
+        .put(`api/v1/documents/${documentId}`, documentData, config)
+        .then((response) => {
+          dispatch(documentModifySuccessful(response.data));
+        })
+        .catch((error) => {
+          dispatch(documentModifyFailed(error.response.data.message));
+        }
+      );
+    }
+    dispatch(documentModifyFailed(getErrorMessage(validation.errors)));
   };
 }
 

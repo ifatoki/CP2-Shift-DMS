@@ -45,14 +45,18 @@ class UserManager extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentUser, signedInRole, currentUserModified, currentUserErrorMessage } = nextProps;
-    if (this.props.currentUserModifying) {
+    const {
+      currentUser, signedInRole, currentUserModified, currentUserErrorMessage
+    } = nextProps;
+    if (currentUserErrorMessage) {
+      toastr.error(currentUserErrorMessage, 'Validation Error');
+    } else if (this.props.currentUserModifying) {
       if (currentUserModified) {
         this.setState({
           accessMode: editModes.READ
-        }, () => toastr.success('User details modified successfully'));
-      } else {
-        toastr.error(currentUserErrorMessage);
+        }, () => toastr.success(
+          'User details modified successfully', 'Success'
+        ));
       }
     }
     if (currentUser) {
@@ -107,6 +111,7 @@ class UserManager extends React.Component {
     if (this.state.changePassword) {
       newUserData.currentPassword = this.state.currentPassword;
       newUserData.newPassword = this.state.newPassword;
+      newUserData.confirmPassword = this.state.confirmPassword;
     }
     this.props.modifyUser(currentUser.id, newUserData);
   }

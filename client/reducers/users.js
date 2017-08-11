@@ -16,14 +16,20 @@ function userReducers(state = initialState, action) {
   case actionTypes.LOGOUT_REQUEST:
   case actionTypes.SIGNUP_REQUEST:
   case actionTypes.LOGIN_REQUEST:
-  case actionTypes.LOGOUT_FAILED:
-  case actionTypes.SIGNUP_FAILED:
-  case actionTypes.LOGIN_FAILED:
   case actionTypes.LOGOUT_SUCCESSFUL:
   case actionTypes.SIGNUP_SUCCESSFUL:
   case actionTypes.LOGIN_SUCCESSFUL:
     return {
       ...state,
+      currentUserErrorMessage: '',
+      result: action.type
+    };
+  case actionTypes.LOGOUT_FAILED:
+  case actionTypes.SIGNUP_FAILED:
+  case actionTypes.LOGIN_FAILED:
+    return {
+      ...state,
+      currentUserErrorMessage: action.payload,
       result: action.type
     };
   case actionTypes.REMOVE_USER:
@@ -96,6 +102,7 @@ function userReducers(state = initialState, action) {
       firstname: action.payload.firstname,
       lastname: action.payload.lastname,
       currentUser: action.payload,
+      currentUserErrorMessage: '',
       currentUserModified: true,
       currentUserUpdated: true,
       currentUserModifying: false,

@@ -5,6 +5,7 @@ const Document = Models.Document;
 const Role = Models.Role;
 
 const filterDocument = document => ({
+  id: document.id,
   title: document.title,
   content: document.content,
   updatedAt: document.updatedAt,
@@ -139,7 +140,7 @@ const documentController = {
             message: 'document not found'
           });
         } else {
-          const response = { document };
+          const response = { document: filterDocument(document) };
           if (document.ownerId === req.userId) {
             response.rightId = 1;
             res.status(200).send(response);

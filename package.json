@@ -123,6 +123,7 @@
     "supertest": "^3.0.0",
     "tinymce": "^4.6.4",
     "toastr": "^2.1.2",
+    "validator": "^8.0.0",
     "webpack": "^3.0.0",
     "webpack-dev-middleware": "^1.11.0",
     "webpack-hot-middleware": "^2.18.2"

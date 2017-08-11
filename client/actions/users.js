@@ -1,6 +1,8 @@
 import axios from 'axios';
+import _ from 'lodash';
 import store from '../client';
 import * as actionTypes from './actionTypes';
+import Validator from '../utils/Validator';
 
 const config = {
   headers: { 'Content-Type': 'application/json' }
@@ -134,20 +136,22 @@ function setTokenToLocalStorage(user, token) {
   addUser(user, token);
 }
 
-export function signUserUp(userDetails) {
-  const userdata = {
-    firstname: userDetails.firstname,
-    lastname: userDetails.lastname,
-    username: userDetails.username,
-    email: userDetails.email,
-    password: userDetails.password,
-    roleId: userDetails.roleId
-  };
+const getErrorMessage = (errors) => {
+  const errorMessage = _.reduce(errors, (result, error) => {
+    return `${error}<br/>${result}`;
+  }, '');
+  return errorMessage;
+};
+
+export function signUserUp({
+  firstname, lastname, username, email, password, roleId
+}) {
+  const userdata = { firstname, lastname, username, email, password, roleId };
+  const validation = Validator.validateSignUp(userdata);
+
   return (dispatch) => {
-    if (userDetails.password !== userDetails.confirmPassword) {
-      dispatch(signupFailed('password mismatch'));
-    } else {
-      dispatch(requestSignup(userdata.username));
+    dispatch(requestSignup(userdata.username));
+    if (validation.isValid) {
       return axios
         .post('/api/v1/users', userdata, config)
         .then((response) => {
@@ -161,29 +165,32 @@ export function signUserUp(userDetails) {
           dispatch(signupFailed(error.response.data.message));
         });
     }
+    dispatch(signupFailed(getErrorMessage(validation.errors)));
   };
 }
 
-export function logUserIn(userDetails) {
-  const userdata = {
-    username: userDetails.username,
-    password: userDetails.password
-  };
+export function logUserIn({ username, password }) {
+  const userdata = { username, password };
+  const validation = Validator.validateLogin(userdata);
+
   return (dispatch) => {
     dispatch(requestLogin(userdata.username));
-    return axios
-      .post('/api/v1/users/login', userdata, config)
-      .then((response) => {
-        setTokenToLocalStorage(
-          response.data.payload.user,
-          response.data.payload.token,
-          response.data.payload.role
-        );
-        dispatch(loginSuccessful());
-      })
-      .catch((error) => {
-        dispatch(loginFailed(error.response.data.message));
-      });
+    if (validation.isValid) {
+      return axios
+        .post('/api/v1/users/login', userdata, config)
+        .then((response) => {
+          setTokenToLocalStorage(
+            response.data.payload.user,
+            response.data.payload.token,
+            response.data.payload.role
+          );
+          dispatch(loginSuccessful());
+        })
+        .catch((error) => {
+          dispatch(loginFailed(error.response.data.message));
+        });
+    }
+    dispatch(loginFailed(getErrorMessage(validation.errors)));
   };
 }
 
@@ -246,16 +253,21 @@ export function getUser(userId) {
 }
 
 export function modifyUser(userId, userData) {
+  const validation = Validator.validateUserEdit(userData);
+
   return (dispatch) => {
     dispatch(userModifyRequest());
-    return axios
-      .put(`api/v1/users/${userId}`, userData, config)
-      .then((response) => {
-        dispatch(userModifySuccessful(response.data));
-      })
-      .catch((error) => {
-        dispatch(userModifyFailed(error.response.data.message));
-      });
+    if (validation.isValid) {
+      return axios
+        .put(`api/v1/users/${userId}`, userData, config)
+        .then((response) => {
+          dispatch(userModifySuccessful(response.data));
+        })
+        .catch((error) => {
+          dispatch(userModifyFailed(error.response.data.message));
+        });
+    }
+    dispatch(userModifyFailed(getErrorMessage(validation.errors)));
   };
 }
 
