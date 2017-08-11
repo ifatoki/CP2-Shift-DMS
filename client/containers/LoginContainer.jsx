@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
 import { logUserIn, signUserUp } from '../actions/users';
-// import * as actionCreators from '../actions/user';
 
 class LoginContainer extends React.Component {
   constructor(props) {
@@ -104,7 +102,7 @@ class LoginContainer extends React.Component {
                 name="signup"
                 onClick={this.onSignUpSubmit}
               >
-                Create and account
+                Create an account
               </div>
             </form>
           </div>
@@ -119,10 +117,9 @@ LoginContainer.propTypes = {
   signUserUp: PropTypes.func.isRequired
 };
 
-// const mapDispatchToProps = dispatch =>
-//   bindActionCreators(actionCreators, dispatch);
-
-export default connect(null, {
+const mapDispatchToProps = {
   logUserIn,
   signUserUp
-})(LoginContainer);
+};
+
+export default connect(null, mapDispatchToProps)(LoginContainer);

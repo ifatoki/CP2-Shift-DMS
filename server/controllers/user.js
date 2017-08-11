@@ -127,7 +127,7 @@ module.exports = {
     });
   },
   fetch: (req, res) => {
-    if (req.userId === 1) {
+    if (req.roleId === 1) {
       User
         .findAll({
           where: {

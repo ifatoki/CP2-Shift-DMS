@@ -291,7 +291,7 @@ const documentController = {
         } else if (document.ownerId === req.userId) {
           deleteDocument(document, req, res);
         } else if (document.accessId === 2) {
-          if (req.userId === 1) {
+          if (req.roleId === 1) {
             deleteDocument(document, req, res);
           } else {
             res.status(403).send({
