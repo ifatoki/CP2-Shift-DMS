@@ -9,19 +9,15 @@ import app from '../../app';
 const expect = chai.expect;
 
 describe('auth : _helpers', () => {
-  describe('The placeholder test', () => {
-    it('should pass the placeholder test', () => {
-      expect(2 + 4).to.equal(6);
-    });
-  });
-
   const password = 'Micheal';
   const aWrongPassword = 'Smith';
   describe('Encrypt Password', () => {
-    it('should return a string', () => {
+    it('should return a string as the encrypted password', () => {
       expect(authHelpers.encrypt(password)).to.be.a('string');
     });
-    it('show return null, when a null password or empty string is passed', () => {
+    it('show return null, when a null password or \
+    empty string is passed for encryption',
+    () => {
       expect(authHelpers.encrypt(null)).to.be.null;
       expect(authHelpers.encrypt('')).to.be.null;
     });
@@ -29,18 +25,21 @@ describe('auth : _helpers', () => {
 
   describe('Compare Password', () => {
     const encryptedPassword = authHelpers.encrypt(password);
-    it("should throw Error('invalid password')", () => {
-      expect(() => authHelpers.comparePassword(aWrongPassword, password))
-        .to.throw('invalid password');
-    });
-    it('should return TRUE', () => {
+    it("should throw Error('invalid password') when a wrong theres no match",
+      () => {
+        expect(() => authHelpers.comparePassword(aWrongPassword, password))
+          .to.throw('invalid password');
+      });
+    it('should return TRUE when passwords match', () => {
       expect(authHelpers.comparePassword(password, encryptedPassword))
         .to.be.true;
     });
   });
 
   describe('confirmAuthentication', () => {
-    it('should respond with json and status 200', (done) => {
+    it('should respond with json and status 200 and a welcome message \
+    when /api route is hit',
+    (done) => {
       request(app)
         .get('/api')
         .expect('Content-Type', /json/)
@@ -60,7 +59,9 @@ describe('auth : _helpers', () => {
         status: 'successful'
       });
     });
-    it("should fail with status 401 and message 'please log login'", (done) => {
+    it("should fail with status 401 and message 'please log login' when a \
+    protected route (/home) is hit by an unauthenticated user",
+    (done) => {
       request(newApp)
         .get('/home')
         .expect('Content-Type', /json/)
@@ -75,9 +76,11 @@ describe('auth : _helpers', () => {
     });
 
     const headers = {
-      authorization: 'bearer 8239892adjlkjadf89983298flkdaj'
+      authorization: process.env.INVALID_AUTH_TOKEN
     };
-    it("should fail with status 401 and message 'jwt malformed'", (done) => {
+    it("should fail with status 401 and message 'jwt malformed', \
+    when an invalid token is used",
+    (done) => {
       request(newApp)
         .get('/home')
         .set('authorization', headers.authorization)
@@ -95,7 +98,9 @@ describe('auth : _helpers', () => {
       id: 1,
       name: 'obama'
     }, true);
-    it("should fail with status 401 and message 'jwt expired'", (done) => {
+    it("should fail with status 401 and message 'jwt expired', \
+    when an expired token is used",
+    (done) => {
       request(newApp)
         .get('/home')
         .set('authorization', `bearer ${expiredToken}`)

@@ -15,8 +15,12 @@ module.exports = {
           title: req.body.title,
           description: req.body.description
         })
-        .then(role => res.status(201).send(filterRole(role)))
-        .catch(error => res.status(400).send(error));
+        .then(role => res.status(201).send({
+          role: filterRole(role)
+        }))
+        .catch(error => res.status(400).send({
+          message: error.message
+        }));
     } else {
       res.status(401).send({
         message: 'you are not authorized to create new roles'
@@ -34,8 +38,12 @@ module.exports = {
         attributes: ['id', 'title', 'description', 'createdAt']
       })
       .then((roles) => {
-        res.status(200).send(roles);
+        res.status(200).send({
+          roles
+        });
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        message: error.message
+      }));
   }
 };

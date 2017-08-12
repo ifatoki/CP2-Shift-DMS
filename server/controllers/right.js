@@ -17,17 +17,20 @@ module.exports = {
                 title: req.body.title,
                 description: req.body.description
               })
-              .then(newRight => res.status(201).send(newRight))
-              .catch(error => res.status(400).send(error));
+              .then(newRight => res.status(201).send({
+                right: newRight
+              }))
+              .catch(error => res.status(400).send({
+                message: error.message
+              }));
           } else {
-            res.status(400).send({
-              message: 'already exists'
+            res.status(403).send({
+              message: 'right already exists'
             });
           }
         })
         .catch((err) => {
-          res.status(500).json({
-            status: 'error',
+          res.status(500).send({
             message: err.message
           });
         });
@@ -42,7 +45,11 @@ module.exports = {
       .findAll({
         include: [DocumentRole]
       })
-      .then(rights => res.status(200).send(rights))
-      .catch(error => res.status(400).send(error));
+      .then(rights => res.status(200).send({
+        rights
+      }))
+      .catch(error => res.status(400).send({
+        message: error.message
+      }));
   }
 };

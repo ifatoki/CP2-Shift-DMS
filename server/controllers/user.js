@@ -6,7 +6,9 @@ const Role = require('../models').Role;
 const localAuth = require('../auth/local');
 const authHelpers = require('../auth/_helpers');
 
-const filterUser = ({ id, username, email, firstname, lastname, roleId, createdAt }) => {
+const filterUser = ({
+  id, username, email, firstname, lastname, roleId, createdAt
+}) => {
   return {
     id,
     username,
@@ -32,10 +34,14 @@ const updateUser = (req, res, user) => {
         const returnedUser = filterUser(user);
 
         returnedUser.role = role.title;
-        res.status(200).send(returnedUser);
+        res.status(200).send({
+          user: returnedUser
+        });
       });
   })
-  .catch(error => res.status(500).send(error));
+  .catch(error => res.status(500).send({
+    message: error.message
+  }));
 };
 
 module.exports = {
@@ -60,15 +66,11 @@ module.exports = {
               const returnedUser = filterUser(user);
               returnedUser.role = role.title;
               res.status(201).send({
-                status: 'success',
-                payload: {
-                  token,
-                  user: returnedUser
-                }
+                token,
+                user: returnedUser
               });
             })
             .catch(error => res.status(400).send({
-              status: 'error',
               message: error.message
             }));
         } else {
@@ -77,7 +79,9 @@ module.exports = {
           });
         }
       })
-      .catch(error => res.status(500).send(error.message));
+      .catch(error => res.status(500).send({
+        message: error.message
+      }));
   },
   login: (req, res) => {
     User
@@ -104,10 +108,8 @@ module.exports = {
             const returnedUser = filterUser(user);
             returnedUser.role = role.title;
             res.status(200).send({
-              payload: {
-                token,
-                user: returnedUser
-              }
+              token,
+              user: returnedUser
             });
           });
       })
@@ -149,10 +151,14 @@ module.exports = {
             const filteredUsers = _.reduce(users, (accumulator, user) => {
               return accumulator.concat(filterUser(user));
             }, []);
-            res.status(200).send(filteredUsers);
+            res.status(200).send({
+              users: filteredUsers
+            });
           }
         })
-        .catch(error => res.status(400).send(error));
+        .catch(error => res.status(400).send({
+          message: error.message
+        }));
     } else {
       res.status(403).send({
         message: 'only overlord can view all users'
@@ -173,11 +179,15 @@ module.exports = {
               const returnedUser = filterUser(user);
 
               returnedUser.role = role.title;
-              res.status(200).send(returnedUser);
+              res.status(200).send({
+                user: returnedUser
+              });
             });
         }
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        message: error.message
+      }));
   },
   fetchUserDocuments(req, res) {
     User
@@ -198,9 +208,9 @@ module.exports = {
         } else {
           user.getMyDocuments()
             .then((documents) => {
-              res.status(200).send(
+              res.status(200).send({
                 documents
-              );
+              });
             })
             .catch((error) => {
               res.status(500).send({
@@ -209,7 +219,9 @@ module.exports = {
             });
         }
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({
+        message: error.message
+      }));
   },
   updateUser: (req, res) => {
     if (req.userId === parseInt(req.params.id, 10)) {
@@ -324,10 +336,18 @@ module.exports = {
           lastname: {
             $ilike: `%${req.query.q}%`
           }
-        }]
-      }
+        }],
+        roleId: {
+          $ne: 1
+        }
+      },
+      attributes: [
+        'id', 'firstname', 'lastname', 'username', 'email', 'roleId'
+      ]
     })
-    .then(users => res.status(200).send(users))
-    .catch(error => res.status(400).send(error));
+    .then(users => res.status(200).send({ users }))
+    .catch(error => res.status(400).send({
+      message: error.message
+    }));
   }
 };

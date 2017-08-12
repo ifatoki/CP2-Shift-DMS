@@ -19,7 +19,9 @@ const updateDocument = (document, req, res) => {
     content: req.body.content || document.content,
   })
   .then((updatedDocument) => {
-    res.status(200).send(filterDocument(updatedDocument));
+    res.status(200).send({
+      document: filterDocument(updatedDocument)
+    });
   })
   .catch(error => res.status(500).send({
     message: error.message
@@ -33,7 +35,9 @@ const deleteDocument = (document, req, res) => {
   .then(() => res.status(200).send({
     message: 'document deleted successfully'
   }))
-  .catch(error => res.status(500).send(error));
+  .catch(error => res.status(500).send({
+    message: error.message
+  }));
 };
 
 const documentController = {
@@ -58,7 +62,9 @@ const documentController = {
               accessId: req.body.accessId
             })
             .then((newDocument) => {
-              res.status(201).send(filterDocument(newDocument));
+              res.status(201).send({
+                document: filterDocument(newDocument)
+              });
             })
             .catch((error) => {
               res.status(500).send({
@@ -95,7 +101,7 @@ const documentController = {
             .then((role) => {
               role.getDocuments()
               .then((documents) => {
-                res.status(200).send(documents);
+                res.status(200).send({ documents });
               })
               .catch((error) => {
                 res.status(500).send({
@@ -106,7 +112,7 @@ const documentController = {
           } else {
             user.getDocuments()
             .then((documents) => {
-              res.status(200).send(documents);
+              res.status(200).send({ documents });
             })
             .catch((error) => {
               res.status(500).send({
@@ -125,7 +131,9 @@ const documentController = {
           limit: req.query.limit || null,
           offset: req.query.offset
         })
-        .then(documents => res.status(200).send(documents.rows))
+        .then(documents => res.status(200).send({
+          documents: documents.rows
+        }))
         .catch(error => res.status(400).send({
           message: error.message
         }));
