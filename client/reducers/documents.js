@@ -17,7 +17,7 @@ const defaultState = {
   currentDocumentErrorMessage: ''
 };
 
-function documentReducers(state = defaultState, action) {
+function documents(state = defaultState, action) {
   switch (action.type) {
   case actionTypes.DOCUMENTS_FETCH_REQUEST:
     return {
@@ -192,4 +192,4 @@ function documentReducers(state = defaultState, action) {
   }
 }
 
-export default documentReducers;
+export default documents;

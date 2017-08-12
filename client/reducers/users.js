@@ -13,7 +13,7 @@ const initialState = {
   currentUserErrorMessage: ''
 };
 
-function userReducers(state = initialState, action) {
+function users(state = initialState, action) {
   switch (action.type) {
   case actionTypes.LOGOUT_REQUEST:
   case actionTypes.SIGNUP_REQUEST:
@@ -204,4 +204,4 @@ function userReducers(state = initialState, action) {
   }
 }
 
-export default userReducers;
+export default users;
