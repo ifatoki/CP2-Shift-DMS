@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { Card, Icon } from 'semantic-ui-react';
 import ReactHtmlParser from 'react-html-parser';
 import Timeago from 'timeago-react';
-import { getDocument, deleteDocument } from '../actions/documents';
+import DocumentActions from '../actions/DocumentActions';
+
+const { getDocument, deleteDocument } = DocumentActions;
 
 class Document extends React.Component {
   constructor(props) {

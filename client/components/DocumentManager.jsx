@@ -3,11 +3,13 @@ import PropType from 'prop-types';
 import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
-import {
+import DocumentActions from '../actions/DocumentActions';
+
+const {
   saveNewDocument,
   modifyDocument,
   cancelNewDocument
-} from '../actions/documents';
+} = DocumentActions;
 
 const editModes = {
   READ: 'READ',

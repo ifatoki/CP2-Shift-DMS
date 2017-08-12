@@ -9,12 +9,14 @@ import {
   fetchAllRoles,
   getUser
 } from '../actions/users';
-import { fetchDocuments } from '../actions/documents';
+import DocumentActions from '../actions/DocumentActions';
 import DocumentList from '../components/DocumentList';
 import SearchComponent from '../components/SearchComponent';
 import UserList from '../components/UserList';
 import DocumentManager from '../components/DocumentManager';
 import UserManager from '../components/UserManager';
+
+const { fetchDocuments } = DocumentActions;
 
 toastr.options = {
   positionClass: 'toast-top-center',

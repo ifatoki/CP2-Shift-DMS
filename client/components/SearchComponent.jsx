@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Search, Grid } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { searchDocuments, getDocument } from '../actions/documents';
+import DocumentActions from '../actions/DocumentActions';
+
+const { searchDocuments, getDocument } = DocumentActions;
 
 class SearchComponent extends Component {
   constructor(props) {
