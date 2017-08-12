@@ -5,7 +5,7 @@ import Timeago from 'timeago-react';
 import { Card, Icon } from 'semantic-ui-react';
 import { getUser, deleteUser } from '../actions/users';
 
-class UserComponent extends React.Component {
+class User extends React.Component {
   constructor(props) {
     super(props);
     this.isDelete = false;
@@ -52,7 +52,7 @@ class UserComponent extends React.Component {
   }
 }
 
-UserComponent.propTypes = {
+User.propTypes = {
   id: PropTypes.number.isRequired,
   firstname: PropTypes.string.isRequired,
   lastname: PropTypes.string.isRequired,
@@ -69,4 +69,4 @@ const mapDispatchToProps = {
   deleteUser
 };
 
-export default connect(null, mapDispatchToProps)(UserComponent);
+export default connect(null, mapDispatchToProps)(User);
