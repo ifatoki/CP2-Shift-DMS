@@ -1,14 +1,14 @@
 import chai from 'chai';
 import request from 'supertest';
 import express from 'express';
-import authHelpers from '../../auth/_helpers';
+import authHelpers from '../../auth/helpers';
 import local from '../../auth/local';
 import app from '../../app';
 // process.env.NODE_ENV = 'test';
 
 const expect = chai.expect;
 
-describe('auth : _helpers', () => {
+describe('auth : helpers', () => {
   const password = 'Micheal';
   const aWrongPassword = 'Smith';
   describe('Encrypt Password', () => {

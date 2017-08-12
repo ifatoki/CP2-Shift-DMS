@@ -1,10 +1,9 @@
 import _ from 'lodash';
 
-const auth = require('../auth/_helpers');
+const auth = require('../auth/helpers');
 const User = require('../models').User;
 const Role = require('../models').Role;
 const localAuth = require('../auth/local');
-const authHelpers = require('../auth/_helpers');
 
 const filterUser = ({
   id, username, email, firstname, lastname, roleId, createdAt
@@ -24,7 +23,7 @@ const updateUser = (req, res, user) => {
     username: req.body.username || user.username,
     firstname: req.body.firstname || user.firstname,
     lastname: req.body.lastname || user.lastname,
-    password: authHelpers.encrypt(req.body.newPassword) || user.password,
+    password: auth.encrypt(req.body.newPassword) || user.password,
     roleId: req.body.roleId || user.roleId,
     email: req.body.email || user.email
   })
@@ -234,7 +233,7 @@ module.exports = {
             });
           } else {
             if (req.body.newPassword) {
-              authHelpers.comparePassword(
+              auth.comparePassword(
                 req.body.currentPassword, user.password
               );
             }

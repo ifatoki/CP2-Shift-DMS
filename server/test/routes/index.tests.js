@@ -7,7 +7,7 @@ import app from '../../app';
 import * as tokens from '../helpers/tokens';
 import postData from '../helpers/testdata';
 import local from '../../auth/local';
-import helpers from '../../auth/_helpers';
+import helpers from '../../auth/helpers';
 
 const { Right, Role, User, Document } = require('../../models');
 

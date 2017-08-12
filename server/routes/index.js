@@ -1,6 +1,6 @@
 import confirmRole from '../controllers/middleware/confirmRole';
 
-const auth = require('../auth/_helpers');
+const auth = require('../auth/helpers');
 const usersController = require('../controllers').users;
 const documentsController = require('../controllers').documents;
 const rolesController = require('../controllers').roles;
