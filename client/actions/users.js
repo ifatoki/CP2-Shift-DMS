@@ -15,7 +15,7 @@ export function addUser(user, token) {
     .then(response => (
       store.dispatch({
         type: actionTypes.ADD_USER,
-        payload: response.data
+        payload: response.data.user
       })));
   } else {
     store.dispatch({
@@ -172,8 +172,8 @@ export function signUserUp({
         .post('/api/v1/users', userdata, config)
         .then((response) => {
           setTokenToLocalStorage(
-            response.data.payload.user,
-            response.data.payload.token
+            response.data.user,
+            response.data.token
           );
           dispatch(signupSuccessful());
         })
@@ -196,9 +196,8 @@ export function logUserIn({ username, password }) {
         .post('/api/v1/users/login', userdata, config)
         .then((response) => {
           setTokenToLocalStorage(
-            response.data.payload.user,
-            response.data.payload.token,
-            response.data.payload.role
+            response.data.user,
+            response.data.token
           );
           dispatch(loginSuccessful());
         })
@@ -232,7 +231,7 @@ export function fetchAllUsers() {
     return axios
       .get('/api/v1/users/', config)
       .then((users) => {
-        dispatch(fetchAllUsersSuccessful(users.data));
+        dispatch(fetchAllUsersSuccessful(users.data.users));
       })
       .catch((error) => {
         dispatch(fetchAllUsersFailed(error.response.data.message));
@@ -246,7 +245,7 @@ export function fetchAllRoles() {
     return axios
       .get('/api/v1/roles/', config)
       .then((roles) => {
-        dispatch(fetchAllRolesSuccessful(roles.data));
+        dispatch(fetchAllRolesSuccessful(roles.data.roles));
       })
       .catch((error) => {
         dispatch(fetchAllRolesFailed(error.response.data.message));
@@ -260,7 +259,7 @@ export function getUser(userId) {
     return axios
       .get(`api/v1/users/${userId}`)
       .then((response) => {
-        dispatch(userGetSuccessful(response.data));
+        dispatch(userGetSuccessful(response.data.user));
       })
       .catch((error) => {
         dispatch(userGetFailed(error.response.data.message));
@@ -277,7 +276,7 @@ export function modifyUser(userId, userData) {
       return axios
         .put(`api/v1/users/${userId}`, userData, config)
         .then((response) => {
-          dispatch(userModifySuccessful(response.data));
+          dispatch(userModifySuccessful(response.data.user));
         })
         .catch((error) => {
           dispatch(userModifyFailed(error.response.data.message));
@@ -293,7 +292,7 @@ export function deleteUser(userId) {
     return axios
       .delete(`api/v1/users/${userId}`, config)
       .then((response) => {
-        dispatch(userDeleteSuccessful(response.data));
+        dispatch(userDeleteSuccessful(response.data.message));
       })
       .catch((error) => {
         dispatch(userDeleteFailed(error.response.data.message));

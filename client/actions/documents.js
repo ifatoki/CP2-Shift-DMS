@@ -119,7 +119,7 @@ export function deleteDocument(documentId) {
     return axios
       .delete(`api/v1/documents/${documentId}`)
       .then((response) => {
-        dispatch(documentDeleteSuccessful(response.data));
+        dispatch(documentDeleteSuccessful(response.data.message));
       })
       .catch((error) => {
         dispatch(documentDeleteFailed(error.response.data.message));
@@ -138,7 +138,7 @@ export function fetchDocuments(userId, type) {
         }
       })
       .then((response) => {
-        dispatch(documentsFetchSuccessful(response.data, type));
+        dispatch(documentsFetchSuccessful(response.data.documents, type));
       })
       .catch((error) => {
         dispatch(documentsFetchFailed(error.response.data.message));
@@ -163,7 +163,7 @@ export function saveNewDocument(documentData) {
       return axios
         .post('api/v1/documents', documentData, config)
         .then((response) => {
-          dispatch(documentSaveSuccessful(response.data));
+          dispatch(documentSaveSuccessful(response.data.document));
         })
         .catch((error) => {
           dispatch(documentSaveFailed(error.response.data.message));
@@ -182,7 +182,7 @@ export function modifyDocument(documentId, documentData) {
       return axios
         .put(`api/v1/documents/${documentId}`, documentData, config)
         .then((response) => {
-          dispatch(documentModifySuccessful(response.data));
+          dispatch(documentModifySuccessful(response.data.document));
         })
         .catch((error) => {
           dispatch(documentModifyFailed(error.response.data.message));
