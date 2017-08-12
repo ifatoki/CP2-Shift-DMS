@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card, Icon } from 'semantic-ui-react';
+import Timeago from 'timeago-react';
 import { getDocument, deleteDocument } from '../actions/documents';
 
 class Document extends React.Component {
@@ -31,7 +32,9 @@ class Document extends React.Component {
           <Card.Header>
             {this.props.title}
           </Card.Header>
-          <Card.Meta content={this.props.created} />
+          <Card.Meta>
+            Created <Timeago datetime={this.props.created} />
+          </Card.Meta>
           <Card.Description content={this.props.content} />
         </Card.Content>
         <Card.Content extra>

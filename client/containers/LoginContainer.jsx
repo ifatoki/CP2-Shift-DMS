@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Dropdown } from 'semantic-ui-react';
 import toastr from 'toastr';
 import { connect } from 'react-redux';
-import { logUserIn, signUserUp } from '../actions/users';
+import _ from 'lodash';
+import { logUserIn, signUserUp, fetchAllRoles } from '../actions/users';
 
 class LoginContainer extends React.Component {
   constructor(props) {
@@ -14,21 +16,39 @@ class LoginContainer extends React.Component {
       email: '',
       password: '',
       confirmPassword: '',
-      roleId: 1
+      roleId: 2,
+      roles: []
     };
     this.onChange = this.onChange.bind(this);
     this.onLoginSubmit = this.onLoginSubmit.bind(this);
     this.onSignUpSubmit = this.onSignUpSubmit.bind(this);
   }
 
-  componentWillReceiveProps({ currentUserErrorMessage }) {
+  componentDidMount() {
+    this.props.fetchAllRoles();
+  }
+
+  componentWillReceiveProps({ currentUserErrorMessage, roles }) {
     if (currentUserErrorMessage) {
       toastr.error(currentUserErrorMessage, 'Validation Error');
     }
+    this.setState({
+      roles: _.reduce(roles, (accumulator, role) => {
+        return accumulator.concat({
+          key: role.id,
+          text: role.title,
+          value: role.id
+        });
+      }, [])
+    });
   }
 
-  onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+  onChange(event, data) {
+    if (data) {
+      this.setState({ [data.name]: data.value });
+    } else {
+      this.setState({ [event.target.name]: event.target.value });
+    }
   }
 
   onLoginSubmit(event) {
@@ -90,11 +110,13 @@ class LoginContainer extends React.Component {
                 <input placeholder="Username" name="username" type="text" onChange={this.onChange} />
               </div>
               <div className="field">
-                <select className="ui dropdown">
-                  <option value="1">Administrator</option>
-                  <option value="2">Editor</option>
-                  <option value="3">Reader</option>
-                </select>
+                <Dropdown
+                  placeholder="Roles"
+                  selection
+                  name="roleId"
+                  options={this.state.roles}
+                  onChange={this.onChange}
+                />
               </div>
               <div className="two fields">
                 <div className="field">
@@ -122,16 +144,19 @@ class LoginContainer extends React.Component {
 LoginContainer.propTypes = {
   logUserIn: PropTypes.func.isRequired,
   signUserUp: PropTypes.func.isRequired,
-  currentUserErrorMessage: PropTypes.string.isRequired
+  currentUserErrorMessage: PropTypes.string.isRequired,
+  fetchAllRoles: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = {
   logUserIn,
-  signUserUp
+  signUserUp,
+  fetchAllRoles
 };
 
 const mapStateToProps = state => ({
-  currentUserErrorMessage: state.user.currentUserErrorMessage
+  currentUserErrorMessage: state.user.currentUserErrorMessage,
+  roles: state.user.roles
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);

@@ -259,7 +259,8 @@ class UserManager extends React.Component {
             onClick={this.saveUser}
             style={{
               display:
-                this.state.edited ? 'inline-block' : 'none'
+                this.state.edited && this.state.accessMode === editModes.WRITE ?
+                'inline-block' : 'none'
             }}
           >
             <i className="save icon" />

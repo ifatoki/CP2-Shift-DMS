@@ -121,6 +121,8 @@
     "semantic-ui-react": "^0.71.0",
     "sequelize": "^3.3.4",
     "supertest": "^3.0.0",
+    "timeago": "^1.6.1",
+    "timeago-react": "^1.2.2",
     "tinymce": "^4.6.4",
     "toastr": "^2.1.2",
     "validator": "^8.0.0",

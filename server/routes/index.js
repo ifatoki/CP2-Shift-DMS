@@ -120,7 +120,6 @@ module.exports = (app) => {
   // find all roles
   app.get(
     '/api/v1/roles',
-    auth.confirmAuthentication,
     rolesController.list
   );
 
