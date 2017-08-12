@@ -1,4 +1,4 @@
-import * as actionTypes from '../actions/actionTypes';
+import ActionTypes from '../actions/ActionTypes';
 
 const defaultState = {
   currentDocument: null,
@@ -19,7 +19,7 @@ const defaultState = {
 
 function documents(state = defaultState, action) {
   switch (action.type) {
-  case actionTypes.DOCUMENTS_FETCH_REQUEST:
+  case ActionTypes.DOCUMENTS_FETCH_REQUEST:
     return {
       ...state,
       documentSaved: false,
@@ -31,7 +31,7 @@ function documents(state = defaultState, action) {
       documentsUpdating: true,
       currentDocumentErrorMessage: ''
     };
-  case actionTypes.DOCUMENTS_FETCH_SUCCESSFUL:
+  case ActionTypes.DOCUMENTS_FETCH_SUCCESSFUL:
     return {
       ...state,
       documents: action.payload,
@@ -39,14 +39,14 @@ function documents(state = defaultState, action) {
       documentsUpdated: true,
       documentsUpdating: false,
     };
-  case actionTypes.DOCUMENTS_FETCH_FAILED:
+  case ActionTypes.DOCUMENTS_FETCH_FAILED:
     return {
       ...state,
       documentsUpdated: false,
       documentsUpdating: false,
       currentDocumentErrorMessage: action.payload
     };
-  case actionTypes.DOCUMENT_SAVE_REQUEST:
+  case ActionTypes.DOCUMENT_SAVE_REQUEST:
     return {
       ...state,
       documentsUpdated: false,
@@ -58,7 +58,7 @@ function documents(state = defaultState, action) {
       savingDocument: true,
       currentDocumentErrorMessage: ''
     };
-  case actionTypes.DOCUMENT_SAVE_SUCCESSFUL:
+  case ActionTypes.DOCUMENT_SAVE_SUCCESSFUL:
     return {
       ...state,
       currentDocument: action.payload,
@@ -66,14 +66,14 @@ function documents(state = defaultState, action) {
       documentSaved: true,
       savingDocument: false,
     };
-  case actionTypes.DOCUMENT_SAVE_FAILED:
+  case ActionTypes.DOCUMENT_SAVE_FAILED:
     return {
       ...state,
       documentSaved: false,
       savingDocument: false,
       currentDocumentErrorMessage: action.payload
     };
-  case actionTypes.DOCUMENT_MODIFY_REQUEST:
+  case ActionTypes.DOCUMENT_MODIFY_REQUEST:
     return {
       ...state,
       currentDocumentModified: false,
@@ -85,7 +85,7 @@ function documents(state = defaultState, action) {
       currentDocumentModifying: true,
       currentDocumentErrorMessage: ''
     };
-  case actionTypes.DOCUMENT_MODIFY_SUCCESSFUL:
+  case ActionTypes.DOCUMENT_MODIFY_SUCCESSFUL:
     return {
       ...state,
       currentDocument: action.payload,
@@ -93,14 +93,14 @@ function documents(state = defaultState, action) {
       currentDocumentUpdated: true,
       currentDocumentModifying: false
     };
-  case actionTypes.DOCUMENT_MODIFY_FAILED:
+  case ActionTypes.DOCUMENT_MODIFY_FAILED:
     return {
       ...state,
       currentDocumentModified: false,
       currentDocumentModifying: false,
       currentDocumentErrorMessage: action.payload
     };
-  case actionTypes.DOCUMENT_GET_REQUEST:
+  case ActionTypes.DOCUMENT_GET_REQUEST:
     return {
       ...state,
       documentsUpdated: false,
@@ -112,7 +112,7 @@ function documents(state = defaultState, action) {
       currentDocumentUpdating: true,
       currentDocumentErrorMessage: ''
     };
-  case actionTypes.DOCUMENT_GET_SUCCESSFUL:
+  case ActionTypes.DOCUMENT_GET_SUCCESSFUL:
     return {
       ...state,
       currentDocument: action.payload.document,
@@ -120,14 +120,14 @@ function documents(state = defaultState, action) {
       currentDocumentUpdated: true,
       currentDocumentUpdating: false,
     };
-  case actionTypes.DOCUMENT_GET_FAILED:
+  case ActionTypes.DOCUMENT_GET_FAILED:
     return {
       ...state,
       currentDocumentUpdated: false,
       currentDocumentUpdating: false,
       currentDocumentErrorMessage: action.payload
     };
-  case actionTypes.DOCUMENT_DELETE_REQUEST:
+  case ActionTypes.DOCUMENT_DELETE_REQUEST:
     return {
       ...state,
       documentsUpdated: false,
@@ -139,20 +139,20 @@ function documents(state = defaultState, action) {
       documentDeleting: true,
       currentDocumentErrorMessage: ''
     };
-  case actionTypes.DOCUMENT_DELETE_SUCCESSFUL:
+  case ActionTypes.DOCUMENT_DELETE_SUCCESSFUL:
     return {
       ...state,
       documentDeleted: true,
       documentDeleting: false,
     };
-  case actionTypes.DOCUMENT_DELETE_FAILED:
+  case ActionTypes.DOCUMENT_DELETE_FAILED:
     return {
       ...state,
       documentDeleted: false,
       documentDeleting: false,
       currentDocumentErrorMessage: action.payload
     };
-  case actionTypes.DOCUMENTS_SEARCH_REQUEST:
+  case ActionTypes.DOCUMENTS_SEARCH_REQUEST:
     return {
       ...state,
       currentDocumentUpdated: false,
@@ -164,21 +164,21 @@ function documents(state = defaultState, action) {
       documentsSearchResultUpdating: true,
       currentDocumentErrorMessage: ''
     };
-  case actionTypes.DOCUMENTS_SEARCH_SUCCESSFUL:
+  case ActionTypes.DOCUMENTS_SEARCH_SUCCESSFUL:
     return {
       ...state,
       documentsSearchResult: action.payload,
       documentsSearchResultUpdated: true,
       documentsSearchResultUpdating: false,
     };
-  case actionTypes.DOCUMENTS_SEARCH_FAILED:
+  case ActionTypes.DOCUMENTS_SEARCH_FAILED:
     return {
       ...state,
       documentsSearchResultUpdated: false,
       documentsSearchResultUpdating: false,
       currentDocumentErrorMessage: action.payload
     };
-  case actionTypes.DOCUMENT_CANCELLED:
+  case ActionTypes.DOCUMENT_CANCELLED:
     return {
       ...state,
       currentDocumentUpdated: false,

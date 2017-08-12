@@ -1,7 +1,7 @@
 import axios from 'axios';
 import _ from 'lodash';
 import store from '../client';
-import * as actionTypes from './actionTypes';
+import ActionTypes from './ActionTypes';
 import Validator from '../utils/Validator';
 
 const config = {
@@ -14,12 +14,12 @@ export function addUser(user, token) {
     axios.get(`/api/v1/users/${user.id}`)
     .then(response => (
       store.dispatch({
-        type: actionTypes.ADD_USER,
+        type: ActionTypes.ADD_USER,
         payload: response.data.user
       })));
   } else {
     store.dispatch({
-      type: actionTypes.ADD_USER,
+      type: ActionTypes.ADD_USER,
       payload: user
     });
   }
@@ -29,118 +29,118 @@ const removeUser = () => {
   window.localStorage.removeItem('token');
   window.localStorage.removeItem('user');
   return {
-    type: actionTypes.REMOVE_USER
+    type: ActionTypes.REMOVE_USER
   };
 };
 
 const requestSignup = payload => ({
-  type: actionTypes.SIGNUP_REQUEST,
+  type: ActionTypes.SIGNUP_REQUEST,
   payload
 });
 
 const signupSuccessful = () => ({
-  type: actionTypes.SIGNUP_SUCCESSFUL
+  type: ActionTypes.SIGNUP_SUCCESSFUL
 });
 
 const signupFailed = payload => ({
-  type: actionTypes.SIGNUP_FAILED,
+  type: ActionTypes.SIGNUP_FAILED,
   payload
 });
 
 const requestLogin = payload => ({
-  type: actionTypes.LOGIN_REQUEST,
+  type: ActionTypes.LOGIN_REQUEST,
   payload
 });
 
 const loginSuccessful = () => ({
-  type: actionTypes.LOGIN_SUCCESSFUL
+  type: ActionTypes.LOGIN_SUCCESSFUL
 });
 
 const loginFailed = payload => ({
-  type: actionTypes.LOGIN_FAILED,
+  type: ActionTypes.LOGIN_FAILED,
   payload
 });
 
 const logoutRequest = () => ({
-  type: actionTypes.LOGOUT_REQUEST
+  type: ActionTypes.LOGOUT_REQUEST
 });
 
 const logoutSuccessful = () => ({
-  type: actionTypes.LOGOUT_SUCCESSFUL
+  type: ActionTypes.LOGOUT_SUCCESSFUL
 });
 
 const logoutFailed = payload => ({
-  type: actionTypes.LOGOUT_FAILED,
+  type: ActionTypes.LOGOUT_FAILED,
   payload
 });
 
 const fetchAllUsersRequest = () => ({
-  type: actionTypes.FETCH_USERS_REQUEST
+  type: ActionTypes.FETCH_USERS_REQUEST
 });
 
 const fetchAllUsersSuccessful = payload => ({
-  type: actionTypes.FETCH_USERS_SUCCESSFUL,
+  type: ActionTypes.FETCH_USERS_SUCCESSFUL,
   payload
 });
 
 const fetchAllUsersFailed = payload => ({
-  type: actionTypes.FETCH_USERS_FAILED,
+  type: ActionTypes.FETCH_USERS_FAILED,
   payload
 });
 
 const fetchAllRolesRequest = () => ({
-  type: actionTypes.FETCH_ROLES_REQUEST
+  type: ActionTypes.FETCH_ROLES_REQUEST
 });
 
 const fetchAllRolesSuccessful = payload => ({
-  type: actionTypes.FETCH_ROLES_SUCCESSFUL,
+  type: ActionTypes.FETCH_ROLES_SUCCESSFUL,
   payload
 });
 
 const fetchAllRolesFailed = payload => ({
-  type: actionTypes.FETCH_ROLES_FAILED,
+  type: ActionTypes.FETCH_ROLES_FAILED,
   payload
 });
 
 const userGetRequest = () => ({
-  type: actionTypes.USER_GET_REQUEST
+  type: ActionTypes.USER_GET_REQUEST
 });
 
 const userGetSuccessful = payload => ({
-  type: actionTypes.USER_GET_SUCCESSFUL,
+  type: ActionTypes.USER_GET_SUCCESSFUL,
   payload
 });
 
 const userGetFailed = payload => ({
-  type: actionTypes.USER_GET_FAILED,
+  type: ActionTypes.USER_GET_FAILED,
   payload
 });
 
 const userModifyRequest = () => ({
-  type: actionTypes.USER_MODIFY_REQUEST
+  type: ActionTypes.USER_MODIFY_REQUEST
 });
 
 const userModifySuccessful = payload => ({
-  type: actionTypes.USER_MODIFY_SUCCESSFUL,
+  type: ActionTypes.USER_MODIFY_SUCCESSFUL,
   payload
 });
 
 const userModifyFailed = payload => ({
-  type: actionTypes.USER_MODIFY_FAILED,
+  type: ActionTypes.USER_MODIFY_FAILED,
   payload
 });
 
 const userDeleteRequest = () => ({
-  type: actionTypes.USER_DELETE_REQUEST
+  type: ActionTypes.USER_DELETE_REQUEST
 });
 
 const userDeleteSuccessful = payload => ({
-  type: actionTypes.USER_DELETE_SUCCESSFUL,
+  type: ActionTypes.USER_DELETE_SUCCESSFUL,
   payload
 });
 
 const userDeleteFailed = payload => ({
-  type: actionTypes.USER_DELETE_FAILED,
+  type: ActionTypes.USER_DELETE_FAILED,
   payload
 });
 
@@ -302,6 +302,6 @@ export function deleteUser(userId) {
 
 export function cancelUser() {
   return dispatch => dispatch({
-    type: actionTypes.USER_CANCELLED,
+    type: ActionTypes.USER_CANCELLED,
   });
 }

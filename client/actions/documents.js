@@ -1,6 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
-import * as actionTypes from './actionTypes';
+import ActionTypes from './ActionTypes';
 import validator from '../utils/Validator';
 
 const config = {
@@ -8,87 +8,87 @@ const config = {
 };
 
 const documentGetRequest = () => ({
-  type: actionTypes.DOCUMENT_GET_REQUEST
+  type: ActionTypes.DOCUMENT_GET_REQUEST
 });
 
 const documentGetSuccessful = payload => ({
-  type: actionTypes.DOCUMENT_GET_SUCCESSFUL,
+  type: ActionTypes.DOCUMENT_GET_SUCCESSFUL,
   payload
 });
 
 const documentGetFailed = payload => ({
-  type: actionTypes.DOCUMENT_GET_FAILED,
+  type: ActionTypes.DOCUMENT_GET_FAILED,
   payload
 });
 
 const documentDeleteRequest = () => ({
-  type: actionTypes.DOCUMENT_DELETE_REQUEST
+  type: ActionTypes.DOCUMENT_DELETE_REQUEST
 });
 
 const documentDeleteSuccessful = payload => ({
-  type: actionTypes.DOCUMENT_DELETE_SUCCESSFUL,
+  type: ActionTypes.DOCUMENT_DELETE_SUCCESSFUL,
   payload
 });
 
 const documentDeleteFailed = payload => ({
-  type: actionTypes.DOCUMENT_DELETE_FAILED,
+  type: ActionTypes.DOCUMENT_DELETE_FAILED,
   payload
 });
 
 const documentsFetchRequest = () => ({
-  type: actionTypes.DOCUMENTS_FETCH_REQUEST
+  type: ActionTypes.DOCUMENTS_FETCH_REQUEST
 });
 
 const documentsFetchSuccessful = (payload, type) => ({
-  type: actionTypes.DOCUMENTS_FETCH_SUCCESSFUL,
+  type: ActionTypes.DOCUMENTS_FETCH_SUCCESSFUL,
   documentsType: type,
   payload
 });
 
 const documentsFetchFailed = payload => ({
-  type: actionTypes.DOCUMENTS_FETCH_FAILED,
+  type: ActionTypes.DOCUMENTS_FETCH_FAILED,
   payload
 });
 
 const documentSaveRequest = () => ({
-  type: actionTypes.DOCUMENT_SAVE_REQUEST
+  type: ActionTypes.DOCUMENT_SAVE_REQUEST
 });
 
 const documentSaveSuccessful = payload => ({
-  type: actionTypes.DOCUMENT_SAVE_SUCCESSFUL,
+  type: ActionTypes.DOCUMENT_SAVE_SUCCESSFUL,
   payload
 });
 
 const documentSaveFailed = payload => ({
-  type: actionTypes.DOCUMENT_SAVE_FAILED,
+  type: ActionTypes.DOCUMENT_SAVE_FAILED,
   payload
 });
 
 const documentModifyRequest = () => ({
-  type: actionTypes.DOCUMENT_MODIFY_REQUEST
+  type: ActionTypes.DOCUMENT_MODIFY_REQUEST
 });
 
 const documentModifySuccessful = payload => ({
-  type: actionTypes.DOCUMENT_MODIFY_SUCCESSFUL,
+  type: ActionTypes.DOCUMENT_MODIFY_SUCCESSFUL,
   payload
 });
 
 const documentModifyFailed = payload => ({
-  type: actionTypes.DOCUMENT_MODIFY_FAILED,
+  type: ActionTypes.DOCUMENT_MODIFY_FAILED,
   payload
 });
 
 const documentsSearchRequest = () => ({
-  type: actionTypes.DOCUMENTS_SEARCH_REQUEST
+  type: ActionTypes.DOCUMENTS_SEARCH_REQUEST
 });
 
 const documentsSearchSuccessful = payload => ({
-  type: actionTypes.DOCUMENTS_SEARCH_SUCCESSFUL,
+  type: ActionTypes.DOCUMENTS_SEARCH_SUCCESSFUL,
   payload
 });
 
 const documentsSearchFailed = payload => ({
-  type: actionTypes.DOCUMENTS_SEARCH_FAILED,
+  type: ActionTypes.DOCUMENTS_SEARCH_FAILED,
   payload
 });
 
@@ -150,7 +150,7 @@ export function fetchDocuments(userId, type) {
 export function cancelNewDocument() {
   return dispatch =>
     dispatch({
-      type: actionTypes.DOCUMENT_CANCELLED
+      type: ActionTypes.DOCUMENT_CANCELLED
     });
 }
 

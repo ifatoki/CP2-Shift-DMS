@@ -1,4 +1,4 @@
-import * as actionTypes from '../actions/actionTypes';
+import ActionTypes from '../actions/ActionTypes';
 
 const initialState = {
   isAuthenticated: false,
@@ -15,26 +15,26 @@ const initialState = {
 
 function users(state = initialState, action) {
   switch (action.type) {
-  case actionTypes.LOGOUT_REQUEST:
-  case actionTypes.SIGNUP_REQUEST:
-  case actionTypes.LOGIN_REQUEST:
-  case actionTypes.LOGOUT_SUCCESSFUL:
-  case actionTypes.SIGNUP_SUCCESSFUL:
-  case actionTypes.LOGIN_SUCCESSFUL:
+  case ActionTypes.LOGOUT_REQUEST:
+  case ActionTypes.SIGNUP_REQUEST:
+  case ActionTypes.LOGIN_REQUEST:
+  case ActionTypes.LOGOUT_SUCCESSFUL:
+  case ActionTypes.SIGNUP_SUCCESSFUL:
+  case ActionTypes.LOGIN_SUCCESSFUL:
     return {
       ...state,
       currentUserErrorMessage: '',
       result: action.type
     };
-  case actionTypes.LOGOUT_FAILED:
-  case actionTypes.SIGNUP_FAILED:
-  case actionTypes.LOGIN_FAILED:
+  case ActionTypes.LOGOUT_FAILED:
+  case ActionTypes.SIGNUP_FAILED:
+  case ActionTypes.LOGIN_FAILED:
     return {
       ...state,
       currentUserErrorMessage: action.payload,
       result: action.type
     };
-  case actionTypes.REMOVE_USER:
+  case ActionTypes.REMOVE_USER:
     return {
       ...state,
       ...state,
@@ -49,7 +49,7 @@ function users(state = initialState, action) {
       currentUserUpdated: false,
       currentUserErrorMessage: ''
     };
-  case actionTypes.ADD_USER:
+  case ActionTypes.ADD_USER:
     return {
       ...state,
       id: action.payload.id,
@@ -63,7 +63,7 @@ function users(state = initialState, action) {
       currentUserUpdated: false,
       currentUserErrorMessage: ''
     };
-  case actionTypes.FETCH_USERS_REQUEST:
+  case ActionTypes.FETCH_USERS_REQUEST:
     return {
       ...state,
       usersUpdated: false,
@@ -73,21 +73,21 @@ function users(state = initialState, action) {
       usersUpdating: true,
       currentUserErrorMessage: ''
     };
-  case actionTypes.FETCH_USERS_SUCCESSFUL:
+  case ActionTypes.FETCH_USERS_SUCCESSFUL:
     return {
       ...state,
       users: action.payload,
       usersUpdated: true,
       usersUpdating: false,
     };
-  case actionTypes.FETCH_USERS_FAILED:
+  case ActionTypes.FETCH_USERS_FAILED:
     return {
       ...state,
       usersUpdated: false,
       usersUpdating: false,
       currentUserErrorMessage: action.payload
     };
-  case actionTypes.USER_MODIFY_REQUEST:
+  case ActionTypes.USER_MODIFY_REQUEST:
     return {
       ...state,
       currentUserModified: false,
@@ -98,7 +98,7 @@ function users(state = initialState, action) {
       currentUserModifying: true,
       currentUserErrorMessage: ''
     };
-  case actionTypes.USER_MODIFY_SUCCESSFUL:
+  case ActionTypes.USER_MODIFY_SUCCESSFUL:
     return {
       ...state,
       email: action.payload.email,
@@ -111,14 +111,14 @@ function users(state = initialState, action) {
       currentUserUpdated: true,
       currentUserModifying: false,
     };
-  case actionTypes.USER_MODIFY_FAILED:
+  case ActionTypes.USER_MODIFY_FAILED:
     return {
       ...state,
       currentUserModified: false,
       currentUserModifying: false,
       currentUserErrorMessage: action.payload
     };
-  case actionTypes.USER_GET_REQUEST:
+  case ActionTypes.USER_GET_REQUEST:
     return {
       ...state,
       rolesUpdated: false,
@@ -129,21 +129,21 @@ function users(state = initialState, action) {
       currentUserUpdating: true,
       currentUserErrorMessage: ''
     };
-  case actionTypes.USER_GET_SUCCESSFUL:
+  case ActionTypes.USER_GET_SUCCESSFUL:
     return {
       ...state,
       currentUser: action.payload,
       currentUserUpdated: true,
       currentUserUpdating: false,
     };
-  case actionTypes.USER_GET_FAILED:
+  case ActionTypes.USER_GET_FAILED:
     return {
       ...state,
       currentUserUpdated: false,
       currentUserUpdating: false,
       currentUserErrorMessage: action.payload
     };
-  case actionTypes.USER_DELETE_REQUEST:
+  case ActionTypes.USER_DELETE_REQUEST:
     return {
       ...state,
       rolesUpdated: false,
@@ -154,20 +154,20 @@ function users(state = initialState, action) {
       userDeleting: true,
       currentUserErrorMessage: ''
     };
-  case actionTypes.USER_DELETE_SUCCESSFUL:
+  case ActionTypes.USER_DELETE_SUCCESSFUL:
     return {
       ...state,
       userDeleted: true,
       userDeleting: false,
     };
-  case actionTypes.USER_DELETE_FAILED:
+  case ActionTypes.USER_DELETE_FAILED:
     return {
       ...state,
       userDeleted: false,
       userDeleting: false,
       currentUserErrorMessage: action.payload
     };
-  case actionTypes.FETCH_ROLES_REQUEST:
+  case ActionTypes.FETCH_ROLES_REQUEST:
     return {
       ...state,
       rolesUpdated: false,
@@ -176,20 +176,20 @@ function users(state = initialState, action) {
       updatingRoles: true,
       currentUserErrorMessage: ''
     };
-  case actionTypes.FETCH_ROLES_SUCCESSFUL:
+  case ActionTypes.FETCH_ROLES_SUCCESSFUL:
     return {
       ...state,
       rolesUpdated: true,
       roles: action.payload
     };
-  case actionTypes.FETCH_ROLES_FAILED:
+  case ActionTypes.FETCH_ROLES_FAILED:
     return {
       ...state,
       rolesUpdated: false,
       updatingRoles: false,
       currentUserErrorMessage: action.payload
     };
-  case actionTypes.USER_CANCELLED:
+  case ActionTypes.USER_CANCELLED:
     return {
       ...state,
       currentUserUpdated: false,
