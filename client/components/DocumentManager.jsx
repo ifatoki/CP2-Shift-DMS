@@ -190,7 +190,12 @@ class DocumentManager extends React.Component {
                 value={this.state.title}
               />
             </div>
-            <div className="two fields">
+            <div
+              className="two fields"
+              style={{
+                display: this.props.user.role === 'overlord' ? 'none' : 'block'
+              }}
+            >
               <Form.Field width={3}>
                 <Form.Field>
                   <Checkbox

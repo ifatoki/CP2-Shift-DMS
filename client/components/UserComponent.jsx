@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Timeago from 'timeago-react';
 import { Card, Icon } from 'semantic-ui-react';
 import { getUser, deleteUser } from '../actions/users';
 
@@ -35,7 +36,9 @@ class UserComponent extends React.Component {
             <a href={`mailto:${this.props.email}`}>{this.props.email}</a>
           </Card.Meta>
           <Card.Meta content={`@${this.props.username}`} />
-          <Card.Description content={this.props.created} />
+          <Card.Meta>
+            Joined <Timeago datetime={this.props.created} />
+          </Card.Meta>
         </Card.Content>
         <Card.Content extra>
           <Icon name="user" color="blue" />
