@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import createBrowserHistory from 'history/createBrowserHistory';
-import auth from './utils/authorizationHelpers';
+import Authorization from './utils/Authorization';
 import appReducer from './reducers/index';
 import App from './containers/App';
 
@@ -29,9 +29,9 @@ const store = createStore(
 
 // console.log('localstorage: ', window.localStorage.user.id);
 if (window.localStorage.token) {
-  auth.decodeToken(window.localStorage.token, (error, payload) => {
+  Authorization.decodeToken(window.localStorage.token, (error, payload) => {
     if (!error) {
-      auth.setUser(payload.sub, window.localStorage.token);
+      Authorization.setUser(payload.sub, window.localStorage.token);
     } else {
       console.log(error);
     }

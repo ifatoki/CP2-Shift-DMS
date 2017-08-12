@@ -2,8 +2,8 @@ import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import { addUser } from '../actions/users';
 
-export default{
-  decodeToken: (token, callback) => {
+export default class Authorization {
+  static decodeToken(token, callback) {
     jwt.verify(token, process.env.SECRET_KEY, (error, payload) => {
       if (!error) {
         const now = moment().unix();
@@ -15,9 +15,10 @@ export default{
         callback(error);
       }
     });
-  },
-  setUser: (user, token) => {
+  }
+
+  static setUser(user, token) {
     window.localStorage.setItem('user', user);
     addUser(user, token);
   }
-};
+}
