@@ -3,12 +3,7 @@ import { Grid } from 'semantic-ui-react';
 import toastr from 'toastr';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  logUserOut,
-  fetchAllUsers,
-  fetchAllRoles,
-  getUser
-} from '../actions/users';
+import UsersActions from '../actions/UsersActions';
 import DocumentActions from '../actions/DocumentActions';
 import DocumentList from '../components/DocumentList';
 import SearchComponent from '../components/SearchComponent';
@@ -16,6 +11,12 @@ import UserList from '../components/UserList';
 import DocumentManager from '../components/DocumentManager';
 import UserManager from '../components/UserManager';
 
+const {
+  logUserOut,
+  fetchAllUsers,
+  fetchAllRoles,
+  getUser
+} = UsersActions;
 const { fetchDocuments } = DocumentActions;
 
 toastr.options = {

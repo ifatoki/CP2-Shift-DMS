@@ -4,7 +4,9 @@ import { Dropdown } from 'semantic-ui-react';
 import toastr from 'toastr';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { logUserIn, signUserUp, fetchAllRoles } from '../actions/users';
+import UsersActions from '../actions/UsersActions';
+
+const { logUserIn, signUserUp, fetchAllRoles } = UsersActions;
 
 class LandingContainer extends React.Component {
   constructor(props) {

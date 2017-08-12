@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Timeago from 'timeago-react';
 import { Card, Icon } from 'semantic-ui-react';
-import { getUser, deleteUser } from '../actions/users';
+import UsersActions from '../actions/UsersActions';
+
+const { getUser, deleteUser } = UsersActions;
 
 class User extends React.Component {
   constructor(props) {

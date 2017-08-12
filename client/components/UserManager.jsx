@@ -3,7 +3,9 @@ import PropType from 'prop-types';
 import toastr from 'toastr';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { modifyUser, cancelUser } from '../actions/users';
+import UsersActions from '../actions/UsersActions';
+
+const { modifyUser, cancelUser } = UsersActions;
 
 const editModes = {
   READ: 'READ',

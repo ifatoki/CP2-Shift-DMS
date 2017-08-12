@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
-import { addUser } from '../actions/users';
+import UsersActions from '../actions/UsersActions';
+
+const { addUser } = UsersActions;
 
 export default class Authorization {
   static decodeToken(token, callback) {
