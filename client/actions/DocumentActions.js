@@ -1,7 +1,7 @@
 import axios from 'axios';
 import _ from 'lodash';
 import ActionTypes from './ActionTypes';
-import Validator from '../utils/Validator';
+import Validator from '../../server/utils/Validator';
 
 const config = {
   headers: { 'Content-Type': 'application/json' }
