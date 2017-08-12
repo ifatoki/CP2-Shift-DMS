@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Route, Redirect } from 'react-router';
 import LandingContainer from './LandingContainer';
-import LoginContainer from './LoginContainer';
 import HomeContainer from './HomeContainer';
 
 class App extends Component {
@@ -18,17 +17,10 @@ class App extends Component {
           }
         />
         <Route
-          exact path="/login" component={
-            this.props.isAuthenticated ?
-            () => <Redirect to="/home" /> :
-            LoginContainer
-          }
-        />
-        <Route
           exact path="/home" component={
             this.props.isAuthenticated ?
             HomeContainer :
-            () => <Redirect to="/login" />
+            () => <Redirect to="/" />
           }
         />
       </div>
