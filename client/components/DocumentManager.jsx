@@ -1,6 +1,7 @@
 import React from 'react';
 import PropType from 'prop-types';
 import toastr from 'toastr';
+import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
 import DocumentActions from '../actions/DocumentActions';
@@ -88,8 +89,6 @@ class DocumentManager extends React.Component {
           content: isNew ? '' : currentDocument.content,
           accessId: isNew ? 2 : currentDocument.accessId
         }, () => {
-          $('#contentHolder').children().remove();
-          $(this.state.content).prependTo('#contentHolder');
           tinymce.activeEditor.setContent(this.state.content);
         });
       });
@@ -248,7 +247,9 @@ class DocumentManager extends React.Component {
                 'block' : 'none',
               height: '500px'
             }}
-          />
+          >
+            { ReactHtmlParser(this.state.content) }
+          </div>
         </div>
         <div
           className="ui actions container"
