@@ -4,10 +4,10 @@ import isEmpty from 'lodash/isEmpty';
 export default class Validator {
   static validateLogin({ username, password }) {
     this.errors = {};
-    if (validator.isEmpty(username.toString()) || username === undefined) {
+    if (username === undefined || validator.isEmpty(username.toString())) {
       this.errors.identifier = 'email or username required';
     }
-    if (validator.isEmpty(password.toString()) || password === undefined) {
+    if (password === undefined || validator.isEmpty(password.toString())) {
       this.errors.password = 'password is required';
     }
     return this.reconcileErrors();
@@ -17,21 +17,21 @@ export default class Validator {
     username, firstname, lastname, email, password, confirmPassword
   }) {
     this.errors = {};
-    if (validator.isEmpty(username.toString()) || username === undefined) {
+    if (username === undefined || validator.isEmpty(username.toString())) {
       this.errors.identifier = 'username is required';
     }
-    if (validator.isEmpty(firstname.toString()) || firstname === undefined) {
+    if (firstname === undefined || validator.isEmpty(firstname.toString())) {
       this.errors.firstname = 'firstname is required';
     }
-    if (validator.isEmpty(lastname.toString()) || lastname === undefined) {
+    if (lastname === undefined || validator.isEmpty(lastname.toString())) {
       this.errors.lastname = 'lastname is required';
     }
-    if (validator.isEmpty(email.toString()) || email === undefined) {
+    if (email === undefined || validator.isEmpty(email.toString())) {
       this.errors.email = 'email is required';
     } else if (!validator.isEmail(email.toString())) {
       this.errors.email = 'email is invalid';
     }
-    if (validator.isEmpty(password.toString()) || password === undefined) {
+    if (password === undefined || validator.isEmpty(password.toString())) {
       this.errors.password = 'password is required';
     } else if (password !== confirmPassword) {
       this.errors.password = "passwords don't match";
@@ -65,7 +65,8 @@ export default class Validator {
         this.errors.password = 'current password is required';
       } else if (!newPassword || validator.isEmpty(newPassword.toString())) {
         this.errors.password = 'new password is required';
-      } else if (!confirmPassword || validator.isEmpty(confirmPassword.toString())) {
+      } else if (!confirmPassword ||
+        validator.isEmpty(confirmPassword.toString())) {
         this.errors.password = 'confirm password is required';
       } else if (newPassword !== confirmPassword) {
         this.errors.password = "passwords don't match";

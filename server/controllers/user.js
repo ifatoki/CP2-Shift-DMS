@@ -83,11 +83,12 @@ module.exports = {
       email: req.body.email,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
-      newPassword: auth.encrypt(req.body.password),
+      password: req.body.password,
+      confirmPassword: req.body.confirmPassword,
       roleId: req.body.roleId
     };
 
-    const validation = Validator.validateNewDocument(userData);
+    const validation = Validator.validateSignUp(userData);
     if (validation.isValid) {
       Role.findById(req.body.roleId)
       .then((role) => {
@@ -113,12 +114,12 @@ module.exports = {
                 user: returnedUser
               });
             })
-            .catch(error => res.status(400).send({
+            .catch(error => res.status(500).send({
               message: error.message
             }));
         } else {
           res.status(404).send({
-            message: "user role doesn't exist"
+            message: "role with passed roleId doesn't exist. change roleId"
           });
         }
       })
@@ -204,7 +205,7 @@ module.exports = {
             });
           }
         })
-        .catch(error => res.status(400).send({
+        .catch(error => res.status(500).send({
           message: error.message
         }));
     } else {
@@ -225,15 +226,19 @@ module.exports = {
           Role.findById(user.roleId)
             .then((role) => {
               const returnedUser = filterUser(user);
-
-              returnedUser.role = role.title;
+              if (role) {
+                returnedUser.role = role.title;
+              }
               res.status(200).send({
                 user: returnedUser
               });
-            });
+            })
+            .catch(error => res.status(500).send({
+              message: error.message
+            }));
         }
       })
-      .catch(error => res.status(400).send({
+      .catch(error => res.status(500).send({
         message: error.message
       }));
   },
@@ -367,12 +372,12 @@ module.exports = {
               .then(() => res.status(200).send({
                 message: 'user deleted successfully'
               }))
-              .catch(error => res.status(400).send({
+              .catch(error => res.status(500).send({
                 message: error.message
               }));
             }
           })
-          .catch(error => res.status(400).send({
+          .catch(error => res.status(500).send({
             message: error.message
           }));
       }
@@ -412,7 +417,7 @@ module.exports = {
       ]
     })
     .then(users => res.status(200).send({ users }))
-    .catch(error => res.status(400).send({
+    .catch(error => res.status(500).send({
       message: error.message
     }));
   }

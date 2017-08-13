@@ -404,7 +404,8 @@ describe('routes : index', () => {
               expect(res.status).to.equal(404);
               expect(res.body)
                 .to.have.property('message')
-                .which.equals("user role doesn't exist");
+                .which.equals(
+                  "role with passed roleId doesn't exist. change roleId");
               done();
             })
             .catch((err) => {
@@ -602,7 +603,7 @@ describe('routes : index', () => {
             done(err);
           });
       });
-      it('should return error 403 when currentPassword isnt sent with request',
+      it('should return error 400 when currentPassword isnt sent with request',
         (done) => {
           const newPassword = faker.internet.password();
           request(app)
@@ -613,10 +614,10 @@ describe('routes : index', () => {
               newPassword
             })
             .then((res) => {
-              expect(res.status).to.equal(403);
+              expect(res.status).to.equal(400);
               expect(res.body)
                 .to.have.property('message')
-                .which.equals('invalid password');
+                .which.equals('current password is required\n');
               done();
             })
             .catch((err) => {
@@ -640,7 +641,8 @@ describe('routes : index', () => {
               .type('form')
               .send({
                 newPassword,
-                currentPassword: users.admin.password
+                currentPassword: users.admin.password,
+                confirmPassword: newPassword
               })
               .then((res) => {
                 expect(res.status).to.equal(200);
@@ -668,7 +670,8 @@ describe('routes : index', () => {
               .catch((err) => {
                 done(err);
               });
-          });
+          })
+          .catch(error => done(error));
         });
     });
 
@@ -694,7 +697,8 @@ describe('routes : index', () => {
             .catch((err) => {
               done(err);
             });
-        });
+        })
+        .catch(error => done(error));
       });
       it('should return 403 error if overlord tries deleting himself',
         (done) => {
@@ -757,7 +761,8 @@ describe('routes : index', () => {
             .catch((err) => {
               done(err);
             });
-        });
+        })
+        .catch(error => done(error));
       });
     });
   });
