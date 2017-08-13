@@ -404,7 +404,7 @@ describe('routes : index', () => {
               expect(res.status).to.equal(404);
               expect(res.body)
                 .to.have.property('message')
-                .which.equals("role doesn't exist");
+                .which.equals("user role doesn't exist");
               done();
             })
             .catch((err) => {

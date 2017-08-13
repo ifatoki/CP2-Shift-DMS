@@ -60,12 +60,12 @@ export default class Validator {
         this.errors.email = 'email is invalid';
       }
     }
-    if (currentPassword !== undefined) {
-      if (validator.isEmpty(currentPassword.toString())) {
+    if (newPassword !== undefined) {
+      if (!currentPassword || validator.isEmpty(currentPassword.toString())) {
         this.errors.password = 'current password is required';
-      } else if (validator.isEmpty(newPassword.toString())) {
+      } else if (!newPassword || validator.isEmpty(newPassword.toString())) {
         this.errors.password = 'new password is required';
-      } else if (validator.isEmpty(confirmPassword.toString())) {
+      } else if (!confirmPassword || validator.isEmpty(confirmPassword.toString())) {
         this.errors.password = 'confirm password is required';
       } else if (newPassword !== confirmPassword) {
         this.errors.password = "passwords don't match";
@@ -76,10 +76,10 @@ export default class Validator {
 
   static validateNewDocument({ title, accessId }) {
     this.errors = {};
-    if (validator.isEmpty(title.toString()) || title === undefined) {
+    if (title === undefined || validator.isEmpty(title.toString())) {
       this.errors.title = 'title is required';
     }
-    if (validator.isEmpty(accessId.toString()) || accessId === undefined) {
+    if (accessId === undefined || validator.isEmpty(accessId.toString())) {
       this.errors.accessId = 'accessId is required';
     } else if (!validator.isInt(accessId.toString())) {
       this.errors.accessId = 'accessId must be a number';

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Validator from '../utils/Validator';
 
 const auth = require('../auth/helpers');
 const User = require('../models').User;
@@ -18,6 +19,13 @@ const filterUser = ({
     createdAt
   };
 };
+
+const getValidatorErrorMessage = (errors) => {
+  return _.reduce(errors, (result, error) => {
+    return `${error}\n${result}`;
+  }, '');
+};
+
 const updateUser = (req, res, user) => {
   user.update({
     username: req.body.username || user.username,
@@ -43,9 +51,45 @@ const updateUser = (req, res, user) => {
   }));
 };
 
+const confirmRole = (req, res, user) => {
+  if (req.body.roleId && req.body.roleId !== 1) {
+    Role
+      .findById(req.body.roleId)
+      .then((role) => {
+        if (!role) {
+          res.status(404).send({
+            message: 'no match found for the passed roleId'
+          });
+        } else {
+          updateUser(req, res, user);
+        }
+      })
+      .catch(error => res.status(500).send({
+        message: error.message
+      }));
+  } else if (req.body.roleId === 1) {
+    res.status(403).send({
+      message: 'user cannot be upgraded to overlord. change role Id'
+    });
+  } else {
+    updateUser(req, res, user);
+  }
+};
+
 module.exports = {
   create: (req, res) => {
-    Role.findById(req.body.roleId)
+    const userData = {
+      username: req.body.username,
+      email: req.body.email,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      newPassword: auth.encrypt(req.body.password),
+      roleId: req.body.roleId
+    };
+
+    const validation = Validator.validateNewDocument(userData);
+    if (validation.isValid) {
+      Role.findById(req.body.roleId)
       .then((role) => {
         if (role) {
           User
@@ -74,13 +118,18 @@ module.exports = {
             }));
         } else {
           res.status(404).send({
-            message: "role doesn't exist"
+            message: "user role doesn't exist"
           });
         }
       })
       .catch(error => res.status(500).send({
         message: error.message
       }));
+    } else {
+      res.status(400).send({
+        message: getValidatorErrorMessage(validation.errors)
+      });
+    }
   },
   login: (req, res) => {
     User
@@ -223,59 +272,77 @@ module.exports = {
       }));
   },
   updateUser: (req, res) => {
-    if (req.userId === parseInt(req.params.id, 10)) {
-      User
-        .findById(req.params.id)
-        .then((user) => {
-          if (!user) {
-            res.status(404).send({
-              message: 'user not found'
-            });
-          } else {
-            if (req.body.newPassword) {
-              auth.comparePassword(
-                req.body.currentPassword, user.password
-              );
-            }
-            if (req.body.email || req.body.username) {
-              User.find({
-                where: {
-                  $or: [{
-                    email: req.body.email,
-                  }, {
-                    username: req.body.username
-                  }]
-                }
-              })
-              .then((conflictingUser) => {
-                if (conflictingUser) {
-                  res.status(403).send({
-                    message: 'a user already has that email address or username'
-                  });
-                } else {
-                  updateUser(req, res, user);
-                }
-              })
-              .catch(error => res.status(400).send({
-                message: error.message
-              }));
+    const userData = {
+      username: req.body.username,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      newPassword: req.body.newPassword,
+      currentPassword: req.body.currentPassword,
+      confirmPassword: req.body.confirmPassword,
+      roleId: req.body.roleId,
+      email: req.body.email
+    };
+    const validation = Validator.validateUserEdit(userData);
+    if (validation.isValid) {
+      if (req.userId === parseInt(req.params.id, 10)) {
+        User
+          .findById(req.params.id)
+          .then((user) => {
+            if (!user) {
+              res.status(404).send({
+                message: 'user not found'
+              });
             } else {
-              updateUser(req, res, user);
+              if (userData.newPassword) {
+                auth.comparePassword(
+                  userData.currentPassword, user.password
+                );
+              }
+              if (userData.email || userData.username) {
+                User.find({
+                  where: {
+                    $or: [{
+                      email: req.body.email,
+                    }, {
+                      username: req.body.username
+                    }]
+                  }
+                })
+                .then((conflictingUser) => {
+                  if (conflictingUser) {
+                    res.status(403).send({
+                      message:
+                        'a user already has that email address or username'
+                    });
+                  } else {
+                    confirmRole(req, res, user);
+                  }
+                })
+                .catch(error => res.status(500).send({
+                  message: error.message
+                }));
+              } else {
+                confirmRole(req, res, user);
+              }
             }
-          }
-        })
-        .catch((error) => {
-          let status = 400;
-          if (error.message === 'invalid password') {
-            status = 403;
-          }
-          res.status(status).send({
-            message: error.message
+          })
+          .catch((error) => {
+            let status = 500;
+            if (error.message === 'invalid password') {
+              status = 403;
+            }
+            res.status(status).send({
+              message: error.message
+            });
           });
+      } else {
+        res.status(403).send({
+          message: 'only a user can edit his details'
         });
+      }
     } else {
-      res.status(403).send({
-        message: 'only a user can edit his details'
+      res.status(400).send({
+        message: getValidatorErrorMessage(validation.errors)
       });
     }
   },

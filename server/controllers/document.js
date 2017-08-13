@@ -1,8 +1,16 @@
+import _ from 'lodash';
 import Models from '../models';
+import Validator from '../utils/Validator';
 
 const User = Models.User;
 const Document = Models.Document;
 const Role = Models.Role;
+
+const getValidatorErrorMessage = (errors) => {
+  return _.reduce(errors, (result, error) => {
+    return `${error}\n${result}`;
+  }, '');
+};
 
 const filterDocument = document => ({
   id: document.id,
@@ -42,7 +50,16 @@ const deleteDocument = (document, req, res) => {
 
 const documentController = {
   create: (req, res) => {
-    Document
+    const documentData = {
+      title: req.body.title,
+      content: req.body.content,
+      ownerId: req.userId,
+      accessId: req.body.accessId
+    };
+
+    const validation = Validator.validateNewDocument(documentData);
+    if (validation.isValid) {
+      Document
       .findOne({
         where: {
           title: req.body.title
@@ -55,12 +72,7 @@ const documentController = {
           });
         } else {
           Document
-            .create({
-              title: req.body.title,
-              content: req.body.content,
-              ownerId: req.userId,
-              accessId: req.body.accessId
-            })
+            .create(documentData)
             .then((newDocument) => {
               res.status(201).send({
                 document: filterDocument(newDocument)
@@ -76,6 +88,11 @@ const documentController = {
       .catch(error => res.status(500).send({
         message: error.message
       }));
+    } else {
+      res.status(400).send({
+        message: getValidatorErrorMessage(validation.errors)
+      });
+    }
   },
   fetchAll: (req, res) => {
     const query = {};
@@ -201,7 +218,14 @@ const documentController = {
       }));
   },
   update: (req, res) => {
-    Document
+    const documentData = {
+      title: req.body.title,
+      content: req.body.content
+    };
+
+    const validation = Validator.validateDocumentEdit(documentData);
+    if (validation.isValid) {
+      Document
       .findById(req.params.id)
       .then((document) => {
         if (!document) {
@@ -288,6 +312,11 @@ const documentController = {
       .catch(error => res.status(500).send({
         message: error.message
       }));
+    } else {
+      res.status(400).send({
+        message: getValidatorErrorMessage(validation.errors)
+      });
+    }
   },
   delete: (req, res) => {
     Document
