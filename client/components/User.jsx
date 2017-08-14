@@ -7,7 +7,7 @@ import UsersActions from '../actions/UsersActions';
 
 const { getUser, deleteUser } = UsersActions;
 
-class User extends React.Component {
+export class User extends React.Component {
   constructor(props) {
     super(props);
     this.isDelete = false;
@@ -46,7 +46,12 @@ class User extends React.Component {
           <Icon name="user" color="blue" />
           {this.props.role}
           <div className="right floated">
-            <Icon name="trash" color="blue" onClick={this.deleteUser} />
+            <Icon
+              className="deleteUser"
+              name="trash"
+              color="blue"
+              onClick={this.deleteUser}
+            />
           </div>
         </Card.Content>
       </Card>
