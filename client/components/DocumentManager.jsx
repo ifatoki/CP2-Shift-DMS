@@ -24,7 +24,7 @@ toastr.options = {
   timeOut: 2000
 };
 
-class DocumentManager extends React.Component {
+export class DocumentManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -151,23 +151,12 @@ class DocumentManager extends React.Component {
   render() {
     const { accessId } = this.state;
     return (
-      <div className="ui longer fullscreen document modal">
+      <div className="ui longer fullscreen document modal documentManager">
         <div className="header">
           <div className="ui container">
             {this.props.createNew ?
             'Create your document here' :
             this.state.title}
-            <textarea
-              style={{
-                display: this.state.accessMode === editModes.WRITE ?
-                  'block' : 'none'
-              }}
-              rows="1"
-              placeholder="Title"
-              name="title"
-              onChange={this.onChange}
-              value={this.state.title}
-            />
           </div>
         </div>
         <div

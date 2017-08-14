@@ -25,7 +25,7 @@ toastr.options = {
   timeOut: 2000
 };
 
-class HomeContainer extends React.Component {
+export class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -180,7 +180,10 @@ class HomeContainer extends React.Component {
     const role = this.props.user.role.charAt(0).toUpperCase()
       + this.props.user.role.slice(1);
     return (
-      <div style={{ height: '100%' }} >
+      <div
+        className="homeContainer"
+        style={{ height: '100%' }}
+      >
         <DocumentManager
           createNew={this.state.createNewDocument}
         />

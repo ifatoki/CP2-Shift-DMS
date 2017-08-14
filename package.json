@@ -33,6 +33,9 @@
     },
     "unmockedModulePathPatterns": [
       "react"
+    ],
+    "setupFiles": [
+      "<rootDir>/test-globals.js"
     ]
   },
   "repository": {

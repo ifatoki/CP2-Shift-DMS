@@ -5,10 +5,10 @@ import { withRouter, Route, Redirect } from 'react-router';
 import LandingContainer from './LandingContainer';
 import HomeContainer from './HomeContainer';
 
-class App extends Component {
+export class App extends Component {
   render() {
     return (
-      <div style={{ height: '100%' }} >
+      <div className="app" style={{ height: '100%' }} >
         <Route
           exact path="/" component={
             this.props.isAuthenticated ?

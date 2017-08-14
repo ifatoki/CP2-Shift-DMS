@@ -19,11 +19,12 @@ const normalizeUsers = (roles, users) => {
   return myUsers;
 };
 
-const UserList = (props) => {
+export const UserList = (props) => {
   const users = normalizeUsers(props.roles, props.users);
   return (
     <div
-      className="ui divided items" style={{
+      className="ui divided items userList"
+      style={{
         paddingTop: '10px',
         marginTop: '0px',
         overflowY: 'scroll',
