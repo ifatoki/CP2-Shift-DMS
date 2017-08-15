@@ -2,7 +2,7 @@ global.$ = () => ({
   tabs: () => null,
   attr: () => null,
   sideNav: () => null,
-  modal: () => null,
+  modal: () => {},
   parallax: () => null,
   show: () => null,
   hide: () => null,
@@ -18,12 +18,13 @@ global.tinymce = {
   }
 };
 
-// global.e = {
-//   target: {
-//     name: 'input',
-//     value: 'input'
-//   }
-// };
+global.e = {
+  target: {
+    name: 'input',
+    value: 'input'
+  },
+  preventDefault: () => null
+};
 
 // global._ = {
 //   forEach: () => null

@@ -198,6 +198,7 @@ export class HomeContainer extends React.Component {
                   margin: 'auto', cursor: 'pointer'
                 }}
                 role="button"
+                name="newDocument"
                 onClick={this.initializeNewDocument}
               >
                 <i className="file text icon blue" />
@@ -205,6 +206,7 @@ export class HomeContainer extends React.Component {
               </i>
               <i
                 className="big icons"
+                name="showUserProfile"
                 style={{
                   margin: '10px', cursor: 'pointer'
                 }}
