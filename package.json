@@ -14,12 +14,25 @@
     "build": "rimraf ./dist && babel ./server -d ./dist --copy-files"
   },
   "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "reporter": [
+      "lcov",
+      "text",
+      "html"
+    ],
+    "include": [
+      "server/"
+    ],
+    "sourceMap": false,
+    "instrument": false,
     "exclude": [
-      "**/*.spec.js",
-      "server/server.js",
-      "server/models/index.js",
-      "build"
-    ]
+      "server/seeders",
+      "server/migrations",
+      "server/test"
+    ],
+    "all": true
   },
   "jest": {
     "moduleFileExtensions": [
