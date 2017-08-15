@@ -1,23 +1,15 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
-import thunk from 'redux-thunk';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
 import { HomeContainer } from '../../containers/HomeContainer';
-import reducers from '../../__mocks__/reducers';
 import homeProps from '../../__mocks__/homeProps';
 
 describe('Single Document Page', () => {
-  const logUserOut = jest.fn(() => Promise.resolve(true));
-  const fetchDocuments = jest.fn(() => Promise.resolve(true));
-  const fetchAllRoles = jest.fn(() => Promise.resolve(true));
-  const fetchAllUsers = jest.fn(() => Promise.resolve(true));
-  const getUser = jest.fn(() => Promise.resolve(true));
-  const store = createStore(
-    reducers,
-    [thunk]
-  );
+  const logUserOut = sinon.stub();
+  const fetchDocuments = sinon.stub();
+  const fetchAllRoles = sinon.stub();
+  const fetchAllUsers = sinon.stub();
+  const getUser = sinon.stub();
 
   const props = {
     logUserOut,
@@ -35,20 +27,12 @@ describe('Single Document Page', () => {
   const showUserProfileSpy = sinon.spy(
       HomeContainer.prototype, 'showUserProfile');
   const logOutSpy = sinon.spy(HomeContainer.prototype, 'logOut');
-
-  // const wrapper = mount(
-  //   <Provider store={store}>
-  //     <HomeContainer
-  //       {...props}
-  //     />
-  //   </Provider>,
-  // );
-
   const wrapper = shallow(
     <HomeContainer
       {...props}
     />
-  )
+  );
+
   it('renders', () => {
     expect(wrapper.find('.homeContainer'))
       .toHaveLength(1);
@@ -64,8 +48,25 @@ describe('Single Document Page', () => {
           target: {
             name: 'input'
           }
-         });
+        });
       expect(documentTypeChangeSpy.called)
+        .toBeTruthy();
+      expect(fetchDocuments.calledOnce)
+        .toBeTruthy();
+    });
+    it('should call fetchAllRoles and fetchAllUsers when users gets clicked',
+    () => {
+      wrapper.find('a[name="users"]')
+        .simulate('click', {
+          preventDefault: () => {
+          },
+          target: {
+            name: 'users'
+          }
+        });
+      expect(fetchAllRoles.calledOnce)
+        .toBeTruthy();
+      expect(fetchAllUsers.calledOnce)
         .toBeTruthy();
     });
     it('should call the onChange method when the text \
@@ -108,9 +109,28 @@ describe('Single Document Page', () => {
       wrapper.setProps({
         documentsUpdated: true,
         documentsType: 'american'
-      }, () => {
-        expect(wrapper.state('type')).toBe('american');
       });
+      expect(wrapper.state('type')).toBe('american');
+    });
+    it('should call fetchDocuments when previous props is savingDocument and current props is documentSaved', () => {
+      let initialCallCount = fetchDocuments.callCount;
+      wrapper.setProps({
+        savingDocument: true
+      });
+      wrapper.setProps({
+        documentSaved: true
+      });
+      expect(fetchDocuments.callCount === (initialCallCount += 1));
+    });
+    it('should call fetchDocuments when previous props is documentDeleting and current props is documentDeleted', () => {
+      let initialCallCount = fetchDocuments.callCount;
+      wrapper.setProps({
+        documentDeleting: true
+      });
+      wrapper.setProps({
+        documentDeleted: true
+      });
+      expect(fetchDocuments.callCount === (initialCallCount += 1));
     });
   });
 });

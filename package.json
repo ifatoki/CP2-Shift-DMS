@@ -6,7 +6,7 @@
   "scripts": {
     "test-seed-all": "cross-env NODE_ENV=test sequelize db:seed:undo:all && cross-env NODE_ENV=test sequelize db:seed:all",
     "test-server": "cross-env NODE_ENV=test nyc mocha --compilers js:babel-register --recursive ./server/test --timeout 90000",
-    "test-client": "cross-env NODE_ENV=test jest --coverage client/",
+    "test-client": "cross-env NODE_ENV=test jest",
     "test": "npm run test-server && npm run test-client",
     "dev": "nodemon --watch server ./server/bin/www --exec babel-node",
     "prestart": "npm run build",
@@ -26,6 +26,11 @@
       "es6",
       "js",
       "jsx"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/server/utils/",
+      "/test-globals.js"
     ],
     "collectCoverage": true,
     "transform": {

@@ -67,12 +67,11 @@ describe('Single Document Page', () => {
       wrapper.setProps({
         roles,
         createNew: true
-      }, () => {
-        expect(wrapper.state('roles')[1]).toEqual({
-          key: roles[1].id,
-          text: roles[1].title,
-          value: roles[1].id
-        });
+      });
+      expect(wrapper.state('roles')[1]).toEqual({
+        key: roles[1].id,
+        text: roles[1].title,
+        value: roles[1].id
       });
     });
   });
