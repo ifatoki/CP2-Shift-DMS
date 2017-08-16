@@ -5,6 +5,7 @@ import _ from 'lodash';
 import configureMockStore from 'redux-mock-store';
 import ActionTypes from '../../actions/ActionTypes';
 import UsersActions from '../../actions/UsersActions';
+import localStorage from '../../__mocks__/localStorage';
 
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
@@ -17,6 +18,7 @@ describe('User Actions', () => {
   afterEach(() => {
     moxios.uninstall();
   });
+  window.localStorage = localStorage;
   const password = faker.internet.password();
   const user = {
     password,
@@ -38,7 +40,7 @@ describe('User Actions', () => {
 
   describe('Create Document Action', () => {
     it('creates documents', (done) => {
-      moxios.stubRequest('api/v1/users', {
+      moxios.stubRequest('/api/v1/users', {
         status: 201,
         response: {
           user
@@ -50,9 +52,31 @@ describe('User Actions', () => {
         expect(store.getActions()[0].type)
           .toEqual(ActionTypes.SIGNUP_REQUEST);
         expect(store.getActions()[1].type)
+          .toEqual(ActionTypes.ADD_USER);
+        expect(store.getActions()[2].type)
           .toEqual(ActionTypes.SIGNUP_SUCCESSFUL);
         expect(store.getActions()[1].payload)
           .toEqual(user);
+      });
+      done();
+    });
+
+    it('sign user up failed', (done) => {
+      moxios.stubRequest('/api/v1/users', {
+        status: 500,
+        response: {
+          message: 'server error'
+        }
+      });
+      const store = mockStore({});
+      store.dispatch(UsersActions.signUserUp(user))
+      .catch(() => {
+        expect(store.getActions()[0].type)
+          .toEqual(ActionTypes.SIGNUP_REQUEST);
+        expect(store.getActions()[1].type)
+          .toEqual(ActionTypes.SIGNUP_FAILED);
+        expect(store.getActions()[1].payload)
+          .toEqual('server error');
       });
       done();
     });
@@ -71,6 +95,89 @@ describe('User Actions', () => {
         .toEqual(ActionTypes.SIGNUP_FAILED);
       expect(store.getActions()[1].payload)
         .toEqual('password is required<br/>email is required<br/>');
+    });
+  });
+
+  describe('user sign in', () => {
+    const token = faker.random.alphaNumeric(16);
+    it('signs the user in', (done) => {
+      moxios.stubRequest('api/v1/users/login', {
+        status: 200,
+        response: {
+          user,
+          token
+        }
+      });
+      const store = mockStore({});
+      store.dispatch(UsersActions.logUserIn({
+        username: 'itunuworks',
+        password: 'itunuworks'
+      }))
+      .then(() => {
+        expect(store.getActions()[0].type)
+          .toEqual(ActionTypes.LOGIN_REQUEST);
+        expect(store.getActions()[1].type)
+          .toEqual(ActionTypes.ADD_USER);
+        expect(store.getActions()[1].payload)
+          .toEqual(user);
+        expect(store.getActions()[2].type)
+          .toEqual(ActionTypes.LOGIN_SUCCESSFUL);
+      });
+      done();
+    });
+    it('signs the user in', (done) => {
+      moxios.stubRequest('api/v1/users/login', {
+        status: 401,
+        response: {
+          message: 'invalid password'
+        }
+      });
+      const store = mockStore({});
+      store.dispatch(UsersActions.logUserIn({
+        username: 'itunuworks',
+        password: 'itunu'
+      }))
+      .catch((error) => {
+        expect(store.getActions()[0].type)
+          .toEqual(ActionTypes.LOGIN_REQUEST);
+        expect(store.getActions()[1].type)
+          .toEqual(ActionTypes.LOGIN_FAILED);
+        expect(store.getActions()[1].payload)
+          .toEqual('invalid password');
+        done(error);
+      });
+      done();
+    });
+    it('signs the user in', () => {
+      const store = mockStore({});
+      store.dispatch(UsersActions.logUserIn({
+        username: 'itunuworks'
+      }));
+      expect(store.getActions()[0].type)
+        .toEqual(ActionTypes.LOGIN_REQUEST);
+      expect(store.getActions()[1].type)
+        .toEqual(ActionTypes.LOGIN_FAILED);
+      expect(store.getActions()[1].payload)
+        .toEqual('password is required<br/>');
+    });
+  });
+
+  describe('user log out', () => {
+    it('log the user out', (done) => {
+      moxios.stubRequest('/api/v1/users/logout', {
+        status: 200
+      });
+      const store = mockStore({});
+      store.dispatch(UsersActions.logUserOut())
+      .then(() => {
+        expect(store.getActions()[0].type)
+          .toEqual(ActionTypes.LOGOUT_REQUEST);
+        expect(store.getActions()[1].type)
+          .toEqual(ActionTypes.REMOVE_USER);
+        expect(store.getActions()[2].type)
+          .toEqual(ActionTypes.LOGOUT_SUCCESSFUL);
+      });
+      done();
     });
   });
 
@@ -125,7 +232,7 @@ describe('User Actions', () => {
     });
 
     it('dispatch error action if theres any error', (done) => {
-      moxios.stubRequest('api/users/3000000', {
+      moxios.stubRequest('api/v1/users/3000000', {
         status: 404,
         response: {
           message: 'user not found'
@@ -133,7 +240,7 @@ describe('User Actions', () => {
       });
       const store = mockStore({});
       store.dispatch(UsersActions.getUser(3000000))
-      .then(() => {
+      .catch(() => {
         expect(store.getActions()[1].type)
           .toEqual(ActionTypes.USER_GET_FAILED);
         expect(store.getActions()[1].payload).toEqual({
@@ -165,7 +272,7 @@ describe('User Actions', () => {
     });
 
     it('dispatch error action if theres any error', (done) => {
-      moxios.stubRequest('api/v1/USERs/3000000', {
+      moxios.stubRequest('api/v1/users/3000000', {
         status: 404,
         response: {
           message: 'user not found'
@@ -173,12 +280,71 @@ describe('User Actions', () => {
       });
       const store = mockStore({});
       store.dispatch(UsersActions.modifyUser(3000000, errorUser))
-      .then(() => {
+      .catch(() => {
         expect(store.getActions()[1].type)
           .toEqual(ActionTypes.USER_MODIFY_FAILED);
         expect(store.getActions()[1].payload).toEqual(
           'user not found'
         );
+      });
+      done();
+    });
+
+    it('should fail modifying user', () => {
+      const store = mockStore({});
+      store.dispatch(UsersActions.modifyUser(errorUser.id, {
+        ...errorUser, email: ''
+      }));
+      expect(store.getActions()[1].type)
+        .toEqual(ActionTypes.USER_MODIFY_FAILED);
+      expect(store.getActions()[1].payload).toEqual(
+        'email is required<br/>'
+      );
+    });
+  });
+
+  describe('Fetch Roles', () => {
+    const roles = _.map([2, 3, 4, 5], (roleId) => {
+      return {
+        roleId,
+        title: faker.company.bsNoun,
+        description: faker.company.catchPhrase
+      };
+    });
+    it('should fetch all roles', (done) => {
+      moxios.stubRequest('/api/v1/roles/', {
+        status: 200,
+        response: {
+          roles
+        }
+      });
+
+      const store = mockStore({});
+      store.dispatch(UsersActions.fetchAllRoles())
+      .then(() => {
+        expect(store.getActions()[0].type)
+          .toEqual(ActionTypes.FETCH_ROLES_REQUEST);
+        expect(store.getActions()[1].payload)
+          .toEqual(roles);
+      });
+      done();
+    });
+
+    it('should fail fetching roles', (done) => {
+      moxios.stubRequest('/api/v1/roles/', {
+        status: 500,
+        response: {
+          message: 'server error'
+        }
+      });
+
+      const store = mockStore({});
+      store.dispatch(UsersActions.fetchAllRoles())
+      .catch(() => {
+        expect(store.getActions()[0].type)
+          .toEqual(ActionTypes.FETCH_ROLES_REQUEST);
+        expect(store.getActions()[1].payload)
+          .toEqual('server error');
       });
       done();
     });

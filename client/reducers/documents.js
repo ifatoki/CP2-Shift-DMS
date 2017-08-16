@@ -1,23 +1,7 @@
 import ActionTypes from '../actions/ActionTypes';
+import { documentsDefaultState } from '../reducers/initialStates'
 
-const defaultState = {
-  currentDocument: null,
-  currentRightId: 3,
-  documents: [],
-  currentDocumentUpdated: false,
-  currentDocumentModified: false,
-  documentsUpdated: false,
-  documentSaved: false,
-  documentsSearchResult: {},
-  documentsSearchResultUpdated: false,
-  savingDocument: false,
-  currentDocumentModifying: false,
-  documentDeleting: false,
-  documentDeleted: false,
-  currentDocumentErrorMessage: ''
-};
-
-function documents(state = defaultState, action) {
+function documents(state = documentsDefaultState, action) {
   switch (action.type) {
   case ActionTypes.DOCUMENTS_FETCH_REQUEST:
     return {

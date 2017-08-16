@@ -116,7 +116,7 @@ describe('Document Actions', () => {
     });
 
     it('dispatch error action if theres any error', (done) => {
-      moxios.stubRequest('api/documents/3000000', {
+      moxios.stubRequest('api/v1/documents/3000000', {
         status: 404,
         response: {
           message: 'document not found'
@@ -124,7 +124,7 @@ describe('Document Actions', () => {
       });
       const store = mockStore({});
       store.dispatch(DocumentActions.getDocument(3000000))
-      .then(() => {
+      .catch(() => {
         expect(store.getActions()[1].type)
           .toEqual(ActionTypes.DOCUMENT_GET_FAILED);
         expect(store.getActions()[1].payload).toEqual({
@@ -197,20 +197,20 @@ describe('Document Actions', () => {
     });
 
     it('dispatch error action if theres any error', (done) => {
-      moxios.stubRequest('api/documents/3000000', {
+      moxios.stubRequest('api/v1/documents/3000000', {
         status: 404,
         response: {
           message: 'document not found'
         }
       });
       const store = mockStore({});
-      store.dispatch(DocumentActions.deleteDocument(3000000, errorDocument))
-      .then(() => {
+      store.dispatch(DocumentActions.deleteDocument('3000000', errorDocument))
+      .catch(() => {
         expect(store.getActions()[1].type)
           .toEqual(ActionTypes.DOCUMENT_DELETE_FAILED);
-        expect(store.getActions()[1].payload).toEqual({
-          message: 'document not found'
-        });
+        expect(store.getActions()[1].payload).toEqual(
+          'document not found'
+        );
       });
       done();
     });
@@ -242,5 +242,12 @@ describe('Document Actions', () => {
       });
       done();
     });
+  });
+
+  it('cancels an ongoing document edit/view', () => {
+    const store = mockStore({});
+    store.dispatch(DocumentActions.cancelNewDocument());
+    expect(store.getActions()[0].type)
+    .toEqual(ActionTypes.DOCUMENT_CANCELLED);
   });
 });

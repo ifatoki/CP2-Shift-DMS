@@ -193,7 +193,7 @@ const UsersActions = {
       dispatch(requestLogin(userdata.username));
       if (validation.isValid) {
         return axios
-          .post('/api/v1/users/login', userdata, config)
+          .post('api/v1/users/login', userdata, config)
           .then((response) => {
             dispatch(
               UsersActions.setTokenToLocalStorage(
@@ -218,11 +218,7 @@ const UsersActions = {
         .then(() => {
           dispatch(removeUser());
           dispatch(logoutSuccessful());
-        })
-        .catch((error) => {
-          dispatch(logoutFailed(error.response.data.message));
-        }
-      );
+        });
     };
   },
 
