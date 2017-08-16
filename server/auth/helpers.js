@@ -2,6 +2,12 @@ import bcrypt from 'bcryptjs';
 import localAuth from './local';
 import { User } from '../models';
 
+/**
+ * @function encrypt
+ *
+ * @param {any} password
+ * @returns {string|null} The encrypted password or null for an error
+ */
 const encrypt = (password) => {
   const salt = bcrypt.genSaltSync();
   if (password) {
@@ -10,6 +16,14 @@ const encrypt = (password) => {
   return null;
 };
 
+/**
+ * @function comparePassword
+ *
+ * @param {any} userPassword
+ * @param {any} databasePassword
+ * @returns {true} when the passwords passed match
+ * @throws {Error} when there is no match
+ */
 const comparePassword = (userPassword, databasePassword) => {
   try {
     const match = bcrypt.compareSync(userPassword, databasePassword);
@@ -20,6 +34,14 @@ const comparePassword = (userPassword, databasePassword) => {
   }
 };
 
+/**
+ * @function confirmAuthentication
+ *
+ * @param {any} req
+ * @param {any} res
+ * @param {any} next
+ * @returns {json} the response object
+ */
 const confirmAuthentication = (req, res, next) => {
   if (!(req.headers && req.headers.authorization)) {
     return res.status(401).json({
@@ -55,7 +77,7 @@ const confirmAuthentication = (req, res, next) => {
         });
     }
     if (status) {
-      return res.status(status).json({
+      return res.status(status).send({
         status: statusMessage
       });
     }

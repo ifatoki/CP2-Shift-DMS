@@ -1,5 +1,14 @@
 const User = require('../../models').User;
 
+/**
+ * @function confirmUserDetails
+ *
+ * @param {any} req
+ * @param {any} res
+ * @param {any} next
+ * @returns {void}
+ * @throws {Error}
+ */
 function confirmUserDetails(req, res, next) {
   User
     .findOne({
