@@ -107,6 +107,9 @@ export class HomeContainer extends React.Component {
               createNewDocument: false,
               currentDocumentUpdated: false
             });
+          },
+          onShow: () => {
+            $('.ui.document.modal').modal('refresh');
           }
         })
         .modal('show');

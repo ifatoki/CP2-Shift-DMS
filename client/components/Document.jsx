@@ -31,20 +31,19 @@ export class Document extends React.Component {
   render() {
     return (
       <Card className="singleDocument" onClick={this.clickHander}>
-        <Card.Content>
+        <div className="ui content" style={{ paddingBottom: 0 }}>
           <Card.Header>
             {this.props.title}
           </Card.Header>
           <Card.Meta>
             Created <Timeago datetime={this.props.created} />
           </Card.Meta>
-          <Card.Description>
+          <div className="description" style={{ height: '80px', overflowY: 'scroll' }}>
             { ReactHtmlParser(this.props.content) }
-          </Card.Description>
-        </Card.Content>
+          </div>
+        </div>
         <Card.Content extra>
           <Icon name="user" color="blue" />
-          @itunuworks
           <div className="right floated">
             <Icon className="deleteDocument" name="trash" color="blue" onClick={this.deleteDocument} />
           </div>

@@ -231,10 +231,12 @@ export class DocumentManager extends React.Component {
           </div>
           <div
             id="contentHolder"
+            className="scrolling content"
             style={{
               display: this.state.accessMode === editModes.READ ?
                 'block' : 'none',
-              height: '500px'
+              height: '500px',
+              overflowY: 'scroll'
             }}
           >
             { ReactHtmlParser(this.state.content) }
