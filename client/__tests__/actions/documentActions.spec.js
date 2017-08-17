@@ -50,7 +50,7 @@ describe('Document Actions', () => {
       done();
     });
 
-    it('dispatch error action if theres any error', () => {
+    it('dispatches error action when errors occur', () => {
       moxios.stubRequest('api/v1/documents', {
         status: 400,
         response: {
@@ -68,14 +68,12 @@ describe('Document Actions', () => {
   });
 
   describe('fetch all documents action', () => {
-    const documents = _.map([1, 2, 3], (id) => {
-      return {
-        id,
-        title: faker.company.catchPhrase(),
-        content: faker.lorem.paragraph(2)
-      };
-    });
-    it('fetches documents', (done) => {
+    const documents = _.map([1, 2, 3], id => ({
+      id,
+      title: faker.company.catchPhrase(),
+      content: faker.lorem.paragraph(2)
+    }));
+    it('fetches documents and returns', (done) => {
       moxios.stubRequest('api/v1/documents', {
         status: 200,
         response: {
@@ -97,7 +95,7 @@ describe('Document Actions', () => {
   });
 
   describe('get single document', () => {
-    it('gets a single document from db', (done) => {
+    it('gets the requested document from the database', (done) => {
       moxios.stubRequest(`api/v1/documents/${document.id}`, {
         status: 200,
         response: { document }
@@ -115,7 +113,7 @@ describe('Document Actions', () => {
       done();
     });
 
-    it('dispatch error action if theres any error', (done) => {
+    it('dispatch error when incvalid document is requested', (done) => {
       moxios.stubRequest('api/v1/documents/3000000', {
         status: 404,
         response: {
@@ -136,7 +134,7 @@ describe('Document Actions', () => {
   });
 
   describe('Update Documents', () => {
-    it('dispatch error action if theres any error', (done) => {
+    it('modifies and return modified document on success', (done) => {
       moxios.stubRequest(`api/v1/documents/${document.id}`, {
         status: 200,
         response: {
@@ -155,7 +153,7 @@ describe('Document Actions', () => {
       done();
     });
 
-    it('dispatch error action if theres any error', (done) => {
+    it('dispatches error for invalid document', (done) => {
       moxios.stubRequest('api/v1/documents/3000000', {
         status: 404,
         response: {
@@ -196,7 +194,7 @@ describe('Document Actions', () => {
       done();
     });
 
-    it('dispatch error action if theres any error', (done) => {
+    it('dispatches error for invalid documents', (done) => {
       moxios.stubRequest('api/v1/documents/3000000', {
         status: 404,
         response: {
@@ -217,7 +215,7 @@ describe('Document Actions', () => {
   });
 
   describe('Search documents', () => {
-    it('returns data if matching documents are found', (done) => {
+    it('returns matching documents', (done) => {
       moxios.stubRequest('api/v1/search/documents?q=hello', {
         status: 200,
         response: {

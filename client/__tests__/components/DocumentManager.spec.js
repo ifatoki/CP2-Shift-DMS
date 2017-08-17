@@ -29,8 +29,6 @@ describe('Single Document Page', () => {
   };
 
   const onChangeSpy = sinon.spy(DocumentManager.prototype, 'onChange');
-  const radioButtonChangeSpy = sinon.spy(DocumentManager.prototype,
-    'handleRadioButtonChange');
   const saveDocumentSpy = sinon.spy(DocumentManager.prototype, 'saveDocument');
   const editDocumentSpy = sinon.spy(DocumentManager.prototype, 'editDocument');
   const cancelDocumentSpy = sinon.spy(DocumentManager.prototype,
@@ -42,26 +40,19 @@ describe('Single Document Page', () => {
     />
   );
 
-  it('renders', () => {
+  it('renders the documentManager element successfully', () => {
     expect(wrapper.find('.documentManager'))
       .toHaveLength(1);
   });
 
   describe('Class Methods', () => {
-    it('should call the onChange method when the Document \
-    types in firstname field', () => {
+    it('should call the onChange method when user types' +
+    'in firstname field', () => {
       wrapper.find('textarea[name="title"]')
         .simulate('change');
       expect(onChangeSpy.called)
         .toBeTruthy();
     });
-    // it('should call the handleChange method when the checkbox\
-    // selection changes', () => {
-    //   wrapper.find('input[value="2"]')
-    //     .simulate('change');
-    //   expect(radioButtonChangeSpy.called)
-    //     .toBeTruthy();
-    // });
     it('should call the saveDocument method when save is clicked', () => {
       wrapper.find('.save.button')
         .simulate('click');

@@ -27,7 +27,7 @@ describe('Single User Page', () => {
     />
   );
 
-  it('renders', () => {
+  it('renders a Card successully', () => {
     expect(wrapper.find('Card'))
       .toHaveLength(1);
   });

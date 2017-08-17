@@ -27,14 +27,14 @@ describe('Single Document Page', () => {
     />
   );
 
-  it('renders', () => {
+  it('renders successfully with only one landingContainer class', () => {
     expect(wrapper.find('.landingContainer'))
       .toHaveLength(1);
   });
 
   describe('Class Methods', () => {
-    it('should call the onChange method when the text \
-    in firstname field changes', () => {
+    it('should call the onChange method when the text' +
+    'in firstname field changes', () => {
       wrapper.find('input[name="firstname"]')
         .simulate('change');
       expect(onChangeSpy.called)

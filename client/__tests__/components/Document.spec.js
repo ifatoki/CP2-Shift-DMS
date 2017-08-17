@@ -24,13 +24,14 @@ describe('Single Document Page', () => {
     />
   );
 
-  it('renders', () => {
+  it('renders successfully showing one Card', () => {
     expect(wrapper.find('Card'))
       .toHaveLength(1);
   });
 
   describe('Class Methods', () => {
-    it('search for matching documents when a user starts typing', () => {
+    it('calls the deleteDocument method when the delete Icon is clicked',
+    () => {
       const spy = sinon.spy(Document.prototype, 'deleteDocument');
       const shallowWrapper = mount(
         <Document

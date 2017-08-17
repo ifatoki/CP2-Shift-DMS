@@ -6,13 +6,11 @@ import { documentsDefaultState } from '../../reducers/initialStates';
 
 describe('Documents Reducer', () => {
   describe('fetch documents', () => {
-    const fetchedDocuments = _.map([1, 2, 3, 4], (id) => {
-      return {
-        id,
-        title: faker.company.catchPhrase(),
-        content: faker.lorem.paragraph(2),
-      };
-    });
+    const fetchedDocuments = _.map([1, 2, 3, 4], id => ({
+      id,
+      title: faker.company.catchPhrase(),
+      content: faker.lorem.paragraph(2)
+    }));
 
     it('should reset the error message and initialize documents updating',
     () => {
@@ -86,8 +84,8 @@ describe('Documents Reducer', () => {
       expect(newState.currentDocumentModifying).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset currentDocumentModifying to false',
-    () => {
+    it('should set the document saved to currentDocument and reset ' +
+    'currentDocumentModifying to false', () => {
       const action = {
         type: ActionTypes.DOCUMENT_MODIFY_SUCCESSFUL,
         payload: document
@@ -103,8 +101,8 @@ describe('Documents Reducer', () => {
       expect(newState.currentDocumentModified).toBeTruthy();
       expect(newState.currentDocument).toEqual(document);
     });
-    it('should set the error message and reset currentDocumentModifying to false',
-    () => {
+    it('should set the error message and reset currentDocumentModifying' +
+    'to false', () => {
       const action = {
         type: ActionTypes.DOCUMENT_MODIFY_FAILED,
         payload: 'document title is invalid'
@@ -122,12 +120,6 @@ describe('Documents Reducer', () => {
     });
   });
   describe('delete document', () => {
-    const document = {
-      id: 4,
-      title: faker.company.catchPhrase(),
-      content: faker.lorem.paragraph(2),
-    };
-
     it('should reset the error message and initialize documentDeleting',
     () => {
       const action = {
@@ -142,8 +134,8 @@ describe('Documents Reducer', () => {
       expect(newState.documentDeleting).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset documentDeleting to false',
-    () => {
+    it('should set the document saved to currentDocument and reset' +
+    'documentDeleting to false', () => {
       const action = {
         type: ActionTypes.DOCUMENT_DELETE_SUCCESSFUL
       };
@@ -196,8 +188,8 @@ describe('Documents Reducer', () => {
       expect(newState.savingDocument).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset savingDocument to false',
-    () => {
+    it('should set the document saved to currentDocument and reset' +
+    'savingDocument to false', () => {
       const action = {
         type: ActionTypes.DOCUMENT_SAVE_SUCCESSFUL,
         payload: {
@@ -234,7 +226,7 @@ describe('Documents Reducer', () => {
       expect(newState.currentDocumentErrorMessage).toEqual(action.payload);
     });
   });
-  describe('save document', () => {
+  describe('get document', () => {
     const document = {
       id: 4,
       title: faker.company.catchPhrase(),
@@ -255,8 +247,8 @@ describe('Documents Reducer', () => {
       expect(newState.currentDocumentUpdating).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset currentDocumentUpdating to false',
-    () => {
+    it('should set the document saved to currentDocument and reset' +
+    'currentDocumentUpdating to false', () => {
       const action = {
         type: ActionTypes.DOCUMENT_GET_SUCCESSFUL,
         payload: {
@@ -275,8 +267,8 @@ describe('Documents Reducer', () => {
       expect(newState.currentDocumentUpdated).toBeTruthy();
       expect(newState.currentDocument).toEqual(action.payload.document);
     });
-    it('should set the error message and reset currentDocumentUpdating to false',
-    () => {
+    it('should set the error message and reset currentDocumentUpdating' +
+    'to false', () => {
       const action = {
         type: ActionTypes.DOCUMENT_GET_FAILED,
         payload: 'document title is invalid'
@@ -294,16 +286,14 @@ describe('Documents Reducer', () => {
     });
   });
   describe('search document', () => {
-    const searchedDocuments = _.map([1, 2, 3, 4], (id) => {
-      return {
-        id,
-        title: faker.company.catchPhrase(),
-        content: faker.lorem.paragraph(2),
-      };
-    });
+    const searchedDocuments = _.map([1, 2, 3, 4], id => ({
+      id,
+      title: faker.company.catchPhrase(),
+      content: faker.lorem.paragraph(2),
+    }));
 
-    it('should reset the error message and initialize documentsSearchResultUpdating',
-    () => {
+    it('should reset the error message and initialize' +
+    'documentsSearchResultUpdating', () => {
       const action = {
         type: ActionTypes.DOCUMENTS_SEARCH_REQUEST,
       };
@@ -316,8 +306,8 @@ describe('Documents Reducer', () => {
       expect(newState.documentsSearchResultUpdating).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset documentsSearchResultUpdating to false',
-    () => {
+    it('should set the document saved to currentDocument and reset' +
+    'documentsSearchResultUpdating to false', () => {
       const action = {
         type: ActionTypes.DOCUMENTS_SEARCH_SUCCESSFUL,
         payload: {
@@ -334,8 +324,8 @@ describe('Documents Reducer', () => {
       expect(newState.documentsSearchResultUpdating).toBeFalsy();
       expect(newState.documentsSearchResultUpdated).toBeTruthy();
     });
-    it('should set the error message and reset documentsSearchResultUpdating to false',
-    () => {
+    it('should set the error message and reset documentsSearchResultUpdating' +
+    'to false', () => {
       const action = {
         type: ActionTypes.DOCUMENTS_SEARCH_FAILED,
         payload: 'search failed'
@@ -353,8 +343,7 @@ describe('Documents Reducer', () => {
     });
   });
   describe('document cancel', () => {
-    it('should set the error message and reset document state',
-    () => {
+    it('should set the error message and reset document state', () => {
       const action = {
         type: ActionTypes.DOCUMENT_CANCELLED,
         payload: 'search failed'
@@ -376,8 +365,7 @@ describe('Documents Reducer', () => {
     });
   });
   describe('default action', () => {
-    it('return the state as it is',
-    () => {
+    it('return the state as it is', () => {
       const action = {
         type: ActionTypes.DOCUMENT_DOCUMENT_DEFAULT
       };

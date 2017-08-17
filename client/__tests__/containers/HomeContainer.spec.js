@@ -22,8 +22,6 @@ describe('Single Document Page', () => {
 
   const documentTypeChangeSpy = sinon.spy(
       HomeContainer.prototype, 'handleDocumentTypeChange');
-  const initializeNewDocumentSpy = sinon.spy(
-      HomeContainer.prototype, 'initializeNewDocument');
   const showUserProfileSpy = sinon.spy(
       HomeContainer.prototype, 'showUserProfile');
   const logOutSpy = sinon.spy(HomeContainer.prototype, 'logOut');
@@ -39,8 +37,8 @@ describe('Single Document Page', () => {
   });
 
   describe('Class Methods', () => {
-    it('should call the onChange method when the text \
-    in firstname field changes', () => {
+    it('should change the document type when the document links are clicked',
+    () => {
       wrapper.find('a[name="private"]')
         .simulate('click', {
           preventDefault: () => {
@@ -69,8 +67,8 @@ describe('Single Document Page', () => {
       expect(fetchAllUsers.calledOnce)
         .toBeTruthy();
     });
-    it('should call the onChange method when the text \
-    in firstname field changes', () => {
+    it('should call the documentTypeChange function when user is clicked',
+    () => {
       wrapper.find('a[name="users"]')
         .simulate('click', {
           preventDefault: () => {},
@@ -81,19 +79,19 @@ describe('Single Document Page', () => {
       expect(documentTypeChangeSpy.called)
         .toBeTruthy();
     });
-    it('should call the onLoginSubmit method when login is clicked', () => {
+    it('should call the logOut function when logout button is clicked', () => {
       wrapper.find('a[name="logout"]')
-        .simulate('click', {
-          preventDefault: () => {
-          },
-          target: {
-            name: 'input',
-          }
-         });
+          .simulate('click', {
+            preventDefault: () => {
+            },
+            target: {
+              name: 'input',
+            }
+          });
       expect(logOutSpy.called)
         .toBeTruthy();
     });
-    it('should call the signUp method when signup is clicked', () => {
+    it('should call the showUserProfile method when icon is clicked', () => {
       wrapper.find('i[name="showUserProfile"]')
         .simulate('click', {
           preventDefault: () => {
@@ -101,7 +99,7 @@ describe('Single Document Page', () => {
           target: {
             name: 'input',
           }
-         });
+        });
       expect(showUserProfileSpy.called)
         .toBeTruthy();
     });
@@ -112,7 +110,8 @@ describe('Single Document Page', () => {
       });
       expect(wrapper.state('type')).toBe('american');
     });
-    it('should call fetchDocuments when previous props is savingDocument and current props is documentSaved', () => {
+    it('should call fetchDocuments when previous props is savingDocument' +
+    'and current props is documentSaved', () => {
       let initialCallCount = fetchDocuments.callCount;
       wrapper.setProps({
         savingDocument: true
@@ -122,7 +121,8 @@ describe('Single Document Page', () => {
       });
       expect(fetchDocuments.callCount === (initialCallCount += 1));
     });
-    it('should call fetchDocuments when previous props is documentDeleting and current props is documentDeleted', () => {
+    it('should call fetchDocuments when previous props is documentDeleting' +
+    'and current props is documentDeleted', () => {
       let initialCallCount = fetchDocuments.callCount;
       wrapper.setProps({
         documentDeleting: true

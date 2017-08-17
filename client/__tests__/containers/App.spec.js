@@ -13,20 +13,8 @@ describe('Single Document Page', () => {
     />
   );
 
-  it('should render successfully', () => {
+  it('should render successfully showing 1 app class item', () => {
     expect(wrapper.find('.app'))
       .toHaveLength(1);
   });
-  // it('should render the homeContainer when isAuthenticated is true', () => {
-  //   expect(wrapper.find('HomeContainer'))
-  //     .toHaveLength(1);
-  // });
-  // it('should update state when props are modified', () => {
-  //   wrapper.setProps({
-  //     isAuthenticated: false
-  //   }, () => {
-  //     expect(wrapper.find('LandingContainer'))
-  //       .toHaveLength(1);
-  //   });
-  // });
 });

@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import faker from 'faker';
 import sinon from 'sinon';
 import { UserManager } from '../../components/UserManager';
 
@@ -19,7 +18,8 @@ describe('Single User Page', () => {
   };
 
   const onChangeSpy = sinon.spy(UserManager.prototype, 'onChange');
-  const selectionChangeSpy = sinon.spy(UserManager.prototype, 'handleSelectionChange');
+  const selectionChangeSpy = sinon.spy(
+    UserManager.prototype, 'handleSelectionChange');
   const saveUserSpy = sinon.spy(UserManager.prototype, 'saveUser');
   const editUserSpy = sinon.spy(UserManager.prototype, 'editUser');
   const cancelUserSpy = sinon.spy(UserManager.prototype, 'cancelUser');
@@ -43,8 +43,8 @@ describe('Single User Page', () => {
       expect(onChangeSpy.called)
         .toBeTruthy();
     });
-    it('should call the handleChange method when the checkbox\
-    selection changes', () => {
+    it('should call the handleChange method when the checkbox' +
+    'selection changes', () => {
       wrapper.find('input[type="checkbox"]')
         .simulate('change');
       expect(selectionChangeSpy.called)

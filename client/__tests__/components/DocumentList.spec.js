@@ -15,13 +15,13 @@ describe('Single User Page', () => {
     />
   );
 
-  it('renders', () => {
+  it('renders successfully having one documentList class item', () => {
     expect(wrapper.find('.documentList'))
       .toHaveLength(1);
   });
 
   describe('Class Methods', () => {
-    it('search for matching Users when a user starts typing', () => {
+    it('loads all the documents in props.documents', () => {
       const shallowWrapper = shallow(
         <DocumentList {...props} />
       );

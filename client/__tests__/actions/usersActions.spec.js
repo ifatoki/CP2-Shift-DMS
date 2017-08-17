@@ -39,7 +39,7 @@ describe('User Actions', () => {
   };
 
   describe('Create Document Action', () => {
-    it('creates documents', (done) => {
+    it('creates and returns created document', (done) => {
       moxios.stubRequest('/api/v1/users', {
         status: 201,
         response: {
@@ -61,7 +61,7 @@ describe('User Actions', () => {
       done();
     });
 
-    it('sign user up failed', (done) => {
+    it('dispatches error on sign user up failed', (done) => {
       moxios.stubRequest('/api/v1/users', {
         status: 500,
         response: {
@@ -81,7 +81,7 @@ describe('User Actions', () => {
       done();
     });
 
-    it('dispatch error action if theres any error', () => {
+    it('dispatch error when title is not specified', () => {
       moxios.stubRequest('api/v1/users', {
         status: 400,
         response: {
@@ -100,7 +100,7 @@ describe('User Actions', () => {
 
   describe('user sign in', () => {
     const token = faker.random.alphaNumeric(16);
-    it('signs the user in', (done) => {
+    it('signs the user in and returns user and token', (done) => {
       moxios.stubRequest('api/v1/users/login', {
         status: 200,
         response: {
@@ -125,7 +125,7 @@ describe('User Actions', () => {
       });
       done();
     });
-    it('signs the user in', (done) => {
+    it('dispatches error when user password is invalid', (done) => {
       moxios.stubRequest('api/v1/users/login', {
         status: 401,
         response: {
@@ -148,7 +148,7 @@ describe('User Actions', () => {
       });
       done();
     });
-    it('signs the user in', () => {
+    it('dispatches error when user password is not entered', () => {
       const store = mockStore({});
       store.dispatch(UsersActions.logUserIn({
         username: 'itunuworks'
@@ -163,7 +163,7 @@ describe('User Actions', () => {
   });
 
   describe('user log out', () => {
-    it('log the user out', (done) => {
+    it('logs the user out', (done) => {
       moxios.stubRequest('/api/v1/users/logout', {
         status: 200
       });
@@ -181,17 +181,15 @@ describe('User Actions', () => {
     });
   });
 
-  describe('fetch all documents action', () => {
-    const users = _.map([1, 2, 3], (id) => {
-      return {
-        id,
-        email: faker.internet.email(),
-        username: faker.internet.userName(),
-        firstname: faker.name.firstName(),
-        lastname: faker.name.lastName()
-      };
-    });
-    it('fetches documents', (done) => {
+  describe('fetch all users action', () => {
+    const users = _.map([1, 2, 3], id => ({
+      id,
+      email: faker.internet.email(),
+      username: faker.internet.userName(),
+      firstname: faker.name.firstName(),
+      lastname: faker.name.lastName()
+    }));
+    it('fetches users', (done) => {
       moxios.stubRequest('api/v1/users', {
         status: 200,
         response: {
@@ -212,8 +210,8 @@ describe('User Actions', () => {
     });
   });
 
-  describe('get single document', () => {
-    it('gets a single document from db', (done) => {
+  describe('get single user', () => {
+    it('gets the specified user from database', (done) => {
       moxios.stubRequest(`api/v1/users/${user.id}`, {
         status: 200,
         response: { user }
@@ -231,7 +229,7 @@ describe('User Actions', () => {
       done();
     });
 
-    it('dispatch error action if theres any error', (done) => {
+    it('dispatches error action if invalid user is requested', (done) => {
       moxios.stubRequest('api/v1/users/3000000', {
         status: 404,
         response: {
@@ -251,8 +249,8 @@ describe('User Actions', () => {
     });
   });
 
-  describe('Update Documents', () => {
-    it('dispatch error action if theres any error', (done) => {
+  describe('Update User profile', () => {
+    it('returns the new user profile on success', (done) => {
       moxios.stubRequest(`api/v1/users/${user.id}`, {
         status: 200,
         response: {
@@ -271,7 +269,7 @@ describe('User Actions', () => {
       done();
     });
 
-    it('dispatch error action if theres any error', (done) => {
+    it('dispatchs error when invalid user is modified', (done) => {
       moxios.stubRequest('api/v1/users/3000000', {
         status: 404,
         response: {
@@ -290,7 +288,8 @@ describe('User Actions', () => {
       done();
     });
 
-    it('should fail modifying user', () => {
+    it('should fail modifying user when email field is edited but yet blank',
+    () => {
       const store = mockStore({});
       store.dispatch(UsersActions.modifyUser(errorUser.id, {
         ...errorUser, email: ''
@@ -304,13 +303,11 @@ describe('User Actions', () => {
   });
 
   describe('Fetch Roles', () => {
-    const roles = _.map([2, 3, 4, 5], (roleId) => {
-      return {
-        roleId,
-        title: faker.company.bsNoun,
-        description: faker.company.catchPhrase
-      };
-    });
+    const roles = _.map([2, 3, 4, 5], id => ({
+      id,
+      title: faker.company.bsNoun,
+      description: faker.company.catchPhrase
+    }));
     it('should fetch all roles', (done) => {
       moxios.stubRequest('/api/v1/roles/', {
         status: 200,
@@ -330,7 +327,7 @@ describe('User Actions', () => {
       done();
     });
 
-    it('should fail fetching roles', (done) => {
+    it('should return error message when fetch fails', (done) => {
       moxios.stubRequest('/api/v1/roles/', {
         status: 500,
         response: {
@@ -351,7 +348,7 @@ describe('User Actions', () => {
   });
 
   describe('Delete Documents', () => {
-    it('deletes a single document', (done) => {
+    it('deletes a single document and returns success message', (done) => {
       moxios.stubRequest('api/v1/users/1', {
         status: 200,
         response: {
@@ -371,7 +368,7 @@ describe('User Actions', () => {
       done();
     });
 
-    it('dispatch error action if theres any error', (done) => {
+    it('dispatches error when invalid user is requested deleted', (done) => {
       moxios.stubRequest('api/users/3000000', {
         status: 404,
         response: {
@@ -392,7 +389,7 @@ describe('User Actions', () => {
   });
 
   describe('Search documents', () => {
-    it('returns data if matching documents are found', () => {
+    it('returns users if matching users are found', () => {
       const store = mockStore({});
       store.dispatch(UsersActions.cancelUser());
       expect(store.getActions()[0].type)
