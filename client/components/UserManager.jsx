@@ -169,14 +169,14 @@ export class UserManager extends React.Component {
               </Form.Group>
               <Form.Group widths="equal">
                 <Form.Input
-                  label="First name"
+                  label="Username"
                   placeholder="Username"
                   name="username"
                   value={`@${this.state.username}`}
                   onChange={this.onChange}
                 />
                 <Form.Input
-                  label="Last name"
+                  label="Email"
                   placeholder="Email"
                   name="email"
                   value={this.state.email}
