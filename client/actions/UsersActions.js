@@ -1,6 +1,5 @@
 import axios from 'axios';
 import _ from 'lodash';
-import store from '../client';
 import ActionTypes from './ActionTypes';
 import Validator from '../../server/utils/Validator';
 
@@ -138,20 +137,20 @@ const UsersActions = {
   setTokenToLocalStorage(user, token) {
     window.localStorage.setItem('token', token);
     window.localStorage.setItem('user', JSON.stringify(user));
-    UsersActions.addUser(user, token);
+    return UsersActions.addUser(user, token);
   },
 
-  addUser(user, token) {
+  addUser(user, token, callback) {
     axios.defaults.headers.common.Authorization = `bearer ${token}`;
     if (Object.keys(user).length < 3) {
       axios.get(`/api/v1/users/${user.id}`)
       .then(response => (
-        store.dispatch({
+        callback({
           type: ActionTypes.ADD_USER,
           payload: response.data.user
         })));
     } else {
-      store.dispatch({
+      return ({
         type: ActionTypes.ADD_USER,
         payload: user
       });
@@ -172,10 +171,10 @@ const UsersActions = {
         return axios
           .post('/api/v1/users', userdata, config)
           .then((response) => {
-            UsersActions.setTokenToLocalStorage(
+            dispatch(UsersActions.setTokenToLocalStorage(
               response.data.user,
               response.data.token
-            );
+            ));
             dispatch(signupSuccessful());
           })
           .catch((error) => {
@@ -194,12 +193,13 @@ const UsersActions = {
       dispatch(requestLogin(userdata.username));
       if (validation.isValid) {
         return axios
-          .post('/api/v1/users/login', userdata, config)
+          .post('api/v1/users/login', userdata, config)
           .then((response) => {
-            UsersActions.setTokenToLocalStorage(
-              response.data.user,
-              response.data.token
-            );
+            dispatch(
+              UsersActions.setTokenToLocalStorage(
+                response.data.user,
+                response.data.token
+              ));
             dispatch(loginSuccessful());
           })
           .catch((error) => {
@@ -218,11 +218,7 @@ const UsersActions = {
         .then(() => {
           dispatch(removeUser());
           dispatch(logoutSuccessful());
-        })
-        .catch((error) => {
-          dispatch(logoutFailed(error.response.data.message));
-        }
-      );
+        });
     };
   },
 

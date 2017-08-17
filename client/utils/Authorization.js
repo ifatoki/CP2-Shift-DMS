@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import UsersActions from '../actions/UsersActions';
+import store from '../client';
 
 const { addUser } = UsersActions;
 
@@ -21,6 +22,8 @@ export default class Authorization {
 
   static setUser(user, token) {
     window.localStorage.setItem('user', user);
-    addUser(user, token);
+    addUser(user, token, (action) => {
+      store.dispatch(action);
+    });
   }
 }

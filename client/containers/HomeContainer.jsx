@@ -25,7 +25,7 @@ toastr.options = {
   timeOut: 2000
 };
 
-class HomeContainer extends React.Component {
+export class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -107,6 +107,9 @@ class HomeContainer extends React.Component {
               createNewDocument: false,
               currentDocumentUpdated: false
             });
+          },
+          onShow: () => {
+            $('.ui.document.modal').modal('refresh');
           }
         })
         .modal('show');
@@ -180,7 +183,10 @@ class HomeContainer extends React.Component {
     const role = this.props.user.role.charAt(0).toUpperCase()
       + this.props.user.role.slice(1);
     return (
-      <div style={{ height: '100%' }} >
+      <div
+        className="homeContainer"
+        style={{ height: '100%' }}
+      >
         <DocumentManager
           createNew={this.state.createNewDocument}
         />
@@ -195,6 +201,7 @@ class HomeContainer extends React.Component {
                   margin: 'auto', cursor: 'pointer'
                 }}
                 role="button"
+                name="newDocument"
                 onClick={this.initializeNewDocument}
               >
                 <i className="file text icon blue" />
@@ -202,6 +209,7 @@ class HomeContainer extends React.Component {
               </i>
               <i
                 className="big icons"
+                name="showUserProfile"
                 style={{
                   margin: '10px', cursor: 'pointer'
                 }}

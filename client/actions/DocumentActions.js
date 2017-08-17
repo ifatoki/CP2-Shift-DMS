@@ -201,7 +201,6 @@ const DocumentActions = {
     return (dispatch) => {
       dispatch(DocumentActions.documentSaveRequest());
       if (validation.isValid) {
-        dispatch(DocumentActions.documentSaveRequest());
         return axios
           .post('api/v1/documents', documentData, config)
           .then((response) => {
@@ -224,7 +223,6 @@ const DocumentActions = {
     return (dispatch) => {
       dispatch(DocumentActions.documentModifyRequest());
       if (validation.isValid) {
-        dispatch(DocumentActions.documentModifyRequest());
         return axios
           .put(`api/v1/documents/${documentId}`, documentData, config)
           .then((response) => {

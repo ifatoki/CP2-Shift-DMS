@@ -6,7 +6,7 @@ import DocumentActions from '../actions/DocumentActions';
 
 const { searchDocuments, getDocument } = DocumentActions;
 
-class SearchComponent extends Component {
+export class SearchComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -54,7 +54,7 @@ class SearchComponent extends Component {
     const { isLoading, value, results } = this.state;
 
     return (
-      <Grid>
+      <Grid className="searchComponent">
         <Grid.Column width={8}>
           <Search
             category

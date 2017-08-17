@@ -4,9 +4,10 @@ import { Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Document from './Document';
 
-const DocumentList = props => (
+export const DocumentList = props => (
   <div
-    className="ui divided items" style={{
+    className="ui divided items documentList"
+    style={{
       paddingTop: '10px',
       marginTop: '0px',
       overflowY: 'scroll',

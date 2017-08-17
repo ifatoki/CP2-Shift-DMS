@@ -412,6 +412,50 @@ describe('routes : index', () => {
               done(err);
             });
         });
+      it('should return 403 error when username already exists',
+        (done) => {
+          request(app)
+            .post('/api/v1/users')
+            .type('form')
+            .send({
+              ...users.fellows,
+              username: 'itunuworks'
+            })
+            .then((res) => {
+              expect(res.status).to.equal(403);
+              expect(res.body)
+                .to.have.property('message')
+                .which.equals(
+                  'a user with that email or username already exists'
+                );
+              done();
+            })
+            .catch((err) => {
+              done(err);
+            });
+        });
+      it('should return 403 error when new overlord is requested created',
+        (done) => {
+          request(app)
+            .post('/api/v1/users')
+            .type('form')
+            .send({
+              ...users.fellows,
+              roleId: 1
+            })
+            .then((res) => {
+              expect(res.status).to.equal(403);
+              expect(res.body)
+                .to.have.property('message')
+                .which.equals(
+                  'overlord already exists'
+                );
+              done();
+            })
+            .catch((err) => {
+              done(err);
+            });
+        });
       it('should return the new user and a token when signup is successful',
       (done) => {
         request(app)

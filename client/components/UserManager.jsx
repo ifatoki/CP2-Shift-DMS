@@ -35,7 +35,7 @@ toastr.options = {
   timeOut: 2000
 };
 
-class UserManager extends React.Component {
+export class UserManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -132,7 +132,7 @@ class UserManager extends React.Component {
 
   render() {
     return (
-      <div className="ui user mini modal">
+      <div className="ui user mini modal userManager">
         <Modal.Header>
           {this.state.accessMode === editModes.WRITE ?
             'Make your changes here' :
@@ -151,6 +151,7 @@ class UserManager extends React.Component {
             <Form>
               <Form.Group widths="equal">
                 <Form.Input
+                  className="firstname"
                   label="First name"
                   placeholder="First name"
                   name="firstname"
@@ -158,6 +159,7 @@ class UserManager extends React.Component {
                   onChange={this.onChange}
                 />
                 <Form.Input
+                  id="lastname"
                   label="Last name"
                   placeholder="Last name"
                   name="lastname"

@@ -8,7 +8,7 @@ import UsersActions from '../actions/UsersActions';
 
 const { logUserIn, signUserUp, fetchAllRoles } = UsersActions;
 
-class LandingContainer extends React.Component {
+export class LandingContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,7 +65,12 @@ class LandingContainer extends React.Component {
 
   render() {
     return (
-      <div style={{ height: 'inherit', background: 'aliceblue' }}>
+      <div
+        className="landingContainer"
+        style={{
+          height: 'inherit', background: 'aliceblue'
+        }}
+      >
         <div className="ui middle aligned center aligned grid" style={{ height: 'inherit' }}>
           <div className="column" style={{ width: '400px' }}>
             <form className="ui form segment">
@@ -87,6 +92,7 @@ class LandingContainer extends React.Component {
               </div>
               <div
                 className="ui primary fluid submit button"
+                id="login"
                 name="login"
                 onClick={this.onLoginSubmit}
               >
@@ -130,6 +136,7 @@ class LandingContainer extends React.Component {
               </div>
               <div
                 className="ui primary fluid submit button"
+                id="signup"
                 name="signup"
                 onClick={this.onSignUpSubmit}
               >
