@@ -130,9 +130,9 @@ const DocumentActions = {
   },
 
   getErrorMessage(errors) {
-    return _.reduce(errors, (result, error) => {
-      return `${error}<br/>${result}`;
-    }, '');
+    return _.reduce(errors, (result, error) =>
+      `${error}<br/>${result}`
+    , '');
   },
 
   cancelNewDocument() {

@@ -7,6 +7,5 @@ const appReducer = combineReducers({
   documents
 });
 
-// const appReducer = userReducers;
 export default appReducer;
 

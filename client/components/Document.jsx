@@ -38,14 +38,21 @@ export class Document extends React.Component {
           <Card.Meta>
             Created <Timeago datetime={this.props.created} />
           </Card.Meta>
-          <div className="description" style={{ height: '80px', overflowY: 'scroll' }}>
+          <div
+            className="description"
+            style={{ height: '80px', overflowY: 'scroll' }}
+          >
             { ReactHtmlParser(this.props.content) }
           </div>
         </div>
         <Card.Content extra>
           <Icon name="user" color="blue" />
           <div className="right floated">
-            <Icon className="deleteDocument" name="trash" color="blue" onClick={this.deleteDocument} />
+            <Icon
+              className="deleteDocument"
+              name="trash" color="blue"
+              onClick={this.deleteDocument}
+            />
           </div>
         </Card.Content>
       </Card>

@@ -27,13 +27,10 @@ const store = createStore(
     applyMiddleware(...middleware)
   ));
 
-// console.log('localstorage: ', window.localStorage.user.id);
 if (window.localStorage.token) {
   Authorization.decodeToken(window.localStorage.token, (error, payload) => {
     if (!error) {
       Authorization.setUser(payload.sub, window.localStorage.token);
-    } else {
-      console.log(error);
     }
   });
 }

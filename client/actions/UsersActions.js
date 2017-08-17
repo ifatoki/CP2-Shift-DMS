@@ -51,11 +51,6 @@ const logoutSuccessful = () => ({
   type: ActionTypes.LOGOUT_SUCCESSFUL
 });
 
-const logoutFailed = payload => ({
-  type: ActionTypes.LOGOUT_FAILED,
-  payload
-});
-
 const fetchAllUsersRequest = () => ({
   type: ActionTypes.FETCH_USERS_REQUEST
 });
@@ -127,9 +122,9 @@ const userDeleteFailed = payload => ({
 });
 
 const getErrorMessage = (errors) => {
-  const errorMessage = _.reduce(errors, (result, error) => {
-    return `${error}<br/>${result}`;
-  }, '');
+  const errorMessage = _.reduce(errors, (result, error) =>
+    `${error}<br/>${result}`
+  , '');
   return errorMessage;
 };
 

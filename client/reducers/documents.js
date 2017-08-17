@@ -1,5 +1,5 @@
 import ActionTypes from '../actions/ActionTypes';
-import { documentsDefaultState } from '../reducers/initialStates'
+import { documentsDefaultState } from '../reducers/initialStates';
 
 function documents(state = documentsDefaultState, action) {
   switch (action.type) {

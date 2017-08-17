@@ -75,10 +75,6 @@ export class UserManager extends React.Component {
     }
   }
 
-  resetModal() {
-    this.setState(initialState);
-  }
-
   onChange(event) {
     event.preventDefault();
     this.setState({
@@ -88,6 +84,10 @@ export class UserManager extends React.Component {
           event.target.value,
       edited: true
     });
+  }
+
+  resetModal() {
+    this.setState(initialState);
   }
 
   handleSelectionChange(event, { checked }) {
@@ -186,7 +186,8 @@ export class UserManager extends React.Component {
               <Form.Checkbox
                 label="Change my password"
                 checked={this.state.changePassword}
-                onChange={this.handleSelectionChange} />
+                onChange={this.handleSelectionChange}
+              />
               <div
                 style={{
                   display:

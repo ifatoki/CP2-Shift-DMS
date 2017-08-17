@@ -35,13 +35,12 @@ export class LandingContainer extends React.Component {
       toastr.error(currentUserErrorMessage, 'Validation Error');
     }
     this.setState({
-      roles: _.reduce(roles, (accumulator, role) => {
-        return accumulator.concat({
+      roles: _.reduce(roles, (accumulator, role) =>
+        accumulator.concat({
           key: role.id,
           text: role.title,
           value: role.id
-        });
-      }, [])
+        }), [])
     });
   }
 
@@ -71,7 +70,10 @@ export class LandingContainer extends React.Component {
           height: 'inherit', background: 'aliceblue'
         }}
       >
-        <div className="ui middle aligned center aligned grid" style={{ height: 'inherit' }}>
+        <div
+          className="ui middle aligned center aligned grid"
+          style={{ height: 'inherit' }}
+        >
           <div className="column" style={{ width: '400px' }}>
             <form className="ui form segment">
               <p>Lets get you signed in</p>
@@ -88,7 +90,8 @@ export class LandingContainer extends React.Component {
                   placeholder="Password"
                   type="password"
                   name="password"
-                  onChange={this.onChange} />
+                  onChange={this.onChange}
+                />
               </div>
               <div
                 className="ui primary fluid submit button"
@@ -100,22 +103,45 @@ export class LandingContainer extends React.Component {
               </div>
             </form>
           </div>
-          <div className="column" style={{ width: '400px', verticalAlign: 'middle' }}>
+          <div
+            className="column"
+            style={{ width: '400px', verticalAlign: 'middle' }}
+          >
             <form className="ui form segment">
               <div className="field">
                 Create your account
               </div>
               <div className="field">
-                <input placeholder="First Name" name="firstname" type="text" onChange={this.onChange} />
+                <input
+                  placeholder="First Name"
+                  name="firstname"
+                  type="text"
+                  onChange={this.onChange}
+                />
               </div>
               <div className="field">
-                <input placeholder="Last Name" name="lastname" type="text" onChange={this.onChange} />
+                <input
+                  placeholder="Last Name"
+                  name="lastname"
+                  type="text"
+                  onChange={this.onChange}
+                />
               </div>
               <div className="field">
-                <input placeholder="Email Address" name="email" type="email" onChange={this.onChange} />
+                <input
+                  placeholder="Email Address"
+                  name="email"
+                  type="email"
+                  onChange={this.onChange}
+                />
               </div>
               <div className="field">
-                <input placeholder="Username" name="username" type="text" onChange={this.onChange} />
+                <input
+                  placeholder="Username"
+                  name="username"
+                  type="text"
+                  onChange={this.onChange}
+                />
               </div>
               <div className="field">
                 <Dropdown
@@ -128,10 +154,20 @@ export class LandingContainer extends React.Component {
               </div>
               <div className="two fields">
                 <div className="field">
-                  <input placeholder="Password" type="password" name="password" onChange={this.onChange} />
+                  <input
+                    placeholder="Password"
+                    type="password"
+                    name="password"
+                    onChange={this.onChange}
+                  />
                 </div>
                 <div className="field">
-                  <input placeholder="Confirm Password" type="password" name="confirmPassword" onChange={this.onChange} />
+                  <input
+                    placeholder="Confirm Password"
+                    type="password"
+                    name="confirmPassword"
+                    onChange={this.onChange}
+                  />
                 </div>
               </div>
               <div

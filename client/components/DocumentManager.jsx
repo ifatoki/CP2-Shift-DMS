@@ -66,9 +66,6 @@ export class DocumentManager extends React.Component {
             content: editor.getContent()
           });
         });
-        editor.on('dirty', () => {
-          console.log('Just got dirty. You may now enable save button');
-        });
       }
     });
   }
