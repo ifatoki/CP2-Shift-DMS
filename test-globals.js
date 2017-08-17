@@ -25,9 +25,3 @@ global.e = {
   },
   preventDefault: () => null
 };
-
-// global._ = {
-//   forEach: () => null
-// };
-
-// global.swal = () => Promise.resolve(true);

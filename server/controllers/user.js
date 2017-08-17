@@ -8,23 +8,21 @@ const localAuth = require('../auth/local');
 
 const filterUser = ({
   id, username, email, firstname, lastname, roleId, createdAt
-}) => {
-  return {
-    id,
-    username,
-    firstname,
-    lastname,
-    email,
-    roleId,
-    createdAt
-  };
-};
+}) => ({
+  id,
+  username,
+  firstname,
+  lastname,
+  email,
+  roleId,
+  createdAt
+});
 
-const getValidatorErrorMessage = (errors) => {
-  return _.reduce(errors, (result, error) => {
-    return `${error}\n${result}`;
-  }, '');
-};
+const getValidatorErrorMessage = errors => (
+  _.reduce(errors, (result, error) =>
+    `${error}\n${result}`
+  , '')
+);
 
 const updateUser = (req, res, user) => {
   user.update({
@@ -197,9 +195,9 @@ module.exports = {
               message: 'no users in database'
             });
           } else {
-            const filteredUsers = _.reduce(users, (accumulator, user) => {
-              return accumulator.concat(filterUser(user));
-            }, []);
+            const filteredUsers = _.reduce(users, (accumulator, user) =>
+              accumulator.concat(filterUser(user))
+            , []);
             res.status(200).send({
               users: filteredUsers
             });

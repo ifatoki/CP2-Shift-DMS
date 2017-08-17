@@ -4,7 +4,6 @@ import express from 'express';
 import authHelpers from '../../auth/helpers';
 import local from '../../auth/local';
 import app from '../../app';
-// process.env.NODE_ENV = 'test';
 
 const expect = chai.expect;
 

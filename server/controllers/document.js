@@ -6,11 +6,11 @@ const User = Models.User;
 const Document = Models.Document;
 const Role = Models.Role;
 
-const getValidatorErrorMessage = (errors) => {
-  return _.reduce(errors, (result, error) => {
-    return `${error}\n${result}`;
-  }, '');
-};
+const getValidatorErrorMessage = errors => (
+  _.reduce(errors, (result, error) =>
+    `${error}\n${result}`
+  , '')
+);
 
 const filterDocument = document => ({
   id: document.id,
