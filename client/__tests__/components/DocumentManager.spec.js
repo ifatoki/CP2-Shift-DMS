@@ -22,10 +22,13 @@ describe('Single Document Page', () => {
       firstname: faker.name.firstName(),
       lastname: faker.name.lastName(),
       result: '',
-      role: 'user'
+      role: 'user',
+      roleId: 1,
+      roles: []
     },
     rightId: 3,
-    currentDocument: {}
+    currentDocument: {},
+    currentDocumentRoles: []
   };
 
   const onChangeSpy = sinon.spy(DocumentManager.prototype, 'onChange');

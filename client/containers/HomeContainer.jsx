@@ -226,7 +226,7 @@ export class HomeContainer extends React.Component {
                   <Dropdown.Item
                     label={{ color: 'red', empty: true, circular: true }}
                     text="Logout"
-                    name="logout"
+                    id="logout"
                     onClick={this.logOut}
                   />
                 </Dropdown.Menu>
@@ -354,14 +354,6 @@ export class HomeContainer extends React.Component {
                   width={8}
                 >
                   <SearchComponent />
-                  <div className="ui category fluid search">
-                    <div className="ui icon fluid input">
-                      <input type="text" value="" tabIndex="0" className="prompt" autoComplete="off" />
-                    </div>
-                    <div className="results transition">
-
-                    </div>
-                  </div>
                 </Grid.Column>
               </Grid.Row>
             </Grid>

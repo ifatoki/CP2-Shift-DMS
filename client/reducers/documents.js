@@ -100,6 +100,7 @@ function documents(state = documentsDefaultState, action) {
     return {
       ...state,
       currentDocument: action.payload.document,
+      currentDocumentRoles: action.payload.documentRoles || [],
       currentRightId: action.payload.rightId,
       currentDocumentUpdated: true,
       currentDocumentUpdating: false,

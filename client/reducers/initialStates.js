@@ -14,6 +14,7 @@ const usersDefaultState = {
 const documentsDefaultState = {
   currentDocument: null,
   currentRightId: 3,
+  currentDocumentRoles: [],
   documents: [],
   currentDocumentUpdated: false,
   currentDocumentModified: false,

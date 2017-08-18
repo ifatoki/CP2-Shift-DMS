@@ -36,7 +36,7 @@ export class DocumentManager extends React.Component {
       rightId: 3, // Read access
       accessMode: this.props.createNew ?
        editModes.NEW : editModes.READ,
-      roles: {}
+      selectedRoles: []
     };
     this.onChange = this.onChange.bind(this);
     this.saveDocument = this.saveDocument.bind(this);
@@ -75,11 +75,14 @@ export class DocumentManager extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentDocument, createNew } = nextProps;
+    const {
+      currentDocument, createNew, currentDocumentRoles, rightId
+    } = nextProps;
 
     if (currentDocument || createNew) {
       this.setState({
-        rightId: nextProps.rightId,
+        rightId,
+        selectedRoles: currentDocumentRoles,
         accessMode: createNew ?
           editModes.NEW : editModes.READ,
       }, () => {
@@ -98,10 +101,7 @@ export class DocumentManager extends React.Component {
 
   onRolesChange(event, data) {
     this.setState({
-      roles: _.reduce(data.value, (cummulator, value) => {
-        cummulator[value] = 3;
-        return cummulator;
-      }, {})
+      selectedRoles: data.value
     });
   }
 
@@ -114,7 +114,14 @@ export class DocumentManager extends React.Component {
   }
 
   handleRadioButtonChange(event, { value }) {
-    this.setState({ accessId: parseInt(value, 10) });
+    if (value === 3) {
+      this.setState({ accessId: parseInt(value, 10) });
+    } else {
+      this.setState({
+        accessId: parseInt(value, 10),
+        selectedRoles: [this.props.user.roleId]
+      });
+    }
   }
 
   saveDocument(event) {
@@ -126,7 +133,10 @@ export class DocumentManager extends React.Component {
         content: this.state.content,
         ownerId: this.props.user.id,
         accessId: this.state.accessId,
-        roles: this.state.roles
+        roles: _.reduce(this.state.selectedRoles, (cummulator, value) => {
+          cummulator[value] = 3;
+          return cummulator;
+        }, {})
       });
     } else {
       const editData = {};
@@ -136,9 +146,16 @@ export class DocumentManager extends React.Component {
       if (this.state.content !== currentDocument.content) {
         editData.content = this.state.content;
       }
-      if (this.state.accessId !== currentDocument.accessId) {
+      if (this.state.accessId !== currentDocument.accessId ||
+        this.state.accessId === 3) {
         editData.accessId = this.state.accessId;
-        editData.roles = this.state.roles;
+        if (this.state.accessId === 3) {
+          editData.roles =
+            _.reduce(this.state.selectedRoles, (cummulator, value) => {
+              cummulator[value] = 3;
+              return cummulator;
+            }, {});
+        }
       }
       this.props.modifyDocument(currentDocument.id, editData);
     }
@@ -196,7 +213,8 @@ export class DocumentManager extends React.Component {
               className="two fields"
               style={{
                 display: this.props.user.role === 'overlord' ||
-                (this.props.currentDocument && this.props.user.id !== this.props.currentDocument.ownerId) ?
+                (this.props.currentDocument && (this.props.user.id !==
+                  this.props.currentDocument.ownerId)) ?
                   'none' : 'block'
               }}
             >
@@ -233,7 +251,12 @@ export class DocumentManager extends React.Component {
                 </Form.Field>
               </Form.Field>
               <Form.Field disabled={accessId !== 3} width={13}>
-                <RoleSearchComponent fluid roles={this.props.user.roles} onChange={this.onRolesChange} />
+                <RoleSearchComponent
+                  fluid
+                  roles={this.props.user.roles}
+                  onChange={this.onRolesChange}
+                  selectedRoles={this.state.selectedRoles}
+                />
               </Form.Field>
             </div>
             <div className="field">
@@ -311,16 +334,19 @@ DocumentManager.propTypes = {
   saveNewDocument: PropType.func.isRequired,
   user: PropType.shape({
     isAuthenticated: PropType.bool.isRequired,
+    roles: PropType.arrayOf(PropType.object).isRequired,
     id: PropType.number.isRequired,
     email: PropType.string.isRequired,
     username: PropType.string.isRequired,
     firstname: PropType.string.isRequired,
     lastname: PropType.string.isRequired,
     result: PropType.string.isRequired,
+    roleId: PropType.number.isRequired,
     role: PropType.string.isRequired
   }).isRequired,
   createNew: PropType.bool.isRequired,
   rightId: PropType.number.isRequired,
+  currentDocumentRoles: PropType.arrayOf(PropType.number).isRequired,
   currentDocument: PropType.shape({
     id: PropType.number,
     title: PropType.string,
@@ -345,7 +371,8 @@ const mapDispatchToProps = {
 const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,
-  rightId: state.documents.currentRightId
+  rightId: state.documents.currentRightId,
+  currentDocumentRoles: state.documents.currentDocumentRoles
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentManager);
