@@ -169,7 +169,8 @@ function documents(state = documentsDefaultState, action) {
       documentsUpdated: false,
       documentSaved: false,
       currentDocumentModified: false,
-      currentDocumentErrorMessage: ''
+      currentDocumentErrorMessage: '',
+      currentDocument: null
     };
   default:
     return state;

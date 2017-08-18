@@ -21,21 +21,6 @@ const filterDocument = document => ({
   accessId: document.accessId
 });
 
-const updateDocument = (document, req, res) => {
-  document.update({
-    title: req.body.title || document.title,
-    content: req.body.content || document.content,
-  })
-  .then((updatedDocument) => {
-    res.status(200).send({
-      document: filterDocument(updatedDocument)
-    });
-  })
-  .catch(error => res.status(500).send({
-    message: error.message
-  }));
-};
-
 const deleteDocument = (document, req, res) => {
   document.destroy({
     cascade: true
@@ -48,16 +33,113 @@ const deleteDocument = (document, req, res) => {
   }));
 };
 
+const addRolesToDocument = (req, res, newDocument, documentData) => {
+  Role
+  .findAll({
+    where: {
+      id: {
+        $and: {
+          $in: documentData.rolesIds,
+          $ne: 1
+        }
+      }
+    }
+  })
+  .then((roles) => {
+    _.map(roles, (role) => {
+      role.DocumentRole = {
+        rightId: documentData.roles[role.id]
+      };
+      return role;
+    });
+    if (roles.length) {
+      newDocument.setRoles(roles)
+      .then(() => {
+        res.status(201).send({
+          document: filterDocument(newDocument),
+          roles: _.map(roles, role => ({
+            id: role.id,
+            title: role.title
+          }))
+        });
+      })
+      .catch((error) => {
+        res.status(500).send({
+          message: error.message
+        });
+      });
+    } else {
+      res.status(201).send({
+        document: filterDocument(newDocument)
+      });
+    }
+  })
+  .catch((error) => {
+    res.status(500).send({
+      message: error.message
+    });
+  });
+};
+
+const updateDocument = (document, req, res) => {
+  const formerAccessId = document.accessId;
+  const documentData = {
+    title: req.body.title || document.title,
+    content: req.body.content || document.content,
+    accessId: req.body.accessId || document.accessId
+  };
+  if (req.body.roles) {
+    documentData.accessId =
+      Object.keys(req.body.roles).length ? 3 : req.body.accessId;
+    documentData.rolesIds = Object.keys(req.body.roles);
+    documentData.roles = req.body.roles;
+  }
+  document.update(documentData)
+  .then((updatedDocument) => {
+    console.log('At least I got here', updatedDocument);
+    console.log('and document', document);
+    if (updatedDocument.accessId === 3 &&
+      documentData.roles &&
+      documentData.rolesIds > 0
+    ) {
+      addRolesToDocument(req, res, updatedDocument, documentData);
+    } else if (formerAccessId === 3 && updatedDocument.accessId !== 3) {
+      console.log('i got in here');
+      updatedDocument.setRoles([])
+      .then(() => {
+        console.log('previous connects removed');
+        res.status(200).send({
+          document: filterDocument(updatedDocument)
+        });
+      })
+      .catch((err) => {
+        console.log('error', err);
+      });
+    } else {
+      res.status(200).send({
+        document: filterDocument(updatedDocument)
+      });
+    }
+  })
+  .catch(error => res.status(500).send({
+    message: error.message
+  }));
+};
+
 const documentController = {
   create: (req, res) => {
     const documentData = {
       title: req.body.title,
       content: req.body.content,
       ownerId: req.userId,
-      accessId: Object.keys(req.body.roles).length ? 3 : req.body.accessId,
-      rolesIds: Object.keys(req.body.roles),
-      roles: req.body.roles
+      accessId: req.body.accessId
     };
+    if (req.body.roles) {
+      documentData.accessId =
+        Object.keys(req.body.roles).length ? 3 : req.body.accessId;
+      documentData.rolesIds = Object.keys(req.body.roles);
+      documentData.roles = req.body.roles;
+    }
     const validation = Validator.validateNewDocument(documentData);
     if (validation.isValid) {
       Document
@@ -75,52 +157,8 @@ const documentController = {
           Document
             .create(documentData)
             .then((newDocument) => {
-              if (documentData.accessId === 3) {
-                Role
-                  .findAll({
-                    where: {
-                      id: {
-                        $and: {
-                          $in: documentData.rolesIds,
-                          $ne: 1
-                        }
-                      }
-                    }
-                  })
-                  .then((roles) => {
-                    _.map(roles, (role) => {
-                      role.DocumentRole = {
-                        rightId: documentData.roles[role.id]
-                      };
-                      return role;
-                    });
-                    if (roles.length) {
-                      newDocument.setRoles(roles)
-                      .then(() => {
-                        res.status(201).send({
-                          document: filterDocument(newDocument),
-                          roles: _.map(roles, role => ({
-                            id: role.id,
-                            title: role.title
-                          }))
-                        });
-                      })
-                      .catch((error) => {
-                        res.status(500).send({
-                          message: error.message
-                        });
-                      });
-                    } else {
-                      res.status(201).send({
-                        document: filterDocument(newDocument)
-                      });
-                    }
-                  })
-                  .catch((error) => {
-                    res.status(500).send({
-                      message: error.message
-                    });
-                  });
+              if (documentData.accessId === 3 && documentData.roles && documentData.rolesIds > 0) {
+                addRolesToDocument(req, res, newDocument, documentData);
               } else {
                 res.status(201).send({
                   document: filterDocument(newDocument)
@@ -269,7 +307,8 @@ const documentController = {
   update: (req, res) => {
     const documentData = {
       title: req.body.title,
-      content: req.body.content
+      content: req.body.content,
+      accessId: req.body.accessId
     };
 
     const validation = Validator.validateDocumentEdit(documentData);
@@ -545,6 +584,26 @@ const documentController = {
         message: error.message
       }));
   },
+  // addRole: (req, res) => {
+  //   Document
+  //     .findById(req.params.documentId)
+  //     .then((document) => {
+  //       User
+  //         .findById(req.userId)
+  //         .then((user) => {
+  //           document.addUser(user)
+  //           .then(res.status(200).send({
+  //             message: 'user added successfully'
+  //           }));
+  //         })
+  //         .catch(error => res.status(500).send({
+  //           message: error.message
+  //         }));
+  //     })
+  //     .catch(error => res.status(500).send({
+  //       message: error.message
+  //     }));
+  // },
   addUser: (req, res) => {
     Document
       .findById(req.params.documentId)

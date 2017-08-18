@@ -54,18 +54,15 @@ export class SearchComponent extends Component {
     const { isLoading, value, results } = this.state;
 
     return (
-      <Grid className="searchComponent">
-        <Grid.Column width={8}>
-          <Search
-            category
-            loading={isLoading}
-            onResultSelect={this.handleResultSelect}
-            onSearchChange={this.handleSearchChange}
-            results={results}
-            value={value}
-          />
-        </Grid.Column>
-      </Grid>
+      <Search
+        category
+        fluid
+        loading={isLoading}
+        onResultSelect={this.handleResultSelect}
+        onSearchChange={this.handleSearchChange}
+        results={results}
+        value={value}
+      />
     );
   }
 }

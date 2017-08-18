@@ -1,9 +1,11 @@
 import React from 'react';
 import PropType from 'prop-types';
 import toastr from 'toastr';
+import _ from 'lodash';
 import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
+import RoleSearchComponent from '../components/RoleSearchComponent';
 import DocumentActions from '../actions/DocumentActions';
 
 const {
@@ -33,13 +35,15 @@ export class DocumentManager extends React.Component {
       accessId: 2,
       rightId: 3, // Read access
       accessMode: this.props.createNew ?
-       editModes.NEW : editModes.READ
+       editModes.NEW : editModes.READ,
+      roles: {}
     };
     this.onChange = this.onChange.bind(this);
     this.saveDocument = this.saveDocument.bind(this);
     this.editDocument = this.editDocument.bind(this);
     this.handleRadioButtonChange = this.handleRadioButtonChange.bind(this);
     this.cancelNewDocument = this.cancelNewDocument.bind(this);
+    this.onRolesChange = this.onRolesChange.bind(this);
   }
 
   componentDidMount() {
@@ -92,6 +96,15 @@ export class DocumentManager extends React.Component {
     }
   }
 
+  onRolesChange(event, data) {
+    this.setState({
+      roles: _.reduce(data.value, (cummulator, value) => {
+        cummulator[value] = 3;
+        return cummulator;
+      }, {})
+    });
+  }
+
   onChange(event) {
     event.preventDefault();
     this.setState(event.target.name !== 'title' ?
@@ -112,7 +125,8 @@ export class DocumentManager extends React.Component {
         title: this.state.title,
         content: this.state.content,
         ownerId: this.props.user.id,
-        accessId: this.state.accessId
+        accessId: this.state.accessId,
+        roles: this.state.roles
       });
     } else {
       const editData = {};
@@ -124,6 +138,7 @@ export class DocumentManager extends React.Component {
       }
       if (this.state.accessId !== currentDocument.accessId) {
         editData.accessId = this.state.accessId;
+        editData.roles = this.state.roles;
       }
       this.props.modifyDocument(currentDocument.id, editData);
     }
@@ -180,7 +195,9 @@ export class DocumentManager extends React.Component {
             <div
               className="two fields"
               style={{
-                display: this.props.user.role === 'overlord' ? 'none' : 'block'
+                display: this.props.user.role === 'overlord' ||
+                (this.props.currentDocument && this.props.user.id !== this.props.currentDocument.ownerId) ?
+                  'none' : 'block'
               }}
             >
               <Form.Field width={3}>
@@ -216,7 +233,7 @@ export class DocumentManager extends React.Component {
                 </Form.Field>
               </Form.Field>
               <Form.Field disabled={accessId !== 3} width={13}>
-                <h1>Itunuloluwa</h1>
+                <RoleSearchComponent fluid roles={this.props.user.roles} onChange={this.onRolesChange} />
               </Form.Field>
             </div>
             <div className="field">

@@ -19,7 +19,7 @@ describe('Single Document Page', () => {
   );
 
   it('renders the searchComponent successfully', () => {
-    expect(wrapper.find('.searchComponent'))
+    expect(wrapper.find('Search'))
       .toHaveLength(1);
   });
 });

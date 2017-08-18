@@ -80,7 +80,7 @@ describe('Single Document Page', () => {
         .toBeTruthy();
     });
     it('should call the logOut function when logout button is clicked', () => {
-      wrapper.find('a[name="logout"]')
+      wrapper.find('div[name="logout"]')
           .simulate('click', {
             preventDefault: () => {
             },

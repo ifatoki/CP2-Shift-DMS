@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Dropdown } from 'semantic-ui-react';
 import toastr from 'toastr';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
@@ -46,8 +46,8 @@ export class HomeContainer extends React.Component {
       type = 'public';
     }
     this.props.fetchDocuments(this.props.user.id, type);
-    $('.ui.dropdown')
-      .dropdown();
+    // $('.ui.dropdown')
+    //   .dropdown();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -193,7 +193,6 @@ export class HomeContainer extends React.Component {
         <UserManager />
         <div className="ui large top fixed hidden secondary white menu">
           <div className="ui container">
-            <a className="active item" href="/document">Home</a>
             <div className="right menu">
               <i
                 className="big icons"
@@ -218,24 +217,20 @@ export class HomeContainer extends React.Component {
               >
                 <i className="user circle outline blue icon" />
               </i>
-              <div className="ui dropdown" style={{ margin: 'auto' }}>
-                <div className="text">
-                  @{this.props.user.username}
-                </div>
-                <i className="dropdown icon" />
-                <div className="menu">
-                  <div className="item">
-                    <a
-                      className="ui button"
-                      name="logout"
-                      onClick={this.logOut}
-                      role="button"
-                    >
-                      Log Out
-                    </a>
-                  </div>
-                </div>
-              </div>
+              <Dropdown
+                text={`@${this.props.user.username}`}
+                floating labeled button
+                style={{ margin: 'auto' }}
+              >
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    label={{ color: 'red', empty: true, circular: true }}
+                    text="Logout"
+                    name="logout"
+                    onClick={this.logOut}
+                  />
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
           </div>
         </div>
@@ -359,6 +354,14 @@ export class HomeContainer extends React.Component {
                   width={8}
                 >
                   <SearchComponent />
+                  <div className="ui category fluid search">
+                    <div className="ui icon fluid input">
+                      <input type="text" value="" tabIndex="0" className="prompt" autoComplete="off" />
+                    </div>
+                    <div className="results transition">
+
+                    </div>
+                  </div>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
