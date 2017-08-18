@@ -57,6 +57,7 @@ function users(state = initialState, action) {
       username: action.payload.username,
       firstname: action.payload.firstname,
       lastname: action.payload.lastname,
+      roleId: action.payload.roleId,
       role: action.payload.role,
       result: action.type,
       isAuthenticated: true,

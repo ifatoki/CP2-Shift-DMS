@@ -96,25 +96,21 @@ const updateDocument = (document, req, res) => {
   }
   document.update(documentData)
   .then((updatedDocument) => {
-    console.log('At least I got here', updatedDocument);
-    console.log('and document', document);
     if (updatedDocument.accessId === 3 &&
       documentData.roles &&
-      documentData.rolesIds > 0
+      documentData.rolesIds.length > 0
     ) {
       addRolesToDocument(req, res, updatedDocument, documentData);
     } else if (formerAccessId === 3 && updatedDocument.accessId !== 3) {
-      console.log('i got in here');
       updatedDocument.setRoles([])
       .then(() => {
-        console.log('previous connects removed');
         res.status(200).send({
           document: filterDocument(updatedDocument)
         });
       })
-      .catch((err) => {
-        console.log('error', err);
-      });
+      .catch(error => res.status(500).send({
+        message: error.message
+      }));
     } else {
       res.status(200).send({
         document: filterDocument(updatedDocument)
@@ -157,7 +153,10 @@ const documentController = {
           Document
             .create(documentData)
             .then((newDocument) => {
-              if (documentData.accessId === 3 && documentData.roles && documentData.rolesIds > 0) {
+              if (documentData.accessId === 3 &&
+                documentData.roles &&
+                documentData.rolesIds.length > 0
+              ) {
                 addRolesToDocument(req, res, newDocument, documentData);
               } else {
                 res.status(201).send({
@@ -255,7 +254,22 @@ const documentController = {
           const response = { document: filterDocument(document) };
           if (document.ownerId === req.userId) {
             response.rightId = 1;
-            res.status(200).send(response);
+            if (document.accessId === 3) {
+              document.getRoles({
+                joinTableAttributes: ['rightId']
+              })
+              .then((roles) => {
+                const documentRoles = _.map(
+                  roles, role => role.dataValues.id);
+                response.documentRoles = documentRoles;
+                res.status(200).send(response);
+              })
+              .catch(error => res.status(500).send({
+                message: error.message
+              }));
+            } else {
+              res.status(200).send(response);
+            }
           } else if (document.accessId === 2) {
             response.rightId = 3;
             res.status(200).send(response);
@@ -269,19 +283,21 @@ const documentController = {
             .then((user) => {
               if (user.length < 1) {
                 document.getRoles({
-                  where: {
-                    id: req.roleId
-                  },
                   joinTableAttributes: ['rightId']
                 })
-                .then((role) => {
-                  if (role.length < 1) {
+                .then((roles) => {
+                  if (roles.length < 1) {
                     res.status(401).send({
                       message: 'you are not authorized to access this document'
                     });
                   } else {
+                    const newRoles = _.map(roles, role => role.dataValues);
+                    const documentRoles = _.map(
+                      roles, role => role.dataValues.id);
+                    const userRole = _.find(newRoles, { 'id': req.roleId });
                     response.rightId =
-                      role[0].dataValues.DocumentRole.dataValues.rightId;
+                      userRole.DocumentRole.dataValues.rightId;
+                    response.documentRoles = documentRoles;
                     res.status(200).send(response);
                   }
                 })
