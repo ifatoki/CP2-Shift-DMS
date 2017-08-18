@@ -131,7 +131,10 @@ const getErrorMessage = (errors) => {
 const UsersActions = {
   setTokenToLocalStorage(user, token) {
     window.localStorage.setItem('token', token);
-    window.localStorage.setItem('user', JSON.stringify(user));
+    window.localStorage.setItem('user', JSON.stringify({
+      id: user.id,
+      username: user.username
+    }));
     return UsersActions.addUser(user, token);
   },
 

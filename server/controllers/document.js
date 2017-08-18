@@ -54,9 +54,10 @@ const documentController = {
       title: req.body.title,
       content: req.body.content,
       ownerId: req.userId,
-      accessId: req.body.accessId
+      accessId: Object.keys(req.body.roles).length ? 3 : req.body.accessId,
+      rolesIds: Object.keys(req.body.roles),
+      roles: req.body.roles
     };
-
     const validation = Validator.validateNewDocument(documentData);
     if (validation.isValid) {
       Document
@@ -74,9 +75,57 @@ const documentController = {
           Document
             .create(documentData)
             .then((newDocument) => {
-              res.status(201).send({
-                document: filterDocument(newDocument)
-              });
+              if (documentData.accessId === 3) {
+                Role
+                  .findAll({
+                    where: {
+                      id: {
+                        $and: {
+                          $in: documentData.rolesIds,
+                          $ne: 1
+                        }
+                      }
+                    }
+                  })
+                  .then((roles) => {
+                    _.map(roles, (role) => {
+                      role.DocumentRole = {
+                        rightId: documentData.roles[role.id]
+                      };
+                      return role;
+                    });
+                    if (roles.length) {
+                      newDocument.setRoles(roles)
+                      .then(() => {
+                        res.status(201).send({
+                          document: filterDocument(newDocument),
+                          roles: _.map(roles, role => ({
+                            id: role.id,
+                            title: role.title
+                          }))
+                        });
+                      })
+                      .catch((error) => {
+                        res.status(500).send({
+                          message: error.message
+                        });
+                      });
+                    } else {
+                      res.status(201).send({
+                        document: filterDocument(newDocument)
+                      });
+                    }
+                  })
+                  .catch((error) => {
+                    res.status(500).send({
+                      message: error.message
+                    });
+                  });
+              } else {
+                res.status(201).send({
+                  document: filterDocument(newDocument)
+                });
+              }
             })
             .catch((error) => {
               res.status(500).send({
