@@ -134,7 +134,9 @@ export class DocumentManager extends React.Component {
         ownerId: this.props.user.id,
         accessId: this.state.accessId,
         roles: _.reduce(this.state.selectedRoles, (cummulator, value) => {
-          cummulator[value] = 3;
+          if (value !== this.props.user.roleId) {
+            cummulator[value] = 3;
+          }
           return cummulator;
         }, {})
       });
@@ -182,7 +184,7 @@ export class DocumentManager extends React.Component {
     return (
       <div className="ui longer fullscreen document modal documentManager">
         <div className="header">
-          <div className="ui container">
+          <div className="ui container intro">
             {this.props.createNew ?
             'Create your document here' :
             this.state.title}
@@ -210,7 +212,7 @@ export class DocumentManager extends React.Component {
               />
             </div>
             <div
-              className="two fields"
+              className="two fields roleManagement"
               style={{
                 display: this.props.user.role === 'overlord' ||
                 (this.props.currentDocument && (this.props.user.id !==
@@ -222,6 +224,7 @@ export class DocumentManager extends React.Component {
                 <Form.Field>
                   <Checkbox
                     radio
+                    id="private"
                     label="Private"
                     name="accessRadioGroup"
                     checked={accessId === 1}
@@ -232,6 +235,7 @@ export class DocumentManager extends React.Component {
                 <Form.Field>
                   <Checkbox
                     radio
+                    id="public"
                     label="Public"
                     name="accessRadioGroup"
                     checked={accessId === 2}
@@ -242,6 +246,7 @@ export class DocumentManager extends React.Component {
                 <Form.Field>
                   <Checkbox
                     radio
+                    id="shared"
                     label="Shared"
                     name="accessRadioGroup"
                     checked={accessId === 3}

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="9">
+
+  <testsuite name="document"
+    errors="0" failures="0" hostname="" id="" package="document" skipped="0"
+    tests="9" time="82.61" timestamp="Sat, 19 Aug 2017 13:44:21 GMT">
+  
+    <testcase name="User sign in with correct credentials" classname="document" time="11.03" assertions="5">
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="User should get window to create new document" classname="document" time="4.464" assertions="7">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="User should get an error message on invalid document title" classname="document" time="7.761" assertions="4">
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="User should get a success message on successful save" classname="document" time="9.314" assertions="4">
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Should be able to edit documents" classname="document" time="14.10" assertions="8">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Should be able to delete his documents" classname="document" time="13.61" assertions="6">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Should be able to view different categories of documents" classname="document" time="9.753" assertions="7">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Should be able to search through documents he has access to" classname="document" time="12.44" assertions="8">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="complete tests" classname="document" time="0.1420" assertions="0">
+    </testcase>
+  
+
+  
+
+  
+  </testsuite>
+</testsuites>

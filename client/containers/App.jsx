@@ -8,14 +8,18 @@ import HomeContainer from './HomeContainer';
 export const App = props => (
   <div className="app" style={{ height: '100%' }} >
     <Route
-      exact path="/" component={
+      exact
+      path="/"
+      component={
         props.isAuthenticated ?
         () => <Redirect to="/home" /> :
         LandingContainer
       }
     />
     <Route
-      exact path="/home" component={
+      exact
+      path="/home"
+      component={
         props.isAuthenticated ?
         HomeContainer :
         () => <Redirect to="/" />

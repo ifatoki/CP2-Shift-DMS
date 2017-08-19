@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Search, Grid } from 'semantic-ui-react';
+import { Search } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DocumentActions from '../actions/DocumentActions';
@@ -70,7 +70,12 @@ export class SearchComponent extends Component {
 SearchComponent.propTypes = {
   searchDocuments: PropTypes.func.isRequired,
   getDocument: PropTypes.func.isRequired,
-  documentsSearchResult: PropTypes.object.isRequired
+  documentsSearchResult: PropTypes.shape({
+    authored: PropTypes.object,
+    public: PropTypes.object,
+    role: PropTypes.object,
+    shared: PropTypes.object
+  }).isRequired
 };
 
 const mapStateToProps = state => ({
