@@ -46,7 +46,10 @@ export class Document extends React.Component {
           </div>
         </div>
         <Card.Content extra>
-          <Icon name="user" color="blue" />
+          <Icon
+            name="user"
+            color="blue"
+          />
           <div className="right floated">
             <Icon
               className="deleteDocument"

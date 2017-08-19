@@ -8,6 +8,12 @@ import UsersActions from '../actions/UsersActions';
 
 const { logUserIn, signUserUp, fetchAllRoles } = UsersActions;
 
+toastr.options = {
+  positionClass: 'toast-top-center',
+  showMethod: 'slideDown',
+  timeOut: 2000
+};
+
 export class LandingContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -79,6 +85,7 @@ export class LandingContainer extends React.Component {
               <p>Lets get you signed in</p>
               <div className="field">
                 <input
+                  id="loginUserName"
                   placeholder="Username"
                   name="username"
                   type="text"
@@ -87,6 +94,7 @@ export class LandingContainer extends React.Component {
               </div>
               <div className="field">
                 <input
+                  id="loginPassword"
                   placeholder="Password"
                   type="password"
                   name="password"

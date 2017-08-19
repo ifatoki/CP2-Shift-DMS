@@ -202,7 +202,9 @@ const documentController = {
           if (req.query.type === 'role') {
             Role.findById(user.roleId)
             .then((role) => {
-              role.getDocuments()
+              role.getDocuments({
+                order: '"updatedAt" DESC'
+              })
               .then((documents) => {
                 res.status(200).send({ documents });
               })
@@ -213,7 +215,9 @@ const documentController = {
               });
             });
           } else {
-            user.getDocuments()
+            user.getDocuments({
+              order: '"updatedAt" DESC'
+            })
             .then((documents) => {
               res.status(200).send({ documents });
             })
@@ -231,6 +235,7 @@ const documentController = {
       Document
         .findAndCountAll({
           where: query,
+          order: '"updatedAt" DESC',
           limit: req.query.limit || null,
           offset: req.query.offset
         })

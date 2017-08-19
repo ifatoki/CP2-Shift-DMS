@@ -7,6 +7,8 @@ engines:
   eslint:
     enabled: true
     checks:
+      import/no-unresolved:
+        enabled: false
       import/extensions:
         enabled: false
   fixme:

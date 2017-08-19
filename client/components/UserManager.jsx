@@ -133,7 +133,7 @@ export class UserManager extends React.Component {
   render() {
     return (
       <div className="ui user mini modal userManager">
-        <Modal.Header>
+        <Modal.Header id="intro">
           {this.state.accessMode === editModes.WRITE ?
             'Make your changes here' :
             `${this.state.firstname.toUpperCase()} 
@@ -148,7 +148,7 @@ export class UserManager extends React.Component {
                 'block' : 'none'
             }}
           >
-            <Form>
+            <Form id="editUserForm">
               <Form.Group widths="equal">
                 <Form.Input
                   className="firstname"
@@ -232,9 +232,9 @@ export class UserManager extends React.Component {
             }}
           >
             <Modal.Description>
-              <Header>{`@${this.state.username}`}</Header>
+              <Header id="username">{`@${this.state.username}`}</Header>
               <p>
-                <a href={`mailto:${this.state.email}`}>
+                <a id="email" href={`mailto:${this.state.email}`}>
                   {this.state.email}
                 </a>
               </p>
@@ -247,6 +247,7 @@ export class UserManager extends React.Component {
         </Modal.Content>
         <Modal.Actions>
           <div
+            id="editButton"
             className="ui primary edit icon button"
             onClick={this.editUser}
             style={{
@@ -260,6 +261,7 @@ export class UserManager extends React.Component {
             <i className="edit icon" />
           </div>
           <div
+            id="saveButton"
             className="ui primary save icon button"
             onClick={this.saveUser}
             style={{
@@ -270,7 +272,12 @@ export class UserManager extends React.Component {
           >
             <i className="save icon" />
           </div>
-          <Button className="cancel" color="grey" onClick={this.cancelUser}>
+          <Button
+            id="cancelButton"
+            className="cancel"
+            color="grey"
+            onClick={this.cancelUser}
+          >
             Cancel
           </Button>
         </Modal.Actions>
@@ -280,7 +287,16 @@ export class UserManager extends React.Component {
 }
 
 UserManager.propTypes = {
-  currentUser: PropType.object,
+  currentUser: PropType.shape({
+    createdAt: PropType.string,
+    email: PropType.string,
+    firstname: PropType.string,
+    id: PropType.number,
+    lastname: PropType.string,
+    role: PropType.number,
+    roleId: PropType.number,
+    username: PropType.string
+  }).isRequired,
   cancelUser: PropType.func.isRequired,
   modifyUser: PropType.func.isRequired,
   signedInRole: PropType.string.isRequired,

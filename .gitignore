@@ -6,3 +6,5 @@ client/assets/js/client.min.js
 .env
 server/config/config.json.sample
 dist
+selenium-debug.log
+reports

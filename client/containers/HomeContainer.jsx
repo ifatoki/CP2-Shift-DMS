@@ -46,8 +46,6 @@ export class HomeContainer extends React.Component {
       type = 'public';
     }
     this.props.fetchDocuments(this.props.user.id, type);
-    // $('.ui.dropdown')
-    //   .dropdown();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -98,7 +96,7 @@ export class HomeContainer extends React.Component {
         .modal({
           closable: false,
           detachable: false,
-          observeChanges: false,
+          observeChanges: true,
           selector: {
             close: '.cancel, .close'
           },
@@ -118,7 +116,7 @@ export class HomeContainer extends React.Component {
         .modal({
           closable: false,
           detachable: false,
-          observeChanges: false,
+          observeChanges: true,
           selector: {
             close: '.cancel, .close'
           },
@@ -161,6 +159,7 @@ export class HomeContainer extends React.Component {
         .modal({
           closable: false,
           detachable: false,
+          observeChanges: true,
           selector: {
             close: '.cancel, .close'
           },
@@ -168,6 +167,9 @@ export class HomeContainer extends React.Component {
             this.setState({
               createNewDocument: false
             });
+          },
+          onShow: () => {
+            $('.ui.document.modal').modal('refresh');
           }
         })
         .modal('show');
@@ -196,6 +198,7 @@ export class HomeContainer extends React.Component {
             <div className="right menu">
               <i
                 className="big icons"
+                id="newDocument"
                 style={{
                   margin: 'auto', cursor: 'pointer'
                 }}
@@ -207,6 +210,7 @@ export class HomeContainer extends React.Component {
                 <i className="corner inverted add icon" />
               </i>
               <i
+                id="userProfile"
                 className="big icons"
                 name="showUserProfile"
                 style={{
@@ -218,15 +222,18 @@ export class HomeContainer extends React.Component {
                 <i className="user circle outline blue icon" />
               </i>
               <Dropdown
+                floating
+                labeled
+                button
+                id="logoutModal"
                 text={`@${this.props.user.username}`}
-                floating labeled button
                 style={{ margin: 'auto' }}
               >
                 <Dropdown.Menu>
                   <Dropdown.Item
+                    id="logout"
                     label={{ color: 'red', empty: true, circular: true }}
                     text="Logout"
-                    id="logout"
                     onClick={this.logOut}
                   />
                 </Dropdown.Menu>
@@ -332,6 +339,7 @@ export class HomeContainer extends React.Component {
                 <Grid.Column width={8}>
                   <div
                     className="ui huge header"
+                    id="documentHeader"
                     style={{
                       display: this.state.showUsers ? 'none' : 'block'
                     }}
@@ -342,6 +350,7 @@ export class HomeContainer extends React.Component {
                     }
                   </div>
                   <div
+                    id="userHeader"
                     className="ui huge header"
                     style={{
                       display: this.state.showUsers ? 'block' : 'none',
