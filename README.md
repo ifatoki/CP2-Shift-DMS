@@ -75,6 +75,8 @@ Before you install the app locally, ensures you have [NodeJS](https://nodejs.org
 
 ## Endpoints
 
+For the API documentation, see [Shift-DMS Api Docs](https://andela-ifatoki.github.io/slate)
+
 ### User Endpoints
 
 | ENDPOINT                                 | DESCRIPTION                              |
