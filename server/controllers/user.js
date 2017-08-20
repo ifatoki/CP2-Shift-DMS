@@ -6,6 +6,12 @@ const User = require('../models').User;
 const Role = require('../models').Role;
 const localAuth = require('../auth/local');
 
+/**
+ * @function filterUser
+ *
+ * @param {any} User
+ * @returns {any} A filtered user object
+ */
 const filterUser = ({
   id, username, email, firstname, lastname, roleId, createdAt
 }) => ({
@@ -18,12 +24,26 @@ const filterUser = ({
   createdAt
 });
 
+/**
+ * @function getValidatorErrorMessage
+ *
+ * @param {any} errors
+ * @returns {string} A summary of all errors
+ */
 const getValidatorErrorMessage = errors => (
   _.reduce(errors, (result, error) =>
     `${error}\n${result}`
   , '')
 );
 
+/**
+ * @function updateUser
+ *
+ * @param {any} req
+ * @param {any} res
+ * @param {any} user
+ * @return {void}
+ */
 const updateUser = (req, res, user) => {
   user.update({
     username: req.body.username || user.username,
@@ -49,6 +69,14 @@ const updateUser = (req, res, user) => {
   }));
 };
 
+/**
+ * @function confirmRole
+ *
+ * @param {any} req
+ * @param {any} res
+ * @param {any} user
+ * @returns {void}
+ */
 const confirmRole = (req, res, user) => {
   if (req.body.roleId && req.body.roleId !== 1) {
     Role
@@ -75,6 +103,13 @@ const confirmRole = (req, res, user) => {
 };
 
 module.exports = {
+  /**
+   * @function create
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   create: (req, res) => {
     const userData = {
       username: req.body.username,
@@ -130,6 +165,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function login
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   login: (req, res) => {
     User
       .findOne({
@@ -172,11 +215,27 @@ module.exports = {
         });
       });
   },
+
+  /**
+   * @function logout
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   logout: (req, res) => {
     res.status(200).send({
       message: 'user signed out'
     });
   },
+
+  /**
+   * @function fetch
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   fetch: (req, res) => {
     if (req.roleId === 1) {
       User
@@ -212,6 +271,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function fetchUser
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   fetchUser: (req, res) => {
     User
       .findById(req.params.id)
@@ -240,6 +307,14 @@ module.exports = {
         message: error.message
       }));
   },
+
+  /**
+   * @function fetchUserDocuments
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   fetchUserDocuments(req, res) {
     User
       .findOne({
@@ -274,6 +349,14 @@ module.exports = {
         message: error.message
       }));
   },
+
+  /**
+   * @function updateUser
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   updateUser: (req, res) => {
     const userData = {
       username: req.body.username,
@@ -349,6 +432,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function deleteUser
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   deleteUser: (req, res) => {
     if (req.roleId === 1) {
       if (parseInt(req.params.id, 10) === 1) {
@@ -385,6 +476,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function search
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   search: (req, res) => {
     User
     .findAll({

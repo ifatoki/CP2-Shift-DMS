@@ -13,6 +13,13 @@ const initialState = {
   currentUserErrorMessage: ''
 };
 
+/**
+ * @function users
+ *
+ * @param {any} [state = initialState]
+ * @param {any} action
+ * @returns {object} state
+ */
 function users(state = initialState, action) {
   switch (action.type) {
   case ActionTypes.LOGOUT_REQUEST:

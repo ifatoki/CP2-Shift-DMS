@@ -2,6 +2,13 @@ const Right = require('../models').Right;
 const DocumentRole = require('../models').DocumentRole;
 
 module.exports = {
+  /**
+   * @function create
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   create(req, res) {
     if (req.body.title !== '') {
       Right
@@ -40,6 +47,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function list
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   list(req, res) {
     return Right
       .findAll({

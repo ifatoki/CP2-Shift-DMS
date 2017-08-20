@@ -4,7 +4,14 @@ import { Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Document from './Document';
 
-export const DocumentList = props => (
+export /**
+ * A React Component that shows an array of documents
+ * @function DocumentList
+ *
+ * @param {any} props
+ * @returns {void}
+ */
+const DocumentList = props => (
   <div
     className="ui divided items documentList"
     style={{
@@ -34,6 +41,12 @@ DocumentList.propTypes = {
   show: PropTypes.bool.isRequired
 };
 
+/**
+ * @function mapStateToProps
+ *
+ * @param {any} state
+ * @returns {object} props
+ */
 const mapStateToProps = state => ({
   documents: state.documents.documents,
 });

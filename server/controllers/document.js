@@ -6,12 +6,24 @@ const User = Models.User;
 const Document = Models.Document;
 const Role = Models.Role;
 
+/**
+ * @function getValidatorErrorMessage
+ *
+ * @param {any} errors
+ * @returns {string} A compilation of the errors
+ */
 const getValidatorErrorMessage = errors => (
   _.reduce(errors, (result, error) =>
     `${error}\n${result}`
   , '')
 );
 
+/**
+ * @function filterDocument
+ *
+ * @param {any} document
+ * @return {any} A filtered document
+ */
 const filterDocument = document => ({
   id: document.id,
   title: document.title,
@@ -21,6 +33,14 @@ const filterDocument = document => ({
   accessId: document.accessId
 });
 
+/**
+ * @function deleteDocument
+ *
+ * @param {any} document
+ * @param {any} req
+ * @param {any} res
+ * @return {void}
+ */
 const deleteDocument = (document, req, res) => {
   document.destroy({
     cascade: true
@@ -33,6 +53,15 @@ const deleteDocument = (document, req, res) => {
   }));
 };
 
+/**
+ * @function addRolesToDocument
+ *
+ * @param {any} req
+ * @param {any} res
+ * @param {any} newDocument
+ * @param {any} documentData
+ * @returns {void}
+ */
 const addRolesToDocument = (req, res, newDocument, documentData) => {
   Role
   .findAll({
@@ -81,6 +110,14 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
   });
 };
 
+/**
+ * @function updateDocument
+ *
+ * @param {any} document
+ * @param {any} req
+ * @param {any} res
+ * @returns {void}
+ */
 const updateDocument = (document, req, res) => {
   const formerAccessId = document.accessId;
   const documentData = {
@@ -123,6 +160,13 @@ const updateDocument = (document, req, res) => {
 };
 
 const documentController = {
+  /**
+   * @function create
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   create: (req, res) => {
     const documentData = {
       title: req.body.title,
@@ -180,6 +224,14 @@ const documentController = {
       });
     }
   },
+
+  /**
+   * @function fetchAll
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   fetchAll: (req, res) => {
     const query = {};
     switch (req.query.type) {
@@ -247,6 +299,14 @@ const documentController = {
         }));
     }
   },
+
+  /**
+   * @function fetchOne
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   fetchOne: (req, res) => {
     Document
       .findById(req.params.id)
@@ -325,6 +385,14 @@ const documentController = {
         message: error.message
       }));
   },
+
+  /**
+   * @function update
+   *
+   * @param {any} req
+   * @param {any} res
+   * @return {void}
+   */
   update: (req, res) => {
     const documentData = {
       title: req.body.title,
@@ -427,6 +495,14 @@ const documentController = {
       });
     }
   },
+
+  /**
+   * @function delete
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   delete: (req, res) => {
     Document
       .findById(req.params.id)
@@ -500,6 +576,14 @@ const documentController = {
         message: error.message
       }));
   },
+
+  /**
+   * @function search
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   search: (req, res) => {
     const searchResults = {};
     User
@@ -625,6 +709,14 @@ const documentController = {
   //       message: error.message
   //     }));
   // },
+
+  /**
+   * @function addUser
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   addUser: (req, res) => {
     Document
       .findById(req.params.documentId)

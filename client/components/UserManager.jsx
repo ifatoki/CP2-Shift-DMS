@@ -35,7 +35,19 @@ toastr.options = {
   timeOut: 2000
 };
 
+/**
+ * A React Component that helps view and manage profiles
+ *
+ * @export
+ * @class UserManager
+ * @extends {React.Component}
+ */
 export class UserManager extends React.Component {
+  /**
+   * Creates an instance of UserManager.
+   * @param {any} props
+   * @memberof UserManager
+   */
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -75,6 +87,13 @@ export class UserManager extends React.Component {
     }
   }
 
+  /**
+   * @method onChange
+   *
+   * @param {any} event
+   * @memberof UserManager
+   * @returns {void}
+   */
   onChange(event) {
     event.preventDefault();
     this.setState({
@@ -86,14 +105,35 @@ export class UserManager extends React.Component {
     });
   }
 
+  /**
+   * @method resetModal
+   *
+   * @memberof UserManager
+   * @returns {void}
+   */
   resetModal() {
     this.setState(initialState);
   }
 
+  /**
+   * @method handleSelectionChange
+   *
+   * @param {any} event
+   * @param {any} eventData
+   * @memberof UserManager
+   * @returns {void}
+   */
   handleSelectionChange(event, { checked }) {
     this.setState({ changePassword: checked });
   }
 
+  /**
+   * @method saveUser
+   *
+   * @param {any} event
+   * @memberof UserManager
+   * @returns {void}
+   */
   saveUser(event) {
     event.preventDefault();
     const newUserData = {};
@@ -118,6 +158,13 @@ export class UserManager extends React.Component {
     this.props.modifyUser(currentUser.id, newUserData);
   }
 
+  /**
+   * @method editUser
+   *
+   * @param {any} event
+   * @memberof UserManager
+   * @returns {void}
+   */
   editUser(event) {
     event.preventDefault();
     this.setState({
@@ -125,11 +172,24 @@ export class UserManager extends React.Component {
     });
   }
 
+  /**
+   * @method cancelUser
+   *
+   * @param {any} event
+   * @memberof UserManager
+   * @returns {void}
+   */
   cancelUser(event) {
     event.preventDefault();
     this.setState(initialState, () => this.props.cancelUser());
   }
 
+  /**
+   * @method render
+   *
+   * @returns {void}
+   * @memberof UserManager
+   */
   render() {
     return (
       <div className="ui user mini modal userManager">
@@ -314,6 +374,12 @@ const mapDispatchToProps = {
   cancelUser
 };
 
+/**
+ * @function mapStateToProps
+ *
+ * @param {any} state
+ * @returns {object} props
+ */
 const mapStateToProps = state => ({
   currentUser: state.user.currentUser,
   signedInRole: state.user.role,

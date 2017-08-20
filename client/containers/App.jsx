@@ -5,7 +5,13 @@ import { withRouter, Route, Redirect } from 'react-router';
 import LandingContainer from './LandingContainer';
 import HomeContainer from './HomeContainer';
 
-export const App = props => (
+export /**
+ * @function App
+ *
+ * @param {any} props
+ * @return {void}
+ */
+const App = props => (
   <div className="app" style={{ height: '100%' }} >
     <Route
       exact

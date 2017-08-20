@@ -4,6 +4,13 @@ import { Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import User from './User';
 
+/**
+ * @function normalizeUsers
+ *
+ * @param {any} roles
+ * @param {any} users
+ * @returns {object} User with role
+ */
 const normalizeUsers = (roles, users) => {
   const myRoles = roles.reduce((accumulator, currentValue) => {
     accumulator[currentValue.id] = currentValue.title;
@@ -19,7 +26,13 @@ const normalizeUsers = (roles, users) => {
   return myUsers;
 };
 
-export const UserList = (props) => {
+export /**
+ * @function UserList
+ *
+ * @param {any} props
+ * @returns {void}
+ */
+const UserList = (props) => {
   const users = normalizeUsers(props.roles, props.users);
   return (
     <div
@@ -61,6 +74,12 @@ UserList.defaultProps = {
   roles: [],
 };
 
+/**
+ * @function mapStateToProps
+ *
+ * @param {any} state
+ * @return {object} props
+ */
 const mapStateToProps = state => ({
   users: state.user.users,
   roles: state.user.roles
