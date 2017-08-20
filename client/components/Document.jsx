@@ -53,7 +53,8 @@ export class Document extends React.Component {
           <div className="right floated">
             <Icon
               className="deleteDocument"
-              name="trash" color="blue"
+              name="trash"
+              color="blue"
               onClick={this.deleteDocument}
             />
           </div>
