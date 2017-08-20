@@ -35,7 +35,7 @@ const server = http.createServer(app);
  *
  * @param {any} error
  * @throws {Error} when an error occurs
- * @return {null} null
+ * @return {void}
  */
 const onError = (error) => {
   if (error.syscall !== 'listen') {

@@ -1,5 +1,11 @@
 const Role = require('../models').Role;
 
+/**
+ * @function filterRole
+ *
+ * @param {any} role
+ * @returns {object} A filtered role
+ */
 const filterRole = role => ({
   id: role.id,
   description: role.description,
@@ -8,6 +14,13 @@ const filterRole = role => ({
 });
 
 module.exports = {
+  /**
+   * @function create
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   create: (req, res) => {
     if (req.userId === 1) {
       Role
@@ -27,6 +40,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function list
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   list: (req, res) => {
     Role
       .findAll({

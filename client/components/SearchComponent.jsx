@@ -6,7 +6,19 @@ import DocumentActions from '../actions/DocumentActions';
 
 const { searchDocuments, getDocument } = DocumentActions;
 
+/**
+ * A React component that implements a document search feature
+ *
+ * @export
+ * @class SearchComponent
+ * @extends {Component}
+ */
 export class SearchComponent extends Component {
+  /**
+   * Creates an instance of SearchComponent.
+   * @param {any} props
+   * @memberof SearchComponent
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -31,10 +43,24 @@ export class SearchComponent extends Component {
     });
   }
 
+  /**
+   * @method resetComponent
+   *
+   * @memberof SearchComponent
+   * @returns {void}
+   */
   resetComponent() {
     this.setState({ isLoading: false, results: [], value: '' });
   }
 
+  /**
+   * @method handleResultSelect
+   *
+   * @param {any} e
+   * @param {any} eventResult
+   * @memberof SearchComponent
+   * @returns {void}
+   */
   handleResultSelect(e, { result }) {
     this.setState({
       value: result.title
@@ -43,6 +69,14 @@ export class SearchComponent extends Component {
     });
   }
 
+  /**
+   * @method handleSearchChange
+   *
+   * @param {any} e
+   * @param {any} eventValue
+   * @memberof SearchComponent
+   * @returns {void}
+   */
   handleSearchChange(e, { value }) {
     this.setState({
       isLoading: true,
@@ -50,6 +84,12 @@ export class SearchComponent extends Component {
     }, () => this.props.searchDocuments(value));
   }
 
+  /**
+   * @method render
+   *
+   * @returns {void}
+   * @memberof SearchComponent
+   */
   render() {
     const { isLoading, value, results } = this.state;
 
@@ -78,6 +118,12 @@ SearchComponent.propTypes = {
   }).isRequired
 };
 
+/**
+ * @function mapStateToProps
+ *
+ * @param {any} state
+ * @returns {object} props
+ */
 const mapStateToProps = state => ({
   documentsSearchResult: state.documents.documentsSearchResult
 });

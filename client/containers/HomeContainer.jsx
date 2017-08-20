@@ -25,7 +25,17 @@ toastr.options = {
   timeOut: 2000
 };
 
+/**
+ * @export
+ * @class HomeContainer
+ * @extends {React.Component}
+ */
 export class HomeContainer extends React.Component {
+  /**
+   * Creates an instance of HomeContainer.
+   * @param {any} props
+   * @memberof HomeContainer
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -39,6 +49,12 @@ export class HomeContainer extends React.Component {
     this.handleDocumentTypeChange = this.handleDocumentTypeChange.bind(this);
   }
 
+  /**
+   * @method componentDidMount
+   *
+   * @memberof HomeContainer
+   * @returns {void}
+   */
   componentDidMount() {
     let type = 'private';
 
@@ -48,6 +64,13 @@ export class HomeContainer extends React.Component {
     this.props.fetchDocuments(this.props.user.id, type);
   }
 
+  /**
+   * @method componentWillReceiveProps
+   *
+   * @param {any} nextProps
+   * @memberof HomeContainer
+   * @returns {void}
+   */
   componentWillReceiveProps(nextProps) {
     const {
       currentDocumentUpdated,
@@ -130,6 +153,13 @@ export class HomeContainer extends React.Component {
     }
   }
 
+  /**
+   * @method handleDocumentTypeChange
+   *
+   * @param {any} event
+   * @memberof HomeContainer
+   * @returns {void}
+   */
   handleDocumentTypeChange(event) {
     event.preventDefault();
     toastr.info(`You are now viewing ${event.target.name} documents`);
@@ -147,10 +177,22 @@ export class HomeContainer extends React.Component {
     });
   }
 
+  /**
+   * @method showUserProfile
+   *
+   * @memberof HomeContainer
+   * @returns {void}
+   */
   showUserProfile() {
     this.props.getUser(this.props.user.id);
   }
 
+  /**
+   * @method initializeNewDocument
+   *
+   * @memberof HomeContainer
+   * @returns {void}
+   */
   initializeNewDocument() {
     this.setState({
       createNewDocument: true
@@ -176,11 +218,24 @@ export class HomeContainer extends React.Component {
     });
   }
 
+  /**
+   * @method logOut
+   *
+   * @param {any} event
+   * @memberof HomeContainer
+   * @returns {void}
+   */
   logOut(event) {
     event.preventDefault();
     this.props.logUserOut();
   }
 
+  /**
+   * @method render
+   *
+   * @returns {void}
+   * @memberof HomeContainer
+   */
   render() {
     const role = this.props.user.role.charAt(0).toUpperCase()
       + this.props.user.role.slice(1);
@@ -423,6 +478,12 @@ const mapDispatchToProps = {
   getUser
 };
 
+/**
+ * @function mapStateToProps
+ *
+ * @param {any} state
+ * @returns {object} props
+ */
 const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,

@@ -3,6 +3,12 @@ import { Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
+/**
+ * @function RoleSearchComponent
+ *
+ * @param {any} props
+ * @returns {void}
+ */
 const RoleSearchComponent = (props) => {
   const roles = _.map(props.roles, role => ({
     key: role.id,
@@ -11,8 +17,11 @@ const RoleSearchComponent = (props) => {
   }));
   return (
     <Dropdown
+      fluid
+      multiple
+      search
+      selection
       placeholder="Role"
-      fluid multiple search selection
       options={roles}
       value={props.selectedRoles}
       onChange={props.onChange}

@@ -1,6 +1,13 @@
 import ActionTypes from '../actions/ActionTypes';
 import { documentsDefaultState } from '../reducers/initialStates';
 
+/**
+ * @function documents
+ *
+ * @param {any} [state=documentsDefaultState]
+ * @param {any} action
+ * @returns {object} state
+ */
 function documents(state = documentsDefaultState, action) {
   switch (action.type) {
   case ActionTypes.DOCUMENTS_FETCH_REQUEST:

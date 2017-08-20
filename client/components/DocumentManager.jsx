@@ -26,7 +26,20 @@ toastr.options = {
   timeOut: 2000
 };
 
+/**
+ * A React component that displays and creates
+ * an environment to modify documents
+ *
+ * @export
+ * @class DocumentManager
+ * @extends {React.Component}
+ */
 export class DocumentManager extends React.Component {
+  /**
+   * Creates an instance of DocumentManager.
+   * @param {any} props
+   * @memberof DocumentManager
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -99,12 +112,27 @@ export class DocumentManager extends React.Component {
     }
   }
 
+  /**
+   * @method onRolesChange
+   *
+   * @param {any} event
+   * @param {any} data
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   onRolesChange(event, data) {
     this.setState({
       selectedRoles: data.value
     });
   }
 
+  /**
+   * @method onChange
+   *
+   * @param {any} event
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   onChange(event) {
     event.preventDefault();
     this.setState(event.target.name !== 'title' ?
@@ -113,6 +141,14 @@ export class DocumentManager extends React.Component {
     );
   }
 
+  /**
+   * @method handleRadioButtonChange
+   *
+   * @param {any} event
+   * @param {any} eventData
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   handleRadioButtonChange(event, { value }) {
     if (value === 3) {
       this.setState({ accessId: parseInt(value, 10) });
@@ -124,6 +160,13 @@ export class DocumentManager extends React.Component {
     }
   }
 
+  /**
+   * @method saveDocument
+   *
+   * @param {any} event
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   saveDocument(event) {
     const { currentDocument } = this.props;
     event.preventDefault();
@@ -163,6 +206,14 @@ export class DocumentManager extends React.Component {
     }
   }
 
+  /**
+   * @method editDocument
+   *
+   * @param {any} event
+   * @memberof DocumentManager
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   editDocument(event) {
     event.preventDefault();
     if (this.props.rightId < 3) {
@@ -174,11 +225,24 @@ export class DocumentManager extends React.Component {
     }
   }
 
+  /**
+   * @method cancelNewDocument
+   *
+   * @param {any} event
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   cancelNewDocument(event) {
     event.preventDefault();
     this.props.cancelNewDocument();
   }
 
+  /**
+   * @method render
+   *
+   * @returns {void}
+   * @memberof DocumentManager
+   */
   render() {
     const { accessId } = this.state;
     return (
@@ -373,6 +437,12 @@ const mapDispatchToProps = {
   modifyDocument
 };
 
+/**
+ * @function mapStateToProps
+ *
+ * @param {any} state
+ * @return {object} props
+ */
 const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,

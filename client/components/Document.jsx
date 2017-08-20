@@ -8,7 +8,19 @@ import DocumentActions from '../actions/DocumentActions';
 
 const { getDocument, deleteDocument } = DocumentActions;
 
+/**
+ * A React Component to help create a single document
+ *
+ * @export
+ * @class Document
+ * @extends {React.Component}
+ */
 export class Document extends React.Component {
+  /**
+   * Creates an instance of Document.
+   * @param {any} props
+   * @memberof Document
+   */
   constructor(props) {
     super(props);
     this.isDelete = false;
@@ -16,6 +28,12 @@ export class Document extends React.Component {
     this.deleteDocument = this.deleteDocument.bind(this);
   }
 
+  /**
+   * @method clickHandler
+   *
+   * @memberof Document
+   * @returns {void}
+   */
   clickHander() {
     if (!this.isDelete) {
       this.props.getDocument(this.props.documentId);
@@ -23,11 +41,23 @@ export class Document extends React.Component {
     this.isDelete = false;
   }
 
+  /**
+   * @method deleteDocument
+   *
+   * @memberof Document
+   * @returns {void}
+   */
   deleteDocument() {
     this.isDelete = true;
     this.props.deleteDocument(this.props.documentId);
   }
 
+  /**
+   * @method render
+   *
+   * @returns {void}
+   * @memberof Document
+   */
   render() {
     return (
       <Card className="singleDocument" onClick={this.clickHander}>

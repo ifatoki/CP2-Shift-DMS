@@ -14,7 +14,17 @@ toastr.options = {
   timeOut: 2000
 };
 
+/**
+ * @export
+ * @class LandingContainer
+ * @extends {React.Component}
+ */
 export class LandingContainer extends React.Component {
+  /**
+   * Creates an instance of LandingContainer.
+   * @param {any} props
+   * @memberof LandingContainer
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -50,6 +60,14 @@ export class LandingContainer extends React.Component {
     });
   }
 
+  /**
+   * @method onChange
+   *
+   * @param {any} event
+   * @param {any} data
+   * @memberof LandingContainer
+   * @returns {void}
+   */
   onChange(event, data) {
     if (data) {
       this.setState({ [data.name]: data.value });
@@ -58,16 +76,36 @@ export class LandingContainer extends React.Component {
     }
   }
 
+  /**
+   * @method onLoginSubmit
+   *
+   * @param {any} event
+   * @memberof LandingContainer
+   * @returns {void}
+   */
   onLoginSubmit(event) {
     event.preventDefault();
     this.props.logUserIn(this.state);
   }
 
+  /**
+   * @method onSignUpSubmit
+   *
+   * @param {any} event
+   * @memberof LandingContainer
+   * @returns {void}
+   */
   onSignUpSubmit(event) {
     event.preventDefault();
     this.props.signUserUp(this.state);
   }
 
+  /**
+   * @method render
+   *
+   * @returns {void}
+   * @memberof LandingContainer
+   */
   render() {
     return (
       <div
@@ -207,6 +245,12 @@ const mapDispatchToProps = {
   fetchAllRoles
 };
 
+/**
+ * @function mapStateToProps
+ *
+ * @param {any} state
+ * @return {object} props
+ */
 const mapStateToProps = state => ({
   currentUserErrorMessage: state.user.currentUserErrorMessage,
   roles: state.user.roles

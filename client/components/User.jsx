@@ -7,7 +7,19 @@ import UsersActions from '../actions/UsersActions';
 
 const { getUser, deleteUser } = UsersActions;
 
+/**
+ * A React component that helps display a single user
+ *
+ * @export
+ * @class User
+ * @extends {React.Component}
+ */
 export class User extends React.Component {
+  /**
+   * Creates an instance of User.
+   * @param {any} props
+   * @memberof User
+   */
   constructor(props) {
     super(props);
     this.isDelete = false;
@@ -15,6 +27,12 @@ export class User extends React.Component {
     this.deleteUser = this.deleteUser.bind(this);
   }
 
+  /**
+   * @method clickHandler
+   *
+   * @memberof User
+   * @returns {void}
+   */
   clickHandler() {
     if (!this.isDelete) {
       this.props.getUser(this.props.id);
@@ -22,11 +40,23 @@ export class User extends React.Component {
     this.isDelete = false;
   }
 
+  /**
+   * @method deleteUser
+   *
+   * @memberof User
+   * @returns {void}
+   */
   deleteUser() {
     this.isDelete = true;
     this.props.deleteUser(this.props.id);
   }
 
+  /**
+   * @method render
+   *
+   * @returns {void}
+   * @memberof User
+   */
   render() {
     return (
       <Card onClick={this.clickHandler} raised>

@@ -1,7 +1,22 @@
 import validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 
+/**
+ * Validates server and client side requests.
+ *
+ * @export
+ * @class Validator
+ */
 export default class Validator {
+  /**
+   * Confirm if login details are valid before pushing them on.
+   * @method validateLogin
+   *
+   * @static
+   * @param {object} userData - User signin data
+   * @returns {object} Contains an errors array and isValid boolean
+   * @memberof Validator
+   */
   static validateLogin({ username, password }) {
     this.errors = {};
     if (username === undefined || validator.isEmpty(username.toString())) {
@@ -13,6 +28,15 @@ export default class Validator {
     return this.reconcileErrors();
   }
 
+  /**
+   * Confirm if signup details are valid before pushing them on.
+   * @method validateSignUp
+   *
+   * @static
+   * @param {object} userData - User signup data
+   * @returns {object} Contains an errors array and isValid boolean
+   * @memberof Validator
+   */
   static validateSignUp({
     username, firstname, lastname, email, password, confirmPassword
   }) {
@@ -39,6 +63,15 @@ export default class Validator {
     return this.reconcileErrors();
   }
 
+  /**
+   * confirm validity of user edit details
+   * @method validateUserEdit
+   *
+   * @static
+   * @param {object} userData
+   * @returns {object} Contains an errors array and isValid boolean
+   * @memberof Validator
+   */
   static validateUserEdit({
     username, firstname, lastname, email,
     currentPassword, newPassword, confirmPassword
@@ -75,6 +108,14 @@ export default class Validator {
     return this.reconcileErrors();
   }
 
+  /**
+   * @method validateNewDocument
+   *
+   * @static
+   * @param {object} userData
+   * @returns {object} Contains an errors array and isValid boolean
+   * @memberof Validator
+   */
   static validateNewDocument({ title, accessId }) {
     this.errors = {};
     if (title === undefined || validator.isEmpty(title.toString())) {
@@ -88,6 +129,14 @@ export default class Validator {
     return this.reconcileErrors();
   }
 
+  /**
+   * @method validateDocumentEdit
+   *
+   * @static
+   * @param {object} userData
+   * @returns {object} Contains an errors array and isValid boolean
+   * @memberof Validator
+   */
   static validateDocumentEdit({ title, accessId }) {
     this.errors = {};
     if (title === '') {
@@ -103,6 +152,13 @@ export default class Validator {
     return this.reconcileErrors();
   }
 
+  /**
+   * @method reconcileErrors
+   *
+   * @static
+   * @returns {object} Contains an errors array and isValid boolean
+   * @memberof Validator
+   */
   static reconcileErrors() {
     return {
       errors: this.errors,

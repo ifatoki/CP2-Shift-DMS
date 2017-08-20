@@ -19,6 +19,12 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     classMethods: {
+      /**
+       * @function associate
+       *
+       * @param {any} models
+       * @returns {void}
+       */
       associate(models) {
         User.belongsTo(models.Role, {
           foreignKey: 'roleId',
