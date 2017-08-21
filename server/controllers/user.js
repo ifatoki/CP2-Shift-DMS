@@ -64,8 +64,8 @@ const updateUser = (req, res, user) => {
         });
       });
   })
-  .catch(error => res.status(500).send({
-    message: error.message
+  .catch(() => res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
   }));
 };
 
@@ -90,8 +90,8 @@ const confirmRole = (req, res, user) => {
           updateUser(req, res, user);
         }
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
   } else if (req.body.roleId === 1) {
     res.status(403).send({
@@ -147,8 +147,8 @@ module.exports = {
                 user: returnedUser
               });
             })
-            .catch(error => res.status(500).send({
-              message: error.message
+            .catch(() => res.status(500).send({
+              message: 'oops, we just encountered an error. please try again'
             }));
         } else {
           res.status(404).send({
@@ -156,8 +156,8 @@ module.exports = {
           });
         }
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
     } else {
       res.status(400).send({
@@ -262,8 +262,8 @@ module.exports = {
             });
           }
         })
-        .catch(error => res.status(500).send({
-          message: error.message
+        .catch(() => res.status(500).send({
+          message: 'oops, we just encountered an error. please try again'
         }));
     } else {
       res.status(403).send({
@@ -298,13 +298,13 @@ module.exports = {
                 user: returnedUser
               });
             })
-            .catch(error => res.status(500).send({
-              message: error.message
+            .catch(() => res.status(500).send({
+              message: 'oops, we just encountered an error. please try again'
             }));
         }
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
   },
 
@@ -404,8 +404,9 @@ module.exports = {
                     confirmRole(req, res, user);
                   }
                 })
-                .catch(error => res.status(500).send({
-                  message: error.message
+                .catch(() => res.status(500).send({
+                  message:
+                    'oops, we just encountered an error. please try again'
                 }));
               } else {
                 confirmRole(req, res, user);
@@ -461,13 +462,13 @@ module.exports = {
               .then(() => res.status(200).send({
                 message: 'user deleted successfully'
               }))
-              .catch(error => res.status(500).send({
-                message: error.message
+              .catch(() => res.status(500).send({
+                message: 'oops, we just encountered an error. please try again'
               }));
             }
           })
-          .catch(error => res.status(500).send({
-            message: error.message
+          .catch(() => res.status(500).send({
+            message: 'oops, we just encountered an error. please try again'
           }));
       }
     } else {
@@ -514,8 +515,8 @@ module.exports = {
       ]
     })
     .then(users => res.status(200).send({ users }))
-    .catch(error => res.status(500).send({
-      message: error.message
+    .catch(() => res.status(500).send({
+      message: 'oops, we just encountered an error. please try again'
     }));
   }
 };

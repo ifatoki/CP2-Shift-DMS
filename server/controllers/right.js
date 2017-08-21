@@ -27,8 +27,8 @@ module.exports = {
               .then(newRight => res.status(201).send({
                 right: newRight
               }))
-              .catch(error => res.status(400).send({
-                message: error.message
+              .catch(() => res.status(500).send({
+                message: 'oops, we just encountered an error. please try again'
               }));
           } else {
             res.status(403).send({
@@ -36,9 +36,9 @@ module.exports = {
             });
           }
         })
-        .catch((err) => {
+        .catch(() => {
           res.status(500).send({
-            message: err.message
+            message: 'oops, we just encountered an error. please try again'
           });
         });
     } else {
@@ -63,8 +63,8 @@ module.exports = {
       .then(rights => res.status(200).send({
         rights
       }))
-      .catch(error => res.status(400).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
   }
 };

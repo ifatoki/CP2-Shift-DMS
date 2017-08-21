@@ -372,8 +372,7 @@ export class HomeContainer extends React.Component {
               <div
                 className="item"
                 style={{
-                  display: this.props.user.role === 'overlord' ?
-                  'none' : 'block'
+                  display: 'none'
                 }}
               >
                 <div className="middle aligned content">
@@ -391,7 +390,7 @@ export class HomeContainer extends React.Component {
           <div className="thirteen wide column">
             <Grid>
               <Grid.Row>
-                <Grid.Column width={8}>
+                <div className="eight wide column">
                   <div
                     className="ui huge header"
                     id="documentHeader"
@@ -413,12 +412,13 @@ export class HomeContainer extends React.Component {
                   >
                    MANAGE USERS
                   </div>
-                </Grid.Column>
-                <Grid.Column
-                  width={8}
+                </div>
+                <div
+                  className="eight wide column"
+                  style={{ display: this.state.showUsers ? 'none' : 'block' }}
                 >
                   <SearchComponent />
-                </Grid.Column>
+                </div>
               </Grid.Row>
             </Grid>
             <UserList show={this.state.showUsers} />
