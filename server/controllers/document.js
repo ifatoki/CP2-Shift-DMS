@@ -48,8 +48,8 @@ const deleteDocument = (document, req, res) => {
   .then(() => res.status(200).send({
     message: 'document deleted successfully'
   }))
-  .catch(error => res.status(500).send({
-    message: error.message
+  .catch(() => res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
   }));
 };
 
@@ -92,9 +92,9 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
           }))
         });
       })
-      .catch((error) => {
+      .catch(() => {
         res.status(500).send({
-          message: error.message
+          message: 'oops, we just encountered an error. please try again'
         });
       });
     } else {
@@ -103,9 +103,9 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
       });
     }
   })
-  .catch((error) => {
+  .catch(() => {
     res.status(500).send({
-      message: error.message
+      message: 'oops, we just encountered an error. please try again'
     });
   });
 };
@@ -145,8 +145,8 @@ const updateDocument = (document, req, res) => {
           document: filterDocument(updatedDocument)
         });
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
     } else {
       res.status(200).send({
@@ -154,8 +154,8 @@ const updateDocument = (document, req, res) => {
       });
     }
   })
-  .catch(error => res.status(500).send({
-    message: error.message
+  .catch(() => res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
   }));
 };
 
@@ -208,15 +208,15 @@ const documentController = {
                 });
               }
             })
-            .catch((error) => {
+            .catch(() => {
               res.status(500).send({
-                message: error.message
+                message: 'oops, we just encountered an error. please try again'
               });
             });
         }
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
     } else {
       res.status(400).send({
@@ -260,11 +260,9 @@ const documentController = {
               .then((documents) => {
                 res.status(200).send({ documents });
               })
-              .catch((error) => {
-                res.status(500).send({
-                  message: error.message
-                });
-              });
+              .catch(() => res.status(500).send({
+                message: 'oops, we just encountered an error. please try again'
+              }));
             });
           } else {
             user.getDocuments({
@@ -273,15 +271,15 @@ const documentController = {
             .then((documents) => {
               res.status(200).send({ documents });
             })
-            .catch((error) => {
+            .catch(() => {
               res.status(500).send({
-                message: error.message
+                message: 'oops, we just encountered an error. please try again'
               });
             });
           }
         })
-        .catch(error => res.status(500).send({
-          message: error.message
+        .catch(() => res.status(500).send({
+          message: 'oops, we just encountered an error. please try again'
         }));
     } else {
       Document
@@ -329,8 +327,8 @@ const documentController = {
                 response.documentRoles = documentRoles;
                 res.status(200).send(response);
               })
-              .catch(error => res.status(500).send({
-                message: error.message
+              .catch(() => res.status(500).send({
+                message: 'oops, we just encountered an error. please try again'
               }));
             } else {
               res.status(200).send(response);
@@ -366,8 +364,9 @@ const documentController = {
                     res.status(200).send(response);
                   }
                 })
-                .catch(error => res.status(500).send({
-                  message: error.message
+                .catch(() => res.status(500).send({
+                  message:
+                    'oops, we just encountered an error. please try again'
                 }));
               } else {
                 response.rightId =
@@ -375,8 +374,8 @@ const documentController = {
                 res.status(200).send(response);
               }
             })
-            .catch(error => res.status(500).send({
-              message: error.message
+            .catch(() => res.status(500).send({
+              message: 'oops, we just encountered an error. please try again'
             }));
           }
         }
@@ -462,8 +461,9 @@ const documentController = {
                         });
                       }
                     })
-                    .catch(error => res.status(500).send({
-                      message: error.message
+                    .catch(() => res.status(500).send({
+                      message:
+                        'oops, we just encountered an error. please try again'
                     }));
                   } else if (
                     user[0].dataValues.DocumentUser.dataValues.rightId < 3
@@ -481,13 +481,13 @@ const documentController = {
                 }));
               }
             })
-            .catch(error => res.status(500).send({
-              message: error.message
+            .catch(() => res.status(500).send({
+              message: 'oops, we just encountered an error. please try again'
             }));
         }
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
     } else {
       res.status(400).send({
@@ -553,8 +553,8 @@ const documentController = {
                   });
                 }
               })
-              .catch(error => res.status(500).send({
-                message: error.message
+              .catch(() => res.status(500).send({
+                message: 'oops, we just encountered an error. please try again'
               }));
             } else if (
               user[0].dataValues.DocumentUser.dataValues.rightId === 1
@@ -567,13 +567,13 @@ const documentController = {
               });
             }
           })
-          .catch(error => res.status(500).send({
-            message: error.message
+          .catch(() => res.status(500).send({
+            message: 'oops, we just encountered an error. please try again'
           }));
         }
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
   },
 
@@ -658,8 +658,9 @@ const documentController = {
                                 }
                                 res.status(200).send(searchResults);
                               })
-                              .catch(error => res.status(500).send({
-                                message: error.message
+                              .catch(() => res.status(500).send({
+                                message: 'oops, we just encountered an error.' +
+                                  ' please try again'
                               }));
                           });
                       } else {
@@ -672,12 +673,13 @@ const documentController = {
                       message: error.message
                     }));
                 })
-                .catch(error => res.status(500).send({
-                  message: error.message
+                .catch(() => res.status(500).send({
+                  message:
+                    'oops, we just encountered an error. please try again'
                 }));
             })
-            .catch(error => res.status(500).send({
-              message: error.message
+            .catch(() => res.status(500).send({
+              message: 'oops, we just encountered an error. please try again'
             }));
         } else {
           res.status(404).send({
@@ -701,12 +703,12 @@ const documentController = {
   //             message: 'user added successfully'
   //           }));
   //         })
-  //         .catch(error => res.status(500).send({
-  //           message: error.message
+  //         .catch(() => res.status(500).send({
+  //           message: 'oops, we just encountered an error. please try again'
   //         }));
   //     })
-  //     .catch(error => res.status(500).send({
-  //       message: error.message
+  //     .catch(() => res.status(500).send({
+  //       message: 'oops, we just encountered an error. please try again'
   //     }));
   // },
 
@@ -729,12 +731,12 @@ const documentController = {
               message: 'user added successfully'
             }));
           })
-          .catch(error => res.status(500).send({
-            message: error.message
+          .catch(() => res.status(500).send({
+            message: 'oops, we just encountered an error. please try again'
           }));
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
   }
 };

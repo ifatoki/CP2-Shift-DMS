@@ -31,8 +31,8 @@ module.exports = {
         .then(role => res.status(201).send({
           role: filterRole(role)
         }))
-        .catch(error => res.status(400).send({
-          message: error.message
+        .catch(() => res.status(500).send({
+          message: 'oops, we just encountered an error. please try again'
         }));
     } else {
       res.status(401).send({
@@ -63,8 +63,8 @@ module.exports = {
           roles
         });
       })
-      .catch(error => res.status(400).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
   }
 };
