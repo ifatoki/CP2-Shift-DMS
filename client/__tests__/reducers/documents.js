@@ -31,7 +31,10 @@ describe('Documents Reducer', () => {
     () => {
       const action = {
         type: ActionTypes.DOCUMENTS_FETCH_SUCCESSFUL,
-        payload: fetchedDocuments
+        payload: {
+          documents: fetchedDocuments,
+          count: 700
+        }
       };
       const state = {
         documentsUpdating: true,
@@ -42,7 +45,8 @@ describe('Documents Reducer', () => {
 
       expect(newState.documentsUpdating).toBeFalsy();
       expect(newState.documentsUpdated).toBeTruthy();
-      expect(newState.documents).toEqual(fetchedDocuments);
+      expect(newState.documents).toEqual(action.payload.documents);
+      expect(newState.documentsCount).toEqual(action.payload.count);
     });
     it('should set the error message and reset documentsUpdating to false',
     () => {

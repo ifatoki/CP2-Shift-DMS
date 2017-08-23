@@ -306,23 +306,24 @@ const DocumentActions = {
    * Dispatches actions associated with fetchDocuments
    * @function fetchDocuments
    *
-   * @param {any} userId
    * @param {any} type
+   * @param {number} offset
    * @returns {object} Action
    */
-  fetchDocuments(userId, type) {
+  fetchDocuments(type, offset) {
     return (dispatch) => {
       dispatch(DocumentActions.documentsFetchRequest());
       return axios
         .get('/api/v1/documents', {
           params: {
-            userId,
-            type
+            type,
+            offset,
+            limit: 9
           }
         })
         .then((response) => {
           dispatch(DocumentActions.documentsFetchSuccessful(
-            response.data.documents, type
+            response.data, type
           ));
         })
         .catch((error) => {

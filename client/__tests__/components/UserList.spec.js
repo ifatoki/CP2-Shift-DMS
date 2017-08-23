@@ -7,7 +7,8 @@ describe('Single User Page', () => {
   const props = {
     show: true,
     users: [],
-    roles: []
+    roles: [],
+    isUpdating: false
   };
 
   const wrapper = mount(

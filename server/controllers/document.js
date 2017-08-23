@@ -289,9 +289,11 @@ const documentController = {
           limit: req.query.limit || null,
           offset: req.query.offset
         })
-        .then(documents => res.status(200).send({
-          documents: documents.rows
-        }))
+        .then(documents =>
+          res.status(200).send({
+            documents: documents.rows,
+            count: documents.count
+          }))
         .catch(error => res.status(400).send({
           message: error.message
         }));

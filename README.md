@@ -2,6 +2,7 @@
 [![codecov](https://codecov.io/gh/andela-ifatoki/CP2-Shift-DMS/branch/implementFeedback/graph/badge.svg)](https://codecov.io/gh/andela-ifatoki/CP2-Shift-DMS)
 [![Build Status](https://travis-ci.org/andela-ifatoki/CP2-Shift-DMS.svg?branch=implementFeedback)](https://travis-ci.org/andela-ifatoki/CP2-Shift-DMS)
 [![Coverage Status](https://coveralls.io/repos/github/andela-ifatoki/CP2-Shift-DMS/badge.svg?branch=implementFeedback)](https://coveralls.io/github/andela-ifatoki/CP2-Shift-DMS?branch=implementFeedback)
+[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)
 
 ## Introduction
 Document Management System is a full stack application based on a RestFUL API that allows users to create and manage documents by giving different priviledges and rights to documents they create based on user roles.

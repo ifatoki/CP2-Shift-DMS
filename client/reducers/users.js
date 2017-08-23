@@ -1,17 +1,5 @@
 import ActionTypes from '../actions/ActionTypes';
-
-const initialState = {
-  isAuthenticated: false,
-  users: [],
-  roles: [],
-  currentUser: {},
-  currentUserUpdated: false,
-  userDeleted: false,
-  userDeleting: false,
-  currentUserModifying: false,
-  currentUserModified: false,
-  currentUserErrorMessage: ''
-};
+import { usersDefaultState } from '../reducers/initialStates';
 
 /**
  * @function users
@@ -20,7 +8,7 @@ const initialState = {
  * @param {any} action
  * @returns {object} state
  */
-function users(state = initialState, action) {
+function users(state = usersDefaultState, action) {
   switch (action.type) {
   case ActionTypes.LOGOUT_REQUEST:
   case ActionTypes.SIGNUP_REQUEST:
