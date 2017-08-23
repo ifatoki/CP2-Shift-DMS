@@ -3,6 +3,12 @@ export default (sequelize, DataTypes) => {
     rightId: DataTypes.INTEGER
   }, {
     classMethods: {
+      /**
+       * @function associate
+       *
+       * @param {any} models
+       * @returns {void}
+       */
       associate: (models) => {
         // associations can be defined here
         DocumentRole.belongsTo(models.Right, {

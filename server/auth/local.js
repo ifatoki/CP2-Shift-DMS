@@ -4,6 +4,13 @@ const moment = require('moment');
 require('dotenv').config();
 
 module.exports = {
+  /**
+   * @function encodeToken
+   *
+   * @param {any} user
+   * @param {any} test
+   * @returns {string} A token with encoded user details
+   */
   encodeToken: (user, test) => {
     const payload = {
       exp: test ? moment().add(2, 'ms').unix() :
@@ -14,6 +21,13 @@ module.exports = {
     const token = jwt.sign(payload, process.env.SECRET_KEY);
     return token;
   },
+  /**
+   * @function decodeToken
+   *
+   * @param {any} token
+   * @param {any} callback
+   * @returns {void}
+   */
   decodeToken: (token, callback) => {
     try {
       const payload = jwt.verify(token, process.env.SECRET_KEY);

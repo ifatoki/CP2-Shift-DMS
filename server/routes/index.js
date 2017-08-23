@@ -1,6 +1,6 @@
 import confirmRole from '../controllers/middleware/confirmRole';
 
-const auth = require('../auth/_helpers');
+const auth = require('../auth/helpers');
 const usersController = require('../controllers').users;
 const documentsController = require('../controllers').documents;
 const rolesController = require('../controllers').roles;
@@ -56,11 +56,6 @@ module.exports = (app) => {
     auth.confirmAuthentication,
     usersController.fetchUserDocuments
   );
-   // find private documents belonging to the user
-  app.get('/api/v1/users/:id/documents/private',
-    auth.confirmAuthentication,
-    usersController.fetchPrivateDocuments
-  );
   // search for user
   app.get(
     '/api/v1/search/users/',
@@ -81,11 +76,6 @@ module.exports = (app) => {
   app.get('/api/v1/documents/',
     auth.confirmAuthentication,
     documentsController.fetchAll
-  );
-  // find all public documents
-  app.get('/api/v1/documents/public',
-    auth.confirmAuthentication,
-    documentsController.fetchPublic
   );
   // find the specified document
   app.get(
@@ -130,7 +120,6 @@ module.exports = (app) => {
   // find all roles
   app.get(
     '/api/v1/roles',
-    auth.confirmAuthentication,
     rolesController.list
   );
 
