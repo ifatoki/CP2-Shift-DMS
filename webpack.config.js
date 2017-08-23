@@ -2,6 +2,7 @@ const debug = process.env.NODE_ENV !== 'production';
 const webpack = require('webpack');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const entry = [
   path.join(__dirname, '/client/client.jsx')
@@ -15,6 +16,9 @@ const plugins = [
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     },
+  }),
+  new ExtractTextPlugin('../css/main.css', {
+    allChunks: true
   }),
 ];
 if (debug) {
@@ -45,6 +49,14 @@ module.exports = {
       {
         test: /\.json$/, loader: 'json-loader',
       },
+      {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          // resolve-url-loader may be chained before sass-loader if necessary
+          use: ['css-loader', 'sass-loader'],
+        }),
+      }
     ],
   },
   output: {

@@ -1,0 +1,5 @@
+@import 'helpers';
+
+.iTried {
+  @include border-radius(10px);
+}

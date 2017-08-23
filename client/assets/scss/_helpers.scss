@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Baloo+Bhaijaan|Butterfly+Kids|Indie+Flower|Short+Stack');
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin setBackground {
+  background: aliceblue;
+}
+
+$indie-flower: 'Indie Flower';
+$project-gray: #696969;
