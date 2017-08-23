@@ -2,6 +2,13 @@ const Right = require('../models').Right;
 const DocumentRole = require('../models').DocumentRole;
 
 module.exports = {
+  /**
+   * @function create
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   create(req, res) {
     if (req.body.title !== '') {
       Right
@@ -17,18 +24,21 @@ module.exports = {
                 title: req.body.title,
                 description: req.body.description
               })
-              .then(newRight => res.status(201).send(newRight))
-              .catch(error => res.status(400).send(error));
+              .then(newRight => res.status(201).send({
+                right: newRight
+              }))
+              .catch(() => res.status(500).send({
+                message: 'oops, we just encountered an error. please try again'
+              }));
           } else {
-            res.status(400).send({
-              message: 'already exists'
+            res.status(403).send({
+              message: 'right already exists'
             });
           }
         })
-        .catch((err) => {
-          res.status(500).json({
-            status: 'error',
-            message: err.message
+        .catch(() => {
+          res.status(500).send({
+            message: 'oops, we just encountered an error. please try again'
           });
         });
     } else {
@@ -37,12 +47,24 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function list
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   list(req, res) {
     return Right
       .findAll({
         include: [DocumentRole]
       })
-      .then(rights => res.status(200).send(rights))
-      .catch(error => res.status(400).send(error));
+      .then(rights => res.status(200).send({
+        rights
+      }))
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
+      }));
   }
 };

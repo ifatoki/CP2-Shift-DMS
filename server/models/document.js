@@ -17,6 +17,12 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     classMethods: {
+      /**
+       * @function associate
+       *
+       * @param {any} models
+       * @returns {void}
+       */
       associate(models) {
         // associations can be defined here
         Document.belongsToMany(models.User, {
@@ -29,6 +35,7 @@ export default (sequelize, DataTypes) => {
         });
         Document.belongsTo(models.User, {
           foreignKey: 'ownerId',
+          onDelete: 'CASCADE'
         });
         Document.belongsTo(models.Access, {
           foreignKey: 'accessId',

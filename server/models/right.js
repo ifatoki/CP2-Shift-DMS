@@ -4,6 +4,12 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.STRING
   }, {
     classMethods: {
+      /**
+       * @function associate
+       *
+       * @param {any} models
+       * @returns {void}
+       */
       associate(models) {
         Right.hasMany(models.DocumentUser, {
           foreignKey: 'rightId'

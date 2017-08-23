@@ -1,4 +1,11 @@
 module.exports = {
+  /**
+   * @function up
+   *
+   * @param {any} queryInterface
+   * @param {any} Sequelize
+   * @returns {void}
+   */
   up: (queryInterface, Sequelize) => {
     queryInterface.createTable('Documents', {
       id: {
@@ -16,7 +23,8 @@ module.exports = {
       },
       ownerId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        onDelete: 'cascade'
       },
       accessId: {
         type: Sequelize.INTEGER,
@@ -32,6 +40,13 @@ module.exports = {
       }
     });
   },
+
+  /**
+   * @function down
+   *
+   * @param {any} queryInterface
+   * @returns {void}
+   */
   down: queryInterface =>
     queryInterface.dropTable('Documents')
 };

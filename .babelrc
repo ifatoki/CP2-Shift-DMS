@@ -4,10 +4,5 @@
     "node6",
     "stage-2",
     "react"
-  ],
-  "env": {
-    "test": {
-      "plugins": [ "istanbul" ]
-    }
-  }
+  ]
 }
