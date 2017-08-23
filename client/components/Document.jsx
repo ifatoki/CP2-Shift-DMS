@@ -62,15 +62,22 @@ export class Document extends React.Component {
     return (
       <Card className="singleDocument" onClick={this.clickHander}>
         <div className="ui content" style={{ paddingBottom: 0 }}>
-          <Card.Header>
+          <div
+            className="header"
+            style={{
+              whiteSpace: 'noWrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}
+          >
             {this.props.title}
-          </Card.Header>
+          </div>
           <Card.Meta>
             Created <Timeago datetime={this.props.created} />
           </Card.Meta>
           <div
             className="description"
-            style={{ height: '80px', overflowY: 'scroll' }}
+            style={{ height: '60px', overflowY: 'scroll' }}
           >
             { ReactHtmlParser(this.props.content) }
           </div>

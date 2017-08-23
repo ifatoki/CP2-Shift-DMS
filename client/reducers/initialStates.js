@@ -6,6 +6,7 @@ const usersDefaultState = {
   currentUserUpdated: false,
   userDeleted: false,
   userDeleting: false,
+  usersUpdating: false,
   currentUserModifying: false,
   currentUserModified: false,
   currentUserErrorMessage: ''
@@ -16,6 +17,7 @@ const documentsDefaultState = {
   currentRightId: 3,
   currentDocumentRoles: [],
   documents: [],
+  documentsCount: 0,
   currentDocumentUpdated: false,
   currentDocumentModified: false,
   documentsUpdated: false,

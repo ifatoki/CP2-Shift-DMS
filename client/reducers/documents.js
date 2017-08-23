@@ -25,7 +25,8 @@ function documents(state = documentsDefaultState, action) {
   case ActionTypes.DOCUMENTS_FETCH_SUCCESSFUL:
     return {
       ...state,
-      documents: action.payload,
+      documents: action.payload.documents,
+      documentsCount: action.payload.count,
       documentsType: action.documentsType,
       documentsUpdated: true,
       documentsUpdating: false,

@@ -3,6 +3,7 @@ import { Grid, Dropdown } from 'semantic-ui-react';
 import toastr from 'toastr';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
+import ReactPaginate from 'react-paginate';
 import UsersActions from '../actions/UsersActions';
 import DocumentActions from '../actions/DocumentActions';
 import DocumentList from '../components/DocumentList';
@@ -42,11 +43,13 @@ export class HomeContainer extends React.Component {
       type: 'private',
       showUsers: false,
       createNewDocument: false,
+      activePage: 0
     };
     this.logOut = this.logOut.bind(this);
     this.showUserProfile = this.showUserProfile.bind(this);
     this.initializeNewDocument = this.initializeNewDocument.bind(this);
     this.handleDocumentTypeChange = this.handleDocumentTypeChange.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
   }
 
   /**
@@ -61,7 +64,7 @@ export class HomeContainer extends React.Component {
     if (this.props.user.id === 1) {
       type = 'public';
     }
-    this.props.fetchDocuments(this.props.user.id, type);
+    this.props.fetchDocuments(type);
   }
 
   /**
@@ -88,7 +91,7 @@ export class HomeContainer extends React.Component {
       if (this.props.documentDeleting) {
         if (documentDeleted) {
           toastr.success('Document Deleted', 'Success');
-          this.props.fetchDocuments(this.props.user.id, this.state.type);
+          this.props.fetchDocuments(this.state.type);
         }
       }
       if (this.props.userDeleting) {
@@ -104,7 +107,7 @@ export class HomeContainer extends React.Component {
           this.setState({
             createNewDocument: false
           }, () => {
-            this.props.fetchDocuments(this.props.user.id, this.state.type);
+            this.props.fetchDocuments(this.state.type);
           });
         }
       }
@@ -172,9 +175,24 @@ export class HomeContainer extends React.Component {
         this.props.fetchAllUsers();
         this.props.fetchAllRoles();
       } else {
-        this.props.fetchDocuments(this.props.user.id, this.state.type);
+        this.props.fetchDocuments(this.state.type);
       }
     });
+  }
+
+  /**
+   * @method handlePageChange
+   *
+   * @param {any} pageNumber
+   * @memberof HomeContainer
+   * @returns {void}
+   */
+  handlePageChange(pageNumber) {
+    this.setState({
+      activePage: pageNumber.selected
+    }, () => this.props.fetchDocuments(
+      this.state.type, Math.ceil((this.state.activePage) * 9)
+    ));
   }
 
   /**
@@ -423,6 +441,18 @@ export class HomeContainer extends React.Component {
             </Grid>
             <UserList show={this.state.showUsers} />
             <DocumentList show={!this.state.showUsers} />
+            <ReactPaginate
+              previousLabel={'previous'}
+              nextLabel={'next'}
+              breakLabel={<a>...</a>}
+              breakClassName={'break-me'}
+              pageCount={Math.ceil(this.props.documentsCount / 9)}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageChange}
+              containerClassName={'pagination'}
+              subContainerClassName={'pages pagination'}
+              activeClassName={'active'}
+            />
           </div>
         </div>
       </div>
@@ -458,6 +488,7 @@ HomeContainer.propTypes = {
   documentDeleting: PropType.bool.isRequired,
   userDeleted: PropType.bool.isRequired,
   userDeleting: PropType.bool.isRequired,
+  documentsCount: PropType.number.isRequired,
   documentsType: PropType.string,
   currentDocumentErrorMessage: PropType.string.isRequired
 };
@@ -488,6 +519,7 @@ const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,
   documentsType: state.documents.documentsType,
+  documentsCount: state.documents.documentsCount,
   currentDocumentUpdated: state.documents.currentDocumentUpdated,
   currentDocumentModified: state.documents.currentDocumentModified,
   currentUser: state.user.currentUser,

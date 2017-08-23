@@ -6,7 +6,7 @@ module.exports = {
       .url('http://localhost:8000/')
       .waitForElementVisible('body', 5000)
       .assert
-        .containsText('p', 'Lets get you signed in')
+        .containsText('p', 'Shift-DMS')
       .clearValue('#loginUserName')
       .clearValue('#loginPassword')
       .setValue('#loginUserName', 'itunuworks')
@@ -89,7 +89,7 @@ module.exports = {
       .click('#logout')
       .waitForElementVisible('#loginUserName', 5000)
       .assert
-        .containsText('p', 'Lets get you signed in')
+        .containsText('p', 'Shift-DMS')
       .pause(3000);
   },
   'complete tests': (browser) => {

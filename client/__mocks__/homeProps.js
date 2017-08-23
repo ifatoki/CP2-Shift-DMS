@@ -12,6 +12,7 @@ const homeProps = {
     role: 'user',
     userUpdateSuccessful: false
   },
+  documentsCount: 0,
   currentDocumentUpdated: false,
   currentDocumentModified: false,
   currentUserUpdated: false,
