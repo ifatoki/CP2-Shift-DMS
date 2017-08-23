@@ -62,6 +62,7 @@ export class User extends React.Component {
       <Card onClick={this.clickHandler} raised>
         <Card.Content>
           <Card.Header
+            className="card-header"
             content={`${this.props.firstname} ${this.props.lastname}`}
           />
           <Card.Meta>

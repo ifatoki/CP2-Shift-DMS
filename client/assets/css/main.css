@@ -1,0 +1,94 @@
+@import url(https://fonts.googleapis.com/css?family=Baloo+Bhaijaan|Butterfly+Kids|Indie+Flower|Short+Stack);.navbar-icon {
+  cursor: pointer;
+  margin: 10px; }
+
+.sub-home-container {
+  margin-top: 0;
+  padding-top: 40px; }
+
+.pagination {
+  display: flex;
+  list-style-type: none;
+  margin: auto;
+  padding: 0;
+  width: fit-content; }
+
+li {
+  padding: 15px; }
+  li .active {
+    background: #2185d0;
+    color: #ffffff; }
+
+.description {
+  height: 50px;
+  overflow-y: scroll; }
+
+.content-holder {
+  height: 500px;
+  overflow-y: scroll; }
+
+.ui.card .ui.content {
+  padding-bottom: 0; }
+
+.inherit {
+  height: inherit; }
+
+.landing-info {
+  color: #696969;
+  font-family: "Indie Flower";
+  font-size: 30px;
+  text-align: left !important;
+  vertical-align: middle !important;
+  width: 600px !important; }
+
+.app-name {
+  font-family: "Baloo Bhaijaan";
+  font-size: 72px;
+  line-height: 0; }
+
+.landing-container {
+  background: #f0f8ff; }
+
+.landing-sub-container {
+  background: #f0f8ff;
+  padding: 2rem; }
+
+.user-auth {
+  vertical-align: middle !important;
+  width: 400px !important; }
+
+.login-toggle {
+  padding-top: 1em; }
+
+.visible-block {
+  display: block; }
+
+.visible-inline {
+  display: inline; }
+
+.visible-inline-block {
+  display: inline-block; }
+
+.not-visible {
+  display: none !important; }
+
+.card-header {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+.user-list,
+.document-list {
+  height: 80%;
+  margin-top: 0;
+  overflow-y: scroll;
+  padding-top: 10px; }
+
+.list-status {
+  color: #696969;
+  font-family: "Indie Flower";
+  font-size: 60px;
+  text-align: center;
+  vertical-align: middle; }
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiIuLi9jc3MvbWFpbi5jc3MiLCJzb3VyY2VSb290IjoiIn0=*/

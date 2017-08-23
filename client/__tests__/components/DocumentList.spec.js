@@ -16,7 +16,7 @@ describe('Single User Page', () => {
   );
 
   it('renders successfully having one documentList class item', () => {
-    expect(wrapper.find('.documentList'))
+    expect(wrapper.find('.document-list'))
       .toHaveLength(1);
   });
 
