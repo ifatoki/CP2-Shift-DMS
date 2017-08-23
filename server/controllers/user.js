@@ -6,26 +6,44 @@ const User = require('../models').User;
 const Role = require('../models').Role;
 const localAuth = require('../auth/local');
 
+/**
+ * @function filterUser
+ *
+ * @param {any} User
+ * @returns {any} A filtered user object
+ */
 const filterUser = ({
   id, username, email, firstname, lastname, roleId, createdAt
-}) => {
-  return {
-    id,
-    username,
-    firstname,
-    lastname,
-    email,
-    roleId,
-    createdAt
-  };
-};
+}) => ({
+  id,
+  username,
+  firstname,
+  lastname,
+  email,
+  roleId,
+  createdAt
+});
 
-const getValidatorErrorMessage = (errors) => {
-  return _.reduce(errors, (result, error) => {
-    return `${error}\n${result}`;
-  }, '');
-};
+/**
+ * @function getValidatorErrorMessage
+ *
+ * @param {any} errors
+ * @returns {string} A summary of all errors
+ */
+const getValidatorErrorMessage = errors => (
+  _.reduce(errors, (result, error) =>
+    `${error}\n${result}`
+  , '')
+);
 
+/**
+ * @function updateUser
+ *
+ * @param {any} req
+ * @param {any} res
+ * @param {any} user
+ * @return {void}
+ */
 const updateUser = (req, res, user) => {
   user.update({
     username: req.body.username || user.username,
@@ -46,11 +64,19 @@ const updateUser = (req, res, user) => {
         });
       });
   })
-  .catch(error => res.status(500).send({
-    message: error.message
+  .catch(() => res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
   }));
 };
 
+/**
+ * @function confirmRole
+ *
+ * @param {any} req
+ * @param {any} res
+ * @param {any} user
+ * @returns {void}
+ */
 const confirmRole = (req, res, user) => {
   if (req.body.roleId && req.body.roleId !== 1) {
     Role
@@ -64,8 +90,8 @@ const confirmRole = (req, res, user) => {
           updateUser(req, res, user);
         }
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
   } else if (req.body.roleId === 1) {
     res.status(403).send({
@@ -77,6 +103,13 @@ const confirmRole = (req, res, user) => {
 };
 
 module.exports = {
+  /**
+   * @function create
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   create: (req, res) => {
     const userData = {
       username: req.body.username,
@@ -114,8 +147,8 @@ module.exports = {
                 user: returnedUser
               });
             })
-            .catch(error => res.status(500).send({
-              message: error.message
+            .catch(() => res.status(500).send({
+              message: 'oops, we just encountered an error. please try again'
             }));
         } else {
           res.status(404).send({
@@ -123,8 +156,8 @@ module.exports = {
           });
         }
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
     } else {
       res.status(400).send({
@@ -132,6 +165,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function login
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   login: (req, res) => {
     User
       .findOne({
@@ -174,11 +215,27 @@ module.exports = {
         });
       });
   },
+
+  /**
+   * @function logout
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   logout: (req, res) => {
     res.status(200).send({
       message: 'user signed out'
     });
   },
+
+  /**
+   * @function fetch
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   fetch: (req, res) => {
     if (req.roleId === 1) {
       User
@@ -197,16 +254,16 @@ module.exports = {
               message: 'no users in database'
             });
           } else {
-            const filteredUsers = _.reduce(users, (accumulator, user) => {
-              return accumulator.concat(filterUser(user));
-            }, []);
+            const filteredUsers = _.reduce(users, (accumulator, user) =>
+              accumulator.concat(filterUser(user))
+            , []);
             res.status(200).send({
               users: filteredUsers
             });
           }
         })
-        .catch(error => res.status(500).send({
-          message: error.message
+        .catch(() => res.status(500).send({
+          message: 'oops, we just encountered an error. please try again'
         }));
     } else {
       res.status(403).send({
@@ -214,6 +271,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function fetchUser
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   fetchUser: (req, res) => {
     User
       .findById(req.params.id)
@@ -233,15 +298,23 @@ module.exports = {
                 user: returnedUser
               });
             })
-            .catch(error => res.status(500).send({
-              message: error.message
+            .catch(() => res.status(500).send({
+              message: 'oops, we just encountered an error. please try again'
             }));
         }
       })
-      .catch(error => res.status(500).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
   },
+
+  /**
+   * @function fetchUserDocuments
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   fetchUserDocuments(req, res) {
     User
       .findOne({
@@ -276,6 +349,14 @@ module.exports = {
         message: error.message
       }));
   },
+
+  /**
+   * @function updateUser
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   updateUser: (req, res) => {
     const userData = {
       username: req.body.username,
@@ -323,8 +404,9 @@ module.exports = {
                     confirmRole(req, res, user);
                   }
                 })
-                .catch(error => res.status(500).send({
-                  message: error.message
+                .catch(() => res.status(500).send({
+                  message:
+                    'oops, we just encountered an error. please try again'
                 }));
               } else {
                 confirmRole(req, res, user);
@@ -351,6 +433,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function deleteUser
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   deleteUser: (req, res) => {
     if (req.roleId === 1) {
       if (parseInt(req.params.id, 10) === 1) {
@@ -372,13 +462,13 @@ module.exports = {
               .then(() => res.status(200).send({
                 message: 'user deleted successfully'
               }))
-              .catch(error => res.status(500).send({
-                message: error.message
+              .catch(() => res.status(500).send({
+                message: 'oops, we just encountered an error. please try again'
               }));
             }
           })
-          .catch(error => res.status(500).send({
-            message: error.message
+          .catch(() => res.status(500).send({
+            message: 'oops, we just encountered an error. please try again'
           }));
       }
     } else {
@@ -387,6 +477,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function search
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   search: (req, res) => {
     User
     .findAll({
@@ -417,8 +515,8 @@ module.exports = {
       ]
     })
     .then(users => res.status(200).send({ users }))
-    .catch(error => res.status(500).send({
-      message: error.message
+    .catch(() => res.status(500).send({
+      message: 'oops, we just encountered an error. please try again'
     }));
   }
 };

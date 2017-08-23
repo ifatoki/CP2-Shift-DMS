@@ -7,6 +7,12 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.STRING
   }, {
     classMethods: {
+      /**
+       * @function associate
+       *
+       * @param {any} models
+       * @returns {void}
+       */
       associate(models) {
         // associations can be defined here
         Role.hasMany(models.User, {

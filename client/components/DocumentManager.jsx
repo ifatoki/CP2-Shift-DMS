@@ -1,9 +1,11 @@
 import React from 'react';
 import PropType from 'prop-types';
 import toastr from 'toastr';
+import _ from 'lodash';
 import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
+import RoleSearchComponent from '../components/RoleSearchComponent';
 import DocumentActions from '../actions/DocumentActions';
 
 const {
@@ -24,7 +26,20 @@ toastr.options = {
   timeOut: 2000
 };
 
-class DocumentManager extends React.Component {
+/**
+ * A React component that displays and creates
+ * an environment to modify documents
+ *
+ * @export
+ * @class DocumentManager
+ * @extends {React.Component}
+ */
+export class DocumentManager extends React.Component {
+  /**
+   * Creates an instance of DocumentManager.
+   * @param {any} props
+   * @memberof DocumentManager
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -33,13 +48,15 @@ class DocumentManager extends React.Component {
       accessId: 2,
       rightId: 3, // Read access
       accessMode: this.props.createNew ?
-       editModes.NEW : editModes.READ
+       editModes.NEW : editModes.READ,
+      selectedRoles: []
     };
     this.onChange = this.onChange.bind(this);
     this.saveDocument = this.saveDocument.bind(this);
     this.editDocument = this.editDocument.bind(this);
     this.handleRadioButtonChange = this.handleRadioButtonChange.bind(this);
     this.cancelNewDocument = this.cancelNewDocument.bind(this);
+    this.onRolesChange = this.onRolesChange.bind(this);
   }
 
   componentDidMount() {
@@ -66,19 +83,19 @@ class DocumentManager extends React.Component {
             content: editor.getContent()
           });
         });
-        editor.on('dirty', () => {
-          console.log('Just got dirty. You may now enable save button');
-        });
       }
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentDocument, createNew } = nextProps;
+    const {
+      currentDocument, createNew, currentDocumentRoles, rightId
+    } = nextProps;
 
     if (currentDocument || createNew) {
       this.setState({
-        rightId: nextProps.rightId,
+        rightId,
+        selectedRoles: currentDocumentRoles,
         accessMode: createNew ?
           editModes.NEW : editModes.READ,
       }, () => {
@@ -95,6 +112,27 @@ class DocumentManager extends React.Component {
     }
   }
 
+  /**
+   * @method onRolesChange
+   *
+   * @param {any} event
+   * @param {any} data
+   * @memberof DocumentManager
+   * @returns {void}
+   */
+  onRolesChange(event, data) {
+    this.setState({
+      selectedRoles: data.value
+    });
+  }
+
+  /**
+   * @method onChange
+   *
+   * @param {any} event
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   onChange(event) {
     event.preventDefault();
     this.setState(event.target.name !== 'title' ?
@@ -103,10 +141,32 @@ class DocumentManager extends React.Component {
     );
   }
 
+  /**
+   * @method handleRadioButtonChange
+   *
+   * @param {any} event
+   * @param {any} eventData
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   handleRadioButtonChange(event, { value }) {
-    this.setState({ accessId: parseInt(value, 10) });
+    if (value === 3) {
+      this.setState({ accessId: parseInt(value, 10) });
+    } else {
+      this.setState({
+        accessId: parseInt(value, 10),
+        selectedRoles: [this.props.user.roleId]
+      });
+    }
   }
 
+  /**
+   * @method saveDocument
+   *
+   * @param {any} event
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   saveDocument(event) {
     const { currentDocument } = this.props;
     event.preventDefault();
@@ -115,7 +175,13 @@ class DocumentManager extends React.Component {
         title: this.state.title,
         content: this.state.content,
         ownerId: this.props.user.id,
-        accessId: this.state.accessId
+        accessId: this.state.accessId,
+        roles: _.reduce(this.state.selectedRoles, (cummulator, value) => {
+          if (value !== this.props.user.roleId) {
+            cummulator[value] = 3;
+          }
+          return cummulator;
+        }, {})
       });
     } else {
       const editData = {};
@@ -125,13 +191,29 @@ class DocumentManager extends React.Component {
       if (this.state.content !== currentDocument.content) {
         editData.content = this.state.content;
       }
-      if (this.state.accessId !== currentDocument.accessId) {
+      if (this.state.accessId !== currentDocument.accessId ||
+        this.state.accessId === 3) {
         editData.accessId = this.state.accessId;
+        if (this.state.accessId === 3) {
+          editData.roles =
+            _.reduce(this.state.selectedRoles, (cummulator, value) => {
+              cummulator[value] = 3;
+              return cummulator;
+            }, {});
+        }
       }
       this.props.modifyDocument(currentDocument.id, editData);
     }
   }
 
+  /**
+   * @method editDocument
+   *
+   * @param {any} event
+   * @memberof DocumentManager
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   editDocument(event) {
     event.preventDefault();
     if (this.props.rightId < 3) {
@@ -143,31 +225,33 @@ class DocumentManager extends React.Component {
     }
   }
 
+  /**
+   * @method cancelNewDocument
+   *
+   * @param {any} event
+   * @memberof DocumentManager
+   * @returns {void}
+   */
   cancelNewDocument(event) {
     event.preventDefault();
     this.props.cancelNewDocument();
   }
 
+  /**
+   * @method render
+   *
+   * @returns {void}
+   * @memberof DocumentManager
+   */
   render() {
     const { accessId } = this.state;
     return (
-      <div className="ui longer fullscreen document modal">
+      <div className="ui longer fullscreen document modal documentManager">
         <div className="header">
-          <div className="ui container">
+          <div className="ui container intro">
             {this.props.createNew ?
             'Create your document here' :
             this.state.title}
-            <textarea
-              style={{
-                display: this.state.accessMode === editModes.WRITE ?
-                  'block' : 'none'
-              }}
-              rows="1"
-              placeholder="Title"
-              name="title"
-              onChange={this.onChange}
-              value={this.state.title}
-            />
           </div>
         </div>
         <div
@@ -192,15 +276,19 @@ class DocumentManager extends React.Component {
               />
             </div>
             <div
-              className="two fields"
+              className="two fields roleManagement"
               style={{
-                display: this.props.user.role === 'overlord' ? 'none' : 'block'
+                display: this.props.user.role === 'overlord' ||
+                (this.props.currentDocument && (this.props.user.id !==
+                  this.props.currentDocument.ownerId)) ?
+                  'none' : 'block'
               }}
             >
               <Form.Field width={3}>
                 <Form.Field>
                   <Checkbox
                     radio
+                    id="private"
                     label="Private"
                     name="accessRadioGroup"
                     checked={accessId === 1}
@@ -211,6 +299,7 @@ class DocumentManager extends React.Component {
                 <Form.Field>
                   <Checkbox
                     radio
+                    id="public"
                     label="Public"
                     name="accessRadioGroup"
                     checked={accessId === 2}
@@ -221,6 +310,7 @@ class DocumentManager extends React.Component {
                 <Form.Field>
                   <Checkbox
                     radio
+                    id="shared"
                     label="Shared"
                     name="accessRadioGroup"
                     checked={accessId === 3}
@@ -230,7 +320,12 @@ class DocumentManager extends React.Component {
                 </Form.Field>
               </Form.Field>
               <Form.Field disabled={accessId !== 3} width={13}>
-                <h1>Itunuloluwa</h1>
+                <RoleSearchComponent
+                  fluid
+                  roles={this.props.user.roles}
+                  onChange={this.onRolesChange}
+                  selectedRoles={this.state.selectedRoles}
+                />
               </Form.Field>
             </div>
             <div className="field">
@@ -242,10 +337,12 @@ class DocumentManager extends React.Component {
           </div>
           <div
             id="contentHolder"
+            className="scrolling content"
             style={{
               display: this.state.accessMode === editModes.READ ?
                 'block' : 'none',
-              height: '500px'
+              height: '500px',
+              overflowY: 'scroll'
             }}
           >
             { ReactHtmlParser(this.state.content) }
@@ -306,16 +403,19 @@ DocumentManager.propTypes = {
   saveNewDocument: PropType.func.isRequired,
   user: PropType.shape({
     isAuthenticated: PropType.bool.isRequired,
+    roles: PropType.arrayOf(PropType.object).isRequired,
     id: PropType.number.isRequired,
     email: PropType.string.isRequired,
     username: PropType.string.isRequired,
     firstname: PropType.string.isRequired,
     lastname: PropType.string.isRequired,
     result: PropType.string.isRequired,
+    roleId: PropType.number.isRequired,
     role: PropType.string.isRequired
   }).isRequired,
   createNew: PropType.bool.isRequired,
   rightId: PropType.number.isRequired,
+  currentDocumentRoles: PropType.arrayOf(PropType.number).isRequired,
   currentDocument: PropType.shape({
     id: PropType.number,
     title: PropType.string,
@@ -337,10 +437,17 @@ const mapDispatchToProps = {
   modifyDocument
 };
 
+/**
+ * @function mapStateToProps
+ *
+ * @param {any} state
+ * @return {object} props
+ */
 const mapStateToProps = state => ({
   user: state.user,
   currentDocument: state.documents.currentDocument,
-  rightId: state.documents.currentRightId
+  rightId: state.documents.currentRightId,
+  currentDocumentRoles: state.documents.currentDocumentRoles
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentManager);

@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
-import { Search, Grid } from 'semantic-ui-react';
+import { Search } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DocumentActions from '../actions/DocumentActions';
 
 const { searchDocuments, getDocument } = DocumentActions;
 
-class SearchComponent extends Component {
+/**
+ * A React component that implements a document search feature
+ *
+ * @export
+ * @class SearchComponent
+ * @extends {Component}
+ */
+export class SearchComponent extends Component {
+  /**
+   * Creates an instance of SearchComponent.
+   * @param {any} props
+   * @memberof SearchComponent
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -31,10 +43,24 @@ class SearchComponent extends Component {
     });
   }
 
+  /**
+   * @method resetComponent
+   *
+   * @memberof SearchComponent
+   * @returns {void}
+   */
   resetComponent() {
     this.setState({ isLoading: false, results: [], value: '' });
   }
 
+  /**
+   * @method handleResultSelect
+   *
+   * @param {any} e
+   * @param {any} eventResult
+   * @memberof SearchComponent
+   * @returns {void}
+   */
   handleResultSelect(e, { result }) {
     this.setState({
       value: result.title
@@ -43,6 +69,14 @@ class SearchComponent extends Component {
     });
   }
 
+  /**
+   * @method handleSearchChange
+   *
+   * @param {any} e
+   * @param {any} eventValue
+   * @memberof SearchComponent
+   * @returns {void}
+   */
   handleSearchChange(e, { value }) {
     this.setState({
       isLoading: true,
@@ -50,22 +84,25 @@ class SearchComponent extends Component {
     }, () => this.props.searchDocuments(value));
   }
 
+  /**
+   * @method render
+   *
+   * @returns {void}
+   * @memberof SearchComponent
+   */
   render() {
     const { isLoading, value, results } = this.state;
 
     return (
-      <Grid>
-        <Grid.Column width={8}>
-          <Search
-            category
-            loading={isLoading}
-            onResultSelect={this.handleResultSelect}
-            onSearchChange={this.handleSearchChange}
-            results={results}
-            value={value}
-          />
-        </Grid.Column>
-      </Grid>
+      <Search
+        category
+        fluid
+        loading={isLoading}
+        onResultSelect={this.handleResultSelect}
+        onSearchChange={this.handleSearchChange}
+        results={results}
+        value={value}
+      />
     );
   }
 }
@@ -73,9 +110,20 @@ class SearchComponent extends Component {
 SearchComponent.propTypes = {
   searchDocuments: PropTypes.func.isRequired,
   getDocument: PropTypes.func.isRequired,
-  documentsSearchResult: PropTypes.object.isRequired
+  documentsSearchResult: PropTypes.shape({
+    authored: PropTypes.object,
+    public: PropTypes.object,
+    role: PropTypes.object,
+    shared: PropTypes.object
+  }).isRequired
 };
 
+/**
+ * @function mapStateToProps
+ *
+ * @param {any} state
+ * @returns {object} props
+ */
 const mapStateToProps = state => ({
   documentsSearchResult: state.documents.documentsSearchResult
 });

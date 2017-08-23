@@ -2,6 +2,13 @@ const Right = require('../models').Right;
 const DocumentRole = require('../models').DocumentRole;
 
 module.exports = {
+  /**
+   * @function create
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   create(req, res) {
     if (req.body.title !== '') {
       Right
@@ -20,8 +27,8 @@ module.exports = {
               .then(newRight => res.status(201).send({
                 right: newRight
               }))
-              .catch(error => res.status(400).send({
-                message: error.message
+              .catch(() => res.status(500).send({
+                message: 'oops, we just encountered an error. please try again'
               }));
           } else {
             res.status(403).send({
@@ -29,9 +36,9 @@ module.exports = {
             });
           }
         })
-        .catch((err) => {
+        .catch(() => {
           res.status(500).send({
-            message: err.message
+            message: 'oops, we just encountered an error. please try again'
           });
         });
     } else {
@@ -40,6 +47,14 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @function list
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {void}
+   */
   list(req, res) {
     return Right
       .findAll({
@@ -48,8 +63,8 @@ module.exports = {
       .then(rights => res.status(200).send({
         rights
       }))
-      .catch(error => res.status(400).send({
-        message: error.message
+      .catch(() => res.status(500).send({
+        message: 'oops, we just encountered an error. please try again'
       }));
   }
 };

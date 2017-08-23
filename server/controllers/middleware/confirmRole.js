@@ -1,5 +1,14 @@
 const User = require('../../models').User;
 
+/**
+ * @function confirmUserDetails
+ *
+ * @param {any} req
+ * @param {any} res
+ * @param {any} next
+ * @returns {void}
+ * @throws {Error}
+ */
 function confirmUserDetails(req, res, next) {
   User
     .findOne({
@@ -27,6 +36,15 @@ function confirmUserDetails(req, res, next) {
     });
 }
 
+/**
+ * @function confirmRole
+ *
+ * @export
+ * @param {any} req
+ * @param {any} res
+ * @param {any} next
+ * @returns {void}
+ */
 export default function confirmRole(req, res, next) {
   if (parseInt(req.body.roleId, 10) === 1) {
     User

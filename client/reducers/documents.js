@@ -1,23 +1,14 @@
 import ActionTypes from '../actions/ActionTypes';
+import { documentsDefaultState } from '../reducers/initialStates';
 
-const defaultState = {
-  currentDocument: null,
-  currentRightId: 3,
-  documents: [],
-  currentDocumentUpdated: false,
-  currentDocumentModified: false,
-  documentsUpdated: false,
-  documentSaved: false,
-  documentsSearchResult: {},
-  documentsSearchResultUpdated: false,
-  savingDocument: false,
-  currentDocumentModifying: false,
-  documentDeleting: false,
-  documentDeleted: false,
-  currentDocumentErrorMessage: ''
-};
-
-function documents(state = defaultState, action) {
+/**
+ * @function documents
+ *
+ * @param {any} [state=documentsDefaultState]
+ * @param {any} action
+ * @returns {object} state
+ */
+function documents(state = documentsDefaultState, action) {
   switch (action.type) {
   case ActionTypes.DOCUMENTS_FETCH_REQUEST:
     return {
@@ -34,7 +25,8 @@ function documents(state = defaultState, action) {
   case ActionTypes.DOCUMENTS_FETCH_SUCCESSFUL:
     return {
       ...state,
-      documents: action.payload,
+      documents: action.payload.documents,
+      documentsCount: action.payload.count,
       documentsType: action.documentsType,
       documentsUpdated: true,
       documentsUpdating: false,
@@ -116,6 +108,7 @@ function documents(state = defaultState, action) {
     return {
       ...state,
       currentDocument: action.payload.document,
+      currentDocumentRoles: action.payload.documentRoles || [],
       currentRightId: action.payload.rightId,
       currentDocumentUpdated: true,
       currentDocumentUpdating: false,
@@ -185,7 +178,8 @@ function documents(state = defaultState, action) {
       documentsUpdated: false,
       documentSaved: false,
       currentDocumentModified: false,
-      currentDocumentErrorMessage: ''
+      currentDocumentErrorMessage: '',
+      currentDocument: null
     };
   default:
     return state;

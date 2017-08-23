@@ -20,22 +20,22 @@ const { users } = postData;
 describe('routes : index', () => {
   describe('Endpoints: Right', () => {
     describe('GET route', () => {
-      it('should return an array when queried in its initial raw state',
-        (done) => {
-          request(app)
-            .get('/api/v1/rights')
-            .set('authorization', `bearer ${overlordToken}`)
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .then((res) => {
-              expect(res.body).to.have.a.property('rights');
-              expect(res.body.rights).to.be.array().ofSize(3);
-              done();
-            })
-            .catch((err) => {
-              done(err);
-            });
-        });
+      it('should return an array of rights when queried in its ' +
+      'initial raw state', (done) => {
+        request(app)
+          .get('/api/v1/rights')
+          .set('authorization', `bearer ${overlordToken}`)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .then((res) => {
+            expect(res.body).to.have.a.property('rights');
+            expect(res.body.rights).to.be.array().ofSize(3);
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          });
+      });
     });
 
     describe('POST route', () => {
@@ -68,9 +68,8 @@ describe('routes : index', () => {
             done(err);
           });
       });
-      it('should return 403 error when a right with the \
-      same title already exists',
-      (done) => {
+      it('should return 403 error when a right with the ' +
+      'same title already exists', (done) => {
         request(app)
           .post('/api/v1/rights')
           .type('form')
@@ -167,7 +166,8 @@ describe('routes : index', () => {
           restartIdentity: true
         });
       });
-      it('should throw a 401 error when user is not overlord', (done) => {
+      it('should throw a 401 error when user is not overlord and he tries' +
+      'creating a role', (done) => {
         request(app)
           .post('/api/v1/roles')
           .type('form')
@@ -372,9 +372,8 @@ describe('routes : index', () => {
       });
 
       describe('GET /api/v1/search/users/', () => {
-        it('should return an object with property users which is an array \
-        when query is successful',
-        (done) => {
+        it('should return an object with property users which is an array' +
+        'when query is successful', (done) => {
           const query = 'it';
           request(app)
             .get(`/api/v1/search/users?q=${query}`)
@@ -406,6 +405,50 @@ describe('routes : index', () => {
                 .to.have.property('message')
                 .which.equals(
                   "role with passed roleId doesn't exist. change roleId");
+              done();
+            })
+            .catch((err) => {
+              done(err);
+            });
+        });
+      it('should return 403 error when username already exists',
+        (done) => {
+          request(app)
+            .post('/api/v1/users')
+            .type('form')
+            .send({
+              ...users.fellows,
+              username: 'itunuworks'
+            })
+            .then((res) => {
+              expect(res.status).to.equal(403);
+              expect(res.body)
+                .to.have.property('message')
+                .which.equals(
+                  'a user with that email or username already exists'
+                );
+              done();
+            })
+            .catch((err) => {
+              done(err);
+            });
+        });
+      it('should return 403 error when new overlord is requested created',
+        (done) => {
+          request(app)
+            .post('/api/v1/users')
+            .type('form')
+            .send({
+              ...users.fellows,
+              roleId: 1
+            })
+            .then((res) => {
+              expect(res.status).to.equal(403);
+              expect(res.body)
+                .to.have.property('message')
+                .which.equals(
+                  'overlord already exists'
+                );
               done();
             })
             .catch((err) => {
@@ -514,27 +557,27 @@ describe('routes : index', () => {
     });
 
     describe('PUT /api/v1/users/:id route', () => {
-      it('should return 403 error when a user tries to update another profile',
-        (done) => {
-          const newEmail = faker.internet.email();
-          request(app)
-            .put('/api/v1/users/2')
-            .set('authorization', `bearer ${overlordToken}`)
-            .type('form')
-            .send({
-              email: newEmail
-            })
-            .then((res) => {
-              expect(res.status).to.equal(403);
-              expect(res.body)
-                .to.have.property('message')
-                .which.equals('only a user can edit his details');
-              done();
-            })
-            .catch((err) => {
-              done(err);
-            });
-        });
+      it('should return 403 error when a user tries to update another users' +
+      'profile', (done) => {
+        const newEmail = faker.internet.email();
+        request(app)
+          .put('/api/v1/users/2')
+          .set('authorization', `bearer ${overlordToken}`)
+          .type('form')
+          .send({
+            email: newEmail
+          })
+          .then((res) => {
+            expect(res.status).to.equal(403);
+            expect(res.body)
+              .to.have.property('message')
+              .which.equals('only a user can edit his details');
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          });
+      });
       it('should return 404 error when userId is not found', (done) => {
         const newEmail = faker.internet.email();
         request(app)
@@ -576,9 +619,8 @@ describe('routes : index', () => {
               done(err);
             });
         });
-      it('should return the modified user with the new \
-      email on successful update',
-      (done) => {
+      it('should return the modified user with the new' +
+      'email on successful update', (done) => {
         const newEmail = faker.internet.email();
         request(app)
           .put('/api/v1/users/1')
@@ -663,7 +705,7 @@ describe('routes : index', () => {
                 .then((modifiedUser) => {
                   expect(helpers
                     .comparePassword(newPassword, modifiedUser.password)
-                  ).to.be.true;
+                  ).to.eql(true);
                 });
                 done();
               })
@@ -731,9 +773,8 @@ describe('routes : index', () => {
             done(err);
           });
       });
-      it('should return success message and actually delete user \
-      when all requirements are met',
-      (done) => {
+      it('should return success message and actually delete user' +
+      'when all requirements are met', (done) => {
         User.findOne({
           where: {
             username: users.admin.username
@@ -907,9 +948,8 @@ describe('routes : index', () => {
 
     describe('GET route', () => {
       describe('GET /api/v1/documents/ route', () => {
-        it('should return an object with property documents which is an array\
-        when query is successful',
-        (done) => {
+        it('should return an object with property documents which is an array' +
+        'when query is successful', (done) => {
           request(app)
             .get('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)
@@ -922,9 +962,8 @@ describe('routes : index', () => {
             })
             .catch(err => done(err));
         });
-        it('should return an object with property documents which is an array \
-        when query is successful',
-        (done) => {
+        it('should return an object with property documents which is an array' +
+        'when query is successful', (done) => {
           request(app)
             .get('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)
@@ -936,8 +975,8 @@ describe('routes : index', () => {
             })
             .catch(err => done(err));
         });
-        it('should return an object with property documents which is \
-        an array of documents when query is successful', (done) => {
+        it('should return an object with property documents which is' +
+        'an array of documents when query is successful', (done) => {
           request(app)
             .get('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)
@@ -950,8 +989,8 @@ describe('routes : index', () => {
             })
             .catch(err => done(err));
         });
-        it('should return an object with property documents which is an \
-        array of documents when query is successful', (done) => {
+        it('should return an object with property documents which is an' +
+        'array of documents when query is successful', (done) => {
           request(app)
             .get('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)
@@ -1091,18 +1130,6 @@ describe('routes : index', () => {
             })
             .catch(err => done(err));
         });
-        it('should return an object on success', (done) => {
-          request(app)
-            .get('/api/v1/search/documents')
-            .set('authorization', `bearer ${userToken}`)
-            .expect(200)
-            .then((res) => {
-              expect(res.body)
-                .to.be.an('object');
-              done();
-            })
-            .catch(err => done(err));
-        });
       });
     });
 
@@ -1121,8 +1148,8 @@ describe('routes : index', () => {
           })
           .catch(err => done(err));
       });
-      it('should return the document reflecting the \
-      modification when modification is successful', (done) => {
+      it('should return the document reflecting the' +
+      'modification when modification is successful', (done) => {
         const newContent = 'I just got changed';
         Document
           .findOne({
@@ -1179,8 +1206,8 @@ describe('routes : index', () => {
           })
           .catch(err => done(err));
       });
-      it('should return the document reflecting the \
-      modification when modification is successful', (done) => {
+      it('should return the document reflecting the' +
+      'modification when modification is successful', (done) => {
         Document
           .findOne({
             where: {
@@ -1279,7 +1306,7 @@ describe('routes : index', () => {
           })
           .catch(err => done(err));
       });
-      it('should return 401 error when user does not have delete rights',
+      it('should return 401 error when user does not have access rights',
         (done) => {
           Document
             .findOne({
