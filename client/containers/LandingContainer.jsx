@@ -283,7 +283,8 @@ export class LandingContainer extends React.Component {
                 </form>
               </div>
               <div
-                className="column" style={{
+                className="column"
+                style={{
                   width: '400px',
                   verticalAlign: 'middle',
                   display: this.state.showLogin ? 'block' : 'none'
