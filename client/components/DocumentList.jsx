@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import Document from './Document';
 
 export /**
@@ -13,36 +14,25 @@ export /**
  */
 const DocumentList = props => (
   <div
-    className="ui divided items documentList"
-    style={{
-      paddingTop: '10px',
-      marginTop: '0px',
-      overflowY: 'scroll',
-      height: '90%',
-      display: props.show ? 'block' : 'none'
-    }}
+    className={
+      classNames('ui divided items document-list', props.show ?
+        'visible-block' : 'not-visible')
+    }
   >
     <div
-      style={{
-        verticalAlign: 'middle',
-        textAlign: 'center',
-        fontSize: '70px',
-        fontFamily: 'Indie Flower',
-        color: '#696969',
-        display: props.isUpdating ? 'block' : 'none'
-      }}
+      className={
+        classNames('list-status', props.isUpdating ?
+          'visible-block' : 'not-visible')
+      }
     >
       <Icon loading name="spinner" />
-      <p
-        style={{
-          fontSize: '50px'
-        }}
-      >Fetching Documents...</p>
+      <p>Fetching Documents...</p>
     </div>
     <div
-      style={{
-        display: props.isUpdating ? 'none' : 'inline-block'
-      }}
+      className={
+        classNames(props.isUpdating ?
+          'not-visible' : 'visible-inline-block')
+      }
     >
       <Card.Group>
         {props.documents.map(document => (
@@ -57,22 +47,13 @@ const DocumentList = props => (
       </Card.Group>
     </div>
     <div
-      style={{
-        verticalAlign: 'middle',
-        textAlign: 'center',
-        fontSize: '70px',
-        fontFamily: 'Indie Flower',
-        color: '#696969',
-        display: (!props.isUpdating && !props.documents.length) ?
-          'block' : 'none'
-      }}
+      className={
+        classNames('list-status', (
+          !props.isUpdating && !props.documents.length) ?
+            'visible-block' : 'not-visible')}
     >
       <Icon name="warning sign" />
-      <p
-        style={{
-          fontSize: '50px'
-        }}
-      >No Documents Found!!!</p>
+      <p>No Documents Found!!!</p>
     </div>
   </div>
 );

@@ -1,0 +1,98 @@
+@import url(https://fonts.googleapis.com/css?family=Baloo+Bhaijaan|Butterfly+Kids|Indie+Flower|Short+Stack);.inherit {
+  height: inherit; }
+
+.landing-info {
+  width: 600px !important;
+  vertical-align: middle !important;
+  text-align: left !important;
+  font-size: 30px;
+  font-family: "Indie Flower";
+  color: #696969; }
+
+.app-name {
+  line-height: 0;
+  font-size: 72px;
+  font-family: 'Baloo Bhaijaan'; }
+
+.landing-container {
+  background: aliceblue; }
+
+.landing-sub-container {
+  padding: 2rem;
+  background: aliceblue; }
+
+.user-auth {
+  width: 400px !important;
+  vertical-align: middle !important; }
+
+.login-toggle {
+  padding-top: 1em; }
+
+.navbar-icon {
+  margin: 10px;
+  cursor: pointer; }
+
+.sub-home-container {
+  padding-top: 40px;
+  margin-top: 0px; }
+
+.pagination {
+  list-style-type: none;
+  display: flex;
+  width: fit-content;
+  margin: auto;
+  padding: 0px; }
+  .pagination li {
+    padding: 15px; }
+  .pagination li.active {
+    background: #2185d0;
+    color: white; }
+
+.description {
+  height: 50px;
+  overflow-y: scroll; }
+
+#content-holder {
+  height: 500px;
+  overflow-y: scroll; }
+
+.ui.card .ui.content {
+  padding-bottom: 0px; }
+
+.iTried {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  border-radius: 10px; }
+
+.visible-block {
+  display: block; }
+
+.visible-inline {
+  display: inline; }
+
+.visible-inline-block {
+  display: inline-block; }
+
+.not-visible {
+  display: none !important; }
+
+.card-header {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+.user-list, .document-list {
+  padding-top: 10px;
+  margin-top: 0px;
+  overflow-y: scroll;
+  height: 80%; }
+
+.list-status {
+  vertical-align: middle;
+  text-align: center;
+  font-size: 60px;
+  font-family: "Indie Flower";
+  color: #696969; }
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiIuLi9jc3MvbWFpbi5jc3MiLCJzb3VyY2VSb290IjoiIn0=*/

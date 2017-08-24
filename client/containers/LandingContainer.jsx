@@ -4,6 +4,7 @@ import { Dropdown } from 'semantic-ui-react';
 import toastr from 'toastr';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import classNames from 'classnames';
 import UsersActions from '../actions/UsersActions';
 
 const { logUserIn, signUserUp, fetchAllRoles } = UsersActions;
@@ -125,55 +126,16 @@ export class LandingContainer extends React.Component {
   render() {
     return (
       <div
-        className="landingContainer"
-        style={{
-          height: 'inherit', background: 'aliceblue'
-        }}
+        className="landing-container inherit"
       >
         <div
-          className="ui grid"
-          style={{
-            height: 'inherit', background: 'aliceblue', padding: '2rem'
-          }}
+          className="ui grid inherit landing-sub-container"
         >
-          <div
-            className="ten wide column"
-            style={{
-              height: 'inherit'
-            }}
-          >
-            <div
-              className="ui middle aligned center aligned grid"
-              style={{ height: 'inherit' }}
-            >
-              <div
-                className="column"
-                style={{
-                  width: '600px',
-                  verticalAlign: 'middle',
-                  textAlign: 'left'
-                }}
-              >
-                <p
-                  style={{
-                    width: '600px',
-                    verticalAlign: 'middle',
-                    lineHeight: '0',
-                    textAlign: 'left',
-                    fontSize: '72px',
-                    fontFamily: 'Baloo Bhaijaan',
-                    color: '#535050' }}
-                >Shift-DMS</p>
-                <p
-                  style={{
-                    width: '600px',
-                    verticalAlign: 'middle',
-                    textAlign: 'left',
-                    fontSize: '30px',
-                    fontFamily: 'Indie Flower',
-                    color: '#696969'
-                  }}
-                >
+          <div className="ten wide column inherit">
+            <div className="ui middle aligned center aligned grid inherit">
+              <div className="column landing-info">
+                <p className="app-name">Shift-DMS</p>
+                <p>
                   Manage documents, roles, privacy and collaboration on the fly
                   all with one account, one tool and one DMS. With inbuilt
                   authentication using JWT, Role sharing capacity across your
@@ -184,22 +146,15 @@ export class LandingContainer extends React.Component {
             </div>
           </div>
           <div
-            className="six wide column"
-            style={{
-              height: 'inherit'
-            }}
+            className="six wide column inherit"
           >
             <div
-              className="ui middle aligned center aligned grid"
-              style={{ height: 'inherit' }}
+              className="ui middle aligned center aligned grid inherit"
             >
               <div
-                className="column"
-                style={{
-                  width: '400px',
-                  verticalAlign: 'middle',
-                  display: this.state.showLogin ? 'none' : 'block'
-                }}
+                className={classNames('column user-auth',
+                  this.state.showLogin ? 'not-visible' : 'visible-block'
+                )}
               >
                 <form className="ui form segment">
                   <div className="field">
@@ -272,9 +227,7 @@ export class LandingContainer extends React.Component {
                   >
                     Create an account
                   </div>
-                  <div
-                    style={{ paddingTop: '1em' }}
-                  >
+                  <div className="login-toggle">
                     Already have an account? &nbsp;
                     <a href="" onClick={this.toggleShowLogin}>
                       Sign In
@@ -283,12 +236,9 @@ export class LandingContainer extends React.Component {
                 </form>
               </div>
               <div
-                className="column"
-                style={{
-                  width: '400px',
-                  verticalAlign: 'middle',
-                  display: this.state.showLogin ? 'block' : 'none'
-                }}
+                className={classNames('column user-auth',
+                  this.state.showLogin ? 'visible-block' : 'not-visible'
+                )}
               >
                 <form className="ui form segment">
                   <p>Lets get you signed in</p>
@@ -318,9 +268,7 @@ export class LandingContainer extends React.Component {
                   >
                     Sign in
                   </div>
-                  <div
-                    style={{ paddingTop: '1em' }}
-                  >
+                  <div className="login-toggle">
                     New user? &nbsp;
                     <a href="" onClick={this.toggleShowLogin}>
                       Create an account
