@@ -13,8 +13,8 @@ describe('auth : local', () => {
 
   describe('decodeToken()', () => {
     const token = localAuth.encodeToken(18);
-    it('should return the actual value initially' +
-    'encoded when token gets decoded', (done) => {
+    it(`should return the actual value initially
+    encoded when token gets decoded`, (done) => {
       localAuth.decodeToken(token, (err, payload) => {
         expect(err).to.eql(null);
         expect(payload.sub).to.equal(18);

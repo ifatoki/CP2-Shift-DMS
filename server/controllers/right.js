@@ -40,7 +40,7 @@ module.exports = {
               .then(newRight => res.status(201).send({
                 right: newRight
               }))
-              .catch(returnServerError());
+              .catch(() => returnServerError());
           } else {
             res.status(403).send({
               message: 'right already exists'

@@ -14,8 +14,8 @@ describe('auth : helpers', () => {
     it('should return a string as the encrypted password', () => {
       expect(authHelpers.encrypt(password)).to.be.a('string');
     });
-    it('show return null, when a null password or' +
-    'empty string is passed for encryption',
+    it(`show return null, when a null password or
+    empty string is passed for encryption`,
     () => {
       expect(authHelpers.encrypt(null)).to.eql(null);
       expect(authHelpers.encrypt('')).to.eql(null);
@@ -24,8 +24,8 @@ describe('auth : helpers', () => {
 
   describe('Compare Password', () => {
     const encryptedPassword = authHelpers.encrypt(password);
-    it("should throw Error('invalid password') when a wrong passwords" +
-    "don't match", () => {
+    it(`should throw Error('invalid password') when a wrong passwords
+    don't match`, () => {
       expect(() => authHelpers.comparePassword(aWrongPassword, password))
         .to.throw('invalid password');
     });
@@ -36,8 +36,8 @@ describe('auth : helpers', () => {
   });
 
   describe('confirmAuthentication', () => {
-    it('should respond with json and status 200 and a welcome message' +
-    'when /api route is hit',
+    it(`should respond with json and status 200 and a welcome message
+    when /api route is hit`,
     (done) => {
       request(app)
         .get('/api')
@@ -58,8 +58,8 @@ describe('auth : helpers', () => {
         status: 'successful'
       });
     });
-    it("should fail with status 401 and message 'please log login' when a" +
-    'protected route (/home) is hit by an unauthenticated user',
+    it(`should fail with status 401 and message 'please log login' when a
+    protected route (/home) is hit by an unauthenticated user`,
     (done) => {
       request(newApp)
         .get('/home')
@@ -77,8 +77,8 @@ describe('auth : helpers', () => {
     const headers = {
       authorization: process.env.INVALID_AUTH_TOKEN
     };
-    it("should fail with status 401 and message 'jwt malformed', " +
-    'when an invalid token is used',
+    it(`should fail with status 401 and message 'jwt malformed'
+    when an invalid token is used`,
     (done) => {
       request(newApp)
         .get('/home')
@@ -97,8 +97,8 @@ describe('auth : helpers', () => {
       id: 1,
       name: 'obama'
     }, true);
-    it("should fail with status 401 and message 'jwt expired', " +
-    'when an expired token is used',
+    it(`should fail with status 401 and message 'jwt expired'
+    when an expired token is used`,
     (done) => {
       request(newApp)
         .get('/home')

@@ -88,8 +88,8 @@ describe('Documents Reducer', () => {
       expect(newState.currentDocumentModifying).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset ' +
-    'currentDocumentModifying to false', () => {
+    it(`should set the document saved to currentDocument and reset 
+    currentDocumentModifying to false`, () => {
       const action = {
         type: ActionTypes.DOCUMENT_MODIFY_SUCCESSFUL,
         payload: document
@@ -105,8 +105,8 @@ describe('Documents Reducer', () => {
       expect(newState.currentDocumentModified).toBeTruthy();
       expect(newState.currentDocument).toEqual(document);
     });
-    it('should set the error message and reset currentDocumentModifying' +
-    'to false', () => {
+    it(`should set the error message and reset currentDocumentModifying
+    to false`, () => {
       const action = {
         type: ActionTypes.DOCUMENT_MODIFY_FAILED,
         payload: 'document title is invalid'
@@ -138,8 +138,8 @@ describe('Documents Reducer', () => {
       expect(newState.documentDeleting).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset' +
-    'documentDeleting to false', () => {
+    it(`should set the document saved to currentDocument and reset
+    documentDeleting to false`, () => {
       const action = {
         type: ActionTypes.DOCUMENT_DELETE_SUCCESSFUL
       };
@@ -192,8 +192,8 @@ describe('Documents Reducer', () => {
       expect(newState.savingDocument).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset' +
-    'savingDocument to false', () => {
+    it(`should set the document saved to currentDocument and reset
+    savingDocument to false`, () => {
       const action = {
         type: ActionTypes.DOCUMENT_SAVE_SUCCESSFUL,
         payload: {
@@ -251,8 +251,8 @@ describe('Documents Reducer', () => {
       expect(newState.currentDocumentUpdating).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset' +
-    'currentDocumentUpdating to false', () => {
+    it(`should set the document saved to currentDocument and reset
+    currentDocumentUpdating to false`, () => {
       const action = {
         type: ActionTypes.DOCUMENT_GET_SUCCESSFUL,
         payload: {
@@ -271,8 +271,8 @@ describe('Documents Reducer', () => {
       expect(newState.currentDocumentUpdated).toBeTruthy();
       expect(newState.currentDocument).toEqual(action.payload.document);
     });
-    it('should set the error message and reset currentDocumentUpdating' +
-    'to false', () => {
+    it(`should set the error message and reset currentDocumentUpdating
+    to false`, () => {
       const action = {
         type: ActionTypes.DOCUMENT_GET_FAILED,
         payload: 'document title is invalid'
@@ -296,8 +296,8 @@ describe('Documents Reducer', () => {
       content: faker.lorem.paragraph(2),
     }));
 
-    it('should reset the error message and initialize' +
-    'documentsSearchResultUpdating', () => {
+    it(`should reset the error message and initialize
+    documentsSearchResultUpdating`, () => {
       const action = {
         type: ActionTypes.DOCUMENTS_SEARCH_REQUEST,
       };
@@ -310,8 +310,8 @@ describe('Documents Reducer', () => {
       expect(newState.documentsSearchResultUpdating).toBeTruthy();
       expect(newState.currentDocumentErrorMessage).toEqual('');
     });
-    it('should set the document saved to currentDocument and reset' +
-    'documentsSearchResultUpdating to false', () => {
+    it(`should set the document saved to currentDocument and reset
+    documentsSearchResultUpdating to false`, () => {
       const action = {
         type: ActionTypes.DOCUMENTS_SEARCH_SUCCESSFUL,
         payload: {
@@ -328,8 +328,8 @@ describe('Documents Reducer', () => {
       expect(newState.documentsSearchResultUpdating).toBeFalsy();
       expect(newState.documentsSearchResultUpdated).toBeTruthy();
     });
-    it('should set the error message and reset documentsSearchResultUpdating' +
-    'to false', () => {
+    it(`should set the error message and reset documentsSearchResultUpdating
+    to false`, () => {
       const action = {
         type: ActionTypes.DOCUMENTS_SEARCH_FAILED,
         payload: 'search failed'

@@ -40,8 +40,8 @@ describe('validator', () => {
       password: 'current password is required'
     });
   });
-  it('validateuseredit with invalid email address should find 1' +
-  'validation error', () => {
+  it(`validateuseredit with invalid email address should find 1
+  validation error`, () => {
     const validator = Validator.validateUserEdit({
       email: 'email'
     });
@@ -50,8 +50,8 @@ describe('validator', () => {
       email: 'email is invalid'
     });
   });
-  it('validateuseredit with an empty string as newPassword should find' +
-  '1 validation error', () => {
+  it(`validateuseredit with an empty string as newPassword should find
+  1 validation error`, () => {
     const validator = Validator.validateUserEdit({
       newPassword: ''
     });
@@ -60,8 +60,8 @@ describe('validator', () => {
       password: 'current password is required'
     });
   });
-  it('validateuseredit with an empty string as newPassword and valid' +
-  'currentPassword should find 1 validation error', () => {
+  it(`validateuseredit with an empty string as newPassword and valid
+  currentPassword should find 1 validation error`, () => {
     const validator = Validator.validateUserEdit({
       newPassword: '',
       currentPassword: 'current'
@@ -71,8 +71,8 @@ describe('validator', () => {
       password: 'new password is required'
     });
   });
-  it('validateuseredit with a valid newPassword and currentPassword' +
-  'should find 1 validation error', () => {
+  it(`validateuseredit with a valid newPassword and currentPassword
+  should find 1 validation error`, () => {
     const validator = Validator.validateUserEdit({
       newPassword: 'new',
       currentPassword: 'current'
@@ -82,8 +82,8 @@ describe('validator', () => {
       password: 'confirm password is required'
     });
   });
-  it('validateuseredit with non matching password fields should find 1' +
-  'validation error', () => {
+  it(`validateuseredit with non matching password fields should find 1
+  validation error`, () => {
     const validator = Validator.validateUserEdit({
       newPassword: 'new',
       currentPassword: 'current',

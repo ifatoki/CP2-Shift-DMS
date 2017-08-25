@@ -43,8 +43,8 @@ describe('Single User Page', () => {
       expect(onChangeSpy.called)
         .toBeTruthy();
     });
-    it('should call the handleChange method when the checkbox' +
-    'selection changes', () => {
+    it(`should call the handleChange method when the checkbox
+    selection changes`, () => {
       wrapper.find('input[type="checkbox"]')
         .simulate('change');
       expect(selectionChangeSpy.called)

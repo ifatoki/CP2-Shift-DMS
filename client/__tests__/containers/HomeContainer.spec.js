@@ -110,8 +110,8 @@ describe('Single Document Page', () => {
       });
       expect(wrapper.state('type')).toBe('american');
     });
-    it('should call fetchDocuments when previous props is savingDocument' +
-    'and current props is documentSaved', () => {
+    it(`should call fetchDocuments when previous props is savingDocument
+    and current props is documentSaved`, () => {
       let initialCallCount = fetchDocuments.callCount;
       wrapper.setProps({
         savingDocument: true
@@ -121,8 +121,8 @@ describe('Single Document Page', () => {
       });
       expect(fetchDocuments.callCount === (initialCallCount += 1));
     });
-    it('should call fetchDocuments when previous props is documentDeleting' +
-    'and current props is documentDeleted', () => {
+    it(`should call fetchDocuments when previous props is documentDeleting
+    and current props is documentDeleted`, () => {
       let initialCallCount = fetchDocuments.callCount;
       wrapper.setProps({
         documentDeleting: true
