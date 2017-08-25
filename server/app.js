@@ -29,7 +29,9 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  limit: '100mb'
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', publicPath);
 
