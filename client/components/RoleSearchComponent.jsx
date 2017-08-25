@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown } from 'semantic-ui-react';
-import _ from 'lodash';
+import lodash from 'lodash';
 import PropTypes from 'prop-types';
 
 /**
@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
  * @returns {void}
  */
 const RoleSearchComponent = (props) => {
-  const roles = _.map(props.roles, role => ({
+  const roles = lodash.map(props.roles, role => ({
     key: role.id,
     value: role.id,
     text: role.title

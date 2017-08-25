@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Timeago from 'timeago-react';
 import { Card, Icon } from 'semantic-ui-react';
-import UsersActions from '../actions/UsersActions';
+import usersActions from '../actions/usersActions';
 
-const { getUser, deleteUser } = UsersActions;
+const { getUser, deleteUser } = usersActions;
 
 /**
  * A React component that helps display a single user

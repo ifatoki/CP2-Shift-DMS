@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Card, Icon } from 'semantic-ui-react';
 import ReactHtmlParser from 'react-html-parser';
 import Timeago from 'timeago-react';
-import DocumentActions from '../actions/DocumentActions';
+import documentActions from '../actions/documentActions';
 
-const { getDocument, deleteDocument } = DocumentActions;
+const { getDocument, deleteDocument } = documentActions;
 
 /**
  * A React Component to help create a single document

@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
-import UsersActions from '../actions/UsersActions';
+import usersActions from '../actions/usersActions';
 import store from '../client';
 
-const { addUser } = UsersActions;
+const { addUser } = usersActions;
 
 /**
  * @export

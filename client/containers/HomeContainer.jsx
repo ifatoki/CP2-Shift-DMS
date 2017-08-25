@@ -5,8 +5,8 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 import classNames from 'classnames';
-import UsersActions from '../actions/UsersActions';
-import DocumentActions from '../actions/DocumentActions';
+import usersActions from '../actions/usersActions';
+import documentActions from '../actions/documentActions';
 import DocumentList from '../components/DocumentList';
 import SearchComponent from '../components/SearchComponent';
 import UserList from '../components/UserList';
@@ -18,8 +18,8 @@ const {
   fetchAllUsers,
   fetchAllRoles,
   getUser
-} = UsersActions;
-const { fetchDocuments } = DocumentActions;
+} = usersActions;
+const { fetchDocuments } = documentActions;
 
 toastr.options = {
   positionClass: 'toast-top-center',

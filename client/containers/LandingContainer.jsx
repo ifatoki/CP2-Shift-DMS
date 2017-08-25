@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 import toastr from 'toastr';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import lodash from 'lodash';
 import classNames from 'classnames';
-import UsersActions from '../actions/UsersActions';
+import usersActions from '../actions/usersActions';
 
-const { logUserIn, signUserUp, fetchAllRoles } = UsersActions;
+const { logUserIn, signUserUp, fetchAllRoles } = usersActions;
 
 toastr.options = {
   positionClass: 'toast-top-center',
@@ -54,7 +54,7 @@ export class LandingContainer extends React.Component {
       toastr.error(currentUserErrorMessage, 'Validation Error');
     }
     this.setState({
-      roles: _.reduce(roles, (accumulator, role) =>
+      roles: lodash.reduce(roles, (accumulator, role) =>
         accumulator.concat({
           key: role.id,
           text: role.title,

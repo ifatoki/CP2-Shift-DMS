@@ -4,9 +4,9 @@ import toastr from 'toastr';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import UsersActions from '../actions/UsersActions';
+import usersActions from '../actions/usersActions';
 
-const { modifyUser, cancelUser } = UsersActions;
+const { modifyUser, cancelUser } = usersActions;
 
 const editModes = {
   READ: 'READ',

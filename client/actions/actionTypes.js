@@ -1,4 +1,4 @@
-const ActionTypes = {
+const actionTypes = {
   // Document Action Types
   DOCUMENT_GET_REQUEST: 'DOCUMENT_GET_REQUEST',
   DOCUMENT_GET_SUCCESSFUL: 'DOCUMENT_GET_SUCCESSFUL',
@@ -50,4 +50,4 @@ const ActionTypes = {
   USER_CANCELLED: 'USER_CANCELLED',
 };
 
-export default ActionTypes;
+export default actionTypes;

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Search } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import DocumentActions from '../actions/DocumentActions';
+import documentActions from '../actions/documentActions';
 
-const { searchDocuments, getDocument } = DocumentActions;
+const { searchDocuments, getDocument } = documentActions;
 
 /**
  * A React component that implements a document search feature

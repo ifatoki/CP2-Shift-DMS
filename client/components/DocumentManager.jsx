@@ -1,19 +1,19 @@
 import React from 'react';
 import PropType from 'prop-types';
 import toastr from 'toastr';
-import _ from 'lodash';
+import lodash from 'lodash';
 import classNames from 'classnames';
 import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
 import RoleSearchComponent from '../components/RoleSearchComponent';
-import DocumentActions from '../actions/DocumentActions';
+import documentActions from '../actions/documentActions';
 
 const {
   saveNewDocument,
   modifyDocument,
   cancelNewDocument
-} = DocumentActions;
+} = documentActions;
 
 const editModes = {
   READ: 'READ',
@@ -177,7 +177,7 @@ export class DocumentManager extends React.Component {
         content: this.state.content,
         ownerId: this.props.user.id,
         accessId: this.state.accessId,
-        roles: _.reduce(this.state.selectedRoles, (cummulator, value) => {
+        roles: lodash.reduce(this.state.selectedRoles, (cummulator, value) => {
           if (value !== this.props.user.roleId) {
             cummulator[value] = 3;
           }
@@ -197,7 +197,7 @@ export class DocumentManager extends React.Component {
         editData.accessId = this.state.accessId;
         if (this.state.accessId === 3) {
           editData.roles =
-            _.reduce(this.state.selectedRoles, (cummulator, value) => {
+            lodash.reduce(this.state.selectedRoles, (cummulator, value) => {
               cummulator[value] = 3;
               return cummulator;
             }, {});
