@@ -434,9 +434,11 @@ export class HomeContainer extends React.Component {
               pageCount={Math.ceil(this.props.documentsCount / 9)}
               pageRangeDisplayed={5}
               onPageChange={this.handlePageChange}
-              containerClassName={'pagination'}
+              containerClassName={`pagination ${
+                this.state.showUsers ? 'not-visible' : 'visible-flex'
+              }`}
               subContainerClassName={'pages pagination'}
-              activeClassName={'active'}
+              activeClassName={'active-page'}
             />
           </div>
         </div>

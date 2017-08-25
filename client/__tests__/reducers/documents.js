@@ -1,12 +1,12 @@
-import _ from 'lodash';
+import lodash from 'lodash';
 import faker from 'faker';
 import documents from '../../reducers/documents';
-import ActionTypes from '../../actions/ActionTypes';
+import actionTypes from '../../actions/actionTypes';
 import { documentsDefaultState } from '../../reducers/initialStates';
 
 describe('Documents Reducer', () => {
   describe('fetch documents', () => {
-    const fetchedDocuments = _.map([1, 2, 3, 4], id => ({
+    const fetchedDocuments = lodash.map([1, 2, 3, 4], id => ({
       id,
       title: faker.company.catchPhrase(),
       content: faker.lorem.paragraph(2)
@@ -15,7 +15,7 @@ describe('Documents Reducer', () => {
     it('should reset the error message and initialize documents updating',
     () => {
       const action = {
-        type: ActionTypes.DOCUMENTS_FETCH_REQUEST,
+        type: actionTypes.DOCUMENTS_FETCH_REQUEST,
       };
       const state = {
         ...documentsDefaultState,
@@ -30,7 +30,7 @@ describe('Documents Reducer', () => {
     it('should set the documents fetched and reset documentsUpdating to false',
     () => {
       const action = {
-        type: ActionTypes.DOCUMENTS_FETCH_SUCCESSFUL,
+        type: actionTypes.DOCUMENTS_FETCH_SUCCESSFUL,
         payload: {
           documents: fetchedDocuments,
           count: 700
@@ -51,7 +51,7 @@ describe('Documents Reducer', () => {
     it('should set the error message and reset documentsUpdating to false',
     () => {
       const action = {
-        type: ActionTypes.DOCUMENTS_FETCH_FAILED,
+        type: actionTypes.DOCUMENTS_FETCH_FAILED,
         payload: 'you have no rights to access documents'
       };
       const state = {
@@ -77,7 +77,7 @@ describe('Documents Reducer', () => {
     it('should reset the error message and initialize currentDocumentModifying',
     () => {
       const action = {
-        type: ActionTypes.DOCUMENT_MODIFY_REQUEST,
+        type: actionTypes.DOCUMENT_MODIFY_REQUEST,
       };
       const state = {
         currentDocumentModifying: false,
@@ -91,7 +91,7 @@ describe('Documents Reducer', () => {
     it(`should set the document saved to currentDocument and reset 
     currentDocumentModifying to false`, () => {
       const action = {
-        type: ActionTypes.DOCUMENT_MODIFY_SUCCESSFUL,
+        type: actionTypes.DOCUMENT_MODIFY_SUCCESSFUL,
         payload: document
       };
       const state = {
@@ -108,7 +108,7 @@ describe('Documents Reducer', () => {
     it(`should set the error message and reset currentDocumentModifying
     to false`, () => {
       const action = {
-        type: ActionTypes.DOCUMENT_MODIFY_FAILED,
+        type: actionTypes.DOCUMENT_MODIFY_FAILED,
         payload: 'document title is invalid'
       };
       const state = {
@@ -127,7 +127,7 @@ describe('Documents Reducer', () => {
     it('should reset the error message and initialize documentDeleting',
     () => {
       const action = {
-        type: ActionTypes.DOCUMENT_DELETE_REQUEST,
+        type: actionTypes.DOCUMENT_DELETE_REQUEST,
       };
       const state = {
         documentDeleting: false,
@@ -141,7 +141,7 @@ describe('Documents Reducer', () => {
     it(`should set the document saved to currentDocument and reset
     documentDeleting to false`, () => {
       const action = {
-        type: ActionTypes.DOCUMENT_DELETE_SUCCESSFUL
+        type: actionTypes.DOCUMENT_DELETE_SUCCESSFUL
       };
       const state = {
         documentDeleting: true,
@@ -155,7 +155,7 @@ describe('Documents Reducer', () => {
     it('should set the error message and reset documentDeleting to false',
     () => {
       const action = {
-        type: ActionTypes.DOCUMENT_DELETE_FAILED,
+        type: actionTypes.DOCUMENT_DELETE_FAILED,
         payload: 'document delete failed'
       };
       const state = {
@@ -181,7 +181,7 @@ describe('Documents Reducer', () => {
     it('should reset the error message and initialize savingDocument',
     () => {
       const action = {
-        type: ActionTypes.DOCUMENT_SAVE_REQUEST,
+        type: actionTypes.DOCUMENT_SAVE_REQUEST,
       };
       const state = {
         savingDocument: false,
@@ -195,7 +195,7 @@ describe('Documents Reducer', () => {
     it(`should set the document saved to currentDocument and reset
     savingDocument to false`, () => {
       const action = {
-        type: ActionTypes.DOCUMENT_SAVE_SUCCESSFUL,
+        type: actionTypes.DOCUMENT_SAVE_SUCCESSFUL,
         payload: {
           document,
           rightId: 1
@@ -215,7 +215,7 @@ describe('Documents Reducer', () => {
     it('should set the error message and reset savingDocument to false',
     () => {
       const action = {
-        type: ActionTypes.DOCUMENT_SAVE_FAILED,
+        type: actionTypes.DOCUMENT_SAVE_FAILED,
         payload: 'document title is invalid'
       };
       const state = {
@@ -240,7 +240,7 @@ describe('Documents Reducer', () => {
     it('should reset the error message and initialize currentDocumentUpdating',
     () => {
       const action = {
-        type: ActionTypes.DOCUMENT_GET_REQUEST,
+        type: actionTypes.DOCUMENT_GET_REQUEST,
       };
       const state = {
         currentDocumentUpdating: false,
@@ -254,7 +254,7 @@ describe('Documents Reducer', () => {
     it(`should set the document saved to currentDocument and reset
     currentDocumentUpdating to false`, () => {
       const action = {
-        type: ActionTypes.DOCUMENT_GET_SUCCESSFUL,
+        type: actionTypes.DOCUMENT_GET_SUCCESSFUL,
         payload: {
           document,
           rightId: 1
@@ -274,7 +274,7 @@ describe('Documents Reducer', () => {
     it(`should set the error message and reset currentDocumentUpdating
     to false`, () => {
       const action = {
-        type: ActionTypes.DOCUMENT_GET_FAILED,
+        type: actionTypes.DOCUMENT_GET_FAILED,
         payload: 'document title is invalid'
       };
       const state = {
@@ -290,7 +290,7 @@ describe('Documents Reducer', () => {
     });
   });
   describe('search document', () => {
-    const searchedDocuments = _.map([1, 2, 3, 4], id => ({
+    const searchedDocuments = lodash.map([1, 2, 3, 4], id => ({
       id,
       title: faker.company.catchPhrase(),
       content: faker.lorem.paragraph(2),
@@ -299,7 +299,7 @@ describe('Documents Reducer', () => {
     it(`should reset the error message and initialize
     documentsSearchResultUpdating`, () => {
       const action = {
-        type: ActionTypes.DOCUMENTS_SEARCH_REQUEST,
+        type: actionTypes.DOCUMENTS_SEARCH_REQUEST,
       };
       const state = {
         documentsSearchResultUpdating: false,
@@ -313,7 +313,7 @@ describe('Documents Reducer', () => {
     it(`should set the document saved to currentDocument and reset
     documentsSearchResultUpdating to false`, () => {
       const action = {
-        type: ActionTypes.DOCUMENTS_SEARCH_SUCCESSFUL,
+        type: actionTypes.DOCUMENTS_SEARCH_SUCCESSFUL,
         payload: {
           searchedDocuments
         }
@@ -331,7 +331,7 @@ describe('Documents Reducer', () => {
     it(`should set the error message and reset documentsSearchResultUpdating
     to false`, () => {
       const action = {
-        type: ActionTypes.DOCUMENTS_SEARCH_FAILED,
+        type: actionTypes.DOCUMENTS_SEARCH_FAILED,
         payload: 'search failed'
       };
       const state = {
@@ -349,7 +349,7 @@ describe('Documents Reducer', () => {
   describe('document cancel', () => {
     it('should set the error message and reset document state', () => {
       const action = {
-        type: ActionTypes.DOCUMENT_CANCELLED,
+        type: actionTypes.DOCUMENT_CANCELLED,
         payload: 'search failed'
       };
       const state = {
@@ -371,7 +371,7 @@ describe('Documents Reducer', () => {
   describe('default action', () => {
     it('return the state as it is', () => {
       const action = {
-        type: ActionTypes.DOCUMENT_DOCUMENT_DEFAULT
+        type: actionTypes.DOCUMENT_DOCUMENT_DEFAULT
       };
       const state = {
         currentDocumentUpdated: false,

@@ -1,10 +1,10 @@
 import moxios from 'moxios';
 import thunk from 'redux-thunk';
 import faker from 'faker';
-import _ from 'lodash';
+import lodash from 'lodash';
 import configureMockStore from 'redux-mock-store';
-import ActionTypes from '../../actions/ActionTypes';
-import UsersActions from '../../actions/UsersActions';
+import actionTypes from '../../actions/actionTypes';
+import usersActions from '../../actions/usersActions';
 import localStorage from '../../__mocks__/localStorage';
 
 const middleware = [thunk];
@@ -47,14 +47,14 @@ describe('User Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(UsersActions.signUserUp(user))
+      store.dispatch(usersActions.signUserUp(user))
       .then(() => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.SIGNUP_REQUEST);
+          .toEqual(actionTypes.SIGNUP_REQUEST);
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.ADD_USER);
+          .toEqual(actionTypes.ADD_USER);
         expect(store.getActions()[2].type)
-          .toEqual(ActionTypes.SIGNUP_SUCCESSFUL);
+          .toEqual(actionTypes.SIGNUP_SUCCESSFUL);
         expect(store.getActions()[1].payload)
           .toEqual(user);
       });
@@ -69,12 +69,12 @@ describe('User Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(UsersActions.signUserUp(user))
+      store.dispatch(usersActions.signUserUp(user))
       .catch(() => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.SIGNUP_REQUEST);
+          .toEqual(actionTypes.SIGNUP_REQUEST);
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.SIGNUP_FAILED);
+          .toEqual(actionTypes.SIGNUP_FAILED);
         expect(store.getActions()[1].payload)
           .toEqual('server error');
       });
@@ -90,9 +90,9 @@ describe('User Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(UsersActions.signUserUp(errorUser));
+      store.dispatch(usersActions.signUserUp(errorUser));
       expect(store.getActions()[1].type)
-        .toEqual(ActionTypes.SIGNUP_FAILED);
+        .toEqual(actionTypes.SIGNUP_FAILED);
       expect(store.getActions()[1].payload)
         .toEqual('password is required<br/>email is required<br/>');
     });
@@ -109,19 +109,19 @@ describe('User Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(UsersActions.logUserIn({
+      store.dispatch(usersActions.logUserIn({
         username: 'itunuworks',
         password: 'itunuworks'
       }))
       .then(() => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.LOGIN_REQUEST);
+          .toEqual(actionTypes.LOGIN_REQUEST);
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.ADD_USER);
+          .toEqual(actionTypes.ADD_USER);
         expect(store.getActions()[1].payload)
           .toEqual(user);
         expect(store.getActions()[2].type)
-          .toEqual(ActionTypes.LOGIN_SUCCESSFUL);
+          .toEqual(actionTypes.LOGIN_SUCCESSFUL);
       });
       done();
     });
@@ -133,15 +133,15 @@ describe('User Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(UsersActions.logUserIn({
+      store.dispatch(usersActions.logUserIn({
         username: 'itunuworks',
         password: 'itunu'
       }))
       .catch((error) => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.LOGIN_REQUEST);
+          .toEqual(actionTypes.LOGIN_REQUEST);
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.LOGIN_FAILED);
+          .toEqual(actionTypes.LOGIN_FAILED);
         expect(store.getActions()[1].payload)
           .toEqual('invalid password');
         done(error);
@@ -150,13 +150,13 @@ describe('User Actions', () => {
     });
     it('dispatches error when user password is not entered', () => {
       const store = mockStore({});
-      store.dispatch(UsersActions.logUserIn({
+      store.dispatch(usersActions.logUserIn({
         username: 'itunuworks'
       }));
       expect(store.getActions()[0].type)
-        .toEqual(ActionTypes.LOGIN_REQUEST);
+        .toEqual(actionTypes.LOGIN_REQUEST);
       expect(store.getActions()[1].type)
-        .toEqual(ActionTypes.LOGIN_FAILED);
+        .toEqual(actionTypes.LOGIN_FAILED);
       expect(store.getActions()[1].payload)
         .toEqual('password is required<br/>');
     });
@@ -168,21 +168,21 @@ describe('User Actions', () => {
         status: 200
       });
       const store = mockStore({});
-      store.dispatch(UsersActions.logUserOut())
+      store.dispatch(usersActions.logUserOut())
       .then(() => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.LOGOUT_REQUEST);
+          .toEqual(actionTypes.LOGOUT_REQUEST);
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.REMOVE_USER);
+          .toEqual(actionTypes.REMOVE_USER);
         expect(store.getActions()[2].type)
-          .toEqual(ActionTypes.LOGOUT_SUCCESSFUL);
+          .toEqual(actionTypes.LOGOUT_SUCCESSFUL);
       });
       done();
     });
   });
 
   describe('fetch all users action', () => {
-    const users = _.map([1, 2, 3], id => ({
+    const users = lodash.map([1, 2, 3], id => ({
       id,
       email: faker.internet.email(),
       username: faker.internet.userName(),
@@ -198,10 +198,10 @@ describe('User Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(UsersActions.fetchAllUsers())
+      store.dispatch(usersActions.fetchAllUsers())
       .then(() => {
         expect(store.getActions()[1].type)
-        .toEqual(ActionTypes.FETCH_USERS_SUCCESSFUL);
+        .toEqual(actionTypes.FETCH_USERS_SUCCESSFUL);
         expect(store.getActions()[1].payload).toEqual(
           users
         );
@@ -218,10 +218,10 @@ describe('User Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(UsersActions.getUser(user.id))
+      store.dispatch(usersActions.getUser(user.id))
       .then(() => {
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.DOCUMENT_GET_SUCCESSFUL);
+          .toEqual(actionTypes.DOCUMENT_GET_SUCCESSFUL);
         expect(store.getActions()[1].payload.user).toEqual(
           user
         );
@@ -237,10 +237,10 @@ describe('User Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(UsersActions.getUser(3000000))
+      store.dispatch(usersActions.getUser(3000000))
       .catch(() => {
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.USER_GET_FAILED);
+          .toEqual(actionTypes.USER_GET_FAILED);
         expect(store.getActions()[1].payload).toEqual({
           message: 'user not found'
         });
@@ -259,10 +259,10 @@ describe('User Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(UsersActions.modifyUser(user.id, user))
+      store.dispatch(usersActions.modifyUser(user.id, user))
       .then(() => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.USER_MODIFY_REQUEST);
+          .toEqual(actionTypes.USER_MODIFY_REQUEST);
         expect(store.getActions()[1].payload)
           .toEqual(user);
       });
@@ -277,10 +277,10 @@ describe('User Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(UsersActions.modifyUser(3000000, errorUser))
+      store.dispatch(usersActions.modifyUser(3000000, errorUser))
       .catch(() => {
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.USER_MODIFY_FAILED);
+          .toEqual(actionTypes.USER_MODIFY_FAILED);
         expect(store.getActions()[1].payload).toEqual(
           'user not found'
         );
@@ -291,11 +291,11 @@ describe('User Actions', () => {
     it('should fail modifying user when email field is edited but yet blank',
     () => {
       const store = mockStore({});
-      store.dispatch(UsersActions.modifyUser(errorUser.id, {
+      store.dispatch(usersActions.modifyUser(errorUser.id, {
         ...errorUser, email: ''
       }));
       expect(store.getActions()[1].type)
-        .toEqual(ActionTypes.USER_MODIFY_FAILED);
+        .toEqual(actionTypes.USER_MODIFY_FAILED);
       expect(store.getActions()[1].payload).toEqual(
         'email is required<br/>'
       );
@@ -303,7 +303,7 @@ describe('User Actions', () => {
   });
 
   describe('Fetch Roles', () => {
-    const roles = _.map([2, 3, 4, 5], id => ({
+    const roles = lodash.map([2, 3, 4, 5], id => ({
       id,
       title: faker.company.bsNoun,
       description: faker.company.catchPhrase
@@ -317,10 +317,10 @@ describe('User Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(UsersActions.fetchAllRoles())
+      store.dispatch(usersActions.fetchAllRoles())
       .then(() => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.FETCH_ROLES_REQUEST);
+          .toEqual(actionTypes.FETCH_ROLES_REQUEST);
         expect(store.getActions()[1].payload)
           .toEqual(roles);
       });
@@ -336,10 +336,10 @@ describe('User Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(UsersActions.fetchAllRoles())
+      store.dispatch(usersActions.fetchAllRoles())
       .catch(() => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.FETCH_ROLES_REQUEST);
+          .toEqual(actionTypes.FETCH_ROLES_REQUEST);
         expect(store.getActions()[1].payload)
           .toEqual('server error');
       });
@@ -357,10 +357,10 @@ describe('User Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(UsersActions.deleteUser(1))
+      store.dispatch(usersActions.deleteUser(1))
       .then(() => {
         expect(store.getActions()[1].type)
-        .toEqual(ActionTypes.USER_DELETE_SUCCESSFUL);
+        .toEqual(actionTypes.USER_DELETE_SUCCESSFUL);
         expect(store.getActions()[1].payload).toEqual(
           'user deleted successfully'
         );
@@ -376,10 +376,10 @@ describe('User Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(UsersActions.deleteUser(3000000, errorUser))
+      store.dispatch(usersActions.deleteUser(3000000, errorUser))
       .then(() => {
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.DOCUMENT_DELETE_FAILED);
+          .toEqual(actionTypes.DOCUMENT_DELETE_FAILED);
         expect(store.getActions()[1].payload).toEqual({
           message: 'user not found'
         });
@@ -391,9 +391,9 @@ describe('User Actions', () => {
   describe('Search documents', () => {
     it('returns users if matching users are found', () => {
       const store = mockStore({});
-      store.dispatch(UsersActions.cancelUser());
+      store.dispatch(usersActions.cancelUser());
       expect(store.getActions()[0].type)
-      .toEqual(ActionTypes.USER_CANCELLED);
+      .toEqual(actionTypes.USER_CANCELLED);
     });
   });
 });

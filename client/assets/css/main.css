@@ -15,9 +15,10 @@
 
 li {
   padding: 15px; }
-  li .active {
-    background: #2185d0;
-    color: #ffffff; }
+
+.active-page {
+  background: #2185d0;
+  color: #ffffff; }
 
 .document-description {
   height: 50px;
