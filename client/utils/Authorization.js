@@ -20,17 +20,19 @@ export default class Authorization {
    * @returns {void}
    */
   static decodeToken(token, callback) {
-    jwt.verify(token, process.env.SECRET_KEY, (error, payload) => {
-      if (!error) {
-        const now = moment().unix();
+    const payload = jwt.decode(token);
 
-        // check if the token has expired
-        if (now > payload.exp) callback('token has expired');
-        else callback(null, payload);
+    if (payload) {
+      const now = moment().unix();
+
+      if (now > payload.exp) {
+        callback('token has expired');
       } else {
-        callback(error);
+        callback(null, payload);
       }
-    });
+    } else {
+      throw new Error('invalid token');
+    }
   }
 
   /**
