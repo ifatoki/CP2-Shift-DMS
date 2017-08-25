@@ -1,5 +1,4 @@
-const Right = require('../models').Right;
-const DocumentRole = require('../models').DocumentRole;
+import { Right, DocumentRole } from '../models';
 
 /**
  * Returns a 500 server error with the server response
@@ -14,7 +13,7 @@ const returnServerError = res => (
   })
 );
 
-module.exports = {
+const rightsController = {
   /**
    * @function create
    *
@@ -73,3 +72,5 @@ module.exports = {
       .catch(() => returnServerError(res));
   }
 };
+
+export default rightsController;

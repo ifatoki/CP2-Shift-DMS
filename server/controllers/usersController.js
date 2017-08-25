@@ -1,10 +1,8 @@
 import _ from 'lodash';
 import Validator from '../utils/Validator';
-
-const auth = require('../auth/helpers');
-const User = require('../models').User;
-const Role = require('../models').Role;
-const localAuth = require('../auth/local');
+import auth from '../auth/helpers';
+import local from '../auth/local';
+import { User, Role } from '../models';
 
 /**
  * Returns a 500 server error with the server response
@@ -111,7 +109,7 @@ const confirmRole = (req, res, user) => {
   }
 };
 
-module.exports = {
+const usersController = {
   /**
    * @function create
    *
@@ -145,7 +143,7 @@ module.exports = {
               roleId: req.body.roleId
             })
             .then((user) => {
-              const token = localAuth.encodeToken({
+              const token = local.encodeToken({
                 id: user.id,
                 username: user.username
               });
@@ -194,7 +192,7 @@ module.exports = {
         return user;
       })
       .then((user) => {
-        const token = localAuth.encodeToken({
+        const token = local.encodeToken({
           id: user.id,
           username: user.username
         });
@@ -506,3 +504,5 @@ module.exports = {
     .catch(() => returnServerError(res));
   }
 };
+
+export default usersController;

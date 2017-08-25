@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import routeIndex from './routes/index';
+import index from './routes/index';
 import webpackConfig from '../webpack.config';
 
 const debug = process.env.NODE_ENV !== 'production';
@@ -37,7 +37,7 @@ app.use('/', publicPath);
 
 
 // Require our routes into the application.
-routeIndex(app);
+index(app);
 // Setup a default catch-all route that sends
 // back a welcome message in JSON format.
 app.get('/*', (req, res) =>

@@ -3,7 +3,7 @@ const moment = require('moment');
 
 require('dotenv').config();
 
-module.exports = {
+const local = {
   /**
    * @function encodeToken
    *
@@ -37,3 +37,5 @@ module.exports = {
     }
   }
 };
+
+export default local;

@@ -16,8 +16,8 @@ const getUsers = _.reduce(roles, (users, role) => {
   return users;
 }, {});
 
-const postData = {
+const testData = {
   users: getUsers
 };
 
-export default postData;
+export default testData;

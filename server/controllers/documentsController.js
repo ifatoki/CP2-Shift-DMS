@@ -1,10 +1,6 @@
 import _ from 'lodash';
-import Models from '../models';
+import { User, Document, Role } from '../models';
 import Validator from '../utils/Validator';
-
-const User = Models.User;
-const Document = Models.Document;
-const Role = Models.Role;
 
 /**
  * Returns a 500 server error with the server response
@@ -164,7 +160,7 @@ const returnDocumentNotFound = res => (
   })
 );
 
-const documentController = {
+const documentsController = {
   /**
    * @function create
    *
@@ -676,4 +672,4 @@ const documentController = {
   }
 };
 
-module.exports = documentController;
+export default documentsController;

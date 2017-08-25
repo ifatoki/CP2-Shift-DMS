@@ -4,8 +4,8 @@ import request from 'supertest';
 import _ from 'lodash';
 import faker from 'faker';
 import app from '../../app';
-import * as tokens from '../helpers/tokens';
-import postData from '../helpers/testdata';
+import tokens from '../helpers/tokens';
+import testData from '../helpers/testData';
 import local from '../../auth/local';
 import helpers from '../../auth/helpers';
 
@@ -15,7 +15,7 @@ const expect = chai.expect;
 chai.use(assertArrays);
 
 const { overlordToken, userToken, nonExistingUserToken } = tokens;
-const { users } = postData;
+const { users } = testData;
 
 describe('routes : index', () => {
   describe('Endpoints: Right', () => {

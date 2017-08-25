@@ -1,4 +1,4 @@
-const Role = require('../models').Role;
+import { Role } from '../models';
 
 /**
  * Returns a 500 server error with the server response
@@ -26,7 +26,7 @@ const filterRole = role => ({
   createdAt: role.createdAt
 });
 
-module.exports = {
+const rolesController = {
   /**
    * @function create
    *
@@ -77,3 +77,5 @@ module.exports = {
       .catch(() => returnServerError(res));
   }
 };
+
+export default rolesController;
