@@ -344,7 +344,7 @@ UserManager.propTypes = {
     firstname: PropType.string,
     id: PropType.number,
     lastname: PropType.string,
-    role: PropType.number,
+    role: PropType.string,
     roleId: PropType.number,
     username: PropType.string
   }).isRequired,

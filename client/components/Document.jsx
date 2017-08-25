@@ -69,7 +69,7 @@ export class Document extends React.Component {
           <Card.Meta>
             Created <Timeago datetime={this.props.created} />
           </Card.Meta>
-          <Card.Description className="description">
+          <Card.Description className="document-description">
             { ReactHtmlParser(this.props.content) }
           </Card.Description>
         </div>
