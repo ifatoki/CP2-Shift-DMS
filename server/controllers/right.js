@@ -1,6 +1,19 @@
 const Right = require('../models').Right;
 const DocumentRole = require('../models').DocumentRole;
 
+/**
+ * Returns a 500 server error with the server response
+ * @function returnServerError
+ *
+ * @param {any} res
+ * @returns {void}
+ */
+const returnServerError = res => (
+  res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
+  })
+);
+
 module.exports = {
   /**
    * @function create
@@ -27,20 +40,14 @@ module.exports = {
               .then(newRight => res.status(201).send({
                 right: newRight
               }))
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(returnServerError());
           } else {
             res.status(403).send({
               message: 'right already exists'
             });
           }
         })
-        .catch(() => {
-          res.status(500).send({
-            message: 'oops, we just encountered an error. please try again'
-          });
-        });
+        .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
         message: 'blank title'
@@ -63,8 +70,6 @@ module.exports = {
       .then(rights => res.status(200).send({
         rights
       }))
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   }
 };

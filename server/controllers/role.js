@@ -1,6 +1,19 @@
 const Role = require('../models').Role;
 
 /**
+ * Returns a 500 server error with the server response
+ * @function returnServerError
+ *
+ * @param {any} res
+ * @returns {void}
+ */
+const returnServerError = res => (
+  res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
+  })
+);
+
+/**
  * @function filterRole
  *
  * @param {any} role
@@ -31,9 +44,7 @@ module.exports = {
         .then(role => res.status(201).send({
           role: filterRole(role)
         }))
-        .catch(() => res.status(500).send({
-          message: 'oops, we just encountered an error. please try again'
-        }));
+        .catch(() => returnServerError(res));
     } else {
       res.status(401).send({
         message: 'you are not authorized to create new roles'
@@ -63,8 +74,6 @@ module.exports = {
           roles
         });
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   }
 };

@@ -7,6 +7,19 @@ const Role = require('../models').Role;
 const localAuth = require('../auth/local');
 
 /**
+ * Returns a 500 server error with the server response
+ * @function returnServerError
+ *
+ * @param {any} res
+ * @returns {void}
+ */
+const returnServerError = res => (
+  res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
+  })
+);
+
+/**
  * @function filterUser
  *
  * @param {any} User
@@ -64,9 +77,7 @@ const updateUser = (req, res, user) => {
         });
       });
   })
-  .catch(() => res.status(500).send({
-    message: 'oops, we just encountered an error. please try again'
-  }));
+  .catch(() => returnServerError(res));
 };
 
 /**
@@ -90,9 +101,7 @@ const confirmRole = (req, res, user) => {
           updateUser(req, res, user);
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   } else if (req.body.roleId === 1) {
     res.status(403).send({
       message: 'user cannot be upgraded to overlord. change role Id'
@@ -147,18 +156,14 @@ module.exports = {
                 user: returnedUser
               });
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
         } else {
           res.status(404).send({
             message: "role with passed roleId doesn't exist. change roleId"
           });
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
         message: getValidatorErrorMessage(validation.errors)
@@ -262,9 +267,7 @@ module.exports = {
             });
           }
         })
-        .catch(() => res.status(500).send({
-          message: 'oops, we just encountered an error. please try again'
-        }));
+        .catch(() => returnServerError(res));
     } else {
       res.status(403).send({
         message: 'only overlord can view all users'
@@ -298,14 +301,10 @@ module.exports = {
                 user: returnedUser
               });
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   },
 
   /**
@@ -338,11 +337,7 @@ module.exports = {
                 documents
               });
             })
-            .catch((error) => {
-              res.status(500).send({
-                message: error.message
-              });
-            });
+            .catch(() => returnServerError(res));
         }
       })
       .catch(error => res.status(400).send({
@@ -404,10 +399,7 @@ module.exports = {
                     confirmRole(req, res, user);
                   }
                 })
-                .catch(() => res.status(500).send({
-                  message:
-                    'oops, we just encountered an error. please try again'
-                }));
+                .catch(() => returnServerError(res));
               } else {
                 confirmRole(req, res, user);
               }
@@ -462,14 +454,10 @@ module.exports = {
               .then(() => res.status(200).send({
                 message: 'user deleted successfully'
               }))
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(() => returnServerError(res));
             }
           })
-          .catch(() => res.status(500).send({
-            message: 'oops, we just encountered an error. please try again'
-          }));
+          .catch(() => returnServerError(res));
       }
     } else {
       res.status(403).send({
@@ -515,8 +503,6 @@ module.exports = {
       ]
     })
     .then(users => res.status(200).send({ users }))
-    .catch(() => res.status(500).send({
-      message: 'oops, we just encountered an error. please try again'
-    }));
+    .catch(() => returnServerError(res));
   }
 };

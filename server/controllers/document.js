@@ -7,6 +7,19 @@ const Document = Models.Document;
 const Role = Models.Role;
 
 /**
+ * Returns a 500 server error with the server response
+ * @function returnServerError
+ *
+ * @param {any} res
+ * @returns {void}
+ */
+const returnServerError = res => (
+  res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
+  })
+);
+
+/**
  * @function getValidatorErrorMessage
  *
  * @param {any} errors
@@ -48,9 +61,7 @@ const deleteDocument = (document, req, res) => {
   .then(() => res.status(200).send({
     message: 'document deleted successfully'
   }))
-  .catch(() => res.status(500).send({
-    message: 'oops, we just encountered an error. please try again'
-  }));
+  .catch(() => returnServerError(res));
 };
 
 /**
@@ -92,22 +103,14 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
           }))
         });
       })
-      .catch(() => {
-        res.status(500).send({
-          message: 'oops, we just encountered an error. please try again'
-        });
-      });
+      .catch(() => returnServerError(res));
     } else {
       res.status(201).send({
         document: filterDocument(newDocument)
       });
     }
   })
-  .catch(() => {
-    res.status(500).send({
-      message: 'oops, we just encountered an error. please try again'
-    });
-  });
+  .catch(() => returnServerError(res));
 };
 
 /**
@@ -145,19 +148,21 @@ const updateDocument = (document, req, res) => {
           document: filterDocument(updatedDocument)
         });
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
     } else {
       res.status(200).send({
         document: filterDocument(updatedDocument)
       });
     }
   })
-  .catch(() => res.status(500).send({
-    message: 'oops, we just encountered an error. please try again'
-  }));
+  .catch(() => returnServerError(res));
 };
+
+const returnDocumentNotFound = res => (
+  res.status(404).send({
+    message: 'document not found'
+  })
+);
 
 const documentController = {
   /**
@@ -208,16 +213,10 @@ const documentController = {
                 });
               }
             })
-            .catch(() => {
-              res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              });
-            });
+            .catch(() => returnServerError(res));
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
         message: getValidatorErrorMessage(validation.errors)
@@ -260,9 +259,7 @@ const documentController = {
               .then((documents) => {
                 res.status(200).send({ documents });
               })
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(() => returnServerError(res));
             });
           } else {
             user.getDocuments({
@@ -271,16 +268,10 @@ const documentController = {
             .then((documents) => {
               res.status(200).send({ documents });
             })
-            .catch(() => {
-              res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              });
-            });
+            .catch(() => returnServerError(res));
           }
         })
-        .catch(() => res.status(500).send({
-          message: 'oops, we just encountered an error. please try again'
-        }));
+        .catch(() => returnServerError(res));
     } else {
       Document
         .findAndCountAll({
@@ -312,9 +303,7 @@ const documentController = {
       .findById(req.params.id)
       .then((document) => {
         if (!document) {
-          res.status(404).send({
-            message: 'document not found'
-          });
+          returnDocumentNotFound(res);
         } else {
           const response = { document: filterDocument(document) };
           if (document.ownerId === req.userId) {
@@ -329,9 +318,7 @@ const documentController = {
                 response.documentRoles = documentRoles;
                 res.status(200).send(response);
               })
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(() => returnServerError(res));
             } else {
               res.status(200).send(response);
             }
@@ -366,19 +353,14 @@ const documentController = {
                     res.status(200).send(response);
                   }
                 })
-                .catch(() => res.status(500).send({
-                  message:
-                    'oops, we just encountered an error. please try again'
-                }));
+                .catch(() => returnServerError(res));
               } else {
                 response.rightId =
                   user[0].dataValues.DocumentUser.dataValues.rightId;
                 res.status(200).send(response);
               }
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
           }
         }
       })
@@ -407,9 +389,7 @@ const documentController = {
       .findById(req.params.id)
       .then((document) => {
         if (!document) {
-          res.status(404).send({
-            message: 'document not found'
-          });
+          returnDocumentNotFound(res);
         } else {
           Document
             .findOne({
@@ -463,10 +443,7 @@ const documentController = {
                         });
                       }
                     })
-                    .catch(() => res.status(500).send({
-                      message:
-                        'oops, we just encountered an error. please try again'
-                    }));
+                    .catch(() => returnServerError(res));
                   } else if (
                     user[0].dataValues.DocumentUser.dataValues.rightId < 3
                   ) {
@@ -483,14 +460,10 @@ const documentController = {
                 }));
               }
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
         message: getValidatorErrorMessage(validation.errors)
@@ -510,9 +483,7 @@ const documentController = {
       .findById(req.params.id)
       .then((document) => {
         if (!document) {
-          res.status(404).send({
-            message: 'document not found'
-          });
+          returnDocumentNotFound(res);
         } else if (document.ownerId === req.userId) {
           deleteDocument(document, req, res);
         } else if (document.accessId === 2) {
@@ -555,9 +526,7 @@ const documentController = {
                   });
                 }
               })
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(() => returnServerError(res));
             } else if (
               user[0].dataValues.DocumentUser.dataValues.rightId === 1
             ) {
@@ -569,14 +538,10 @@ const documentController = {
               });
             }
           })
-          .catch(() => res.status(500).send({
-            message: 'oops, we just encountered an error. please try again'
-          }));
+          .catch(() => returnServerError(res));
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   },
 
   /**
@@ -660,10 +625,7 @@ const documentController = {
                                 }
                                 res.status(200).send(searchResults);
                               })
-                              .catch(() => res.status(500).send({
-                                message: 'oops, we just encountered an error.' +
-                                  ' please try again'
-                              }));
+                              .catch(() => returnServerError(res));
                           });
                       } else {
                         res.status(404).send({
@@ -675,14 +637,9 @@ const documentController = {
                       message: error.message
                     }));
                 })
-                .catch(() => res.status(500).send({
-                  message:
-                    'oops, we just encountered an error. please try again'
-                }));
+                .catch(() => returnServerError(res));
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
         } else {
           res.status(404).send({
             message: 'invalid user'
@@ -693,26 +650,6 @@ const documentController = {
         message: error.message
       }));
   },
-  // addRole: (req, res) => {
-  //   Document
-  //     .findById(req.params.documentId)
-  //     .then((document) => {
-  //       User
-  //         .findById(req.userId)
-  //         .then((user) => {
-  //           document.addUser(user)
-  //           .then(res.status(200).send({
-  //             message: 'user added successfully'
-  //           }));
-  //         })
-  //         .catch(() => res.status(500).send({
-  //           message: 'oops, we just encountered an error. please try again'
-  //         }));
-  //     })
-  //     .catch(() => res.status(500).send({
-  //       message: 'oops, we just encountered an error. please try again'
-  //     }));
-  // },
 
   /**
    * @function addUser
@@ -733,13 +670,9 @@ const documentController = {
               message: 'user added successfully'
             }));
           })
-          .catch(() => res.status(500).send({
-            message: 'oops, we just encountered an error. please try again'
-          }));
+          .catch(() => returnServerError(res));
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   }
 };
 

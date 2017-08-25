@@ -1,7 +1,7 @@
 # Shift-DMS
-[![codecov](https://codecov.io/gh/andela-ifatoki/CP2-Shift-DMS/branch/implementFeedback/graph/badge.svg)](https://codecov.io/gh/andela-ifatoki/CP2-Shift-DMS)
-[![Build Status](https://travis-ci.org/andela-ifatoki/CP2-Shift-DMS.svg?branch=implementFeedback)](https://travis-ci.org/andela-ifatoki/CP2-Shift-DMS)
-[![Coverage Status](https://coveralls.io/repos/github/andela-ifatoki/CP2-Shift-DMS/badge.svg?branch=implementFeedback)](https://coveralls.io/github/andela-ifatoki/CP2-Shift-DMS?branch=implementFeedback)
+[![codecov](https://codecov.io/gh/andela-ifatoki/CP2-Shift-DMS/branch/chore/150541479/implement-scorecard-feedback/graph/badge.svg)](https://codecov.io/gh/andela-ifatoki/CP2-Shift-DMS)
+[![Build Status](https://travis-ci.org/andela-ifatoki/CP2-Shift-DMS.svg?branch=chore/150541479/implement-scorecard-feedback)](https://travis-ci.org/andela-ifatoki/CP2-Shift-DMS)
+[![Coverage Status](https://coveralls.io/repos/github/andela-ifatoki/CP2-Shift-DMS/badge.svg?branch=chore/150541479/implement-scorecard-feedback)](https://coveralls.io/github/andela-ifatoki/CP2-Shift-DMS?branch=implementFeedback)
 [![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)
 
 ## Introduction
@@ -106,11 +106,30 @@ For the API documentation, see [Shift-DMS Api Docs](https://andela-ifatoki.githu
 
 ## Limitations
 
-N/A
+* Users cannot change their roles. This can only be done by the **Overlord**.
+* The app can have only one **Overlord** who manages the users, roles and public documents.
 
-### Troubleshooting & FAQ
+## Troubleshooting & FAQ
 
-Not available at the moment
+* Can I share documents on social media?
+  * Not at this time. Such feature is not yet available.
+* What do I need to create an account on the platform?
+  * Its simple. All you need is a valid email address, a username and a password.
+
+## Contributing
+
+Contributors are welcome to further enhance the features of this API by contributing to its development. The following guidelines should guide you in contributing to this project:
+
+- Fork this repository to your own account.
+- Download/Clone a forked copy of tthe repository to your local machine.
+- Create a new branch: `git checkout -b new-branch-name`.
+- Install the dependencies using `npm install`.
+- Run `npm install` to install project dependencies
+- Create a `.env` file in your root directory as described in `.env.sample` file
+- To run application unit tests: `npm test`.
+- Work on a new feature and push to your remote branch: `git push origin your-branch-name`
+- Raise a pull request to the staging branch of this repo.
+- This project uses javascript ES6 and follows the airbnb style-guide: <https://github.com/airbnb/javascript>
 
 ## License
 
