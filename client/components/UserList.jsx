@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import User from './User';
 
 /**
@@ -36,36 +37,24 @@ const UserList = (props) => {
   const users = normalizeUsers(props.roles, props.users);
   return (
     <div
-      className="ui divided items userList"
-      style={{
-        paddingTop: '10px',
-        marginTop: '0px',
-        overflowY: 'scroll',
-        height: '90%',
-        display: props.show ? 'block' : 'none'
-      }}
+      className={
+        classNames('ui divided items user-list', props.show ?
+          'visible-block' : 'not-visible')
+      }
     >
       <div
-        style={{
-          verticalAlign: 'middle',
-          textAlign: 'center',
-          fontSize: '70px',
-          fontFamily: 'Indie Flower',
-          color: '#696969',
-          display: props.isUpdating ? 'block' : 'none'
-        }}
+        className={
+          classNames('list-status', props.isUpdating ?
+            'visible-block' : 'not-visible')
+        }
       >
         <Icon loading name="spinner" />
-        <p
-          style={{
-            fontSize: '50px'
-          }}
-        >Fetching Users...</p>
+        <p>Fetching Users...</p>
       </div>
       <div
-        style={{
-          display: props.isUpdating ? 'none' : 'inline-block'
-        }}
+        className={
+          classNames((props.isUpdating) ?
+            'not-visible' : 'visible-inline-block')}
       >
         <Card.Group>
           {users.map(user => (
@@ -83,21 +72,13 @@ const UserList = (props) => {
         </Card.Group>
       </div>
       <div
-        style={{
-          verticalAlign: 'middle',
-          textAlign: 'center',
-          fontSize: '70px',
-          fontFamily: 'Indie Flower',
-          color: '#696969',
-          display: (!props.isUpdating && !props.users.length) ? 'block' : 'none'
-        }}
+        className={
+          classNames('list-status', (
+            !props.isUpdating && !props.users.length) ?
+              'visible-block' : 'not-visible')}
       >
         <Icon name="warning sign" />
-        <p
-          style={{
-            fontSize: '50px'
-          }}
-        >No Users Found!!!</p>
+        <p>No Users Found!!!</p>
       </div>
     </div>
   );

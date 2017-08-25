@@ -28,7 +28,7 @@ describe('Single Document Page', () => {
   );
 
   it('renders successfully with only one landingContainer class', () => {
-    expect(wrapper.find('.landingContainer'))
+    expect(wrapper.find('.landing-container'))
       .toHaveLength(1);
   });
 

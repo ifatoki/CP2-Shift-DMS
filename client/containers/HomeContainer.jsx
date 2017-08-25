@@ -4,6 +4,7 @@ import toastr from 'toastr';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
+import classNames from 'classnames';
 import UsersActions from '../actions/UsersActions';
 import DocumentActions from '../actions/DocumentActions';
 import DocumentList from '../components/DocumentList';
@@ -259,8 +260,7 @@ export class HomeContainer extends React.Component {
       + this.props.user.role.slice(1);
     return (
       <div
-        className="homeContainer"
-        style={{ height: '100%' }}
+        className="homeContainer inherit"
       >
         <DocumentManager
           createNew={this.state.createNewDocument}
@@ -270,11 +270,8 @@ export class HomeContainer extends React.Component {
           <div className="ui container">
             <div className="right menu">
               <i
-                className="big icons"
+                className="big icons navbar-icon"
                 id="newDocument"
-                style={{
-                  margin: 'auto', cursor: 'pointer'
-                }}
                 role="button"
                 name="newDocument"
                 onClick={this.initializeNewDocument}
@@ -284,11 +281,8 @@ export class HomeContainer extends React.Component {
               </i>
               <i
                 id="userProfile"
-                className="big icons"
+                className="big icons navbar-icon"
                 name="showUserProfile"
-                style={{
-                  margin: '10px', cursor: 'pointer'
-                }}
                 role="button"
                 onClick={this.showUserProfile}
               >
@@ -315,22 +309,16 @@ export class HomeContainer extends React.Component {
           </div>
         </div>
         <div
-          className="ui grid container"
-          style={{
-            paddingTop: '40px',
-            marginTop: '0px',
-            height: '100%'
-          }}
+          className="ui grid container inherit sub-home-container"
         >
           <div className="three wide column fixed">
             <i className="dropbox huge blue icon" />
             <div className="ui divided items">
               <div
-                className="item"
-                style={{
-                  display: this.props.user.role === 'overlord' ?
-                  'none' : 'block'
-                }}
+                className={
+                  classNames('item', this.props.user.role === 'overlord' ?
+                    'not-visible' : 'visible-block')
+                }
               >
                 <div className="middle aligned content">
                   <a
@@ -354,11 +342,10 @@ export class HomeContainer extends React.Component {
                 </div>
               </div>
               <div
-                className="item"
-                style={{
-                  display: this.props.user.role === 'overlord' ?
-                  'none' : 'block'
-                }}
+                className={
+                  classNames('item', this.props.user.role === 'overlord' ?
+                    'not-visible' : 'visible-block')
+                }
               >
                 <div className="middle aligned content">
                   <a
@@ -371,11 +358,10 @@ export class HomeContainer extends React.Component {
                 </div>
               </div>
               <div
-                className="item"
-                style={{
-                  display: this.props.user.role === 'overlord' ?
-                  'block' : 'none'
-                }}
+                className={
+                  classNames('item', this.props.user.role === 'overlord' ?
+                    'visible-block' : 'not-visible')
+                }
               >
                 <div className="middle aligned content">
                   <a
@@ -388,10 +374,7 @@ export class HomeContainer extends React.Component {
                 </div>
               </div>
               <div
-                className="item"
-                style={{
-                  display: 'none'
-                }}
+                className="item not-visible"
               >
                 <div className="middle aligned content">
                   <a
@@ -410,11 +393,11 @@ export class HomeContainer extends React.Component {
               <Grid.Row>
                 <div className="eight wide column">
                   <div
-                    className="ui huge header"
+                    className={
+                      classNames('ui huge header', this.state.showUsers ?
+                        'not-visible' : 'visible-block')
+                    }
                     id="documentHeader"
-                    style={{
-                      display: this.state.showUsers ? 'none' : 'block'
-                    }}
                   >
                     {this.props.documentsType === 'role' ?
                       `${role.toUpperCase()} DOCUMENTS` :
@@ -423,17 +406,19 @@ export class HomeContainer extends React.Component {
                   </div>
                   <div
                     id="userHeader"
-                    className="ui huge header"
-                    style={{
-                      display: this.state.showUsers ? 'block' : 'none',
-                    }}
+                    className={
+                      classNames('ui huge header', this.state.showUsers ?
+                        'visible-block' : 'not-visible')
+                    }
                   >
                    MANAGE USERS
                   </div>
                 </div>
                 <div
-                  className="eight wide column"
-                  style={{ display: this.state.showUsers ? 'none' : 'block' }}
+                  className={
+                    classNames('eight wide column', this.state.showUsers ?
+                      'not-visible' : 'visible-block')
+                  }
                 >
                   <SearchComponent />
                 </div>

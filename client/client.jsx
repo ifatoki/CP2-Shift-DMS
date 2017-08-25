@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import createBrowserHistory from 'history/createBrowserHistory';
+import './assets/scss/main.scss';
 import Authorization from './utils/Authorization';
 import appReducer from './reducers/index';
 import App from './containers/App';

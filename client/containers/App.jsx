@@ -12,7 +12,7 @@ export /**
  * @return {void}
  */
 const App = props => (
-  <div className="app" style={{ height: '100%' }} >
+  <div className="app inherit">
     <Route
       exact
       path="/"

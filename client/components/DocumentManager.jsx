@@ -2,6 +2,7 @@ import React from 'react';
 import PropType from 'prop-types';
 import toastr from 'toastr';
 import _ from 'lodash';
+import classNames from 'classnames';
 import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
@@ -258,13 +259,10 @@ export class DocumentManager extends React.Component {
           className="ui container"
         >
           <div
-            className="ui form"
-            style={{
-              display: (
-                this.state.accessMode === editModes.WRITE ||
-                this.state.accessMode === editModes.NEW
-              ) ? 'block' : 'none'
-            }}
+            className={classNames('ui form', (
+              this.state.accessMode === editModes.WRITE ||
+              this.state.accessMode === editModes.NEW
+            ) ? 'visible-block' : 'not-visible')}
           >
             <div className="field">
               <textarea
@@ -276,13 +274,12 @@ export class DocumentManager extends React.Component {
               />
             </div>
             <div
-              className="two fields roleManagement"
-              style={{
-                display: this.props.user.role === 'overlord' ||
-                (this.props.currentDocument && (this.props.user.id !==
-                  this.props.currentDocument.ownerId)) ?
-                  'none' : 'block'
-              }}
+              className={classNames('two fields roleManagement', (
+                this.props.user.role === 'overlord' || (
+                  this.props.currentDocument && (
+                  this.props.user.id !== this.props.currentDocument.ownerId)
+                )) ?
+                'not-visible' : 'visible-block')}
             >
               <Form.Field width={3}>
                 <Form.Field>
@@ -331,19 +328,14 @@ export class DocumentManager extends React.Component {
             <div className="field">
               <textarea
                 className="tinymcepanel"
-                style={{ height: '50%' }}
               />
             </div>
           </div>
           <div
-            id="contentHolder"
-            className="scrolling content"
-            style={{
-              display: this.state.accessMode === editModes.READ ?
-                'block' : 'none',
-              height: '500px',
-              overflowY: 'scroll'
-            }}
+            className={
+              classNames('scrolling content content-holder', (
+                this.state.accessMode === editModes.READ) ?
+                'visible-block' : 'not-visible')}
           >
             { ReactHtmlParser(this.state.content) }
           </div>
@@ -352,44 +344,35 @@ export class DocumentManager extends React.Component {
           className="ui actions container"
         >
           <div
-            className="ui primary edit icon button"
+            className={classNames('ui primary edit icon button', (
+              this.state.accessMode === editModes.READ) &&
+                (this.state.rightId !== 3) ?
+                'visible-inline-block' : 'not-visible')}
             onClick={this.editDocument}
-            style={{
-              display: (
-                (this.state.accessMode === editModes.READ) &&
-                (this.state.rightId !== 3)
-              ) ? 'inline-block' : 'none'
-            }}
           >
             <i className="edit icon" />
           </div>
           <div
-            className="ui primary save icon button"
+            className={classNames('ui primary save icon button', (
+              this.state.accessMode === editModes.READ) ?
+              'not-visible' : 'visible-inline-block')}
             onClick={this.saveDocument}
-            style={{
-              display: this.state.accessMode === editModes.READ ?
-                'none' : 'inline-block'
-            }}
           >
             <i className="save icon" />
           </div>
           <div
-            className="ui cancel button"
+            className={classNames('ui cancel button', (
+              this.state.accessMode !== editModes.READ) ?
+              'visible-inline-block' : 'not-visible')}
             onClick={this.cancelNewDocument}
-            style={{
-              display: (this.state.accessMode !== editModes.READ) ?
-                'inline-block' : 'none'
-            }}
           >
             Cancel
           </div>
           <div
-            className="ui close button"
+            className={classNames('ui close button', (
+              this.state.accessMode === editModes.READ) ?
+              'visible-inline-block' : 'not-visible')}
             onClick={this.cancelNewDocument}
-            style={{
-              display: (this.state.accessMode === editModes.READ) ?
-                'inline-block' : 'none'
-            }}
           >
             Close
           </div>

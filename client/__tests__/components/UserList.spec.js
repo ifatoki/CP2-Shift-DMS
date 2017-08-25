@@ -18,7 +18,7 @@ describe('Single User Page', () => {
   );
 
   it('renders the component successfully', () => {
-    expect(wrapper.find('.userList'))
+    expect(wrapper.find('.user-list'))
       .toHaveLength(1);
   });
 

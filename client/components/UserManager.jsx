@@ -3,6 +3,7 @@ import PropType from 'prop-types';
 import toastr from 'toastr';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import UsersActions from '../actions/UsersActions';
 
 const { modifyUser, cancelUser } = UsersActions;
@@ -202,11 +203,9 @@ export class UserManager extends React.Component {
         </Modal.Header>
         <Modal.Content >
           <div
-            style={{
-              display:
-                this.state.accessMode === editModes.WRITE ?
-                'block' : 'none'
-            }}
+            className={classNames(this.state.accessMode === editModes.WRITE ?
+              'visible-block' : 'not-visible'
+            )}
           >
             <Form id="editUserForm">
               <Form.Group widths="equal">
@@ -249,11 +248,9 @@ export class UserManager extends React.Component {
                 onChange={this.handleSelectionChange}
               />
               <div
-                style={{
-                  display:
-                    this.state.changePassword ?
-                    'block' : 'none'
-                }}
+                className={classNames(this.state.changePassword ?
+                  'visible-block' : 'not-visible'
+                )}
               >
                 <Form.Group widths="equal">
                   <Form.Input
@@ -285,11 +282,9 @@ export class UserManager extends React.Component {
             </Form>
           </div>
           <div
-            style={{
-              display:
-                this.state.accessMode === editModes.READ ?
-                'block' : 'none'
-            }}
+            className={
+              classNames(this.state.accessMode === editModes.READ ?
+                'visible-block' : 'not-visible')}
           >
             <Modal.Description>
               <Header id="username">{`@${this.state.username}`}</Header>
@@ -308,27 +303,23 @@ export class UserManager extends React.Component {
         <Modal.Actions>
           <div
             id="editButton"
-            className="ui primary edit icon button"
+            className={classNames('ui primary edit icon button',
+              (!this.state.isOverlord ||
+                (this.state.isOverlord && this.state.roleId === 1)) &&
+              this.state.accessMode === editModes.READ ?
+                'visible-inline-block' : 'not-visible'
+            )}
             onClick={this.editUser}
-            style={{
-              display: (
-                (!this.state.isOverlord ||
-                  (this.state.isOverlord && this.state.roleId === 1)
-                ) && this.state.accessMode === editModes.READ
-              ) ? 'inline-block' : 'none'
-            }}
           >
             <i className="edit icon" />
           </div>
           <div
             id="saveButton"
-            className="ui primary save icon button"
+            className={classNames('ui primary save icon button',
+              this.state.edited && this.state.accessMode === editModes.WRITE ?
+              'visible-inline-block' : 'not-visible'
+            )}
             onClick={this.saveUser}
-            style={{
-              display:
-                this.state.edited && this.state.accessMode === editModes.WRITE ?
-                'inline-block' : 'none'
-            }}
           >
             <i className="save icon" />
           </div>

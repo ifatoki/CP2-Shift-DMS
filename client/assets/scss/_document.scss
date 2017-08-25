@@ -1,0 +1,17 @@
+@import "helpers";
+
+.description {
+  height: 50px;
+  overflow-y: scroll;
+}
+
+.content-holder {
+  height: 500px;
+  overflow-y: scroll;
+}
+
+.ui.card {
+  .ui.content {
+    padding-bottom: 0;
+  }
+}

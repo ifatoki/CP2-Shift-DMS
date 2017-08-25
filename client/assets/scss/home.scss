@@ -1,0 +1,28 @@
+@import "helpers";
+
+.navbar-icon {
+  cursor: pointer;
+  margin: 10px;
+}
+
+.sub-home-container {
+  margin-top: 0;
+  padding-top: 40px;
+}
+
+.pagination {
+  display: flex;
+  list-style-type: none;
+  margin: auto;
+  padding: 0;
+  width: fit-content;
+}
+
+li {
+  padding: 15px;
+
+  .active {
+    background: $blue;
+    color: $white;
+  }
+}
