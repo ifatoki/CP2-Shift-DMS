@@ -66,6 +66,9 @@ const onListening = () => {
   debug(`🚧 Application is Listening on ${bind}`);
 };
 
+/**
+ * Synchronize the sequelize models with the database object
+ * */
 models.sequelize.sync().then(() => {
   /**
    * Listen on provided port, on all network interfaces.

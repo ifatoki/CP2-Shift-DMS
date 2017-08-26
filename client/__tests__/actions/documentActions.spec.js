@@ -1,10 +1,10 @@
 import moxios from 'moxios';
 import thunk from 'redux-thunk';
 import faker from 'faker';
-import _ from 'lodash';
+import lodash from 'lodash';
 import configureMockStore from 'redux-mock-store';
-import ActionTypes from '../../actions/ActionTypes';
-import DocumentActions from '../../actions/DocumentActions';
+import actionTypes from '../../actions/actionTypes';
+import documentActions from '../../actions/documentActions';
 
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
@@ -38,12 +38,12 @@ describe('Document Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(DocumentActions.saveNewDocument(document))
+      store.dispatch(documentActions.saveNewDocument(document))
       .then(() => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.DOCUMENT_SAVE_REQUEST);
+          .toEqual(actionTypes.DOCUMENT_SAVE_REQUEST);
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.DOCUMENT_SAVE_SUCCESSFUL);
+          .toEqual(actionTypes.DOCUMENT_SAVE_SUCCESSFUL);
         expect(store.getActions()[1].payload)
           .toEqual(document);
       });
@@ -59,16 +59,35 @@ describe('Document Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(DocumentActions.saveNewDocument(errorDocument));
+      store.dispatch(documentActions.saveNewDocument(errorDocument));
       expect(store.getActions()[1].type)
-        .toEqual(ActionTypes.DOCUMENT_SAVE_FAILED);
+        .toEqual(actionTypes.DOCUMENT_SAVE_FAILED);
       expect(store.getActions()[1].payload)
         .toEqual('title is required<br/>');
+    });
+
+    it('dispatches error action when errors occur', (done) => {
+      moxios.stubRequest('api/v1/documents', {
+        status: 500,
+        response: {
+          message: 'sorry our servers errored out'
+        }
+      });
+
+      const store = mockStore({});
+      store.dispatch(documentActions.saveNewDocument(document))
+      .then(() => {
+        expect(store.getActions()[1].type)
+          .toEqual(actionTypes.DOCUMENT_SAVE_FAILED);
+        expect(store.getActions()[1].payload)
+          .toEqual('sorry our servers errored out');
+      });
+      done();
     });
   });
 
   describe('fetch all documents action', () => {
-    const documents = _.map([1, 2, 3], id => ({
+    const documents = lodash.map([1, 2, 3], id => ({
       id,
       title: faker.company.catchPhrase(),
       content: faker.lorem.paragraph(2)
@@ -82,10 +101,10 @@ describe('Document Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(DocumentActions.fetchDocuments())
+      store.dispatch(documentActions.fetchDocuments())
       .then(() => {
         expect(store.getActions()[1].type)
-        .toEqual(ActionTypes.DOCUMENTS_FETCH_SUCCESSFUL);
+        .toEqual(actionTypes.DOCUMENTS_FETCH_SUCCESSFUL);
         expect(store.getActions()[1].payload).toEqual(
           documents
         );
@@ -102,10 +121,10 @@ describe('Document Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(DocumentActions.getDocument(document.id))
+      store.dispatch(documentActions.getDocument(document.id))
       .then(() => {
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.DOCUMENT_GET_SUCCESSFUL);
+          .toEqual(actionTypes.DOCUMENT_GET_SUCCESSFUL);
         expect(store.getActions()[1].payload.document).toEqual(
           document
         );
@@ -113,7 +132,7 @@ describe('Document Actions', () => {
       done();
     });
 
-    it('dispatch error when incvalid document is requested', (done) => {
+    it('dispatch error when invalid document is requested', (done) => {
       moxios.stubRequest('api/v1/documents/3000000', {
         status: 404,
         response: {
@@ -121,10 +140,10 @@ describe('Document Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(DocumentActions.getDocument(3000000))
+      store.dispatch(documentActions.getDocument(3000000))
       .catch(() => {
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.DOCUMENT_GET_FAILED);
+          .toEqual(actionTypes.DOCUMENT_GET_FAILED);
         expect(store.getActions()[1].payload).toEqual({
           message: 'Document not found'
         });
@@ -143,10 +162,10 @@ describe('Document Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(DocumentActions.modifyDocument(document.id, document))
+      store.dispatch(documentActions.modifyDocument(document.id, document))
       .then(() => {
         expect(store.getActions()[0].type)
-          .toEqual(ActionTypes.DOCUMENT_MODIFY_REQUEST);
+          .toEqual(actionTypes.DOCUMENT_MODIFY_REQUEST);
         expect(store.getActions()[1].payload)
           .toEqual(document);
       });
@@ -161,15 +180,36 @@ describe('Document Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(DocumentActions.modifyDocument(3000000, errorDocument))
+      store.dispatch(documentActions.modifyDocument(3000000, errorDocument))
       .then(() => {
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.DOCUMENT_MODIFY_FAILED);
+          .toEqual(actionTypes.DOCUMENT_MODIFY_FAILED);
         expect(store.getActions()[1].payload).toEqual(
           'document not found'
         );
       });
       done();
+    });
+
+    it('dispatches error action when validation errors occur', () => {
+      const modifyErrorDocument = {
+        title: '',
+        id: 3
+      };
+      moxios.stubRequest(`api/v1/documents/${modifyErrorDocument.id}`, {
+        status: 400,
+        response: {
+          message: 'title is required<br/>'
+        }
+      });
+
+      const store = mockStore({});
+      store.dispatch(documentActions
+        .modifyDocument(modifyErrorDocument.id, modifyErrorDocument));
+      expect(store.getActions()[1].type)
+        .toEqual(actionTypes.DOCUMENT_MODIFY_FAILED);
+      expect(store.getActions()[1].payload)
+        .toEqual('title is required<br/>');
     });
   });
 
@@ -183,10 +223,10 @@ describe('Document Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(DocumentActions.deleteDocument(1))
+      store.dispatch(documentActions.deleteDocument(1))
       .then(() => {
         expect(store.getActions()[1].type)
-        .toEqual(ActionTypes.DOCUMENT_DELETE_SUCCESSFUL);
+        .toEqual(actionTypes.DOCUMENT_DELETE_SUCCESSFUL);
         expect(store.getActions()[1].payload).toEqual(
           'document deleted successfully'
         );
@@ -202,10 +242,10 @@ describe('Document Actions', () => {
         }
       });
       const store = mockStore({});
-      store.dispatch(DocumentActions.deleteDocument('3000000', errorDocument))
+      store.dispatch(documentActions.deleteDocument('3000000', errorDocument))
       .catch(() => {
         expect(store.getActions()[1].type)
-          .toEqual(ActionTypes.DOCUMENT_DELETE_FAILED);
+          .toEqual(actionTypes.DOCUMENT_DELETE_FAILED);
         expect(store.getActions()[1].payload).toEqual(
           'document not found'
         );
@@ -228,10 +268,10 @@ describe('Document Actions', () => {
       });
 
       const store = mockStore({});
-      store.dispatch(DocumentActions.searchDocuments('hello'))
+      store.dispatch(documentActions.searchDocuments('hello'))
       .then(() => {
         expect(store.getActions()[1].type)
-        .toEqual(ActionTypes.DOCUMENTS_SEARCH_SUCCESSFUL);
+        .toEqual(actionTypes.DOCUMENTS_SEARCH_SUCCESSFUL);
         expect(store.getActions()[1].payload.documents).toEqual([{
           id: 1,
           title: 'Hello World',
@@ -240,12 +280,30 @@ describe('Document Actions', () => {
       });
       done();
     });
+
+    it('returns an error on server error', (done) => {
+      moxios.stubRequest('api/v1/search/documents?q=hello', {
+        status: 500,
+        message: 'oops, our server be acting up'
+      });
+
+      const store = mockStore({});
+      store.dispatch(documentActions.searchDocuments('hello'))
+      .then(() => {
+        expect(store.getActions()[1].type)
+        .toEqual(actionTypes.DOCUMENTS_SEARCH_FAILED);
+        expect(store.getActions()[1].payload).toEqual(
+          'oops, our server be acting up'
+        );
+      });
+      done();
+    });
   });
 
   it('cancels an ongoing document edit/view', () => {
     const store = mockStore({});
-    store.dispatch(DocumentActions.cancelNewDocument());
+    store.dispatch(documentActions.cancelNewDocument());
     expect(store.getActions()[0].type)
-    .toEqual(ActionTypes.DOCUMENT_CANCELLED);
+    .toEqual(actionTypes.DOCUMENT_CANCELLED);
   });
 });

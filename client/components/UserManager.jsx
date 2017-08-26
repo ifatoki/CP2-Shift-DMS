@@ -4,9 +4,9 @@ import toastr from 'toastr';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import UsersActions from '../actions/UsersActions';
+import usersActions from '../actions/usersActions';
 
-const { modifyUser, cancelUser } = UsersActions;
+const { modifyUser, cancelUser } = usersActions;
 
 const editModes = {
   READ: 'READ',
@@ -89,6 +89,7 @@ export class UserManager extends React.Component {
   }
 
   /**
+   * Handles a change to the forms in the Component
    * @method onChange
    *
    * @param {any} event
@@ -107,6 +108,7 @@ export class UserManager extends React.Component {
   }
 
   /**
+   * Reset the Component to its initial State
    * @method resetModal
    *
    * @memberof UserManager
@@ -117,6 +119,7 @@ export class UserManager extends React.Component {
   }
 
   /**
+   * Enable or disables the reset password form
    * @method handleSelectionChange
    *
    * @param {any} event
@@ -129,6 +132,7 @@ export class UserManager extends React.Component {
   }
 
   /**
+   * Saves the modifications made to the current user.
    * @method saveUser
    *
    * @param {any} event
@@ -160,6 +164,7 @@ export class UserManager extends React.Component {
   }
 
   /**
+   * Changes the Component to Edit mode
    * @method editUser
    *
    * @param {any} event
@@ -174,6 +179,7 @@ export class UserManager extends React.Component {
   }
 
   /**
+   * Close the open component
    * @method cancelUser
    *
    * @param {any} event
@@ -344,7 +350,7 @@ UserManager.propTypes = {
     firstname: PropType.string,
     id: PropType.number,
     lastname: PropType.string,
-    role: PropType.number,
+    role: PropType.string,
     roleId: PropType.number,
     username: PropType.string
   }).isRequired,
@@ -366,6 +372,7 @@ const mapDispatchToProps = {
 };
 
 /**
+ * Map state to props
  * @function mapStateToProps
  *
  * @param {any} state

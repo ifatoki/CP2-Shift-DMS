@@ -1,19 +1,19 @@
 import React from 'react';
 import PropType from 'prop-types';
 import toastr from 'toastr';
-import _ from 'lodash';
+import lodash from 'lodash';
 import classNames from 'classnames';
 import ReactHtmlParser from 'react-html-parser';
 import { connect } from 'react-redux';
 import { Checkbox, Form } from 'semantic-ui-react';
 import RoleSearchComponent from '../components/RoleSearchComponent';
-import DocumentActions from '../actions/DocumentActions';
+import documentActions from '../actions/documentActions';
 
 const {
   saveNewDocument,
   modifyDocument,
   cancelNewDocument
-} = DocumentActions;
+} = documentActions;
 
 const editModes = {
   READ: 'READ',
@@ -31,7 +31,7 @@ toastr.options = {
  * A React component that displays and creates
  * an environment to modify documents
  *
- * @export
+ * @export DocumentManager
  * @class DocumentManager
  * @extends {React.Component}
  */
@@ -114,6 +114,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Changes the selected role in the Component state
    * @method onRolesChange
    *
    * @param {any} event
@@ -128,6 +129,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Sets the Component state based on changes in its textboxes
    * @method onChange
    *
    * @param {any} event
@@ -143,6 +145,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Sets the document Types state based on radio button selection change
    * @method handleRadioButtonChange
    *
    * @param {any} event
@@ -162,6 +165,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Saves the currentDocument
    * @method saveDocument
    *
    * @param {any} event
@@ -170,22 +174,22 @@ export class DocumentManager extends React.Component {
    */
   saveDocument(event) {
     const { currentDocument } = this.props;
+    const editData = {};
     event.preventDefault();
     if (this.state.accessMode === editModes.NEW) {
-      this.props.saveNewDocument({
-        title: this.state.title,
-        content: this.state.content,
-        ownerId: this.props.user.id,
-        accessId: this.state.accessId,
-        roles: _.reduce(this.state.selectedRoles, (cummulator, value) => {
-          if (value !== this.props.user.roleId) {
+      editData.title = this.state.title;
+      editData.content = this.state.content;
+      editData.ownerId = this.props.user.id;
+      editData.accessId = this.state.accessId;
+      if (this.state.accessId === 3) {
+        editData.roles = lodash
+          .reduce(this.state.selectedRoles, (cummulator, value) => {
             cummulator[value] = 3;
-          }
-          return cummulator;
-        }, {})
-      });
+            return cummulator;
+          }, {});
+      }
+      this.props.saveNewDocument(editData);
     } else {
-      const editData = {};
       if (this.state.title !== currentDocument.title) {
         editData.title = this.state.title;
       }
@@ -197,8 +201,10 @@ export class DocumentManager extends React.Component {
         editData.accessId = this.state.accessId;
         if (this.state.accessId === 3) {
           editData.roles =
-            _.reduce(this.state.selectedRoles, (cummulator, value) => {
-              cummulator[value] = 3;
+            lodash.reduce(this.state.selectedRoles, (cummulator, value) => {
+              if (value !== this.props.user.roleId) {
+                cummulator[value] = 3;
+              }
               return cummulator;
             }, {});
         }
@@ -208,6 +214,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Sets the current document to Edit Mode
    * @method editDocument
    *
    * @param {any} event
@@ -227,6 +234,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Close the currently open document
    * @method cancelNewDocument
    *
    * @param {any} event

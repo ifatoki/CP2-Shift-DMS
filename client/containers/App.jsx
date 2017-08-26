@@ -5,7 +5,7 @@ import { withRouter, Route, Redirect } from 'react-router';
 import LandingContainer from './LandingContainer';
 import HomeContainer from './HomeContainer';
 
-export /**
+export /** The Root Application Component
  * @function App
  *
  * @param {any} props

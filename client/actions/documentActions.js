@@ -1,13 +1,13 @@
 import axios from 'axios';
-import _ from 'lodash';
-import ActionTypes from './ActionTypes';
+import lodash from 'lodash';
+import actionTypes from './actionTypes';
 import Validator from '../../server/utils/Validator';
 
 const config = {
   headers: { 'Content-Type': 'application/json' }
 };
 
-const DocumentActions = {
+const documentActions = {
   /**
    * @function documentGetRequest
    *
@@ -15,11 +15,12 @@ const DocumentActions = {
    */
   documentGetRequest() {
     return {
-      type: ActionTypes.DOCUMENT_GET_REQUEST
+      type: actionTypes.DOCUMENT_GET_REQUEST
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_GET_SUCCESSFUL action
    * @function documentGetSuccessful
    *
    * @param {any} payload
@@ -27,12 +28,13 @@ const DocumentActions = {
    */
   documentGetSuccessful(payload) {
     return {
-      type: ActionTypes.DOCUMENT_GET_SUCCESSFUL,
+      type: actionTypes.DOCUMENT_GET_SUCCESSFUL,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_GET_FAILED action
    * @function documentGetFailed
    *
    * @param {any} payload
@@ -40,23 +42,25 @@ const DocumentActions = {
    */
   documentGetFailed(payload) {
     return {
-      type: ActionTypes.DOCUMENT_GET_FAILED,
+      type: actionTypes.DOCUMENT_GET_FAILED,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_DELETE_REQUEST action
    * @function documentDeleteRequest
    *
    * @returns {object} Action
    */
   documentDeleteRequest() {
     return {
-      type: ActionTypes.DOCUMENT_DELETE_REQUEST
+      type: actionTypes.DOCUMENT_DELETE_REQUEST
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_DELETE_SUCCESSFUL action
    * @function documentDeleteSuccessful
    *
    * @param {any} payload
@@ -64,12 +68,13 @@ const DocumentActions = {
    */
   documentDeleteSuccessful(payload) {
     return {
-      type: ActionTypes.DOCUMENT_DELETE_SUCCESSFUL,
+      type: actionTypes.DOCUMENT_DELETE_SUCCESSFUL,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_DELETE_FAILED action
    * @function documentDeleteFailed
    *
    * @param {any} payload
@@ -77,23 +82,25 @@ const DocumentActions = {
    */
   documentDeleteFailed(payload) {
     return {
-      type: ActionTypes.DOCUMENT_DELETE_FAILED,
+      type: actionTypes.DOCUMENT_DELETE_FAILED,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENTS_FETCH_REQUEST action
    * @function documentsFetchRequest
    *
    * @returns {object} Action
    */
   documentsFetchRequest() {
     return {
-      type: ActionTypes.DOCUMENTS_FETCH_REQUEST
+      type: actionTypes.DOCUMENTS_FETCH_REQUEST
     };
   },
 
   /**
+   * Dispatches a DOCUMENTS_FETCH_SUCCESSFUL action
    * @function documentsFetchSuccessful
    *
    * @param {any} payload
@@ -102,13 +109,14 @@ const DocumentActions = {
    */
   documentsFetchSuccessful(payload, type) {
     return {
-      type: ActionTypes.DOCUMENTS_FETCH_SUCCESSFUL,
+      type: actionTypes.DOCUMENTS_FETCH_SUCCESSFUL,
       documentsType: type,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENTS_FETCH_FAILED action
    * @function documentsFetchFailed
    *
    * @param {any} payload
@@ -116,23 +124,25 @@ const DocumentActions = {
    */
   documentsFetchFailed(payload) {
     return {
-      type: ActionTypes.DOCUMENTS_FETCH_FAILED,
+      type: actionTypes.DOCUMENTS_FETCH_FAILED,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_SAVE_REQUEST action
    * @function documentSaveRequest
    *
    * @returns {object} Action
    */
   documentSaveRequest() {
     return {
-      type: ActionTypes.DOCUMENT_SAVE_REQUEST
+      type: actionTypes.DOCUMENT_SAVE_REQUEST
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_SAVE_SUCCESSFUL action
    * @function documentSaveSuccessful
    *
    * @param {any} payload
@@ -140,12 +150,13 @@ const DocumentActions = {
    */
   documentSaveSuccessful(payload) {
     return {
-      type: ActionTypes.DOCUMENT_SAVE_SUCCESSFUL,
+      type: actionTypes.DOCUMENT_SAVE_SUCCESSFUL,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_SAVE_FAILED action
    * @function documentSaveFailed
    *
    * @param {any} payload
@@ -153,23 +164,25 @@ const DocumentActions = {
    */
   documentSaveFailed(payload) {
     return {
-      type: ActionTypes.DOCUMENT_SAVE_FAILED,
+      type: actionTypes.DOCUMENT_SAVE_FAILED,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_MODIFY_REQUEST action
    * @function documentModifyRequest
    *
    * @returns {object} Action
    */
   documentModifyRequest() {
     return {
-      type: ActionTypes.DOCUMENT_MODIFY_REQUEST
+      type: actionTypes.DOCUMENT_MODIFY_REQUEST
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_MODIFY_SUCCESSFUL action
    * @function documentModifySuccessful
    *
    * @param {any} payload
@@ -177,12 +190,13 @@ const DocumentActions = {
    */
   documentModifySuccessful(payload) {
     return {
-      type: ActionTypes.DOCUMENT_MODIFY_SUCCESSFUL,
+      type: actionTypes.DOCUMENT_MODIFY_SUCCESSFUL,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_MODIFY_FAILED action
    * @function documentModifyFailed
    *
    * @param {any} payload
@@ -190,23 +204,25 @@ const DocumentActions = {
    */
   documentModifyFailed(payload) {
     return {
-      type: ActionTypes.DOCUMENT_MODIFY_FAILED,
+      type: actionTypes.DOCUMENT_MODIFY_FAILED,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENTS_SEARCH_REQUEST action
    * @function documentsSearchRequest
    *
    * @returns {object} Action
    */
   documentsSearchRequest() {
     return {
-      type: ActionTypes.DOCUMENTS_SEARCH_REQUEST
+      type: actionTypes.DOCUMENTS_SEARCH_REQUEST
     };
   },
 
   /**
+   * Dispatches a DOCUMENTS_SEARCH_SUCCESSFUL action
    * @function documentsSearchSuccessful
    *
    * @param {any} payload
@@ -214,12 +230,13 @@ const DocumentActions = {
    */
   documentsSearchSuccessful(payload) {
     return {
-      type: ActionTypes.DOCUMENTS_SEARCH_SUCCESSFUL,
+      type: actionTypes.DOCUMENTS_SEARCH_SUCCESSFUL,
       payload
     };
   },
 
   /**
+   * Dispatches a DOCUMENT_SEARCH_FAILED action
    * @function documentsSearchFailed
    *
    * @param {any} payload
@@ -227,7 +244,7 @@ const DocumentActions = {
    */
   documentsSearchFailed(payload) {
     return {
-      type: ActionTypes.DOCUMENTS_SEARCH_FAILED,
+      type: actionTypes.DOCUMENTS_SEARCH_FAILED,
       payload
     };
   },
@@ -240,12 +257,13 @@ const DocumentActions = {
    * @returns {string} Error message
    */
   getErrorMessage(errors) {
-    return _.reduce(errors, (result, error) =>
+    return lodash.reduce(errors, (result, error) =>
       `${error}<br/>${result}`
     , '');
   },
 
   /**
+   * Dispatches a DOCUMENT_CANCELLED action
    * @function cancelNewDocument
    *
    * @returns {object} Action
@@ -253,7 +271,7 @@ const DocumentActions = {
   cancelNewDocument() {
     return dispatch =>
       dispatch({
-        type: ActionTypes.DOCUMENT_CANCELLED
+        type: actionTypes.DOCUMENT_CANCELLED
       });
   },
 
@@ -266,14 +284,14 @@ const DocumentActions = {
    */
   getDocument(documentId) {
     return (dispatch) => {
-      dispatch(DocumentActions.documentGetRequest());
+      dispatch(documentActions.documentGetRequest());
       return axios
         .get(`api/v1/documents/${documentId}`)
         .then((response) => {
-          dispatch(DocumentActions.documentGetSuccessful(response.data));
+          dispatch(documentActions.documentGetSuccessful(response.data));
         })
         .catch((error) => {
-          dispatch(DocumentActions
+          dispatch(documentActions
             .documentGetFailed(error.response.data.message));
         });
     };
@@ -288,15 +306,15 @@ const DocumentActions = {
    */
   deleteDocument(documentId) {
     return (dispatch) => {
-      dispatch(DocumentActions.documentDeleteRequest());
+      dispatch(documentActions.documentDeleteRequest());
       return axios
         .delete(`api/v1/documents/${documentId}`)
         .then((response) => {
-          dispatch(DocumentActions
+          dispatch(documentActions
             .documentDeleteSuccessful(response.data.message));
         })
         .catch((error) => {
-          dispatch(DocumentActions
+          dispatch(documentActions
             .documentDeleteFailed(error.response.data.message));
         });
     };
@@ -312,7 +330,7 @@ const DocumentActions = {
    */
   fetchDocuments(type, offset) {
     return (dispatch) => {
-      dispatch(DocumentActions.documentsFetchRequest());
+      dispatch(documentActions.documentsFetchRequest());
       return axios
         .get('/api/v1/documents', {
           params: {
@@ -322,12 +340,12 @@ const DocumentActions = {
           }
         })
         .then((response) => {
-          dispatch(DocumentActions.documentsFetchSuccessful(
+          dispatch(documentActions.documentsFetchSuccessful(
             response.data, type
           ));
         })
         .catch((error) => {
-          dispatch(DocumentActions
+          dispatch(documentActions
             .documentsFetchFailed(error.response.data.message));
         }
       );
@@ -344,21 +362,21 @@ const DocumentActions = {
   saveNewDocument(documentData) {
     const validation = Validator.validateNewDocument(documentData);
     return (dispatch) => {
-      dispatch(DocumentActions.documentSaveRequest());
+      dispatch(documentActions.documentSaveRequest());
       if (validation.isValid) {
         return axios
           .post('api/v1/documents', documentData, config)
           .then((response) => {
-            dispatch(DocumentActions
+            dispatch(documentActions
               .documentSaveSuccessful(response.data.document));
           })
           .catch((error) => {
-            dispatch(DocumentActions
+            dispatch(documentActions
               .documentSaveFailed(error.response.data.message));
           });
       }
-      dispatch(DocumentActions.documentSaveFailed(
-        DocumentActions.getErrorMessage(validation.errors)
+      dispatch(documentActions.documentSaveFailed(
+        documentActions.getErrorMessage(validation.errors)
       ));
     };
   },
@@ -374,22 +392,22 @@ const DocumentActions = {
   modifyDocument(documentId, documentData) {
     const validation = Validator.validateDocumentEdit(documentData);
     return (dispatch) => {
-      dispatch(DocumentActions.documentModifyRequest());
+      dispatch(documentActions.documentModifyRequest());
       if (validation.isValid) {
         return axios
           .put(`api/v1/documents/${documentId}`, documentData, config)
           .then((response) => {
-            dispatch(DocumentActions
+            dispatch(documentActions
               .documentModifySuccessful(response.data.document));
           })
           .catch((error) => {
-            dispatch(DocumentActions
+            dispatch(documentActions
               .documentModifyFailed(error.response.data.message));
           }
         );
       }
-      dispatch(DocumentActions.documentModifyFailed(
-        DocumentActions.getErrorMessage(validation.errors)
+      dispatch(documentActions.documentModifyFailed(
+        documentActions.getErrorMessage(validation.errors)
       ));
     };
   },
@@ -403,14 +421,14 @@ const DocumentActions = {
    */
   searchDocuments(query) {
     return (dispatch) => {
-      dispatch(DocumentActions.documentsSearchRequest());
+      dispatch(documentActions.documentsSearchRequest());
       return axios
         .get(`api/v1/search/documents?q=${query}`, config)
         .then((response) => {
-          dispatch(DocumentActions.documentsSearchSuccessful(response.data));
+          dispatch(documentActions.documentsSearchSuccessful(response.data));
         })
         .catch((error) => {
-          dispatch(DocumentActions
+          dispatch(documentActions
             .documentsSearchFailed(error.response.data.message));
         }
       );
@@ -418,4 +436,4 @@ const DocumentActions = {
   }
 };
 
-export default DocumentActions;
+export default documentActions;

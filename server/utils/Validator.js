@@ -109,6 +109,7 @@ export default class Validator {
   }
 
   /**
+   * Confirm validity of data passed to create new document
    * @method validateNewDocument
    *
    * @static
@@ -130,6 +131,7 @@ export default class Validator {
   }
 
   /**
+   * Confirm validity of data passed to edit new document
    * @method validateDocumentEdit
    *
    * @static
@@ -153,6 +155,7 @@ export default class Validator {
   }
 
   /**
+   * Append new errors to existing error object and set validity status
    * @method reconcileErrors
    *
    * @static

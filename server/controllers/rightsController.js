@@ -1,8 +1,21 @@
-const Right = require('../models').Right;
-const DocumentRole = require('../models').DocumentRole;
+import { Right, DocumentRole } from '../models';
 
-module.exports = {
+/**
+ * Returns a 500 server error with the server response
+ * @function returnServerError
+ *
+ * @param {any} res
+ * @returns {void}
+ */
+const returnServerError = res => (
+  res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
+  })
+);
+
+const rightsController = {
   /**
+   * Create a new right with the passed data
    * @function create
    *
    * @param {any} req
@@ -27,20 +40,14 @@ module.exports = {
               .then(newRight => res.status(201).send({
                 right: newRight
               }))
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(() => returnServerError());
           } else {
             res.status(403).send({
               message: 'right already exists'
             });
           }
         })
-        .catch(() => {
-          res.status(500).send({
-            message: 'oops, we just encountered an error. please try again'
-          });
-        });
+        .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
         message: 'blank title'
@@ -49,6 +56,7 @@ module.exports = {
   },
 
   /**
+   * Fetch and return all rights.
    * @function list
    *
    * @param {any} req
@@ -63,8 +71,8 @@ module.exports = {
       .then(rights => res.status(200).send({
         rights
       }))
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   }
 };
+
+export default rightsController;

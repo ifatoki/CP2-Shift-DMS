@@ -1,8 +1,8 @@
 import faker from 'faker';
-import _ from 'lodash';
+import lodash from 'lodash';
 
 const roles = ['overlord', 'admin', 'success', 'learning', 'fellows'];
-const getUsers = _.reduce(roles, (users, role) => {
+const getUsers = lodash.reduce(roles, (users, role) => {
   const pass = faker.internet.password(8);
   users[role] = {
     roleId: roles.indexOf(role) + 1,
@@ -16,8 +16,8 @@ const getUsers = _.reduce(roles, (users, role) => {
   return users;
 }, {});
 
-const postData = {
+const testData = {
   users: getUsers
 };
 
-export default postData;
+export default testData;

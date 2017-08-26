@@ -33,8 +33,8 @@ describe('Single Document Page', () => {
   });
 
   describe('Class Methods', () => {
-    it('should call the onChange method when the text' +
-    'in firstname field changes', () => {
+    it(`should call the onChange method when the text
+    in firstname field changes`, () => {
       wrapper.find('input[name="firstname"]')
         .simulate('change');
       expect(onChangeSpy.called)

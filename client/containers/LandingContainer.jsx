@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown } from 'semantic-ui-react';
 import toastr from 'toastr';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import lodash from 'lodash';
 import classNames from 'classnames';
-import UsersActions from '../actions/UsersActions';
+import AuthenticationForm from '../components/AuthenticationForm';
+import usersActions from '../actions/usersActions';
 
-const { logUserIn, signUserUp, fetchAllRoles } = UsersActions;
+const { logUserIn, signUserUp, fetchAllRoles } = usersActions;
 
 toastr.options = {
   positionClass: 'toast-top-center',
@@ -16,6 +16,7 @@ toastr.options = {
 };
 
 /**
+ * Serves as a Landing page with all the Login and signup features
  * @export
  * @class LandingContainer
  * @extends {React.Component}
@@ -54,7 +55,7 @@ export class LandingContainer extends React.Component {
       toastr.error(currentUserErrorMessage, 'Validation Error');
     }
     this.setState({
-      roles: _.reduce(roles, (accumulator, role) =>
+      roles: lodash.reduce(roles, (accumulator, role) =>
         accumulator.concat({
           key: role.id,
           text: role.title,
@@ -64,6 +65,7 @@ export class LandingContainer extends React.Component {
   }
 
   /**
+   * Modifies the component state based on text entered in the fields
    * @method onChange
    *
    * @param {any} event
@@ -80,6 +82,7 @@ export class LandingContainer extends React.Component {
   }
 
   /**
+   * Logs the user in with the entered details
    * @method onLoginSubmit
    *
    * @param {any} event
@@ -92,6 +95,7 @@ export class LandingContainer extends React.Component {
   }
 
   /**
+   * Creates a new user account with the entered details
    * @method onSignUpSubmit
    *
    * @param {any} event
@@ -104,6 +108,7 @@ export class LandingContainer extends React.Component {
   }
 
   /**
+   * Toggle between show login or signup
    * @method toggleShowLogin
    *
    * @param {any} event
@@ -156,125 +161,27 @@ export class LandingContainer extends React.Component {
                   this.state.showLogin ? 'not-visible' : 'visible-block'
                 )}
               >
-                <form className="ui form segment">
-                  <div className="field">
-                    Create your account
-                  </div>
-                  <div className="field">
-                    <input
-                      placeholder="First Name"
-                      name="firstname"
-                      type="text"
-                      onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="field">
-                    <input
-                      placeholder="Last Name"
-                      name="lastname"
-                      type="text"
-                      onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="field">
-                    <input
-                      placeholder="Email Address"
-                      name="email"
-                      type="email"
-                      onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="field">
-                    <input
-                      placeholder="Username"
-                      name="username"
-                      type="text"
-                      onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="field">
-                    <Dropdown
-                      placeholder="Roles"
-                      selection
-                      name="roleId"
-                      options={this.state.roles}
-                      onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="two fields">
-                    <div className="field">
-                      <input
-                        placeholder="Password"
-                        type="password"
-                        name="password"
-                        onChange={this.onChange}
-                      />
-                    </div>
-                    <div className="field">
-                      <input
-                        placeholder="Confirm Password"
-                        type="password"
-                        name="confirmPassword"
-                        onChange={this.onChange}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className="ui primary fluid submit button"
-                    id="signup"
-                    name="signup"
-                    onClick={this.onSignUpSubmit}
-                  >
-                    Create an account
-                  </div>
-                  <div className="login-toggle">
-                    Already have an account? &nbsp;
-                    <a href="" onClick={this.toggleShowLogin}>
-                      Sign In
-                    </a>
-                  </div>
-                </form>
+                <AuthenticationForm
+                  roles={this.state.roles}
+                  onChange={this.onChange}
+                  toggleShowLogin={this.toggleShowLogin}
+                  onSignUpSubmit={this.onSignUpSubmit}
+                  onLoginSubmit={this.onLoginSubmit}
+                />
               </div>
               <div
                 className={classNames('column user-auth',
                   this.state.showLogin ? 'visible-block' : 'not-visible'
                 )}
               >
-                <form className="ui form segment">
-                  <p>Lets get you signed in</p>
-                  <div className="field">
-                    <input
-                      id="loginUserName"
-                      placeholder="Username"
-                      name="username"
-                      type="text"
-                      onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="field">
-                    <input
-                      id="loginPassword"
-                      placeholder="Password"
-                      type="password"
-                      name="password"
-                      onChange={this.onChange}
-                    />
-                  </div>
-                  <div
-                    className="ui primary fluid submit button"
-                    id="login"
-                    name="login"
-                    onClick={this.onLoginSubmit}
-                  >
-                    Sign in
-                  </div>
-                  <div className="login-toggle">
-                    New user? &nbsp;
-                    <a href="" onClick={this.toggleShowLogin}>
-                      Create an account
-                    </a>
-                  </div>
-                </form>
+                <AuthenticationForm
+                  isLogin
+                  roles={this.state.roles}
+                  onChange={this.onChange}
+                  toggleShowLogin={this.toggleShowLogin}
+                  onSignUpSubmit={this.onSignUpSubmit}
+                  onLoginSubmit={this.onLoginSubmit}
+                />
               </div>
             </div>
           </div>

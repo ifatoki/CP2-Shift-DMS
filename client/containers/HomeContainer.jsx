@@ -5,8 +5,8 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 import classNames from 'classnames';
-import UsersActions from '../actions/UsersActions';
-import DocumentActions from '../actions/DocumentActions';
+import usersActions from '../actions/usersActions';
+import documentActions from '../actions/documentActions';
 import DocumentList from '../components/DocumentList';
 import SearchComponent from '../components/SearchComponent';
 import UserList from '../components/UserList';
@@ -18,8 +18,8 @@ const {
   fetchAllUsers,
   fetchAllRoles,
   getUser
-} = UsersActions;
-const { fetchDocuments } = DocumentActions;
+} = usersActions;
+const { fetchDocuments } = documentActions;
 
 toastr.options = {
   positionClass: 'toast-top-center',
@@ -27,7 +27,8 @@ toastr.options = {
   timeOut: 2000
 };
 
-/**
+/** The HomeContainer houses most of the apps functionality and
+ * becomes visible on successful authentication
  * @export
  * @class HomeContainer
  * @extends {React.Component}
@@ -158,6 +159,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Modifies the document type to match the selection
    * @method handleDocumentTypeChange
    *
    * @param {any} event
@@ -182,6 +184,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Navigates to the selected page
    * @method handlePageChange
    *
    * @param {any} pageNumber
@@ -197,6 +200,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Opens the users profile
    * @method showUserProfile
    *
    * @memberof HomeContainer
@@ -207,6 +211,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Opens a modal to create a new document
    * @method initializeNewDocument
    *
    * @memberof HomeContainer
@@ -238,6 +243,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Logs the user out.
    * @method logOut
    *
    * @param {any} event
@@ -434,9 +440,11 @@ export class HomeContainer extends React.Component {
               pageCount={Math.ceil(this.props.documentsCount / 9)}
               pageRangeDisplayed={5}
               onPageChange={this.handlePageChange}
-              containerClassName={'pagination'}
+              containerClassName={`pagination ${
+                this.state.showUsers ? 'not-visible' : 'visible-flex'
+              }`}
               subContainerClassName={'pages pagination'}
-              activeClassName={'active'}
+              activeClassName={'active-page'}
             />
           </div>
         </div>

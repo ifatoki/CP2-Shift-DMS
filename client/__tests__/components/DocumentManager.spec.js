@@ -49,8 +49,8 @@ describe('Single Document Page', () => {
   });
 
   describe('Class Methods', () => {
-    it('should call the onChange method when user types' +
-    'in firstname field', () => {
+    it(`should call the onChange method when user types
+    in firstname field`, () => {
       wrapper.find('textarea[name="title"]')
         .simulate('change');
       expect(onChangeSpy.called)

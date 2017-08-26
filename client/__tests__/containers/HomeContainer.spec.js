@@ -21,9 +21,9 @@ describe('Single Document Page', () => {
   };
 
   const documentTypeChangeSpy = sinon.spy(
-      HomeContainer.prototype, 'handleDocumentTypeChange');
+    HomeContainer.prototype, 'handleDocumentTypeChange');
   const showUserProfileSpy = sinon.spy(
-      HomeContainer.prototype, 'showUserProfile');
+    HomeContainer.prototype, 'showUserProfile');
   const logOutSpy = sinon.spy(HomeContainer.prototype, 'logOut');
   const wrapper = shallow(
     <HomeContainer
@@ -110,8 +110,8 @@ describe('Single Document Page', () => {
       });
       expect(wrapper.state('type')).toBe('american');
     });
-    it('should call fetchDocuments when previous props is savingDocument' +
-    'and current props is documentSaved', () => {
+    it(`should call fetchDocuments when previous props is savingDocument
+    and current props is documentSaved`, () => {
       let initialCallCount = fetchDocuments.callCount;
       wrapper.setProps({
         savingDocument: true
@@ -121,8 +121,8 @@ describe('Single Document Page', () => {
       });
       expect(fetchDocuments.callCount === (initialCallCount += 1));
     });
-    it('should call fetchDocuments when previous props is documentDeleting' +
-    'and current props is documentDeleted', () => {
+    it(`should call fetchDocuments when previous props is documentDeleting
+    and current props is documentDeleted`, () => {
       let initialCallCount = fetchDocuments.callCount;
       wrapper.setProps({
         documentDeleting: true
@@ -131,6 +131,19 @@ describe('Single Document Page', () => {
         documentDeleted: true
       });
       expect(fetchDocuments.callCount === (initialCallCount += 1));
+    });
+    it(`should call fetchAllUsers and fetchAllRoles when props userDeleting
+    is recieved`, () => {
+      let initialFetchRolesCallCount = fetchAllRoles.callCount;
+      let initialFetchUsersCallCount = fetchAllUsers.callCount;
+      wrapper.setProps({
+        userDeleting: true
+      });
+      wrapper.setProps({
+        userDeleted: true
+      });
+      expect(fetchAllRoles.callCount === (initialFetchRolesCallCount += 1));
+      expect(fetchAllUsers.callCount === (initialFetchUsersCallCount += 1));
     });
   });
 });

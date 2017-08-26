@@ -1,12 +1,13 @@
 import confirmRole from '../controllers/middleware/confirmRole';
+import helpers from '../auth/helpers';
+import {
+  usersController,
+  documentsController,
+  rolesController,
+  rightsController
+} from '../controllers';
 
-const auth = require('../auth/helpers');
-const usersController = require('../controllers').users;
-const documentsController = require('../controllers').documents;
-const rolesController = require('../controllers').roles;
-const rightsController = require('../controllers').rights;
-
-module.exports = (app) => {
+const index = (app) => {
   app.get('/api', (req, res) => res.status(200).send({
     message: 'Welcome to the Shift-DMS API!',
   }));
@@ -23,43 +24,43 @@ module.exports = (app) => {
   // logs a user out
   app.post(
     '/api/v1/users/logout',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     usersController.logout
   );
   // find all users
   app.get(
     '/api/v1/users/',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     usersController.fetch
   );
   // find user with the specified id
   app.get(
     '/api/v1/users/:id',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     usersController.fetchUser
   );
   // update the user with the specified id's attributes
   app.put(
     '/api/v1/users/:id',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     usersController.updateUser
   );
   // delete the specified user
   app.delete(
     '/api/v1/users/:id',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     usersController.deleteUser
   );
   // find all the documents belonging to the specified user
   app.get(
     '/api/v1/users/:id/documents',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     usersController.fetchUserDocuments
   );
   // search for user
   app.get(
     '/api/v1/search/users/',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     usersController.search
   );
 
@@ -69,42 +70,42 @@ module.exports = (app) => {
   // create a new document record
   app.post(
     '/api/v1/documents',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     documentsController.create
   );
   // find all documents
   app.get('/api/v1/documents/',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     documentsController.fetchAll
   );
   // find the specified document
   app.get(
     '/api/v1/documents/:id',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     documentsController.fetchOne
   );
   // update the specified documents attributes
   app.put(
     '/api/v1/documents/:id',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     documentsController.update
   );
   // delete the specified document
   app.delete(
     '/api/v1/documents/:id',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     documentsController.delete
   );
   // search for a document
   app.get(
     '/api/v1/search/documents/',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     documentsController.search
   );
   // add a new role to the specified document
   app.post(
     '/api/v1/documents/:documentId',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     documentsController.addUser
   );
 
@@ -114,7 +115,7 @@ module.exports = (app) => {
   // create a new role record
   app.post(
     '/api/v1/roles',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     rolesController.create
   );
   // find all roles
@@ -128,13 +129,15 @@ module.exports = (app) => {
   // create a new right record
   app.post(
     '/api/v1/rights',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     rightsController.create
   );
   // find all rights
   app.get(
     '/api/v1/rights',
-    auth.confirmAuthentication,
+    helpers.confirmAuthentication,
     rightsController.list
   );
 };
+
+export default index;

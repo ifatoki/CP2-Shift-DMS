@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Card, Icon } from 'semantic-ui-react';
 import ReactHtmlParser from 'react-html-parser';
 import Timeago from 'timeago-react';
-import DocumentActions from '../actions/DocumentActions';
+import documentActions from '../actions/documentActions';
 
-const { getDocument, deleteDocument } = DocumentActions;
+const { getDocument, deleteDocument } = documentActions;
 
 /**
  * A React Component to help create a single document
@@ -29,6 +29,7 @@ export class Document extends React.Component {
   }
 
   /**
+   * Handles click events on the Document Component
    * @method clickHandler
    *
    * @memberof Document
@@ -42,6 +43,7 @@ export class Document extends React.Component {
   }
 
   /**
+   * Handles the delete event on the Document Component
    * @method deleteDocument
    *
    * @memberof Document
@@ -69,7 +71,7 @@ export class Document extends React.Component {
           <Card.Meta>
             Created <Timeago datetime={this.props.created} />
           </Card.Meta>
-          <Card.Description className="description">
+          <Card.Description className="document-description">
             { ReactHtmlParser(this.props.content) }
           </Card.Description>
         </div>

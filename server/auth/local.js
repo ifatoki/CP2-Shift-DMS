@@ -3,8 +3,9 @@ const moment = require('moment');
 
 require('dotenv').config();
 
-module.exports = {
+const local = {
   /**
+   * Encodes the passed user object in a token
    * @function encodeToken
    *
    * @param {any} user
@@ -22,6 +23,7 @@ module.exports = {
     return token;
   },
   /**
+   * Decodes a token to extract the content.
    * @function decodeToken
    *
    * @param {any} token
@@ -37,3 +39,5 @@ module.exports = {
     }
   }
 };
+
+export default local;

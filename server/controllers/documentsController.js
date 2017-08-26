@@ -1,12 +1,22 @@
 import _ from 'lodash';
-import Models from '../models';
+import { User, Document, Role } from '../models';
 import Validator from '../utils/Validator';
 
-const User = Models.User;
-const Document = Models.Document;
-const Role = Models.Role;
+/**
+ * Returns a 500 server error with the server response
+ * @function returnServerError
+ *
+ * @param {any} res
+ * @returns {void}
+ */
+const returnServerError = res => (
+  res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
+  })
+);
 
 /**
+ * Create a string of all the validation errors.
  * @function getValidatorErrorMessage
  *
  * @param {any} errors
@@ -19,6 +29,7 @@ const getValidatorErrorMessage = errors => (
 );
 
 /**
+ * Filter out document properties
  * @function filterDocument
  *
  * @param {any} document
@@ -34,6 +45,7 @@ const filterDocument = document => ({
 });
 
 /**
+ * Delete a document from the app
  * @function deleteDocument
  *
  * @param {any} document
@@ -48,12 +60,11 @@ const deleteDocument = (document, req, res) => {
   .then(() => res.status(200).send({
     message: 'document deleted successfully'
   }))
-  .catch(() => res.status(500).send({
-    message: 'oops, we just encountered an error. please try again'
-  }));
+  .catch(() => returnServerError(res));
 };
 
 /**
+ * Add roles to an existing document
  * @function addRolesToDocument
  *
  * @param {any} req
@@ -92,25 +103,18 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
           }))
         });
       })
-      .catch(() => {
-        res.status(500).send({
-          message: 'oops, we just encountered an error. please try again'
-        });
-      });
+      .catch(() => returnServerError(res));
     } else {
       res.status(201).send({
         document: filterDocument(newDocument)
       });
     }
   })
-  .catch(() => {
-    res.status(500).send({
-      message: 'oops, we just encountered an error. please try again'
-    });
-  });
+  .catch(() => returnServerError(res));
 };
 
 /**
+ * Modify the content of a document.
  * @function updateDocument
  *
  * @param {any} document
@@ -145,22 +149,32 @@ const updateDocument = (document, req, res) => {
           document: filterDocument(updatedDocument)
         });
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
     } else {
       res.status(200).send({
         document: filterDocument(updatedDocument)
       });
     }
   })
-  .catch(() => res.status(500).send({
-    message: 'oops, we just encountered an error. please try again'
-  }));
+  .catch(() => returnServerError(res));
 };
 
-const documentController = {
+/**
+ * Return a 404 error and send a document not found error message
+ * @function returnDocumentNotFound
+ *
+ * @param {any} res
+ * @return {void}
+ */
+const returnDocumentNotFound = res => (
+  res.status(404).send({
+    message: 'document not found'
+  })
+);
+
+const documentsController = {
   /**
+   * Create a new document with the passed details
    * @function create
    *
    * @param {any} req
@@ -208,16 +222,10 @@ const documentController = {
                 });
               }
             })
-            .catch(() => {
-              res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              });
-            });
+            .catch(() => returnServerError(res));
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
         message: getValidatorErrorMessage(validation.errors)
@@ -226,6 +234,7 @@ const documentController = {
   },
 
   /**
+   * Fetch and return all available documents
    * @function fetchAll
    *
    * @param {any} req
@@ -260,9 +269,7 @@ const documentController = {
               .then((documents) => {
                 res.status(200).send({ documents });
               })
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(() => returnServerError(res));
             });
           } else {
             user.getDocuments({
@@ -271,16 +278,10 @@ const documentController = {
             .then((documents) => {
               res.status(200).send({ documents });
             })
-            .catch(() => {
-              res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              });
-            });
+            .catch(() => returnServerError(res));
           }
         })
-        .catch(() => res.status(500).send({
-          message: 'oops, we just encountered an error. please try again'
-        }));
+        .catch(() => returnServerError(res));
     } else {
       Document
         .findAndCountAll({
@@ -301,6 +302,7 @@ const documentController = {
   },
 
   /**
+   * Fetch and return the doucment with the passed id
    * @function fetchOne
    *
    * @param {any} req
@@ -312,9 +314,7 @@ const documentController = {
       .findById(req.params.id)
       .then((document) => {
         if (!document) {
-          res.status(404).send({
-            message: 'document not found'
-          });
+          returnDocumentNotFound(res);
         } else {
           const response = { document: filterDocument(document) };
           if (document.ownerId === req.userId) {
@@ -329,9 +329,7 @@ const documentController = {
                 response.documentRoles = documentRoles;
                 res.status(200).send(response);
               })
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(() => returnServerError(res));
             } else {
               res.status(200).send(response);
             }
@@ -366,19 +364,14 @@ const documentController = {
                     res.status(200).send(response);
                   }
                 })
-                .catch(() => res.status(500).send({
-                  message:
-                    'oops, we just encountered an error. please try again'
-                }));
+                .catch(() => returnServerError(res));
               } else {
                 response.rightId =
                   user[0].dataValues.DocumentUser.dataValues.rightId;
                 res.status(200).send(response);
               }
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
           }
         }
       })
@@ -388,6 +381,7 @@ const documentController = {
   },
 
   /**
+   * Modify the document with the passed id with the passed data
    * @function update
    *
    * @param {any} req
@@ -407,9 +401,7 @@ const documentController = {
       .findById(req.params.id)
       .then((document) => {
         if (!document) {
-          res.status(404).send({
-            message: 'document not found'
-          });
+          returnDocumentNotFound(res);
         } else {
           Document
             .findOne({
@@ -463,10 +455,7 @@ const documentController = {
                         });
                       }
                     })
-                    .catch(() => res.status(500).send({
-                      message:
-                        'oops, we just encountered an error. please try again'
-                    }));
+                    .catch(() => returnServerError(res));
                   } else if (
                     user[0].dataValues.DocumentUser.dataValues.rightId < 3
                   ) {
@@ -483,14 +472,10 @@ const documentController = {
                 }));
               }
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
         message: getValidatorErrorMessage(validation.errors)
@@ -499,6 +484,7 @@ const documentController = {
   },
 
   /**
+   * Delete the document with the passed Id
    * @function delete
    *
    * @param {any} req
@@ -510,9 +496,7 @@ const documentController = {
       .findById(req.params.id)
       .then((document) => {
         if (!document) {
-          res.status(404).send({
-            message: 'document not found'
-          });
+          returnDocumentNotFound(res);
         } else if (document.ownerId === req.userId) {
           deleteDocument(document, req, res);
         } else if (document.accessId === 2) {
@@ -555,9 +539,7 @@ const documentController = {
                   });
                 }
               })
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(() => returnServerError(res));
             } else if (
               user[0].dataValues.DocumentUser.dataValues.rightId === 1
             ) {
@@ -569,17 +551,14 @@ const documentController = {
               });
             }
           })
-          .catch(() => res.status(500).send({
-            message: 'oops, we just encountered an error. please try again'
-          }));
+          .catch(() => returnServerError(res));
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   },
 
   /**
+   * Search through all documents using the passed query string
    * @function search
    *
    * @param {any} req
@@ -660,10 +639,7 @@ const documentController = {
                                 }
                                 res.status(200).send(searchResults);
                               })
-                              .catch(() => res.status(500).send({
-                                message: 'oops, we just encountered an error.' +
-                                  ' please try again'
-                              }));
+                              .catch(() => returnServerError(res));
                           });
                       } else {
                         res.status(404).send({
@@ -675,14 +651,9 @@ const documentController = {
                       message: error.message
                     }));
                 })
-                .catch(() => res.status(500).send({
-                  message:
-                    'oops, we just encountered an error. please try again'
-                }));
+                .catch(() => returnServerError(res));
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
         } else {
           res.status(404).send({
             message: 'invalid user'
@@ -693,26 +664,6 @@ const documentController = {
         message: error.message
       }));
   },
-  // addRole: (req, res) => {
-  //   Document
-  //     .findById(req.params.documentId)
-  //     .then((document) => {
-  //       User
-  //         .findById(req.userId)
-  //         .then((user) => {
-  //           document.addUser(user)
-  //           .then(res.status(200).send({
-  //             message: 'user added successfully'
-  //           }));
-  //         })
-  //         .catch(() => res.status(500).send({
-  //           message: 'oops, we just encountered an error. please try again'
-  //         }));
-  //     })
-  //     .catch(() => res.status(500).send({
-  //       message: 'oops, we just encountered an error. please try again'
-  //     }));
-  // },
 
   /**
    * @function addUser
@@ -733,14 +684,10 @@ const documentController = {
               message: 'user added successfully'
             }));
           })
-          .catch(() => res.status(500).send({
-            message: 'oops, we just encountered an error. please try again'
-          }));
+          .catch(() => returnServerError(res));
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   }
 };
 
-module.exports = documentController;
+export default documentsController;

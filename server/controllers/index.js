@@ -1,11 +1,11 @@
-import documents from './document';
-import rights from './right';
-import roles from './role';
-import users from './user';
+import documentsController from './documentsController';
+import rightsController from './rightsController';
+import rolesController from './rolesController';
+import usersController from './usersController';
 
 export {
-  documents,
-  rights,
-  roles,
-  users
+  documentsController,
+  rightsController,
+  rolesController,
+  usersController
 };

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import _ from 'lodash';
-import ActionTypes from './ActionTypes';
+import lodash from 'lodash';
+import actionTypes from './actionTypes';
 import Validator from '../../server/utils/Validator';
 
 const config = {
@@ -18,266 +18,290 @@ const removeUser = () => {
   window.localStorage.removeItem('token');
   window.localStorage.removeItem('user');
   return {
-    type: ActionTypes.REMOVE_USER
+    type: actionTypes.REMOVE_USER
   };
 };
 
 /**
+ * Dispatches a SIGNUP_REQUEST action
  * @function requestSignup
  *
  * @param {any} payload
  * @returns {object} Action
  */
 const requestSignup = payload => ({
-  type: ActionTypes.SIGNUP_REQUEST,
+  type: actionTypes.SIGNUP_REQUEST,
   payload
 });
 
 /**
+ * Dispatches a SIGNUP_SUCCESSFUL action
  * @function signupSuccessful
  *
  * @returns {object} Action
  */
 const signupSuccessful = () => ({
-  type: ActionTypes.SIGNUP_SUCCESSFUL
+  type: actionTypes.SIGNUP_SUCCESSFUL
 });
 
 /**
+ * Dispatches a SIGNUP_FAILED action
  * @function signupFailed
  *
  * @param {any} payload
  * @returns {object} Action
  */
 const signupFailed = payload => ({
-  type: ActionTypes.SIGNUP_FAILED,
+  type: actionTypes.SIGNUP_FAILED,
   payload
 });
 
 /**
+ * Dispatches a LOGIN_REQUEST action
  * @function requestLogin
  *
  * @param {any} payload
  * @returns {object} Action
  */
 const requestLogin = payload => ({
-  type: ActionTypes.LOGIN_REQUEST,
+  type: actionTypes.LOGIN_REQUEST,
   payload
 });
 
 /**
+ * Dispatches a LOGIN_SUCCESSFUL action
  * @function loginSuccessful
  *
  * @returns {object} Action
  */
 const loginSuccessful = () => ({
-  type: ActionTypes.LOGIN_SUCCESSFUL
+  type: actionTypes.LOGIN_SUCCESSFUL
 });
 
 /**
+ * Dispatches a LOGIN_FAILED action
  * @function loginFailed
  *
  * @param {any} payload
  * @returns {object} Action
  */
 const loginFailed = payload => ({
-  type: ActionTypes.LOGIN_FAILED,
+  type: actionTypes.LOGIN_FAILED,
   payload
 });
 
 /**
+ * Dispatches a LOGOUT_REQUEST action
  * @function logoutRequest
  *
  * @returns {object} Action
  */
 const logoutRequest = () => ({
-  type: ActionTypes.LOGOUT_REQUEST
+  type: actionTypes.LOGOUT_REQUEST
 });
 
 /**
+ * Dispatches a LOGOUT_SUCCESSFUL action
  * @function logoutSuccessful
  *
  * @returns {object} Action
  */
 const logoutSuccessful = () => ({
-  type: ActionTypes.LOGOUT_SUCCESSFUL
+  type: actionTypes.LOGOUT_SUCCESSFUL
 });
 
 /**
+ * Dispatches a FETCH_USERS_REQUEST action
  * @function fetchAllUsersRequest
  *
  * @returns {object} Action
  */
 const fetchAllUsersRequest = () => ({
-  type: ActionTypes.FETCH_USERS_REQUEST
+  type: actionTypes.FETCH_USERS_REQUEST
 });
 
 /**
+ * Dispatches a FETCH_USERS_SUCCESSFUL action
  * @function fetchAllUsersSuccessful
  *
  * @param {any} payload
  * @returns {object} Action
  */
 const fetchAllUsersSuccessful = payload => ({
-  type: ActionTypes.FETCH_USERS_SUCCESSFUL,
+  type: actionTypes.FETCH_USERS_SUCCESSFUL,
   payload
 });
 
 /**
+ * Dispatches a FETCH_USERS_FAILED action
  * @function fetchAllUsersFailed
  *
  * @param {any} payload
  * @returns {object} Action
  */
 const fetchAllUsersFailed = payload => ({
-  type: ActionTypes.FETCH_USERS_FAILED,
+  type: actionTypes.FETCH_USERS_FAILED,
   payload
 });
 
 /**
+ * Dispatches a FETCH_ROLES_REQUEST action
  * @function fetchAllRolesRequest
  *
  * @returns {object} Action
  */
 const fetchAllRolesRequest = () => ({
-  type: ActionTypes.FETCH_ROLES_REQUEST
+  type: actionTypes.FETCH_ROLES_REQUEST
 });
 
 /**
+ * Dispatches a FETCH_ROLES_SUCCESSFUL action
  * @function fetchAllRolesSuccessful
  *
  * @param {any} payload
  * @returns {object} Action
  */
 const fetchAllRolesSuccessful = payload => ({
-  type: ActionTypes.FETCH_ROLES_SUCCESSFUL,
+  type: actionTypes.FETCH_ROLES_SUCCESSFUL,
   payload
 });
 
 /**
+ * Dispatches a FETCH_ROLES_FAILED action
  * @function fetchAllRolesFailed
  *
  * @param {any} payload
  * @returns {object} Action
  */
 const fetchAllRolesFailed = payload => ({
-  type: ActionTypes.FETCH_ROLES_FAILED,
+  type: actionTypes.FETCH_ROLES_FAILED,
   payload
 });
 
 /**
+ * Dispatches a USER_GET_REQUEST action
  * @function userGetRequest
  *
  * @returns {object} Action
  */
 const userGetRequest = () => ({
-  type: ActionTypes.USER_GET_REQUEST
+  type: actionTypes.USER_GET_REQUEST
 });
 
 /**
+ * Dispatches a USER_GET_SUCCESSFUL action
  * @function userGetSuccessful
  *
  * @param {any} payload
  * @return {object} Action
  */
 const userGetSuccessful = payload => ({
-  type: ActionTypes.USER_GET_SUCCESSFUL,
+  type: actionTypes.USER_GET_SUCCESSFUL,
   payload
 });
 
 /**
+ * Dispatches a USER_GET_FAILED action
  * @function userGetFailed
  *
  * @param {any} payload
  * @return {object} Action
  */
 const userGetFailed = payload => ({
-  type: ActionTypes.USER_GET_FAILED,
+  type: actionTypes.USER_GET_FAILED,
   payload
 });
 
 /**
+ * Dispatches a USER_MODIFY_REQUEST action
  * @function userModifyRequest
  *
  * @return {object} Action
  */
 const userModifyRequest = () => ({
-  type: ActionTypes.USER_MODIFY_REQUEST
+  type: actionTypes.USER_MODIFY_REQUEST
 });
 
 /**
+ * Dispatches a USER_MODIFY_SUCCESSFUL action
  * @function userModifySuccessful
  *
  * @param {any} payload
  * @return {object} Action
  */
 const userModifySuccessful = payload => ({
-  type: ActionTypes.USER_MODIFY_SUCCESSFUL,
+  type: actionTypes.USER_MODIFY_SUCCESSFUL,
   payload
 });
 
 /**
+ * Dispatches a USER_MODIFY_FAILED action
  * @function userModifyFailed
  *
  * @param {any} payload
  * @return {object} Action
  */
 const userModifyFailed = payload => ({
-  type: ActionTypes.USER_MODIFY_FAILED,
+  type: actionTypes.USER_MODIFY_FAILED,
   payload
 });
 
 /**
+ * Dispatches a USER_DELETE_REQUEST action
  * @function userDeleteRequest
  *
  * @return {object} Action
  */
 const userDeleteRequest = () => ({
-  type: ActionTypes.USER_DELETE_REQUEST
+  type: actionTypes.USER_DELETE_REQUEST
 });
 
 /**
+ * Dispatches a USER_DELETE_SUCCESSFUL action
  * @function userDeleteSuccessful
  *
  * @param {any} payload
  * @return {object} Action
  */
 const userDeleteSuccessful = payload => ({
-  type: ActionTypes.USER_DELETE_SUCCESSFUL,
+  type: actionTypes.USER_DELETE_SUCCESSFUL,
   payload
 });
 
 /**
+ * Dispatches a USER_DELETE_FAILED action
  * @function userDeleteFailed
  *
  * @param {any} payload
  * @return {object} Action
  */
 const userDeleteFailed = payload => ({
-  type: ActionTypes.USER_DELETE_FAILED,
+  type: actionTypes.USER_DELETE_FAILED,
   payload
 });
 
 /**
+ * Generate and return the error messages in HTML format
  * @function getErrorMessage
  *
  * @param {any} errors
  * @returns {string} errorMessage
  */
 const getErrorMessage = (errors) => {
-  const errorMessage = _.reduce(errors, (result, error) =>
+  const errorMessage = lodash.reduce(errors, (result, error) =>
     `${error}<br/>${result}`
   , '');
   return errorMessage;
 };
 
-const UsersActions = {
+const usersActions = {
   setTokenToLocalStorage(user, token) {
     window.localStorage.setItem('token', token);
     window.localStorage.setItem('user', JSON.stringify({
       id: user.id,
       username: user.username
     }));
-    return UsersActions.addUser(user, token);
+    return usersActions.addUser(user, token);
   },
 
   /**
@@ -295,12 +319,12 @@ const UsersActions = {
       axios.get(`/api/v1/users/${user.id}`)
       .then(response => (
         callback({
-          type: ActionTypes.ADD_USER,
+          type: actionTypes.ADD_USER,
           payload: response.data.user
         })));
     } else {
       return ({
-        type: ActionTypes.ADD_USER,
+        type: actionTypes.ADD_USER,
         payload: user
       });
     }
@@ -327,7 +351,7 @@ const UsersActions = {
         return axios
           .post('/api/v1/users', userdata, config)
           .then((response) => {
-            dispatch(UsersActions.setTokenToLocalStorage(
+            dispatch(usersActions.setTokenToLocalStorage(
               response.data.user,
               response.data.token
             ));
@@ -359,7 +383,7 @@ const UsersActions = {
           .post('api/v1/users/login', userdata, config)
           .then((response) => {
             dispatch(
-              UsersActions.setTokenToLocalStorage(
+              usersActions.setTokenToLocalStorage(
                 response.data.user,
                 response.data.token
               ));
@@ -508,9 +532,9 @@ const UsersActions = {
    */
   cancelUser() {
     return dispatch => dispatch({
-      type: ActionTypes.USER_CANCELLED,
+      type: actionTypes.USER_CANCELLED,
     });
   }
 };
 
-export default UsersActions;
+export default usersActions;

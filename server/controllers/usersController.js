@@ -1,12 +1,24 @@
 import _ from 'lodash';
 import Validator from '../utils/Validator';
-
-const auth = require('../auth/helpers');
-const User = require('../models').User;
-const Role = require('../models').Role;
-const localAuth = require('../auth/local');
+import auth from '../auth/helpers';
+import local from '../auth/local';
+import { User, Role } from '../models';
 
 /**
+ * Returns a 500 server error with the server response
+ * @function returnServerError
+ *
+ * @param {any} res
+ * @returns {void}
+ */
+const returnServerError = res => (
+  res.status(500).send({
+    message: 'oops, we just encountered an error. please try again'
+  })
+);
+
+/**
+ * Filter out protected user details
  * @function filterUser
  *
  * @param {any} User
@@ -25,6 +37,7 @@ const filterUser = ({
 });
 
 /**
+ * Create an error message from an error object
  * @function getValidatorErrorMessage
  *
  * @param {any} errors
@@ -37,6 +50,7 @@ const getValidatorErrorMessage = errors => (
 );
 
 /**
+ * Update the user with the passed Id using the passed data
  * @function updateUser
  *
  * @param {any} req
@@ -64,12 +78,11 @@ const updateUser = (req, res, user) => {
         });
       });
   })
-  .catch(() => res.status(500).send({
-    message: 'oops, we just encountered an error. please try again'
-  }));
+  .catch(() => returnServerError(res));
 };
 
 /**
+ * Confirms the role of the user.
  * @function confirmRole
  *
  * @param {any} req
@@ -90,9 +103,7 @@ const confirmRole = (req, res, user) => {
           updateUser(req, res, user);
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   } else if (req.body.roleId === 1) {
     res.status(403).send({
       message: 'user cannot be upgraded to overlord. change role Id'
@@ -102,8 +113,9 @@ const confirmRole = (req, res, user) => {
   }
 };
 
-module.exports = {
+const usersController = {
   /**
+   * Create a new user using passed data
    * @function create
    *
    * @param {any} req
@@ -136,7 +148,7 @@ module.exports = {
               roleId: req.body.roleId
             })
             .then((user) => {
-              const token = localAuth.encodeToken({
+              const token = local.encodeToken({
                 id: user.id,
                 username: user.username
               });
@@ -147,18 +159,14 @@ module.exports = {
                 user: returnedUser
               });
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
         } else {
           res.status(404).send({
             message: "role with passed roleId doesn't exist. change roleId"
           });
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
         message: getValidatorErrorMessage(validation.errors)
@@ -167,6 +175,7 @@ module.exports = {
   },
 
   /**
+   * Log in with the passed details.
    * @function login
    *
    * @param {any} req
@@ -189,7 +198,7 @@ module.exports = {
         return user;
       })
       .then((user) => {
-        const token = localAuth.encodeToken({
+        const token = local.encodeToken({
           id: user.id,
           username: user.username
         });
@@ -217,6 +226,7 @@ module.exports = {
   },
 
   /**
+   * Log user out.
    * @function logout
    *
    * @param {any} req
@@ -230,6 +240,7 @@ module.exports = {
   },
 
   /**
+   * Fetch and return all available users.
    * @function fetch
    *
    * @param {any} req
@@ -262,9 +273,7 @@ module.exports = {
             });
           }
         })
-        .catch(() => res.status(500).send({
-          message: 'oops, we just encountered an error. please try again'
-        }));
+        .catch(() => returnServerError(res));
     } else {
       res.status(403).send({
         message: 'only overlord can view all users'
@@ -273,6 +282,7 @@ module.exports = {
   },
 
   /**
+   * Fetch and return the user with the passed id
    * @function fetchUser
    *
    * @param {any} req
@@ -298,17 +308,14 @@ module.exports = {
                 user: returnedUser
               });
             })
-            .catch(() => res.status(500).send({
-              message: 'oops, we just encountered an error. please try again'
-            }));
+            .catch(() => returnServerError(res));
         }
       })
-      .catch(() => res.status(500).send({
-        message: 'oops, we just encountered an error. please try again'
-      }));
+      .catch(() => returnServerError(res));
   },
 
   /**
+   * Fetch all documents for the user with the passed id
    * @function fetchUserDocuments
    *
    * @param {any} req
@@ -338,11 +345,7 @@ module.exports = {
                 documents
               });
             })
-            .catch((error) => {
-              res.status(500).send({
-                message: error.message
-              });
-            });
+            .catch(() => returnServerError(res));
         }
       })
       .catch(error => res.status(400).send({
@@ -351,6 +354,7 @@ module.exports = {
   },
 
   /**
+   * Update the user with the passed Id using the passed data
    * @function updateUser
    *
    * @param {any} req
@@ -404,10 +408,7 @@ module.exports = {
                     confirmRole(req, res, user);
                   }
                 })
-                .catch(() => res.status(500).send({
-                  message:
-                    'oops, we just encountered an error. please try again'
-                }));
+                .catch(() => returnServerError(res));
               } else {
                 confirmRole(req, res, user);
               }
@@ -435,6 +436,7 @@ module.exports = {
   },
 
   /**
+   * Delete the user with the passed id
    * @function deleteUser
    *
    * @param {any} req
@@ -462,14 +464,10 @@ module.exports = {
               .then(() => res.status(200).send({
                 message: 'user deleted successfully'
               }))
-              .catch(() => res.status(500).send({
-                message: 'oops, we just encountered an error. please try again'
-              }));
+              .catch(() => returnServerError(res));
             }
           })
-          .catch(() => res.status(500).send({
-            message: 'oops, we just encountered an error. please try again'
-          }));
+          .catch(() => returnServerError(res));
       }
     } else {
       res.status(403).send({
@@ -479,6 +477,7 @@ module.exports = {
   },
 
   /**
+   * Search through all users with the search query string
    * @function search
    *
    * @param {any} req
@@ -515,8 +514,8 @@ module.exports = {
       ]
     })
     .then(users => res.status(200).send({ users }))
-    .catch(() => res.status(500).send({
-      message: 'oops, we just encountered an error. please try again'
-    }));
+    .catch(() => returnServerError(res));
   }
 };
+
+export default usersController;
