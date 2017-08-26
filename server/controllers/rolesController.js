@@ -14,6 +14,7 @@ const returnServerError = res => (
 );
 
 /**
+ * Filter the role, displaying only necessary data
  * @function filterRole
  *
  * @param {any} role
@@ -28,6 +29,7 @@ const filterRole = role => ({
 
 const rolesController = {
   /**
+   * Create a new role using the passed data
    * @function create
    *
    * @param {any} req
@@ -53,6 +55,7 @@ const rolesController = {
   },
 
   /**
+   * List out all available roles
    * @function list
    *
    * @param {any} req

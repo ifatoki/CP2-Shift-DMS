@@ -6,7 +6,9 @@ import store from '../client';
 const { addUser } = usersActions;
 
 /**
- * @export
+ * A class that handles part of
+ * the authentication needs of the application
+ * @export Authorization
  * @class Authorization
  */
 export default class Authorization {

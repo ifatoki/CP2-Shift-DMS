@@ -2,6 +2,8 @@ import actionTypes from '../actions/actionTypes';
 import { usersDefaultState } from '../reducers/initialStates';
 
 /**
+ * Listens for user actions and returns a fresh state
+ * reflecting the changes resulting from the triggered action
  * @function users
  *
  * @param {any} [state = initialState]

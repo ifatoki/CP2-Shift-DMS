@@ -23,6 +23,7 @@ const removeUser = () => {
 };
 
 /**
+ * Dispatches a SIGNUP_REQUEST action
  * @function requestSignup
  *
  * @param {any} payload
@@ -34,6 +35,7 @@ const requestSignup = payload => ({
 });
 
 /**
+ * Dispatches a SIGNUP_SUCCESSFUL action
  * @function signupSuccessful
  *
  * @returns {object} Action
@@ -43,6 +45,7 @@ const signupSuccessful = () => ({
 });
 
 /**
+ * Dispatches a SIGNUP_FAILED action
  * @function signupFailed
  *
  * @param {any} payload
@@ -54,6 +57,7 @@ const signupFailed = payload => ({
 });
 
 /**
+ * Dispatches a LOGIN_REQUEST action
  * @function requestLogin
  *
  * @param {any} payload
@@ -65,6 +69,7 @@ const requestLogin = payload => ({
 });
 
 /**
+ * Dispatches a LOGIN_SUCCESSFUL action
  * @function loginSuccessful
  *
  * @returns {object} Action
@@ -74,6 +79,7 @@ const loginSuccessful = () => ({
 });
 
 /**
+ * Dispatches a LOGIN_FAILED action
  * @function loginFailed
  *
  * @param {any} payload
@@ -85,6 +91,7 @@ const loginFailed = payload => ({
 });
 
 /**
+ * Dispatches a LOGOUT_REQUEST action
  * @function logoutRequest
  *
  * @returns {object} Action
@@ -94,6 +101,7 @@ const logoutRequest = () => ({
 });
 
 /**
+ * Dispatches a LOGOUT_SUCCESSFUL action
  * @function logoutSuccessful
  *
  * @returns {object} Action
@@ -103,6 +111,7 @@ const logoutSuccessful = () => ({
 });
 
 /**
+ * Dispatches a FETCH_USERS_REQUEST action
  * @function fetchAllUsersRequest
  *
  * @returns {object} Action
@@ -112,6 +121,7 @@ const fetchAllUsersRequest = () => ({
 });
 
 /**
+ * Dispatches a FETCH_USERS_SUCCESSFUL action
  * @function fetchAllUsersSuccessful
  *
  * @param {any} payload
@@ -123,6 +133,7 @@ const fetchAllUsersSuccessful = payload => ({
 });
 
 /**
+ * Dispatches a FETCH_USERS_FAILED action
  * @function fetchAllUsersFailed
  *
  * @param {any} payload
@@ -134,6 +145,7 @@ const fetchAllUsersFailed = payload => ({
 });
 
 /**
+ * Dispatches a FETCH_ROLES_REQUEST action
  * @function fetchAllRolesRequest
  *
  * @returns {object} Action
@@ -143,6 +155,7 @@ const fetchAllRolesRequest = () => ({
 });
 
 /**
+ * Dispatches a FETCH_ROLES_SUCCESSFUL action
  * @function fetchAllRolesSuccessful
  *
  * @param {any} payload
@@ -154,6 +167,7 @@ const fetchAllRolesSuccessful = payload => ({
 });
 
 /**
+ * Dispatches a FETCH_ROLES_FAILED action
  * @function fetchAllRolesFailed
  *
  * @param {any} payload
@@ -165,6 +179,7 @@ const fetchAllRolesFailed = payload => ({
 });
 
 /**
+ * Dispatches a USER_GET_REQUEST action
  * @function userGetRequest
  *
  * @returns {object} Action
@@ -174,6 +189,7 @@ const userGetRequest = () => ({
 });
 
 /**
+ * Dispatches a USER_GET_SUCCESSFUL action
  * @function userGetSuccessful
  *
  * @param {any} payload
@@ -185,6 +201,7 @@ const userGetSuccessful = payload => ({
 });
 
 /**
+ * Dispatches a USER_GET_FAILED action
  * @function userGetFailed
  *
  * @param {any} payload
@@ -196,6 +213,7 @@ const userGetFailed = payload => ({
 });
 
 /**
+ * Dispatches a USER_MODIFY_REQUEST action
  * @function userModifyRequest
  *
  * @return {object} Action
@@ -205,6 +223,7 @@ const userModifyRequest = () => ({
 });
 
 /**
+ * Dispatches a USER_MODIFY_SUCCESSFUL action
  * @function userModifySuccessful
  *
  * @param {any} payload
@@ -216,6 +235,7 @@ const userModifySuccessful = payload => ({
 });
 
 /**
+ * Dispatches a USER_MODIFY_FAILED action
  * @function userModifyFailed
  *
  * @param {any} payload
@@ -227,6 +247,7 @@ const userModifyFailed = payload => ({
 });
 
 /**
+ * Dispatches a USER_DELETE_REQUEST action
  * @function userDeleteRequest
  *
  * @return {object} Action
@@ -236,6 +257,7 @@ const userDeleteRequest = () => ({
 });
 
 /**
+ * Dispatches a USER_DELETE_SUCCESSFUL action
  * @function userDeleteSuccessful
  *
  * @param {any} payload
@@ -247,6 +269,7 @@ const userDeleteSuccessful = payload => ({
 });
 
 /**
+ * Dispatches a USER_DELETE_FAILED action
  * @function userDeleteFailed
  *
  * @param {any} payload
@@ -258,6 +281,7 @@ const userDeleteFailed = payload => ({
 });
 
 /**
+ * Generate and return the error messages in HTML format
  * @function getErrorMessage
  *
  * @param {any} errors

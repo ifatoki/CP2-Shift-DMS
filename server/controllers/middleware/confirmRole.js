@@ -1,6 +1,8 @@
 const User = require('../../models').User;
 
 /**
+ * Confirms if a user with the same username or email already exist and
+ * returns a matching error or proceeds to the next block.
  * @function confirmUserDetails
  *
  * @param {any} req
@@ -37,6 +39,8 @@ function confirmUserDetails(req, res, next) {
 }
 
 /**
+ * Confirm if an Overlord role already exists.
+ * If so, throw an error, else proceed with creating on.
  * @function confirmRole
  *
  * @export

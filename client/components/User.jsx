@@ -28,6 +28,7 @@ export class User extends React.Component {
   }
 
   /**
+   * Handle click events on the User Component
    * @method clickHandler
    *
    * @memberof User
@@ -41,6 +42,7 @@ export class User extends React.Component {
   }
 
   /**
+   * Handle a delete User event
    * @method deleteUser
    *
    * @memberof User

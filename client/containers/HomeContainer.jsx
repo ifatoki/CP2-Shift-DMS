@@ -27,7 +27,8 @@ toastr.options = {
   timeOut: 2000
 };
 
-/**
+/** The HomeContainer houses most of the apps functionality and
+ * becomes visible on successful authentication
  * @export
  * @class HomeContainer
  * @extends {React.Component}
@@ -158,6 +159,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Modifies the document type to match the selection
    * @method handleDocumentTypeChange
    *
    * @param {any} event
@@ -182,6 +184,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Navigates to the selected page
    * @method handlePageChange
    *
    * @param {any} pageNumber
@@ -197,6 +200,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Opens the users profile
    * @method showUserProfile
    *
    * @memberof HomeContainer
@@ -207,6 +211,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Opens a modal to create a new document
    * @method initializeNewDocument
    *
    * @memberof HomeContainer
@@ -238,6 +243,7 @@ export class HomeContainer extends React.Component {
   }
 
   /**
+   * Logs the user out.
    * @method logOut
    *
    * @param {any} event

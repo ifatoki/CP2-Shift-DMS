@@ -20,6 +20,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_GET_SUCCESSFUL action
    * @function documentGetSuccessful
    *
    * @param {any} payload
@@ -33,6 +34,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_GET_FAILED action
    * @function documentGetFailed
    *
    * @param {any} payload
@@ -46,6 +48,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_DELETE_REQUEST action
    * @function documentDeleteRequest
    *
    * @returns {object} Action
@@ -57,6 +60,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_DELETE_SUCCESSFUL action
    * @function documentDeleteSuccessful
    *
    * @param {any} payload
@@ -70,6 +74,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_DELETE_FAILED action
    * @function documentDeleteFailed
    *
    * @param {any} payload
@@ -83,6 +88,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENTS_FETCH_REQUEST action
    * @function documentsFetchRequest
    *
    * @returns {object} Action
@@ -94,6 +100,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENTS_FETCH_SUCCESSFUL action
    * @function documentsFetchSuccessful
    *
    * @param {any} payload
@@ -109,6 +116,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENTS_FETCH_FAILED action
    * @function documentsFetchFailed
    *
    * @param {any} payload
@@ -122,6 +130,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_SAVE_REQUEST action
    * @function documentSaveRequest
    *
    * @returns {object} Action
@@ -133,6 +142,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_SAVE_SUCCESSFUL action
    * @function documentSaveSuccessful
    *
    * @param {any} payload
@@ -146,6 +156,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_SAVE_FAILED action
    * @function documentSaveFailed
    *
    * @param {any} payload
@@ -159,6 +170,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_MODIFY_REQUEST action
    * @function documentModifyRequest
    *
    * @returns {object} Action
@@ -170,6 +182,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_MODIFY_SUCCESSFUL action
    * @function documentModifySuccessful
    *
    * @param {any} payload
@@ -183,6 +196,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_MODIFY_FAILED action
    * @function documentModifyFailed
    *
    * @param {any} payload
@@ -196,6 +210,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENTS_SEARCH_REQUEST action
    * @function documentsSearchRequest
    *
    * @returns {object} Action
@@ -207,6 +222,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENTS_SEARCH_SUCCESSFUL action
    * @function documentsSearchSuccessful
    *
    * @param {any} payload
@@ -220,6 +236,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_SEARCH_FAILED action
    * @function documentsSearchFailed
    *
    * @param {any} payload
@@ -246,6 +263,7 @@ const documentActions = {
   },
 
   /**
+   * Dispatches a DOCUMENT_CANCELLED action
    * @function cancelNewDocument
    *
    * @returns {object} Action

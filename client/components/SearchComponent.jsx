@@ -54,6 +54,7 @@ export class SearchComponent extends Component {
   }
 
   /**
+   * Triggers when a search result gets selected
    * @method handleResultSelect
    *
    * @param {any} e
@@ -70,6 +71,7 @@ export class SearchComponent extends Component {
   }
 
   /**
+   * Trigger when the search text is modified
    * @method handleSearchChange
    *
    * @param {any} e

@@ -4,6 +4,7 @@ import { User } from '../models';
 
 const helpers = {
   /**
+   * Encrypts a password and returns the new encrypted one.
    * @function encrypt
    *
    * @param {any} password
@@ -18,6 +19,8 @@ const helpers = {
   },
 
   /**
+   * Compares a password and an encrypted one to
+   * see if they match when decrypted.
    * @function comparePassword
    *
    * @param {any} userPassword
@@ -36,6 +39,7 @@ const helpers = {
   },
 
   /**
+   * Confirms using the header and token, if the user is authenticated.
    * @function confirmAuthentication
    *
    * @param {any} req

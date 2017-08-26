@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import User from './User';
 
 /**
+ * Include the users roles in the users
  * @function normalizeUsers
  *
  * @param {any} roles
@@ -27,8 +28,9 @@ const normalizeUsers = (roles, users) => {
   return myUsers;
 };
 
-export /**
+export /** A React Component which holds the User Components
  * @function UserList
+ *
  *
  * @param {any} props
  * @returns {void}
@@ -97,6 +99,7 @@ UserList.defaultProps = {
 };
 
 /**
+ * Maps state to Component Props
  * @function mapStateToProps
  *
  * @param {any} state

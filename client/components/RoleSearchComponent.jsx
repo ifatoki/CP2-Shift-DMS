@@ -4,6 +4,7 @@ import lodash from 'lodash';
 import PropTypes from 'prop-types';
 
 /**
+ * A React Component to help with Role selection
  * @function RoleSearchComponent
  *
  * @param {any} props

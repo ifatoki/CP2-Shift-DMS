@@ -4,6 +4,7 @@ import lodash from 'lodash';
 import PropTypes from 'prop-types';
 
 /**
+ * A React Component used to setup the Login and Signup form
  * @function AuthenticationForm
  *
  * @param {any} props

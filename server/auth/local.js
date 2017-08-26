@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const local = {
   /**
+   * Encodes the passed user object in a token
    * @function encodeToken
    *
    * @param {any} user
@@ -22,6 +23,7 @@ const local = {
     return token;
   },
   /**
+   * Decodes a token to extract the content.
    * @function decodeToken
    *
    * @param {any} token

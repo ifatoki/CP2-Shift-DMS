@@ -16,6 +16,7 @@ const returnServerError = res => (
 );
 
 /**
+ * Create a string of all the validation errors.
  * @function getValidatorErrorMessage
  *
  * @param {any} errors
@@ -28,6 +29,7 @@ const getValidatorErrorMessage = errors => (
 );
 
 /**
+ * Filter out document properties
  * @function filterDocument
  *
  * @param {any} document
@@ -43,6 +45,7 @@ const filterDocument = document => ({
 });
 
 /**
+ * Delete a document from the app
  * @function deleteDocument
  *
  * @param {any} document
@@ -61,6 +64,7 @@ const deleteDocument = (document, req, res) => {
 };
 
 /**
+ * Add roles to an existing document
  * @function addRolesToDocument
  *
  * @param {any} req
@@ -110,6 +114,7 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
 };
 
 /**
+ * Modify the content of a document.
  * @function updateDocument
  *
  * @param {any} document
@@ -154,6 +159,13 @@ const updateDocument = (document, req, res) => {
   .catch(() => returnServerError(res));
 };
 
+/**
+ * Return a 404 error and send a document not found error message
+ * @function returnDocumentNotFound
+ *
+ * @param {any} res
+ * @return {void}
+ */
 const returnDocumentNotFound = res => (
   res.status(404).send({
     message: 'document not found'
@@ -162,6 +174,7 @@ const returnDocumentNotFound = res => (
 
 const documentsController = {
   /**
+   * Create a new document with the passed details
    * @function create
    *
    * @param {any} req
@@ -221,6 +234,7 @@ const documentsController = {
   },
 
   /**
+   * Fetch and return all available documents
    * @function fetchAll
    *
    * @param {any} req
@@ -288,6 +302,7 @@ const documentsController = {
   },
 
   /**
+   * Fetch and return the doucment with the passed id
    * @function fetchOne
    *
    * @param {any} req
@@ -366,6 +381,7 @@ const documentsController = {
   },
 
   /**
+   * Modify the document with the passed id with the passed data
    * @function update
    *
    * @param {any} req
@@ -468,6 +484,7 @@ const documentsController = {
   },
 
   /**
+   * Delete the document with the passed Id
    * @function delete
    *
    * @param {any} req
@@ -541,6 +558,7 @@ const documentsController = {
   },
 
   /**
+   * Search through all documents using the passed query string
    * @function search
    *
    * @param {any} req

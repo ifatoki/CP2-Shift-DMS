@@ -18,6 +18,7 @@ const returnServerError = res => (
 );
 
 /**
+ * Filter out protected user details
  * @function filterUser
  *
  * @param {any} User
@@ -36,6 +37,7 @@ const filterUser = ({
 });
 
 /**
+ * Create an error message from an error object
  * @function getValidatorErrorMessage
  *
  * @param {any} errors
@@ -48,6 +50,7 @@ const getValidatorErrorMessage = errors => (
 );
 
 /**
+ * Update the user with the passed Id using the passed data
  * @function updateUser
  *
  * @param {any} req
@@ -79,6 +82,7 @@ const updateUser = (req, res, user) => {
 };
 
 /**
+ * Confirms the role of the user.
  * @function confirmRole
  *
  * @param {any} req
@@ -111,6 +115,7 @@ const confirmRole = (req, res, user) => {
 
 const usersController = {
   /**
+   * Create a new user using passed data
    * @function create
    *
    * @param {any} req
@@ -170,6 +175,7 @@ const usersController = {
   },
 
   /**
+   * Log in with the passed details.
    * @function login
    *
    * @param {any} req
@@ -220,6 +226,7 @@ const usersController = {
   },
 
   /**
+   * Log user out.
    * @function logout
    *
    * @param {any} req
@@ -233,6 +240,7 @@ const usersController = {
   },
 
   /**
+   * Fetch and return all available users.
    * @function fetch
    *
    * @param {any} req
@@ -274,6 +282,7 @@ const usersController = {
   },
 
   /**
+   * Fetch and return the user with the passed id
    * @function fetchUser
    *
    * @param {any} req
@@ -306,6 +315,7 @@ const usersController = {
   },
 
   /**
+   * Fetch all documents for the user with the passed id
    * @function fetchUserDocuments
    *
    * @param {any} req
@@ -344,6 +354,7 @@ const usersController = {
   },
 
   /**
+   * Update the user with the passed Id using the passed data
    * @function updateUser
    *
    * @param {any} req
@@ -425,6 +436,7 @@ const usersController = {
   },
 
   /**
+   * Delete the user with the passed id
    * @function deleteUser
    *
    * @param {any} req
@@ -465,6 +477,7 @@ const usersController = {
   },
 
   /**
+   * Search through all users with the search query string
    * @function search
    *
    * @param {any} req

@@ -15,6 +15,7 @@ const returnServerError = res => (
 
 const rightsController = {
   /**
+   * Create a new right with the passed data
    * @function create
    *
    * @param {any} req
@@ -55,6 +56,7 @@ const rightsController = {
   },
 
   /**
+   * Fetch and return all rights.
    * @function list
    *
    * @param {any} req

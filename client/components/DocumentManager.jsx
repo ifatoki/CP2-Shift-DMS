@@ -31,7 +31,7 @@ toastr.options = {
  * A React component that displays and creates
  * an environment to modify documents
  *
- * @export
+ * @export DocumentManager
  * @class DocumentManager
  * @extends {React.Component}
  */
@@ -114,6 +114,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Changes the selected role in the Component state
    * @method onRolesChange
    *
    * @param {any} event
@@ -128,6 +129,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Sets the Component state based on changes in its textboxes
    * @method onChange
    *
    * @param {any} event
@@ -143,6 +145,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Sets the document Types state based on radio button selection change
    * @method handleRadioButtonChange
    *
    * @param {any} event
@@ -162,6 +165,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Saves the currentDocument
    * @method saveDocument
    *
    * @param {any} event
@@ -208,6 +212,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Sets the current document to Edit Mode
    * @method editDocument
    *
    * @param {any} event
@@ -227,6 +232,7 @@ export class DocumentManager extends React.Component {
   }
 
   /**
+   * Close the currently open document
    * @method cancelNewDocument
    *
    * @param {any} event

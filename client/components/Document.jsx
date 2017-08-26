@@ -29,6 +29,7 @@ export class Document extends React.Component {
   }
 
   /**
+   * Handles click events on the Document Component
    * @method clickHandler
    *
    * @memberof Document
@@ -42,6 +43,7 @@ export class Document extends React.Component {
   }
 
   /**
+   * Handles the delete event on the Document Component
    * @method deleteDocument
    *
    * @memberof Document

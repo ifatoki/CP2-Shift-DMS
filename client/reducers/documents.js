@@ -2,6 +2,8 @@ import actionTypes from '../actions/actionTypes';
 import { documentsDefaultState } from '../reducers/initialStates';
 
 /**
+ * Listens for actions and returns a fresh state
+ * reflecting the modifications triggered by the action
  * @function documents
  *
  * @param {any} [state=documentsDefaultState]
