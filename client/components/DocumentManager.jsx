@@ -174,22 +174,22 @@ export class DocumentManager extends React.Component {
    */
   saveDocument(event) {
     const { currentDocument } = this.props;
+    const editData = {};
     event.preventDefault();
     if (this.state.accessMode === editModes.NEW) {
-      this.props.saveNewDocument({
-        title: this.state.title,
-        content: this.state.content,
-        ownerId: this.props.user.id,
-        accessId: this.state.accessId,
-        roles: lodash.reduce(this.state.selectedRoles, (cummulator, value) => {
-          if (value !== this.props.user.roleId) {
+      editData.title = this.state.title;
+      editData.content = this.state.content;
+      editData.ownerId = this.props.user.id;
+      editData.accessId = this.state.accessId;
+      if (this.state.accessId === 3) {
+        editData.roles = lodash
+          .reduce(this.state.selectedRoles, (cummulator, value) => {
             cummulator[value] = 3;
-          }
-          return cummulator;
-        }, {})
-      });
+            return cummulator;
+          }, {});
+      }
+      this.props.saveNewDocument(editData);
     } else {
-      const editData = {};
       if (this.state.title !== currentDocument.title) {
         editData.title = this.state.title;
       }
@@ -202,7 +202,9 @@ export class DocumentManager extends React.Component {
         if (this.state.accessId === 3) {
           editData.roles =
             lodash.reduce(this.state.selectedRoles, (cummulator, value) => {
-              cummulator[value] = 3;
+              if (value !== this.props.user.roleId) {
+                cummulator[value] = 3;
+              }
               return cummulator;
             }, {});
         }
