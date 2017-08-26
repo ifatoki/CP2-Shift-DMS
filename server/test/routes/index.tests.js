@@ -1,7 +1,7 @@
 import chai from 'chai';
 import assertArrays from 'chai-arrays';
 import request from 'supertest';
-import _ from 'lodash';
+import lodash from 'lodash';
 import faker from 'faker';
 import app from '../../app';
 import tokens from '../helpers/tokens';
@@ -147,7 +147,7 @@ describe('routes : index', () => {
           .expect('Content-Type', /json/)
           .expect(200)
           .then((res) => {
-            expect(_.map(res.body.roles, role => role.id))
+            expect(lodash.map(res.body.roles, role => role.id))
               .not.to.be.containing(1);
             done();
           })
@@ -271,7 +271,7 @@ describe('routes : index', () => {
               .expect('Content-Type', /json/)
               .expect(200)
               .then((res) => {
-                expect(_.map(res.body, user => user.id))
+                expect(lodash.map(res.body, user => user.id))
                   .not.to.be.containing(1);
                 done();
               })
