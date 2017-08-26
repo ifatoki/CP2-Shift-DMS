@@ -65,6 +65,25 @@ describe('Document Actions', () => {
       expect(store.getActions()[1].payload)
         .toEqual('title is required<br/>');
     });
+
+    it('dispatches error action when errors occur', (done) => {
+      moxios.stubRequest('api/v1/documents', {
+        status: 500,
+        response: {
+          message: 'sorry our servers errored out'
+        }
+      });
+
+      const store = mockStore({});
+      store.dispatch(documentActions.saveNewDocument(document))
+      .then(() => {
+        expect(store.getActions()[1].type)
+          .toEqual(actionTypes.DOCUMENT_SAVE_FAILED);
+        expect(store.getActions()[1].payload)
+          .toEqual('sorry our servers errored out');
+      });
+      done();
+    });
   });
 
   describe('fetch all documents action', () => {
@@ -113,7 +132,7 @@ describe('Document Actions', () => {
       done();
     });
 
-    it('dispatch error when incvalid document is requested', (done) => {
+    it('dispatch error when invalid document is requested', (done) => {
       moxios.stubRequest('api/v1/documents/3000000', {
         status: 404,
         response: {
@@ -170,6 +189,27 @@ describe('Document Actions', () => {
         );
       });
       done();
+    });
+
+    it('dispatches error action when validation errors occur', () => {
+      const modifyErrorDocument = {
+        title: '',
+        id: 3
+      };
+      moxios.stubRequest(`api/v1/documents/${modifyErrorDocument.id}`, {
+        status: 400,
+        response: {
+          message: 'title is required<br/>'
+        }
+      });
+
+      const store = mockStore({});
+      store.dispatch(documentActions
+        .modifyDocument(modifyErrorDocument.id, modifyErrorDocument));
+      expect(store.getActions()[1].type)
+        .toEqual(actionTypes.DOCUMENT_MODIFY_FAILED);
+      expect(store.getActions()[1].payload)
+        .toEqual('title is required<br/>');
     });
   });
 
@@ -237,6 +277,24 @@ describe('Document Actions', () => {
           title: 'Hello World',
           content: 'Hi dear'
         }]);
+      });
+      done();
+    });
+
+    it('returns an error on server error', (done) => {
+      moxios.stubRequest('api/v1/search/documents?q=hello', {
+        status: 500,
+        message: 'oops, our server be acting up'
+      });
+
+      const store = mockStore({});
+      store.dispatch(documentActions.searchDocuments('hello'))
+      .then(() => {
+        expect(store.getActions()[1].type)
+        .toEqual(actionTypes.DOCUMENTS_SEARCH_FAILED);
+        expect(store.getActions()[1].payload).toEqual(
+          'oops, our server be acting up'
+        );
       });
       done();
     });
