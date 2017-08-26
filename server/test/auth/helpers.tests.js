@@ -14,7 +14,7 @@ describe('auth : helpers', () => {
     it('should return a string as the encrypted password', () => {
       expect(authHelpers.encrypt(password)).to.be.a('string');
     });
-    it(`show return null, when a null password or
+    it(`should return null, when a null password or
     empty string is passed for encryption`,
     () => {
       expect(authHelpers.encrypt(null)).to.eql(null);
@@ -24,7 +24,7 @@ describe('auth : helpers', () => {
 
   describe('Compare Password', () => {
     const encryptedPassword = authHelpers.encrypt(password);
-    it(`should throw Error('invalid password') when a wrong passwords
+    it(`should throw Error('invalid password') when passwords
     don't match`, () => {
       expect(() => authHelpers.comparePassword(aWrongPassword, password))
         .to.throw('invalid password');

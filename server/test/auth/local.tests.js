@@ -3,7 +3,8 @@ import local from '../../auth/local';
 
 describe('auth : local', () => {
   describe('encodeToken()', () => {
-    it('should return a string as the encoded token', (done) => {
+    it('should return a string as the encoded token when successful',
+    (done) => {
       const token = local.encodeToken(1);
       expect(token).to.not.eql(undefined);
       expect(token).to.be.a('string');

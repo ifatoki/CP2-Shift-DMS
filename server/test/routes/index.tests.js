@@ -121,8 +121,8 @@ describe('routes : index', () => {
 
   describe('Endpoints: Role', () => {
     describe('GET route', () => {
-      it('should return an object with a property roles which is an array',
-      (done) => {
+      it(`should return an object with a property roles which is an 
+      array on success`, (done) => {
         request(app)
           .get('/api/v1/roles')
           .set('authorization', `bearer ${overlordToken}`)
@@ -131,8 +131,8 @@ describe('routes : index', () => {
           .then((res) => {
             expect(res.body)
               .to.have.property('roles')
-              .which.is.array()
-              .ofSize(3);
+              .which.is.array().ofSize(3);
+            expect(res.body.roles[0]).to.have.property('title', 'admin');
             done();
           })
           .catch((err) => {
@@ -239,8 +239,9 @@ describe('routes : index', () => {
             .then((res) => {
               expect(res.body)
                 .to.have.property('users')
-                .which.is.array()
-                .ofSize(2);
+                .which.is.array().ofSize(2);
+              expect(res.body.users[0])
+                .to.have.property('username', 'prof_turb');
               done();
             })
             .catch((err) => {
@@ -364,6 +365,8 @@ describe('routes : index', () => {
               expect(res.body)
                 .to.have.property('documents')
                 .which.is.array();
+              expect(res.body.documents[0])
+                .to.have.property('title');
               done();
             })
             .catch((err) => {
@@ -375,7 +378,7 @@ describe('routes : index', () => {
       describe('GET /api/v1/search/users/', () => {
         it(`should return an object with property users which is an array
         when query is successful`, (done) => {
-          const query = 'it';
+          const query = 'prof';
           request(app)
             .get(`/api/v1/search/users?q=${query}`)
             .set('authorization', `bearer ${overlordToken}`)
@@ -384,6 +387,7 @@ describe('routes : index', () => {
               expect(res.body)
                 .to.have.property('users')
                 .which.is.array();
+              expect(res.body.users[0]).to.have.property('username');
               done();
             })
             .catch((err) => {
@@ -842,8 +846,8 @@ describe('routes : index', () => {
 
     describe('POST route', () => {
       describe('POST /api/v1/documents route', () => {
-        it('should create and return new document as all requirements are met',
-        (done) => {
+        it(`should create and return new document when all 
+        requirements are met`, (done) => {
           request(app)
             .post('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)
@@ -866,8 +870,8 @@ describe('routes : index', () => {
             })
             .catch(err => done(err));
         });
-        it('should create and return new document as all requirements are met',
-        (done) => {
+        it(`should create and return new document when all 
+        requirements are met`, (done) => {
           request(app)
             .post('/api/v1/documents')
             .set('authorization', `bearer ${overlordToken}`)
@@ -890,8 +894,8 @@ describe('routes : index', () => {
             })
             .catch(err => done(err));
         });
-        it('should create and return new document as all requirements are met',
-        (done) => {
+        it(`should create and return new document when
+        all requirements are met`, (done) => {
           request(app)
             .post('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)

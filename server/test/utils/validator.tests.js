@@ -6,12 +6,14 @@ const expect = chai.expect;
 chai.use(assertArrays);
 
 describe('validator', () => {
-  it('login should find 2 validation errors', () => {
+  it('login should find 2 validation errors when no user details are entered',
+  () => {
     const validator = Validator.validateLogin({});
     expect(Object.keys(validator.errors).length).to.equal(2);
     expect(validator.isValid).to.eql(false);
   });
-  it('signup should find 5 validation errors', () => {
+  it('signup should find 5 validation errors wehn no user details are entered',
+  () => {
     const validator = Validator.validateSignUp({});
     expect(validator.isValid).eqls(false);
     expect(validator.errors).to.eqls({
