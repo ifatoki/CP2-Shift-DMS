@@ -1,0 +1,42 @@
+@import "helpers";
+
+.inherit {
+  height: inherit;
+}
+
+.landing-info {
+  color: $project-gray;
+  font-family: $indie-flower;
+  font-size: 30px;
+  text-align: left !important;
+  vertical-align: middle !important;
+  width: 600px !important;
+}
+
+.app-name {
+  font-family: "Baloo Bhaijaan";
+  font-size: 72px;
+  line-height: 0;
+}
+
+.landing-container {
+  @include set-background;
+  $indie-flower: "Indie Flower";
+  $project-gray: #696969;
+}
+
+.landing-sub-container {
+  @include set-background;
+  $indie-flower: "Indie Flower";
+  $project-gray: #696969;
+  padding: 2rem;
+}
+
+.user-auth {
+  vertical-align: middle !important;
+  width: 400px !important;
+}
+
+.login-toggle {
+  padding-top: 1em;
+}
