@@ -280,6 +280,7 @@ export class HomeContainer extends React.Component {
                 id="newDocument"
                 role="button"
                 name="newDocument"
+                tabIndex="-1"
                 onClick={this.initializeNewDocument}
               >
                 <i className="file text icon blue" />
@@ -290,6 +291,7 @@ export class HomeContainer extends React.Component {
                 className="big icons navbar-icon"
                 name="showUserProfile"
                 role="button"
+                tabIndex="-1"
                 onClick={this.showUserProfile}
               >
                 <i className="user circle outline blue icon" />
