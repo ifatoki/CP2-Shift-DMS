@@ -6,7 +6,7 @@
 [![Issue Count](https://codeclimate.com/github/andela-ifatoki/CP2-Shift-DMS/badges/issue_count.svg)](https://codeclimate.com/github/andela-ifatoki/CP2-Shift-DMS)
 
 ## Introduction
-Document Management System is a full stack application based on a RestFUL API that allows users to create and manage documents by giving different priviledges and rights to documents they create based on user roles.
+Shift-DMS is a full stack application based on a RestFUL API that allows users to create and manage documents by giving different priviledges and rights to documents they create based on user roles.
 
 ## Why Shift-DMS?
 With this application you can create and store a document, you have the option to select the visibility access for the document **public** - users registered on the platform can view your document, **private** - your document will only be view by you, **role** - based on the Admin's discretion, he/she can create a role and all registered users with that role can view your document because you belong to the same role. BE assured that your documents are safe and securely hosted on Heroku.
