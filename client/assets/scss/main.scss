@@ -1,0 +1,42 @@
+@import "helpers";
+@import "home";
+@import "document";
+@import "landing";
+
+.visible-block {
+  display: block;
+}
+
+.visible-inline {
+  display: inline;
+}
+
+.visible-inline-block {
+  display: inline-block;
+}
+
+.not-visible {
+  display: none !important;
+}
+
+.card-header {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-list,
+.document-list {
+  height: 80%;
+  margin-top: 0;
+  overflow-y: scroll;
+  padding-top: 10px;
+}
+
+.list-status {
+  color: $project-gray;
+  font-family: $indie-flower;
+  font-size: 60px;
+  text-align: center;
+  vertical-align: middle;
+}
