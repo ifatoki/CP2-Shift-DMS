@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const DocumentRole = sequelize.define('DocumentRole', {
+  const documentRole = sequelize.define('DocumentRole', {
     rightId: DataTypes.INTEGER
   }, {
     classMethods: {
@@ -11,11 +11,11 @@ export default (sequelize, DataTypes) => {
        */
       associate: (models) => {
         // associations can be defined here
-        DocumentRole.belongsTo(models.Right, {
+        documentRole.belongsTo(models.Right, {
           foreignKey: 'rightId'
         });
       }
     }
   });
-  return DocumentRole;
+  return documentRole;
 };

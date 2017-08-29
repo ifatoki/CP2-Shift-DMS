@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Right = sequelize.define('Right', {
+  const right = sequelize.define('Right', {
     title: DataTypes.STRING,
     description: DataTypes.STRING
   }, {
@@ -11,14 +11,14 @@ export default (sequelize, DataTypes) => {
        * @returns {void}
        */
       associate(models) {
-        Right.hasMany(models.DocumentUser, {
+        right.hasMany(models.DocumentUser, {
           foreignKey: 'rightId'
         });
-        Right.hasMany(models.DocumentRole, {
+        right.hasMany(models.DocumentRole, {
           foreignKey: 'rightId'
         });
       }
     }
   });
-  return Right;
+  return right;
 };

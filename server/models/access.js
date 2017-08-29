@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Access = sequelize.define('Access', {
+  const access = sequelize.define('Access', {
     title: {
       type: DataTypes.STRING,
       allowNull: false
@@ -14,11 +14,11 @@ export default (sequelize, DataTypes) => {
        */
       associate: (models) => {
         // associations can be defined here
-        Access.hasMany(models.Document, {
+        access.hasMany(models.Document, {
           foreignKey: 'accessId',
         });
       }
     }
   });
-  return Access;
+  return access;
 };
