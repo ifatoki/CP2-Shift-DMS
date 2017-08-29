@@ -310,73 +310,79 @@ const documentsController = {
    * @returns {void}
    */
   fetchOne: (req, res) => {
-    Document
-      .findById(req.params.id)
-      .then((document) => {
-        if (!document) {
-          returnDocumentNotFound(res);
-        } else {
-          const response = { document: filterDocument(document) };
-          if (document.ownerId === req.userId) {
-            response.rightId = 1;
-            if (document.accessId === 3) {
-              document.getRoles({
-                joinTableAttributes: ['rightId']
-              })
-              .then((roles) => {
-                const documentRoles = _.map(
-                  roles, role => role.dataValues.id);
-                response.documentRoles = documentRoles;
-                res.status(200).send(response);
-              })
-              .catch(() => returnServerError(res));
-            } else {
-              res.status(200).send(response);
-            }
-          } else if (document.accessId === 2) {
-            response.rightId = 3;
-            res.status(200).send(response);
+    if (!isNaN(parseInt(req.params.id, 10))) {
+      Document
+        .findById(req.params.id)
+        .then((document) => {
+          if (!document) {
+            returnDocumentNotFound(res);
           } else {
-            document.getUsers({
-              where: {
-                id: req.userId
-              },
-              joinTableAttributes: ['rightId']
-            })
-            .then((user) => {
-              if (user.length < 1) {
+            const response = { document: filterDocument(document) };
+            if (document.ownerId === req.userId) {
+              response.rightId = 1;
+              if (document.accessId === 3) {
                 document.getRoles({
                   joinTableAttributes: ['rightId']
                 })
                 .then((roles) => {
-                  if (roles.length < 1) {
-                    res.status(401).send({
-                      message:
-                        'you are not authorized to access this document'
-                    });
-                  } else {
-                    const newRoles = _.map(roles, role => role.dataValues);
-                    const documentRoles = _.map(
-                      roles, role => role.dataValues.id);
-                    const userRole = _.find(newRoles, { 'id': req.roleId });
-                    response.rightId =
-                      userRole.DocumentRole.dataValues.rightId;
-                    response.documentRoles = documentRoles;
-                    res.status(200).send(response);
-                  }
+                  const documentRoles = _.map(
+                    roles, role => role.dataValues.id);
+                  response.documentRoles = documentRoles;
+                  res.status(200).send(response);
                 })
                 .catch(() => returnServerError(res));
               } else {
-                response.rightId =
-                  user[0].dataValues.DocumentUser.dataValues.rightId;
                 res.status(200).send(response);
               }
-            })
-            .catch(() => returnServerError(res));
+            } else if (document.accessId === 2) {
+              response.rightId = 3;
+              res.status(200).send(response);
+            } else {
+              document.getUsers({
+                where: {
+                  id: req.userId
+                },
+                joinTableAttributes: ['rightId']
+              })
+              .then((user) => {
+                if (user.length < 1) {
+                  document.getRoles({
+                    joinTableAttributes: ['rightId']
+                  })
+                  .then((roles) => {
+                    if (roles.length < 1) {
+                      res.status(401).send({
+                        message:
+                          'you are not authorized to access this document'
+                      });
+                    } else {
+                      const newRoles = _.map(roles, role => role.dataValues);
+                      const documentRoles = _.map(
+                        roles, role => role.dataValues.id);
+                      const userRole = _.find(newRoles, { 'id': req.roleId });
+                      response.rightId =
+                        userRole.DocumentRole.dataValues.rightId;
+                      response.documentRoles = documentRoles;
+                      res.status(200).send(response);
+                    }
+                  })
+                  .catch(() => returnServerError(res));
+                } else {
+                  response.rightId =
+                    user[0].dataValues.DocumentUser.dataValues.rightId;
+                  res.status(200).send(response);
+                }
+              })
+              .catch(() => returnServerError(res));
+            }
           }
-        }
-      })
-      .catch(() => returnServerError(res));
+        })
+        .catch(() => returnServerError(res));
+    } else {
+      res.status(400).send({
+        message: 'id must be an integer'
+      });
+    }
   },
 
   /**
@@ -395,7 +401,7 @@ const documentsController = {
     };
 
     const validation = Validator.validateDocumentEdit(documentData);
-    if (validation.isValid) {
+    if (!isNaN(parseInt(req.params.id, 10)) && validation.isValid) {
       Document
       .findById(req.params.id)
       .then((document) => {
@@ -477,7 +483,8 @@ const documentsController = {
       .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
-        message: getValidatorErrorMessage(validation.errors)
+        message: isNaN(parseInt(req.params.id, 10)) ?
+          'id must be a number' : getValidatorErrorMessage(validation.errors)
       });
     }
   },
@@ -491,69 +498,75 @@ const documentsController = {
    * @returns {void}
    */
   delete: (req, res) => {
-    Document
-      .findById(req.params.id)
-      .then((document) => {
-        if (!document) {
-          returnDocumentNotFound(res);
-        } else if (document.ownerId === req.userId) {
-          deleteDocument(document, req, res);
-        } else if (document.accessId === 2) {
-          if (req.roleId === 1) {
+    if (!isNaN(parseInt(req.params.id, 10))) {
+      Document
+        .findById(req.params.id)
+        .then((document) => {
+          if (!document) {
+            returnDocumentNotFound(res);
+          } else if (document.ownerId === req.userId) {
             deleteDocument(document, req, res);
-          } else {
-            res.status(403).send({
-              message: "you don't have the rights to delete this document"
-            });
-          }
-        } else {
-          document.getUsers({
-            where: {
-              id: req.userId
-            },
-            joinTableAttributes: ['rightId']
-          })
-          .then((user) => {
-            if (user.length < 1) {
-              document.getRoles({
-                where: {
-                  id: req.roleId
-                },
-                joinTableAttributes: ['rightId']
-              })
-              .then((role) => {
-                if (role.length < 1) {
-                  res.status(401).send({
-                    message:
-                      'you are not authorized to access this document'
-                  });
-                } else if (
-                  role[0].dataValues.DocumentRole.dataValues.rightId === 1
-                ) {
-                  deleteDocument(document, req, res);
-                } else {
-                  res.status(403).send({
-                    message:
-                      "you don't have the rights to delete this document"
-                  });
-                }
-              })
-              .catch(() => returnServerError(res));
-            } else if (
-              user[0].dataValues.DocumentUser.dataValues.rightId === 1
-            ) {
+          } else if (document.accessId === 2) {
+            if (req.roleId === 1) {
               deleteDocument(document, req, res);
             } else {
               res.status(403).send({
-                message:
-                  "you don't have the rights to delete this document"
+                message: "you don't have the rights to delete this document"
               });
             }
-          })
-          .catch(() => returnServerError(res));
-        }
-      })
-      .catch(() => returnServerError(res));
+          } else {
+            document.getUsers({
+              where: {
+                id: req.userId
+              },
+              joinTableAttributes: ['rightId']
+            })
+            .then((user) => {
+              if (user.length < 1) {
+                document.getRoles({
+                  where: {
+                    id: req.roleId
+                  },
+                  joinTableAttributes: ['rightId']
+                })
+                .then((role) => {
+                  if (role.length < 1) {
+                    res.status(401).send({
+                      message:
+                        'you are not authorized to access this document'
+                    });
+                  } else if (
+                    role[0].dataValues.DocumentRole.dataValues.rightId === 1
+                  ) {
+                    deleteDocument(document, req, res);
+                  } else {
+                    res.status(403).send({
+                      message:
+                        "you don't have the rights to delete this document"
+                    });
+                  }
+                })
+                .catch(() => returnServerError(res));
+              } else if (
+                user[0].dataValues.DocumentUser.dataValues.rightId === 1
+              ) {
+                deleteDocument(document, req, res);
+              } else {
+                res.status(403).send({
+                  message:
+                    "you don't have the rights to delete this document"
+                });
+              }
+            })
+            .catch(() => returnServerError(res));
+          }
+        })
+        .catch(() => returnServerError(res));
+    } else {
+      res.status(400).send({
+        message: 'id must be an integer'
+      });
+    }
   },
 
   /**
@@ -673,20 +686,26 @@ const documentsController = {
    * @returns {void}
    */
   addUser: (req, res) => {
-    Document
-      .findById(req.params.documentId)
-      .then((document) => {
-        User
-          .findById(req.userId)
-          .then((user) => {
-            document.addUser(user)
-            .then(res.status(200).send({
-              message: 'user added successfully'
-            }));
-          })
-          .catch(() => returnServerError(res));
-      })
-      .catch(() => returnServerError(res));
+    if (!isNaN(parseInt(req.params.documentId, 10))) {
+      Document
+        .findById(req.params.documentId)
+        .then((document) => {
+          User
+            .findById(req.userId)
+            .then((user) => {
+              document.addUser(user)
+              .then(res.status(200).send({
+                message: 'user added successfully'
+              }));
+            })
+            .catch(() => returnServerError(res));
+        })
+        .catch(() => returnServerError(res));
+    } else {
+      res.status(400).send({
+        message: 'documentId must be an integer'
+      });
+    }
   }
 };
 

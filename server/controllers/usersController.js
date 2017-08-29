@@ -256,7 +256,7 @@ const usersController = {
               $ne: 1
             }
           },
-          offset: req.query.offset,
+          offset: req.query.offset || null,
           limit: req.query.limit || null
         })
         .then((users) => {
@@ -290,28 +290,34 @@ const usersController = {
    * @returns {void}
    */
   fetchUser: (req, res) => {
-    User
-      .findById(req.params.id)
-      .then((user) => {
-        if (!user) {
-          res.status(404).send({
-            message: 'user not found'
-          });
-        } else {
-          Role.findById(user.roleId)
-            .then((role) => {
-              const returnedUser = filterUser(user);
-              if (role) {
-                returnedUser.role = role.title;
-              }
-              res.status(200).send({
-                user: returnedUser
-              });
-            })
-            .catch(() => returnServerError(res));
-        }
-      })
-      .catch(() => returnServerError(res));
+    if (!isNaN(parseInt(req.params.id, 10))) {
+      User
+        .findById(req.params.id)
+        .then((user) => {
+          if (!user) {
+            res.status(404).send({
+              message: 'user not found'
+            });
+          } else {
+            Role.findById(user.roleId)
+              .then((role) => {
+                const returnedUser = filterUser(user);
+                if (role) {
+                  returnedUser.role = role.title;
+                }
+                res.status(200).send({
+                  user: returnedUser
+                });
+              })
+              .catch(() => returnServerError(res));
+          }
+        })
+        .catch(() => returnServerError(res));
+    } else {
+      res.status(400).send({
+        message: 'id must be an integer'
+      });
+    }
   },
 
   /**
@@ -323,34 +329,40 @@ const usersController = {
    * @returns {void}
    */
   fetchUserDocuments(req, res) {
-    User
-      .findOne({
-        where: {
-          id: req.params.id
-        },
-      })
-      .then((user) => {
-        if (!user) {
-          res.status(404).send({
-            message: 'user not found'
-          });
-        } else if (parseInt(req.params.id, 10) !== req.userId) {
-          res.status(403).send({
-            message: "you can't fetch another users documents"
-          });
-        } else {
-          user.getMyDocuments()
-            .then((documents) => {
-              res.status(200).send({
-                documents
-              });
-            })
-            .catch(() => returnServerError(res));
-        }
-      })
-      .catch(error => res.status(400).send({
-        message: error.message
-      }));
+    if (!isNaN(parseInt(req.params.id, 10))) {
+      User
+        .findOne({
+          where: {
+            id: req.params.id
+          },
+        })
+        .then((user) => {
+          if (!user) {
+            res.status(404).send({
+              message: 'user not found'
+            });
+          } else if (parseInt(req.params.id, 10) !== req.userId) {
+            res.status(403).send({
+              message: "you can't fetch another users documents"
+            });
+          } else {
+            user.getMyDocuments()
+              .then((documents) => {
+                res.status(200).send({
+                  documents
+                });
+              })
+              .catch(() => returnServerError(res));
+          }
+        })
+        .catch(error => res.status(400).send({
+          message: error.message
+        }));
+    } else {
+      res.status(400).send({
+        message: 'id must be an integer'
+      });
+    }
   },
 
   /**
@@ -449,7 +461,7 @@ const usersController = {
         res.status(403).send({
           message: 'you cannot delete the overlord'
         });
-      } else {
+      } else if (!isNaN(parseInt(req.params.id, 10))) {
         User
           .findById(req.params.id)
           .then((user) => {
@@ -468,6 +480,10 @@ const usersController = {
             }
           })
           .catch(() => returnServerError(res));
+      } else {
+        res.status(400).send({
+          message: 'id must be an integer'
+        });
       }
     } else {
       res.status(403).send({
