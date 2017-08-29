@@ -36,7 +36,7 @@ toastr.options = {
 export class HomeContainer extends React.Component {
   /**
    * Creates an instance of HomeContainer.
-   * @param {any} props
+   * @param {Object} props - Component Props
    * @memberof HomeContainer
    */
   constructor(props) {
@@ -72,7 +72,7 @@ export class HomeContainer extends React.Component {
   /**
    * @method componentWillReceiveProps
    *
-   * @param {any} nextProps
+   * @param {Object} nextProps - Next props coming into Component
    * @memberof HomeContainer
    * @returns {void}
    */
@@ -162,7 +162,7 @@ export class HomeContainer extends React.Component {
    * Modifies the document type to match the selection
    * @method handleDocumentTypeChange
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof HomeContainer
    * @returns {void}
    */
@@ -187,7 +187,7 @@ export class HomeContainer extends React.Component {
    * Navigates to the selected page
    * @method handlePageChange
    *
-   * @param {any} pageNumber
+   * @param {Object} pageNumber - Object containing currentselected page
    * @memberof HomeContainer
    * @returns {void}
    */
@@ -246,7 +246,7 @@ export class HomeContainer extends React.Component {
    * Logs the user out.
    * @method logOut
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof HomeContainer
    * @returns {void}
    */
@@ -507,7 +507,7 @@ const mapDispatchToProps = {
 /**
  * @function mapStateToProps
  *
- * @param {any} state
+ * @param {Object} state - Redux state
  * @returns {object} props
  */
 const mapStateToProps = state => ({

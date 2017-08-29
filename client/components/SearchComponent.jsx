@@ -16,7 +16,7 @@ const { searchDocuments, getDocument } = documentActions;
 export class SearchComponent extends Component {
   /**
    * Creates an instance of SearchComponent.
-   * @param {any} props
+   * @param {Object} props - Component Props
    * @memberof SearchComponent
    */
   constructor(props) {
@@ -57,12 +57,12 @@ export class SearchComponent extends Component {
    * Triggers when a search result gets selected
    * @method handleResultSelect
    *
-   * @param {any} e
-   * @param {any} eventResult
+   * @param {Object} event - onClick event
+   * @param {Object} eventResult - onClick data
    * @memberof SearchComponent
    * @returns {void}
    */
-  handleResultSelect(e, { result }) {
+  handleResultSelect(event, { result }) {
     this.setState({
       value: result.title
     }, () => {
@@ -74,12 +74,12 @@ export class SearchComponent extends Component {
    * Trigger when the search text is modified
    * @method handleSearchChange
    *
-   * @param {any} e
-   * @param {any} eventValue
+   * @param {Object} event - onChange event
+   * @param {Object} eventValue - onChange data
    * @memberof SearchComponent
    * @returns {void}
    */
-  handleSearchChange(e, { value }) {
+  handleSearchChange(event, { value }) {
     this.setState({
       isLoading: true,
       value
@@ -123,7 +123,7 @@ SearchComponent.propTypes = {
 /**
  * @function mapStateToProps
  *
- * @param {any} state
+ * @param {Object} state - Redux state
  * @returns {object} props
  */
 const mapStateToProps = state => ({

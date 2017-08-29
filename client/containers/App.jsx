@@ -8,7 +8,7 @@ import HomeContainer from './HomeContainer';
 export /** The Root Application Component
  * @function App
  *
- * @param {any} props
+ * @param {Object} props - Component Props
  * @return {void}
  */
 const App = props => (

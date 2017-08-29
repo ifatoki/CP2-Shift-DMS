@@ -17,7 +17,7 @@ const { getUser, deleteUser } = usersActions;
 export class User extends React.Component {
   /**
    * Creates an instance of User.
-   * @param {any} props
+   * @param {Object} props - Component Props
    * @memberof User
    */
   constructor(props) {

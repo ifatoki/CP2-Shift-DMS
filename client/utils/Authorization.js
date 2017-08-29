@@ -16,8 +16,8 @@ export default class Authorization {
    * @method decodeToken
    *
    * @static
-   * @param {any} token
-   * @param {any} callback
+   * @param {string} token - Token to be decoded
+   * @param {Callback} callback - Callback function on completion
    * @memberof Authorization
    * @returns {void}
    */
@@ -41,8 +41,8 @@ export default class Authorization {
    * @method setUser
    *
    * @static
-   * @param {any} user
-   * @param {any} token
+   * @param {Object} user - User Object for localStorage
+   * @param {string} token - User token for localStorage
    * @memberof Authorization
    * @returns {void}
    */

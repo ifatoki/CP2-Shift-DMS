@@ -6,7 +6,7 @@ import Validator from '../utils/Validator';
  * Returns a 500 server error with the server response
  * @function returnServerError
  *
- * @param {any} res
+ * @param {Object} res - Server Response Object
  * @returns {void}
  */
 const returnServerError = res => (
@@ -19,7 +19,7 @@ const returnServerError = res => (
  * Create a string of all the validation errors.
  * @function getValidatorErrorMessage
  *
- * @param {any} errors
+ * @param {Object} errors - An errors Object
  * @returns {string} A compilation of the errors
  */
 const getValidatorErrorMessage = errors => (
@@ -32,8 +32,8 @@ const getValidatorErrorMessage = errors => (
  * Filter out document properties
  * @function filterDocument
  *
- * @param {any} document
- * @return {any} A filtered document
+ * @param {Object} document - Document Object
+ * @return {Object} A filtered document
  */
 const filterDocument = document => ({
   id: document.id,
@@ -48,9 +48,9 @@ const filterDocument = document => ({
  * Delete a document from the app
  * @function deleteDocument
  *
- * @param {any} document
- * @param {any} req
- * @param {any} res
+ * @param {Object} document - Document Object
+ * @param {Object} req - Server Request Object
+ * @param {Object} res - Server Response Object
  * @return {void}
  */
 const deleteDocument = (document, req, res) => {
@@ -67,10 +67,10 @@ const deleteDocument = (document, req, res) => {
  * Add roles to an existing document
  * @function addRolesToDocument
  *
- * @param {any} req
- * @param {any} res
- * @param {any} newDocument
- * @param {any} documentData
+ * @param {Object} req - Server Request Object
+ * @param {Object} res - Server Response Object
+ * @param {Object} newDocument - Document Object
+ * @param {Object} documentData - Document Object
  * @returns {void}
  */
 const addRolesToDocument = (req, res, newDocument, documentData) => {
@@ -117,9 +117,9 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
  * Modify the content of a document.
  * @function updateDocument
  *
- * @param {any} document
- * @param {any} req
- * @param {any} res
+ * @param {Object} document - Document Object
+ * @param {Object} req - Server Request Object
+ * @param {Object} res - Server Response Object
  * @returns {void}
  */
 const updateDocument = (document, req, res) => {
@@ -163,7 +163,7 @@ const updateDocument = (document, req, res) => {
  * Return a 404 error and send a document not found error message
  * @function returnDocumentNotFound
  *
- * @param {any} res
+ * @param {Object} res - Server Response Object
  * @return {void}
  */
 const returnDocumentNotFound = res => (
@@ -177,8 +177,8 @@ const documentsController = {
    * Create a new document with the passed details
    * @function create
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   create: (req, res) => {
@@ -237,8 +237,8 @@ const documentsController = {
    * Fetch and return all available documents
    * @function fetchAll
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   fetchAll: (req, res) => {
@@ -305,87 +305,92 @@ const documentsController = {
    * Fetch and return the doucment with the passed id
    * @function fetchOne
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   fetchOne: (req, res) => {
-    Document
-      .findById(req.params.id)
-      .then((document) => {
-        if (!document) {
-          returnDocumentNotFound(res);
-        } else {
-          const response = { document: filterDocument(document) };
-          if (document.ownerId === req.userId) {
-            response.rightId = 1;
-            if (document.accessId === 3) {
-              document.getRoles({
-                joinTableAttributes: ['rightId']
-              })
-              .then((roles) => {
-                const documentRoles = _.map(
-                  roles, role => role.dataValues.id);
-                response.documentRoles = documentRoles;
-                res.status(200).send(response);
-              })
-              .catch(() => returnServerError(res));
-            } else {
-              res.status(200).send(response);
-            }
-          } else if (document.accessId === 2) {
-            response.rightId = 3;
-            res.status(200).send(response);
+    if (!isNaN(parseInt(req.params.id, 10))) {
+      Document
+        .findById(req.params.id)
+        .then((document) => {
+          if (!document) {
+            returnDocumentNotFound(res);
           } else {
-            document.getUsers({
-              where: {
-                id: req.userId
-              },
-              joinTableAttributes: ['rightId']
-            })
-            .then((user) => {
-              if (user.length < 1) {
+            const response = { document: filterDocument(document) };
+            if (document.ownerId === req.userId) {
+              response.rightId = 1;
+              if (document.accessId === 3) {
                 document.getRoles({
                   joinTableAttributes: ['rightId']
                 })
                 .then((roles) => {
-                  if (roles.length < 1) {
-                    res.status(401).send({
-                      message: 'you are not authorized to access this document'
-                    });
-                  } else {
-                    const newRoles = _.map(roles, role => role.dataValues);
-                    const documentRoles = _.map(
-                      roles, role => role.dataValues.id);
-                    const userRole = _.find(newRoles, { 'id': req.roleId });
-                    response.rightId =
-                      userRole.DocumentRole.dataValues.rightId;
-                    response.documentRoles = documentRoles;
-                    res.status(200).send(response);
-                  }
+                  const documentRoles = _.map(
+                    roles, role => role.dataValues.id);
+                  response.documentRoles = documentRoles;
+                  res.status(200).send(response);
                 })
                 .catch(() => returnServerError(res));
               } else {
-                response.rightId =
-                  user[0].dataValues.DocumentUser.dataValues.rightId;
                 res.status(200).send(response);
               }
-            })
-            .catch(() => returnServerError(res));
+            } else if (document.accessId === 2) {
+              response.rightId = 3;
+              res.status(200).send(response);
+            } else {
+              document.getUsers({
+                where: {
+                  id: req.userId
+                },
+                joinTableAttributes: ['rightId']
+              })
+              .then((user) => {
+                if (user.length < 1) {
+                  document.getRoles({
+                    joinTableAttributes: ['rightId']
+                  })
+                  .then((roles) => {
+                    if (roles.length < 1) {
+                      res.status(401).send({
+                        message:
+                          'you are not authorized to access this document'
+                      });
+                    } else {
+                      const newRoles = _.map(roles, role => role.dataValues);
+                      const documentRoles = _.map(
+                        roles, role => role.dataValues.id);
+                      const userRole = _.find(newRoles, { 'id': req.roleId });
+                      response.rightId =
+                        userRole.DocumentRole.dataValues.rightId;
+                      response.documentRoles = documentRoles;
+                      res.status(200).send(response);
+                    }
+                  })
+                  .catch(() => returnServerError(res));
+                } else {
+                  response.rightId =
+                    user[0].dataValues.DocumentUser.dataValues.rightId;
+                  res.status(200).send(response);
+                }
+              })
+              .catch(() => returnServerError(res));
+            }
           }
-        }
-      })
-      .catch(error => res.status(400).send({
-        message: error.message
-      }));
+        })
+        .catch(() => returnServerError(res));
+    } else {
+      res.status(400).send({
+        message: 'id must be an integer'
+      });
+    }
   },
 
   /**
    * Modify the document with the passed id with the passed data
    * @function update
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @return {void}
    */
   update: (req, res) => {
@@ -396,7 +401,7 @@ const documentsController = {
     };
 
     const validation = Validator.validateDocumentEdit(documentData);
-    if (validation.isValid) {
+    if (!isNaN(parseInt(req.params.id, 10)) && validation.isValid) {
       Document
       .findById(req.params.id)
       .then((document) => {
@@ -478,7 +483,8 @@ const documentsController = {
       .catch(() => returnServerError(res));
     } else {
       res.status(400).send({
-        message: getValidatorErrorMessage(validation.errors)
+        message: isNaN(parseInt(req.params.id, 10)) ?
+          'id must be a number' : getValidatorErrorMessage(validation.errors)
       });
     }
   },
@@ -487,82 +493,88 @@ const documentsController = {
    * Delete the document with the passed Id
    * @function delete
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   delete: (req, res) => {
-    Document
-      .findById(req.params.id)
-      .then((document) => {
-        if (!document) {
-          returnDocumentNotFound(res);
-        } else if (document.ownerId === req.userId) {
-          deleteDocument(document, req, res);
-        } else if (document.accessId === 2) {
-          if (req.roleId === 1) {
+    if (!isNaN(parseInt(req.params.id, 10))) {
+      Document
+        .findById(req.params.id)
+        .then((document) => {
+          if (!document) {
+            returnDocumentNotFound(res);
+          } else if (document.ownerId === req.userId) {
             deleteDocument(document, req, res);
-          } else {
-            res.status(403).send({
-              message: "you don't have the rights to delete this document"
-            });
-          }
-        } else {
-          document.getUsers({
-            where: {
-              id: req.userId
-            },
-            joinTableAttributes: ['rightId']
-          })
-          .then((user) => {
-            if (user.length < 1) {
-              document.getRoles({
-                where: {
-                  id: req.roleId
-                },
-                joinTableAttributes: ['rightId']
-              })
-              .then((role) => {
-                if (role.length < 1) {
-                  res.status(401).send({
-                    message:
-                      'you are not authorized to access this document'
-                  });
-                } else if (
-                  role[0].dataValues.DocumentRole.dataValues.rightId === 1
-                ) {
-                  deleteDocument(document, req, res);
-                } else {
-                  res.status(403).send({
-                    message:
-                      "you don't have the rights to delete this document"
-                  });
-                }
-              })
-              .catch(() => returnServerError(res));
-            } else if (
-              user[0].dataValues.DocumentUser.dataValues.rightId === 1
-            ) {
+          } else if (document.accessId === 2) {
+            if (req.roleId === 1) {
               deleteDocument(document, req, res);
             } else {
               res.status(403).send({
-                message:
-                  "you don't have the rights to delete this document"
+                message: "you don't have the rights to delete this document"
               });
             }
-          })
-          .catch(() => returnServerError(res));
-        }
-      })
-      .catch(() => returnServerError(res));
+          } else {
+            document.getUsers({
+              where: {
+                id: req.userId
+              },
+              joinTableAttributes: ['rightId']
+            })
+            .then((user) => {
+              if (user.length < 1) {
+                document.getRoles({
+                  where: {
+                    id: req.roleId
+                  },
+                  joinTableAttributes: ['rightId']
+                })
+                .then((role) => {
+                  if (role.length < 1) {
+                    res.status(401).send({
+                      message:
+                        'you are not authorized to access this document'
+                    });
+                  } else if (
+                    role[0].dataValues.DocumentRole.dataValues.rightId === 1
+                  ) {
+                    deleteDocument(document, req, res);
+                  } else {
+                    res.status(403).send({
+                      message:
+                        "you don't have the rights to delete this document"
+                    });
+                  }
+                })
+                .catch(() => returnServerError(res));
+              } else if (
+                user[0].dataValues.DocumentUser.dataValues.rightId === 1
+              ) {
+                deleteDocument(document, req, res);
+              } else {
+                res.status(403).send({
+                  message:
+                    "you don't have the rights to delete this document"
+                });
+              }
+            })
+            .catch(() => returnServerError(res));
+          }
+        })
+        .catch(() => returnServerError(res));
+    } else {
+      res.status(400).send({
+        message: 'id must be an integer'
+      });
+    }
   },
 
   /**
    * Search through all documents using the passed query string
    * @function search
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   search: (req, res) => {
@@ -666,27 +678,34 @@ const documentsController = {
   },
 
   /**
+   * Add a new user to a document
    * @function addUser
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   addUser: (req, res) => {
-    Document
-      .findById(req.params.documentId)
-      .then((document) => {
-        User
-          .findById(req.userId)
-          .then((user) => {
-            document.addUser(user)
-            .then(res.status(200).send({
-              message: 'user added successfully'
-            }));
-          })
-          .catch(() => returnServerError(res));
-      })
-      .catch(() => returnServerError(res));
+    if (!isNaN(parseInt(req.params.documentId, 10))) {
+      Document
+        .findById(req.params.documentId)
+        .then((document) => {
+          User
+            .findById(req.userId)
+            .then((user) => {
+              document.addUser(user)
+              .then(res.status(200).send({
+                message: 'user added successfully'
+              }));
+            })
+            .catch(() => returnServerError(res));
+        })
+        .catch(() => returnServerError(res));
+    } else {
+      res.status(400).send({
+        message: 'documentId must be an integer'
+      });
+    }
   }
 };
 

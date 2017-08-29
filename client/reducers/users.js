@@ -6,8 +6,8 @@ import { usersDefaultState } from '../reducers/initialStates';
  * reflecting the changes resulting from the triggered action
  * @function users
  *
- * @param {any} [state = initialState]
- * @param {any} action
+ * @param {any} [state = initialState] - Redux store state
+ * @param {any} action - Action triggered
  * @returns {object} state
  */
 function users(state = usersDefaultState, action) {

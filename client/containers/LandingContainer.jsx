@@ -24,7 +24,7 @@ toastr.options = {
 export class LandingContainer extends React.Component {
   /**
    * Creates an instance of LandingContainer.
-   * @param {any} props
+   * @param {Object} props - Component Props
    * @memberof LandingContainer
    */
   constructor(props) {
@@ -68,8 +68,8 @@ export class LandingContainer extends React.Component {
    * Modifies the component state based on text entered in the fields
    * @method onChange
    *
-   * @param {any} event
-   * @param {any} data
+   * @param {Object} event - onChange event
+   * @param {Object} data - onChange event data
    * @memberof LandingContainer
    * @returns {void}
    */
@@ -85,7 +85,7 @@ export class LandingContainer extends React.Component {
    * Logs the user in with the entered details
    * @method onLoginSubmit
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof LandingContainer
    * @returns {void}
    */
@@ -98,7 +98,7 @@ export class LandingContainer extends React.Component {
    * Creates a new user account with the entered details
    * @method onSignUpSubmit
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof LandingContainer
    * @returns {void}
    */
@@ -111,7 +111,7 @@ export class LandingContainer extends React.Component {
    * Toggle between show login or signup
    * @method toggleShowLogin
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof LandingContainer
    * @returns {void}
    */
@@ -207,7 +207,7 @@ const mapDispatchToProps = {
 /**
  * @function mapStateToProps
  *
- * @param {any} state
+ * @param {Object} state - Redux state
  * @return {object} props
  */
 const mapStateToProps = state => ({

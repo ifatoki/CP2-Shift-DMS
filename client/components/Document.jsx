@@ -18,7 +18,7 @@ const { getDocument, deleteDocument } = documentActions;
 export class Document extends React.Component {
   /**
    * Creates an instance of Document.
-   * @param {any} props
+   * @param {Object} props - Component Props
    * @memberof Document
    */
   constructor(props) {

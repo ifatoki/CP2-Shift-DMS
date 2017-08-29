@@ -12,7 +12,7 @@ const config = {
  * from localstorage and dispatchs and action.
  * @function removeUser
  *
- * @returns {object} Action
+ * @returns {Object} Action
  */
 const removeUser = () => {
   window.localStorage.removeItem('token');
@@ -26,8 +26,8 @@ const removeUser = () => {
  * Dispatches a SIGNUP_REQUEST action
  * @function requestSignup
  *
- * @param {any} payload
- * @returns {object} Action
+ * @param {Object} payload - Action Payload
+ * @returns {Object} Action
  */
 const requestSignup = payload => ({
   type: actionTypes.SIGNUP_REQUEST,
@@ -38,7 +38,7 @@ const requestSignup = payload => ({
  * Dispatches a SIGNUP_SUCCESSFUL action
  * @function signupSuccessful
  *
- * @returns {object} Action
+ * @returns {Object} Action
  */
 const signupSuccessful = () => ({
   type: actionTypes.SIGNUP_SUCCESSFUL
@@ -48,8 +48,8 @@ const signupSuccessful = () => ({
  * Dispatches a SIGNUP_FAILED action
  * @function signupFailed
  *
- * @param {any} payload
- * @returns {object} Action
+ * @param {string} payload - Error message
+ * @returns {Object} Action
  */
 const signupFailed = payload => ({
   type: actionTypes.SIGNUP_FAILED,
@@ -60,8 +60,8 @@ const signupFailed = payload => ({
  * Dispatches a LOGIN_REQUEST action
  * @function requestLogin
  *
- * @param {any} payload
- * @returns {object} Action
+ * @param {string} payload - Username of user
+ * @returns {Object} Action
  */
 const requestLogin = payload => ({
   type: actionTypes.LOGIN_REQUEST,
@@ -72,7 +72,7 @@ const requestLogin = payload => ({
  * Dispatches a LOGIN_SUCCESSFUL action
  * @function loginSuccessful
  *
- * @returns {object} Action
+ * @returns {Object} Action
  */
 const loginSuccessful = () => ({
   type: actionTypes.LOGIN_SUCCESSFUL
@@ -82,8 +82,8 @@ const loginSuccessful = () => ({
  * Dispatches a LOGIN_FAILED action
  * @function loginFailed
  *
- * @param {any} payload
- * @returns {object} Action
+ * @param {string} payload - Error message
+ * @returns {Object} Action
  */
 const loginFailed = payload => ({
   type: actionTypes.LOGIN_FAILED,
@@ -94,7 +94,7 @@ const loginFailed = payload => ({
  * Dispatches a LOGOUT_REQUEST action
  * @function logoutRequest
  *
- * @returns {object} Action
+ * @returns {Object} Action
  */
 const logoutRequest = () => ({
   type: actionTypes.LOGOUT_REQUEST
@@ -104,7 +104,7 @@ const logoutRequest = () => ({
  * Dispatches a LOGOUT_SUCCESSFUL action
  * @function logoutSuccessful
  *
- * @returns {object} Action
+ * @returns {Object} Action
  */
 const logoutSuccessful = () => ({
   type: actionTypes.LOGOUT_SUCCESSFUL
@@ -114,7 +114,7 @@ const logoutSuccessful = () => ({
  * Dispatches a FETCH_USERS_REQUEST action
  * @function fetchAllUsersRequest
  *
- * @returns {object} Action
+ * @returns {Object} Action
  */
 const fetchAllUsersRequest = () => ({
   type: actionTypes.FETCH_USERS_REQUEST
@@ -124,8 +124,8 @@ const fetchAllUsersRequest = () => ({
  * Dispatches a FETCH_USERS_SUCCESSFUL action
  * @function fetchAllUsersSuccessful
  *
- * @param {any} payload
- * @returns {object} Action
+ * @param {Object} payload - Action Payload
+ * @returns {Object} Action
  */
 const fetchAllUsersSuccessful = payload => ({
   type: actionTypes.FETCH_USERS_SUCCESSFUL,
@@ -136,8 +136,8 @@ const fetchAllUsersSuccessful = payload => ({
  * Dispatches a FETCH_USERS_FAILED action
  * @function fetchAllUsersFailed
  *
- * @param {any} payload
- * @returns {object} Action
+ * @param {string} payload - Error message
+ * @returns {Object} Action
  */
 const fetchAllUsersFailed = payload => ({
   type: actionTypes.FETCH_USERS_FAILED,
@@ -148,7 +148,7 @@ const fetchAllUsersFailed = payload => ({
  * Dispatches a FETCH_ROLES_REQUEST action
  * @function fetchAllRolesRequest
  *
- * @returns {object} Action
+ * @returns {Object} Action
  */
 const fetchAllRolesRequest = () => ({
   type: actionTypes.FETCH_ROLES_REQUEST
@@ -158,8 +158,8 @@ const fetchAllRolesRequest = () => ({
  * Dispatches a FETCH_ROLES_SUCCESSFUL action
  * @function fetchAllRolesSuccessful
  *
- * @param {any} payload
- * @returns {object} Action
+ * @param {Object} payload - Action Payload
+ * @returns {Object} Action
  */
 const fetchAllRolesSuccessful = payload => ({
   type: actionTypes.FETCH_ROLES_SUCCESSFUL,
@@ -170,8 +170,8 @@ const fetchAllRolesSuccessful = payload => ({
  * Dispatches a FETCH_ROLES_FAILED action
  * @function fetchAllRolesFailed
  *
- * @param {any} payload
- * @returns {object} Action
+ * @param {string} payload - Error message
+ * @returns {Object} Action
  */
 const fetchAllRolesFailed = payload => ({
   type: actionTypes.FETCH_ROLES_FAILED,
@@ -182,7 +182,7 @@ const fetchAllRolesFailed = payload => ({
  * Dispatches a USER_GET_REQUEST action
  * @function userGetRequest
  *
- * @returns {object} Action
+ * @returns {Object} Action
  */
 const userGetRequest = () => ({
   type: actionTypes.USER_GET_REQUEST
@@ -192,7 +192,7 @@ const userGetRequest = () => ({
  * Dispatches a USER_GET_SUCCESSFUL action
  * @function userGetSuccessful
  *
- * @param {any} payload
+ * @param {Object} payload - Action Payload
  * @return {object} Action
  */
 const userGetSuccessful = payload => ({
@@ -204,7 +204,7 @@ const userGetSuccessful = payload => ({
  * Dispatches a USER_GET_FAILED action
  * @function userGetFailed
  *
- * @param {any} payload
+ * @param {string} payload - Error message
  * @return {object} Action
  */
 const userGetFailed = payload => ({
@@ -226,7 +226,7 @@ const userModifyRequest = () => ({
  * Dispatches a USER_MODIFY_SUCCESSFUL action
  * @function userModifySuccessful
  *
- * @param {any} payload
+ * @param {Object} payload - Action Payload
  * @return {object} Action
  */
 const userModifySuccessful = payload => ({
@@ -238,7 +238,7 @@ const userModifySuccessful = payload => ({
  * Dispatches a USER_MODIFY_FAILED action
  * @function userModifyFailed
  *
- * @param {any} payload
+ * @param {string} payload - Error message
  * @return {object} Action
  */
 const userModifyFailed = payload => ({
@@ -260,7 +260,7 @@ const userDeleteRequest = () => ({
  * Dispatches a USER_DELETE_SUCCESSFUL action
  * @function userDeleteSuccessful
  *
- * @param {any} payload
+ * @param {string} payload - Success Message
  * @return {object} Action
  */
 const userDeleteSuccessful = payload => ({
@@ -272,7 +272,7 @@ const userDeleteSuccessful = payload => ({
  * Dispatches a USER_DELETE_FAILED action
  * @function userDeleteFailed
  *
- * @param {any} payload
+ * @param {string} payload - Error message
  * @return {object} Action
  */
 const userDeleteFailed = payload => ({
@@ -284,7 +284,7 @@ const userDeleteFailed = payload => ({
  * Generate and return the error messages in HTML format
  * @function getErrorMessage
  *
- * @param {any} errors
+ * @param {Object} errors - Object of Validation Errors
  * @returns {string} errorMessage
  */
 const getErrorMessage = (errors) => {
@@ -308,10 +308,10 @@ const usersActions = {
    * Dispatches actions associated with adding new user
    * @function addUser
    *
-   * @param {any} user
-   * @param {any} token
-   * @param {any} callback
-   * @returns {object} Action
+   * @param {Object} user - User to be added
+   * @param {string} token - User token
+   * @param {RequestCallback} callback - Request callback on completion
+   * @returns {Object} Action
    */
   addUser(user, token, callback) {
     axios.defaults.headers.common.Authorization = `bearer ${token}`;
@@ -334,8 +334,8 @@ const usersActions = {
    * Dispatches actions associated with signing user up
    * @function signUserUp
    *
-   * @param {any} userData
-   * @returns {object} Action
+   * @param {Object} userData - User data for signup
+   * @returns {Object} Action
    */
   signUserUp({
     firstname, lastname, username, email, password, roleId, confirmPassword
@@ -369,8 +369,8 @@ const usersActions = {
    * Dispatches actions associated with signing user in
    * @function logUserIn
    *
-   * @param {any} userData
-   * @returns {object} Action
+   * @param {Object} userData - User login data
+   * @returns {Object} Action
    */
   logUserIn({ username, password }) {
     const userdata = { username, password };
@@ -401,7 +401,7 @@ const usersActions = {
    * Dispatches actions associated with signing user out
    * @function logUserOut
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   logUserOut() {
     return (dispatch) => {
@@ -419,7 +419,7 @@ const usersActions = {
    * Dispatches actions associated with fetching all users
    * @function fetchAllUsers
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   fetchAllUsers() {
     return (dispatch) => {
@@ -439,7 +439,7 @@ const usersActions = {
    * Dispatches actions associated with fetching all roles.
    * @function fetchAllRoles
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   fetchAllRoles() {
     return (dispatch) => {
@@ -459,8 +459,8 @@ const usersActions = {
    * Dispatches actions associated with getting a user
    * @function getUser
    *
-   * @param {any} userId
-   * @returns {object} Action
+   * @param {number} userId - Id of user to be fetched
+   * @returns {Object} Action
    */
   getUser(userId) {
     return (dispatch) => {
@@ -480,9 +480,9 @@ const usersActions = {
    * Dispatches actions associated with modifying user data
    * @function modifyUser
    *
-   * @param {any} userId
-   * @param {any} userData
-   * @returns {object} Action
+   * @param {number} userId - Id of user to be modified
+   * @param {Object} userData - modification data for user
+   * @returns {Object} Action
    */
   modifyUser(userId, userData) {
     const validation = Validator.validateUserEdit(userData);
@@ -507,8 +507,8 @@ const usersActions = {
    * Dispatches actions associated with creating a new user
    * @function deleteUser
    *
-   * @param {any} userId
-   * @returns {object} Action
+   * @param {number} userId - Id of user to be deleted
+   * @returns {Object} Action
    */
   deleteUser(userId) {
     return (dispatch) => {
@@ -528,7 +528,7 @@ const usersActions = {
    * Dispatches a USER_CANCELLED action
    * @function cancelUser
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   cancelUser() {
     return dispatch => dispatch({

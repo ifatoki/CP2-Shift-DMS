@@ -4,7 +4,7 @@ import { Right, DocumentRole } from '../models';
  * Returns a 500 server error with the server response
  * @function returnServerError
  *
- * @param {any} res
+ * @param {Object} res - Server Response Object
  * @returns {void}
  */
 const returnServerError = res => (
@@ -18,8 +18,8 @@ const rightsController = {
    * Create a new right with the passed data
    * @function create
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   create(req, res) {
@@ -59,8 +59,8 @@ const rightsController = {
    * Fetch and return all rights.
    * @function list
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   list(req, res) {
