@@ -46,7 +46,7 @@ toastr.options = {
 export class UserManager extends React.Component {
   /**
    * Creates an instance of UserManager.
-   * @param {any} props
+   * @param {Object} props - Component Props
    * @memberof UserManager
    */
   constructor(props) {
@@ -92,7 +92,7 @@ export class UserManager extends React.Component {
    * Handles a change to the forms in the Component
    * @method onChange
    *
-   * @param {any} event
+   * @param {Object} event - onChange event
    * @memberof UserManager
    * @returns {void}
    */
@@ -122,8 +122,8 @@ export class UserManager extends React.Component {
    * Enable or disables the reset password form
    * @method handleSelectionChange
    *
-   * @param {any} event
-   * @param {any} eventData
+   * @param {Object} event - onChange event
+   * @param {Object} eventData - onChange event data
    * @memberof UserManager
    * @returns {void}
    */
@@ -135,7 +135,7 @@ export class UserManager extends React.Component {
    * Saves the modifications made to the current user.
    * @method saveUser
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof UserManager
    * @returns {void}
    */
@@ -167,7 +167,7 @@ export class UserManager extends React.Component {
    * Changes the Component to Edit mode
    * @method editUser
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof UserManager
    * @returns {void}
    */
@@ -182,7 +182,7 @@ export class UserManager extends React.Component {
    * Close the open component
    * @method cancelUser
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof UserManager
    * @returns {void}
    */
@@ -375,7 +375,7 @@ const mapDispatchToProps = {
  * Map state to props
  * @function mapStateToProps
  *
- * @param {any} state
+ * @param {Object} state - Redux State
  * @returns {object} props
  */
 const mapStateToProps = state => ({

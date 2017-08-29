@@ -9,8 +9,8 @@ import User from './User';
  * Include the users roles in the users
  * @function normalizeUsers
  *
- * @param {any} roles
- * @param {any} users
+ * @param {Array} roles - List of Roles
+ * @param {Array} users - List of Users
  * @returns {object} User with role
  */
 const normalizeUsers = (roles, users) => {
@@ -32,7 +32,7 @@ export /** A React Component which holds the User Components
  * @function UserList
  *
  *
- * @param {any} props
+ * @param {Object} props - Component Props
  * @returns {void}
  */
 const UserList = (props) => {
@@ -102,7 +102,7 @@ UserList.defaultProps = {
  * Maps state to Component Props
  * @function mapStateToProps
  *
- * @param {any} state
+ * @param {Object} state - Redux state
  * @return {object} props
  */
 const mapStateToProps = state => ({

@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const user = sequelize.define('User', {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -22,25 +22,25 @@ export default (sequelize, DataTypes) => {
       /**
        * @function associate
        *
-       * @param {any} models
+       * @param {Object} models - Sequelize Models
        * @returns {void}
        */
       associate(models) {
-        User.belongsTo(models.Role, {
+        user.belongsTo(models.Role, {
           foreignKey: 'roleId',
         });
 
-        User.hasMany(models.Document, {
+        user.hasMany(models.Document, {
           foreignKey: 'ownerId',
           as: 'myDocuments'
         });
 
-        User.belongsToMany(models.Document, {
+        user.belongsToMany(models.Document, {
           through: 'DocumentUser',
           foreignKey: 'userId'
         });
       }
     }
   });
-  return User;
+  return user;
 };

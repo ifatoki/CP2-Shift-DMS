@@ -38,7 +38,7 @@ toastr.options = {
 export class DocumentManager extends React.Component {
   /**
    * Creates an instance of DocumentManager.
-   * @param {any} props
+   * @param {Object} props - Component Props
    * @memberof DocumentManager
    */
   constructor(props) {
@@ -117,8 +117,8 @@ export class DocumentManager extends React.Component {
    * Changes the selected role in the Component state
    * @method onRolesChange
    *
-   * @param {any} event
-   * @param {any} data
+   * @param {Object} event - onClick event
+   * @param {Object} data - onClick event data
    * @memberof DocumentManager
    * @returns {void}
    */
@@ -132,7 +132,7 @@ export class DocumentManager extends React.Component {
    * Sets the Component state based on changes in its textboxes
    * @method onChange
    *
-   * @param {any} event
+   * @param {Object} event - onChange event
    * @memberof DocumentManager
    * @returns {void}
    */
@@ -148,8 +148,8 @@ export class DocumentManager extends React.Component {
    * Sets the document Types state based on radio button selection change
    * @method handleRadioButtonChange
    *
-   * @param {any} event
-   * @param {any} eventData
+   * @param {Object} event - onChange event
+   * @param {Object} eventData - onChange event data
    * @memberof DocumentManager
    * @returns {void}
    */
@@ -168,7 +168,7 @@ export class DocumentManager extends React.Component {
    * Saves the currentDocument
    * @method saveDocument
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof DocumentManager
    * @returns {void}
    */
@@ -217,7 +217,7 @@ export class DocumentManager extends React.Component {
    * Sets the current document to Edit Mode
    * @method editDocument
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof DocumentManager
    * @memberof DocumentManager
    * @returns {void}
@@ -237,7 +237,7 @@ export class DocumentManager extends React.Component {
    * Close the currently open document
    * @method cancelNewDocument
    *
-   * @param {any} event
+   * @param {Object} event - onClick event
    * @memberof DocumentManager
    * @returns {void}
    */
@@ -431,7 +431,7 @@ const mapDispatchToProps = {
 /**
  * @function mapStateToProps
  *
- * @param {any} state
+ * @param {Object} state - Redux state
  * @return {object} props
  */
 const mapStateToProps = state => ({

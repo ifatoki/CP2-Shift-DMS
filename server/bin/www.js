@@ -8,9 +8,10 @@ import models from '../models';
 debug('init:server');
 
 /**
+ * Normalize the passed port and verify its validity
  * @function normalizePort
  *
- * @param {any} val
+ * @param {string} val - Port
  * @returns {number|false} a valid port or a false.
  */
 const normalizePort = (val) => {
@@ -31,9 +32,10 @@ app.set('port', port);
 const server = http.createServer(app);
 
 /**
+ * Handle and throw errors
  * @function onError
  *
- * @param {any} error
+ * @param {Error} error - Error thrown
  * @throws {Error} when an error occurs
  * @return {void}
  */
@@ -55,6 +57,7 @@ const onError = (error) => {
   }
 };
 /**
+ * Handle successful listening
  * @function onListening
  * @returns {void}
  */

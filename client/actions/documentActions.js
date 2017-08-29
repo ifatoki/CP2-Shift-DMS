@@ -11,7 +11,7 @@ const documentActions = {
   /**
    * @function documentGetRequest
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   documentGetRequest() {
     return {
@@ -23,8 +23,8 @@ const documentActions = {
    * Dispatches a DOCUMENT_GET_SUCCESSFUL action
    * @function documentGetSuccessful
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {Object} payload - Action payload
+   * @returns {Object} Action
    */
   documentGetSuccessful(payload) {
     return {
@@ -37,8 +37,8 @@ const documentActions = {
    * Dispatches a DOCUMENT_GET_FAILED action
    * @function documentGetFailed
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {string} payload - Error Message
+   * @returns {Object} Action
    */
   documentGetFailed(payload) {
     return {
@@ -51,7 +51,7 @@ const documentActions = {
    * Dispatches a DOCUMENT_DELETE_REQUEST action
    * @function documentDeleteRequest
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   documentDeleteRequest() {
     return {
@@ -63,8 +63,8 @@ const documentActions = {
    * Dispatches a DOCUMENT_DELETE_SUCCESSFUL action
    * @function documentDeleteSuccessful
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {Object} payload - Action payload
+   * @returns {Object} Action
    */
   documentDeleteSuccessful(payload) {
     return {
@@ -77,8 +77,8 @@ const documentActions = {
    * Dispatches a DOCUMENT_DELETE_FAILED action
    * @function documentDeleteFailed
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {string} payload - Error Message
+   * @returns {Object} Action
    */
   documentDeleteFailed(payload) {
     return {
@@ -91,7 +91,7 @@ const documentActions = {
    * Dispatches a DOCUMENTS_FETCH_REQUEST action
    * @function documentsFetchRequest
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   documentsFetchRequest() {
     return {
@@ -103,9 +103,9 @@ const documentActions = {
    * Dispatches a DOCUMENTS_FETCH_SUCCESSFUL action
    * @function documentsFetchSuccessful
    *
-   * @param {any} payload
-   * @param {any} type
-   * @returns {object} Action
+   * @param {Object} payload - Action payload
+   * @param {string} type
+   * @returns {Object} Action
    */
   documentsFetchSuccessful(payload, type) {
     return {
@@ -119,8 +119,8 @@ const documentActions = {
    * Dispatches a DOCUMENTS_FETCH_FAILED action
    * @function documentsFetchFailed
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {Object} payload - Action payload
+   * @returns {Object} Action
    */
   documentsFetchFailed(payload) {
     return {
@@ -133,7 +133,7 @@ const documentActions = {
    * Dispatches a DOCUMENT_SAVE_REQUEST action
    * @function documentSaveRequest
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   documentSaveRequest() {
     return {
@@ -145,8 +145,8 @@ const documentActions = {
    * Dispatches a DOCUMENT_SAVE_SUCCESSFUL action
    * @function documentSaveSuccessful
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {Object} payload - Action payload
+   * @returns {Object} Action
    */
   documentSaveSuccessful(payload) {
     return {
@@ -159,8 +159,8 @@ const documentActions = {
    * Dispatches a DOCUMENT_SAVE_FAILED action
    * @function documentSaveFailed
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {string} payload - Error Message
+   * @returns {Object} Action
    */
   documentSaveFailed(payload) {
     return {
@@ -173,7 +173,7 @@ const documentActions = {
    * Dispatches a DOCUMENT_MODIFY_REQUEST action
    * @function documentModifyRequest
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   documentModifyRequest() {
     return {
@@ -185,8 +185,8 @@ const documentActions = {
    * Dispatches a DOCUMENT_MODIFY_SUCCESSFUL action
    * @function documentModifySuccessful
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {Object} payload - Action payload
+   * @returns {Object} Action
    */
   documentModifySuccessful(payload) {
     return {
@@ -199,8 +199,8 @@ const documentActions = {
    * Dispatches a DOCUMENT_MODIFY_FAILED action
    * @function documentModifyFailed
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {string} payload - Error Message
+   * @returns {Object} Action
    */
   documentModifyFailed(payload) {
     return {
@@ -213,7 +213,7 @@ const documentActions = {
    * Dispatches a DOCUMENTS_SEARCH_REQUEST action
    * @function documentsSearchRequest
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   documentsSearchRequest() {
     return {
@@ -225,8 +225,8 @@ const documentActions = {
    * Dispatches a DOCUMENTS_SEARCH_SUCCESSFUL action
    * @function documentsSearchSuccessful
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {Object} payload - Action payload
+   * @returns {Object} Action
    */
   documentsSearchSuccessful(payload) {
     return {
@@ -239,8 +239,8 @@ const documentActions = {
    * Dispatches a DOCUMENT_SEARCH_FAILED action
    * @function documentsSearchFailed
    *
-   * @param {any} payload
-   * @returns {object} Action
+   * @param {string} payload - Error Message
+   * @returns {Object} Action
    */
   documentsSearchFailed(payload) {
     return {
@@ -253,7 +253,7 @@ const documentActions = {
    * Returns error messages formatted as html
    * @function getErrorMessage
    *
-   * @param {any} errors
+   * @param {Object} errors - Errors Object containing validation errors
    * @returns {string} Error message
    */
   getErrorMessage(errors) {
@@ -266,7 +266,7 @@ const documentActions = {
    * Dispatches a DOCUMENT_CANCELLED action
    * @function cancelNewDocument
    *
-   * @returns {object} Action
+   * @returns {Object} Action
    */
   cancelNewDocument() {
     return dispatch =>
@@ -279,8 +279,8 @@ const documentActions = {
    * Dispatches actions associated with getting documents
    * @function getDocument
    *
-   * @param {any} documentId
-   * @returns {object} Action
+   * @param {number} documentId - Required documents Id
+   * @returns {Object} Action
    */
   getDocument(documentId) {
     return (dispatch) => {
@@ -301,8 +301,8 @@ const documentActions = {
    * Dispatch actions associated with deleting documents
    * @function deleteDocument
    *
-   * @param {any} documentId
-   * @returns {object} Action
+   * @param {number} documentId - Required Documents Id
+   * @returns {Object} Action
    */
   deleteDocument(documentId) {
     return (dispatch) => {
@@ -324,9 +324,9 @@ const documentActions = {
    * Dispatches actions associated with fetchDocuments
    * @function fetchDocuments
    *
-   * @param {any} type
-   * @param {number} offset
-   * @returns {object} Action
+   * @param {string} type - Type of documents to be fetched
+   * @param {number} offset - Number of documents to be offset in result
+   * @returns {Object} Action
    */
   fetchDocuments(type, offset) {
     return (dispatch) => {
@@ -356,8 +356,8 @@ const documentActions = {
    * Dispatches actions associated with saving new documents
    * @function saveNewDocument
    *
-   * @param {any} documentData
-   * @returns {object} Action
+   * @param {Object} documentData - Data to be used to create document
+   * @returns {Object} Action
    */
   saveNewDocument(documentData) {
     const validation = Validator.validateNewDocument(documentData);
@@ -385,9 +385,9 @@ const documentActions = {
    * Dispatches actions associated with modifying documents
    * @function modifyDocument
    *
-   * @param {any} documentId
-   * @param {any} documentData
-   * @returns {object} Action
+   * @param {number} documentId - Id of document to be modified
+   * @param {Object} documentData - document data to be updated
+   * @returns {Object} Action
    */
   modifyDocument(documentId, documentData) {
     const validation = Validator.validateDocumentEdit(documentData);
@@ -416,8 +416,8 @@ const documentActions = {
    * Dispatches actions associated with searching through documents
    * @function searchDocuments
    *
-   * @param {any} query
-   * @returns {object} Action
+   * @param {string} query - Search string
+   * @returns {Object} Action
    */
   searchDocuments(query) {
     return (dispatch) => {

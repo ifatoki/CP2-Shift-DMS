@@ -8,8 +8,8 @@ const local = {
    * Encodes the passed user object in a token
    * @function encodeToken
    *
-   * @param {any} user
-   * @param {any} test
+   * @param {Object} user - User Object with basic id and username
+   * @param {boolean} test - True to generate token that expires in 2ms
    * @returns {string} A token with encoded user details
    */
   encodeToken: (user, test) => {
@@ -26,8 +26,8 @@ const local = {
    * Decodes a token to extract the content.
    * @function decodeToken
    *
-   * @param {any} token
-   * @param {any} callback
+   * @param {string} token - Token to be verified
+   * @param {Callback} callback - Function callback on completion
    * @returns {void}
    */
   decodeToken: (token, callback) => {
