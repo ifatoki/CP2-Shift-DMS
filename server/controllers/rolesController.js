@@ -4,7 +4,7 @@ import { Role } from '../models';
  * Returns a 500 server error with the server response
  * @function returnServerError
  *
- * @param {any} res
+ * @param {Object} res - Server Response Object
  * @returns {void}
  */
 const returnServerError = res => (
@@ -17,7 +17,7 @@ const returnServerError = res => (
  * Filter the role, displaying only necessary data
  * @function filterRole
  *
- * @param {any} role
+ * @param {Object} role - A Role Object
  * @returns {object} A filtered role
  */
 const filterRole = role => ({
@@ -32,8 +32,8 @@ const rolesController = {
    * Create a new role using the passed data
    * @function create
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   create: (req, res) => {
@@ -58,8 +58,8 @@ const rolesController = {
    * List out all available roles
    * @function list
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   list: (req, res) => {

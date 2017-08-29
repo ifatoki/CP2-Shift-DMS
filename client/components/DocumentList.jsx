@@ -9,7 +9,7 @@ export /**
  * A React Component that shows an array of documents
  * @function DocumentList
  *
- * @param {any} props
+ * @param {Object} props - Component Props
  * @returns {void}
  */
 const DocumentList = props => (
@@ -71,7 +71,7 @@ DocumentList.defaultProps = {
 /**
  * @function mapStateToProps
  *
- * @param {any} state
+ * @param {Object} state - Redux State
  * @returns {object} props
  */
 const mapStateToProps = state => ({

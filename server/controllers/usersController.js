@@ -8,7 +8,7 @@ import { User, Role } from '../models';
  * Returns a 500 server error with the server response
  * @function returnServerError
  *
- * @param {any} res
+ * @param {Object} res - Server Response Object
  * @returns {void}
  */
 const returnServerError = res => (
@@ -21,8 +21,8 @@ const returnServerError = res => (
  * Filter out protected user details
  * @function filterUser
  *
- * @param {any} User
- * @returns {any} A filtered user object
+ * @param {Object} User - A User Object
+ * @returns {Object} A filtered user object
  */
 const filterUser = ({
   id, username, email, firstname, lastname, roleId, createdAt
@@ -40,7 +40,7 @@ const filterUser = ({
  * Create an error message from an error object
  * @function getValidatorErrorMessage
  *
- * @param {any} errors
+ * @param {Object} errors - An errors Object
  * @returns {string} A summary of all errors
  */
 const getValidatorErrorMessage = errors => (
@@ -53,9 +53,9 @@ const getValidatorErrorMessage = errors => (
  * Update the user with the passed Id using the passed data
  * @function updateUser
  *
- * @param {any} req
- * @param {any} res
- * @param {any} user
+ * @param {Object} req - Server Request Object
+ * @param {Object} res - Server Response Object
+ * @param {Object} user -  A user Object
  * @return {void}
  */
 const updateUser = (req, res, user) => {
@@ -85,9 +85,9 @@ const updateUser = (req, res, user) => {
  * Confirms the role of the user.
  * @function confirmRole
  *
- * @param {any} req
- * @param {any} res
- * @param {any} user
+ * @param {Object} req - Server Request Object
+ * @param {Object} res - Server Response Object
+ * @param {Object} user - A user object
  * @returns {void}
  */
 const confirmRole = (req, res, user) => {
@@ -118,8 +118,8 @@ const usersController = {
    * Create a new user using passed data
    * @function create
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   create: (req, res) => {
@@ -178,8 +178,8 @@ const usersController = {
    * Log in with the passed details.
    * @function login
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   login: (req, res) => {
@@ -229,8 +229,8 @@ const usersController = {
    * Log user out.
    * @function logout
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   logout: (req, res) => {
@@ -243,8 +243,8 @@ const usersController = {
    * Fetch and return all available users.
    * @function fetch
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   fetch: (req, res) => {
@@ -285,8 +285,8 @@ const usersController = {
    * Fetch and return the user with the passed id
    * @function fetchUser
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   fetchUser: (req, res) => {
@@ -318,8 +318,8 @@ const usersController = {
    * Fetch all documents for the user with the passed id
    * @function fetchUserDocuments
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   fetchUserDocuments(req, res) {
@@ -357,8 +357,8 @@ const usersController = {
    * Update the user with the passed Id using the passed data
    * @function updateUser
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   updateUser: (req, res) => {
@@ -439,8 +439,8 @@ const usersController = {
    * Delete the user with the passed id
    * @function deleteUser
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   deleteUser: (req, res) => {
@@ -480,8 +480,8 @@ const usersController = {
    * Search through all users with the search query string
    * @function search
    *
-   * @param {any} req
-   * @param {any} res
+   * @param {Object} req - Server Request Object
+   * @param {Object} res - Server Response Object
    * @returns {void}
    */
   search: (req, res) => {

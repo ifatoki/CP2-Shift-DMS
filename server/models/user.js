@@ -22,7 +22,7 @@ export default (sequelize, DataTypes) => {
       /**
        * @function associate
        *
-       * @param {any} models
+       * @param {Object} models - Sequelize Models
        * @returns {void}
        */
       associate(models) {

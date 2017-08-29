@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
  * A React Component used to setup the Login and Signup form
  * @function AuthenticationForm
  *
- * @param {any} props
+ * @param {Object} props - Component Props
  * @returns {void}
  */
 const AuthenticationForm = (props) => {

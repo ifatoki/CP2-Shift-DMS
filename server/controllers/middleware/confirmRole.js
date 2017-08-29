@@ -5,9 +5,9 @@ const User = require('../../models').User;
  * returns a matching error or proceeds to the next block.
  * @function confirmUserDetails
  *
- * @param {any} req
- * @param {any} res
- * @param {any} next
+ * @param {Object} req - Server Request Object
+ * @param {Object} res - Server Response Object
+ * @param {requestCallback} next - Server Request Callback
  * @returns {void}
  * @throws {Error}
  */
@@ -44,9 +44,9 @@ function confirmUserDetails(req, res, next) {
  * @function confirmRole
  *
  * @export
- * @param {any} req
- * @param {any} res
- * @param {any} next
+ * @param {Object} req - Server Request Object
+ * @param {Object} res - Server Response Object
+ * @param {requestCallback} next - Server Request Callback
  * @returns {void}
  */
 export default function confirmRole(req, res, next) {
