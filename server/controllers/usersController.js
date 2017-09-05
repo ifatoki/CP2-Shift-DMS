@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import lodash from 'lodash';
 import Validator from '../utils/Validator';
 import auth from '../auth/helpers';
 import local from '../auth/local';
@@ -44,7 +44,7 @@ const filterUser = ({
  * @returns {string} A summary of all errors
  */
 const getValidatorErrorMessage = errors => (
-  _.reduce(errors, (result, error) =>
+  lodash.reduce(errors, (result, error) =>
     `${error}\n${result}`
   , '')
 );
@@ -265,7 +265,7 @@ const usersController = {
               message: 'no users in database'
             });
           } else {
-            const filteredUsers = _.reduce(users, (accumulator, user) =>
+            const filteredUsers = lodash.reduce(users, (accumulator, user) =>
               accumulator.concat(filterUser(user))
             , []);
             res.status(200).send({

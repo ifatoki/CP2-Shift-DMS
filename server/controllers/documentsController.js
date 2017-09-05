@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import lodash from 'lodash';
 import { User, Document, Role } from '../models';
 import Validator from '../utils/Validator';
 
@@ -23,7 +23,7 @@ const returnServerError = res => (
  * @returns {string} A compilation of the errors
  */
 const getValidatorErrorMessage = errors => (
-  _.reduce(errors, (result, error) =>
+  lodash.reduce(errors, (result, error) =>
     `${error}\n${result}`
   , '')
 );
@@ -86,7 +86,7 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
     }
   })
   .then((roles) => {
-    _.map(roles, (role) => {
+    lodash.map(roles, (role) => {
       role.DocumentRole = {
         rightId: documentData.roles[role.id]
       };
@@ -97,7 +97,7 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
       .then(() => {
         res.status(201).send({
           document: filterDocument(newDocument),
-          roles: _.map(roles, role => ({
+          roles: lodash.map(roles, role => ({
             id: role.id,
             title: role.title
           }))
@@ -325,7 +325,7 @@ const documentsController = {
                   joinTableAttributes: ['rightId']
                 })
                 .then((roles) => {
-                  const documentRoles = _.map(
+                  const documentRoles = lodash.map(
                     roles, role => role.dataValues.id);
                   response.documentRoles = documentRoles;
                   res.status(200).send(response);
@@ -356,10 +356,12 @@ const documentsController = {
                           'you are not authorized to access this document'
                       });
                     } else {
-                      const newRoles = _.map(roles, role => role.dataValues);
-                      const documentRoles = _.map(
+                      const newRoles =
+                        lodash.map(roles, role => role.dataValues);
+                      const documentRoles = lodash.map(
                         roles, role => role.dataValues.id);
-                      const userRole = _.find(newRoles, { 'id': req.roleId });
+                      const userRole =
+                        lodash.find(newRoles, { 'id': req.roleId });
                       response.rightId =
                         userRole.DocumentRole.dataValues.rightId;
                       response.documentRoles = documentRoles;
