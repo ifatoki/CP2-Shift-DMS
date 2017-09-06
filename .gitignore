@@ -8,3 +8,4 @@ server/config/config.json.sample
 dist
 selenium-debug.log
 reports
+.idea
