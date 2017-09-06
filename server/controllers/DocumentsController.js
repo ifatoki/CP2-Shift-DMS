@@ -14,6 +14,7 @@ const documentTypesEnum = {
  * @function returnServerError
  *
  * @param {Object} res - Server Response Object
+ *
  * @returns {void}
  */
 const returnServerError = res => (
@@ -27,6 +28,7 @@ const returnServerError = res => (
  * @function getValidatorErrorMessage
  *
  * @param {Object} errors - An errors Object
+ *
  * @returns {string} A compilation of the errors
  */
 const getValidatorErrorMessage = errors => (
@@ -40,6 +42,7 @@ const getValidatorErrorMessage = errors => (
  * @function filterDocument
  *
  * @param {Object} document - Document Object
+ *
  * @return {Object} A filtered document
  */
 const filterDocument = ({
@@ -55,6 +58,7 @@ const filterDocument = ({
  * @param {Object} document - Document Object
  * @param {Object} req - Server Request Object
  * @param {Object} res - Server Response Object
+ *
  * @return {void}
  */
 const deleteDocument = (document, req, res) => {
@@ -75,6 +79,7 @@ const deleteDocument = (document, req, res) => {
  * @param {Object} res - Server Response Object
  * @param {Object} newDocument - Document Object
  * @param {Object} documentData - Document Object
+ *
  * @returns {void}
  */
 const addRolesToDocument = (req, res, newDocument, documentData) => {
@@ -124,6 +129,7 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
  * @param {Object} document - Document Object
  * @param {Object} req - Server Request Object
  * @param {Object} res - Server Response Object
+ *
  * @returns {void}
  */
 const updateDocument = (document, req, res) => {
@@ -168,6 +174,7 @@ const updateDocument = (document, req, res) => {
  * @function returnDocumentNotFound
  *
  * @param {Object} res - Server Response Object
+ *
  * @return {void}
  */
 const returnDocumentNotFound = res => (
@@ -183,6 +190,7 @@ const DocumentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   create: (req, res) => {
@@ -247,6 +255,7 @@ const DocumentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   fetchAll: (req, res) => {
@@ -315,6 +324,7 @@ const DocumentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   fetchOne: (req, res) => {
@@ -401,6 +411,7 @@ const DocumentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @return {void}
    */
   update: (req, res) => {
@@ -508,6 +519,7 @@ const DocumentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   delete: (req, res) => {
@@ -588,6 +600,7 @@ const DocumentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   search: (req, res) => {
@@ -696,6 +709,7 @@ const DocumentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   addUser: (req, res) => {

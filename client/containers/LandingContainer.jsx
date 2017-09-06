@@ -17,14 +17,17 @@ toastr.options = {
 
 /**
  * Serves as a Landing page with all the Login and signup features
- * @export
+ * @export LandingContainer
+ *
  * @class LandingContainer
+ *
  * @extends {React.Component}
  */
 export class LandingContainer extends React.Component {
   /**
    * Creates an instance of LandingContainer.
    * @param {Object} props - Component Props
+   *
    * @memberof LandingContainer
    */
   constructor(props) {
@@ -70,7 +73,9 @@ export class LandingContainer extends React.Component {
    *
    * @param {Object} event - onChange event
    * @param {Object} data - onChange event data
+   *
    * @memberof LandingContainer
+   *
    * @returns {void}
    */
   onChange(event, data) {
@@ -86,7 +91,9 @@ export class LandingContainer extends React.Component {
    * @method onLoginSubmit
    *
    * @param {Object} event - onClick event
+   *
    * @memberof LandingContainer
+   *
    * @returns {void}
    */
   onLoginSubmit(event) {
@@ -99,7 +106,9 @@ export class LandingContainer extends React.Component {
    * @method onSignUpSubmit
    *
    * @param {Object} event - onClick event
+   *
    * @memberof LandingContainer
+   *
    * @returns {void}
    */
   onSignUpSubmit(event) {
@@ -112,7 +121,9 @@ export class LandingContainer extends React.Component {
    * @method toggleShowLogin
    *
    * @param {Object} event - onClick event
+   *
    * @memberof LandingContainer
+   *
    * @returns {void}
    */
   toggleShowLogin(event) {
@@ -126,6 +137,7 @@ export class LandingContainer extends React.Component {
    * @method render
    *
    * @returns {void}
+   *
    * @memberof LandingContainer
    */
   render() {
@@ -208,6 +220,7 @@ const mapDispatchToProps = {
  * @function mapStateToProps
  *
  * @param {Object} state - Redux state
+ *
  * @return {object} props
  */
 const mapStateToProps = state => ({

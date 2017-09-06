@@ -8,6 +8,7 @@ const AuthHelpers = {
    * @function encrypt
    *
    * @param {string} password - Password to be encrypted
+   *
    * @returns {string|null} The encrypted password or null for an error
    */
   encrypt(password) {
@@ -25,7 +26,9 @@ const AuthHelpers = {
    *
    * @param {string} userPassword - Password entered by user
    * @param {string} databasePassword - Hashed password from database
+   *
    * @returns {true} when the passwords passed match
+   *
    * @throws {Error} when there is no match
    */
   comparePassword(userPassword, databasePassword) {
@@ -45,6 +48,7 @@ const AuthHelpers = {
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
    * @param {ResponseCallback} next - Server Middleware Callback
+   *
    * @returns {json} the response object
    */
   confirmAuthentication(req, res, next) {

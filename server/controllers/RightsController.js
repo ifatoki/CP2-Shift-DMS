@@ -5,6 +5,7 @@ import { Right, DocumentRole } from '../models';
  * @function returnServerError
  *
  * @param {Object} res - Server Response Object
+ *
  * @returns {void}
  */
 const returnServerError = res => (
@@ -20,6 +21,7 @@ const RightsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   create(req, res) {
@@ -61,6 +63,7 @@ const RightsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   list(req, res) {

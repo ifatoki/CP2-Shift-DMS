@@ -8,7 +8,9 @@ const User = require('../../models').User;
  * @param {Object} req - Server Request Object
  * @param {Object} res - Server Response Object
  * @param {requestCallback} next - Server Request Callback
+ *
  * @returns {void}
+ *
  * @throws {Error}
  */
 function confirmUserDetails(req, res, next) {
@@ -43,10 +45,10 @@ function confirmUserDetails(req, res, next) {
  * If so, throw an error, else proceed with creating on.
  * @function confirmRole
  *
- * @export
  * @param {Object} req - Server Request Object
  * @param {Object} res - Server Response Object
  * @param {requestCallback} next - Server Request Callback
+ *
  * @returns {void}
  */
 export default function confirmRole(req, res, next) {

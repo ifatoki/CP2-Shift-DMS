@@ -39,14 +39,17 @@ toastr.options = {
 /**
  * A React Component that helps view and manage profiles
  *
- * @export
+ * @export UserManager
+ *
  * @class UserManager
+ *
  * @extends {React.Component}
  */
 export class UserManager extends React.Component {
   /**
    * Creates an instance of UserManager.
    * @param {Object} props - Component Props
+   *
    * @memberof UserManager
    */
   constructor(props) {
@@ -93,7 +96,9 @@ export class UserManager extends React.Component {
    * @method onChange
    *
    * @param {Object} event - onChange event
+   *
    * @memberof UserManager
+   *
    * @returns {void}
    */
   onChange(event) {
@@ -112,6 +117,7 @@ export class UserManager extends React.Component {
    * @method resetModal
    *
    * @memberof UserManager
+   *
    * @returns {void}
    */
   resetModal() {
@@ -124,7 +130,9 @@ export class UserManager extends React.Component {
    *
    * @param {Object} event - onChange event
    * @param {Object} eventData - onChange event data
+   *
    * @memberof UserManager
+   *
    * @returns {void}
    */
   handleSelectionChange(event, { checked }) {
@@ -136,7 +144,9 @@ export class UserManager extends React.Component {
    * @method saveUser
    *
    * @param {Object} event - onClick event
+   *
    * @memberof UserManager
+   *
    * @returns {void}
    */
   saveUser(event) {
@@ -168,7 +178,9 @@ export class UserManager extends React.Component {
    * @method editUser
    *
    * @param {Object} event - onClick event
+   *
    * @memberof UserManager
+   *
    * @returns {void}
    */
   editUser(event) {
@@ -183,7 +195,9 @@ export class UserManager extends React.Component {
    * @method cancelUser
    *
    * @param {Object} event - onClick event
+   *
    * @memberof UserManager
+   *
    * @returns {void}
    */
   cancelUser(event) {
@@ -195,6 +209,7 @@ export class UserManager extends React.Component {
    * @method render
    *
    * @returns {void}
+   *
    * @memberof UserManager
    */
   render() {
@@ -376,6 +391,7 @@ const mapDispatchToProps = {
  * @function mapStateToProps
  *
  * @param {Object} state - Redux State
+ *
  * @returns {object} props
  */
 const mapStateToProps = state => ({

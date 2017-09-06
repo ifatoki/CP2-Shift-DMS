@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
  * @function AuthenticationForm
  *
  * @param {Object} props - Component Props
+ *
  * @returns {void}
  */
 const AuthenticationForm = (props) => {

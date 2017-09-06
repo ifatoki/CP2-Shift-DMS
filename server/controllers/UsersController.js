@@ -9,6 +9,7 @@ import { User, Role } from '../models';
  * @function returnServerError
  *
  * @param {Object} res - Server Response Object
+ *
  * @returns {void}
  */
 const returnServerError = res => (
@@ -22,6 +23,7 @@ const returnServerError = res => (
  * @function filterUser
  *
  * @param {Object} User - A User Object
+ *
  * @returns {Object} A filtered user object
  */
 const filterUser = ({
@@ -41,6 +43,7 @@ const filterUser = ({
  * @function getValidatorErrorMessage
  *
  * @param {Object} errors - An errors Object
+ *
  * @returns {string} A summary of all errors
  */
 const getValidatorErrorMessage = errors => (
@@ -55,6 +58,7 @@ const getValidatorErrorMessage = errors => (
  *
  * @param {Object} req - Server Request Object
  * @param {Object} user - A user object
+ *
  * @returns {void}
  */
 const confirmRole = (req, user) => {
@@ -90,6 +94,7 @@ const confirmRole = (req, user) => {
  * @param {Object} req - Server Request Object
  * @param {Object} res - Server Response Object
  * @param {Object} unConfirmedUser -  A user Object
+ *
  * @return {void}
  */
 const updateUser = (req, res, unConfirmedUser) => {
@@ -146,6 +151,7 @@ const updateUser = (req, res, unConfirmedUser) => {
  * @function returnUserNotFound
  *
  * @param {Object} res - Server Response Object
+ *
  * @return {void}
  */
 const returnUserNotFound = res => (
@@ -161,6 +167,7 @@ const UsersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   create: (req, res) => {
@@ -224,6 +231,7 @@ const UsersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   login: (req, res) => {
@@ -275,6 +283,7 @@ const UsersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   logout: (req, res) => {
@@ -289,6 +298,7 @@ const UsersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   fetchAll: (req, res) => {
@@ -331,6 +341,7 @@ const UsersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   fetchOne: (req, res) => {
@@ -368,6 +379,7 @@ const UsersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   fetchUserDocuments(req, res) {
@@ -411,6 +423,7 @@ const UsersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   updateUser: (req, res) => {
@@ -500,6 +513,7 @@ const UsersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   deleteUser: (req, res) => {
@@ -543,6 +557,7 @@ const UsersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   search: (req, res) => {
