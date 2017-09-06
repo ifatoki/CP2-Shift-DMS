@@ -9,14 +9,17 @@ const { searchDocuments, getDocument } = documentActions;
 /**
  * A React component that implements a document search feature
  *
- * @export
+ * @export SearchComponent
+ *
  * @class SearchComponent
+ *
  * @extends {Component}
  */
 export class SearchComponent extends Component {
   /**
    * Creates an instance of SearchComponent.
    * @param {Object} props - Component Props
+   *
    * @memberof SearchComponent
    */
   constructor(props) {
@@ -47,6 +50,7 @@ export class SearchComponent extends Component {
    * @method resetComponent
    *
    * @memberof SearchComponent
+   *
    * @returns {void}
    */
   resetComponent() {
@@ -59,7 +63,9 @@ export class SearchComponent extends Component {
    *
    * @param {Object} event - onClick event
    * @param {Object} eventResult - onClick data
+   *
    * @memberof SearchComponent
+   *
    * @returns {void}
    */
   handleResultSelect(event, { result }) {
@@ -76,7 +82,9 @@ export class SearchComponent extends Component {
    *
    * @param {Object} event - onChange event
    * @param {Object} eventValue - onChange data
+   *
    * @memberof SearchComponent
+   *
    * @returns {void}
    */
   handleSearchChange(event, { value }) {
@@ -90,6 +98,7 @@ export class SearchComponent extends Component {
    * @method render
    *
    * @returns {void}
+   *
    * @memberof SearchComponent
    */
   render() {
@@ -124,6 +133,7 @@ SearchComponent.propTypes = {
  * @function mapStateToProps
  *
  * @param {Object} state - Redux state
+ *
  * @returns {object} props
  */
 const mapStateToProps = state => ({

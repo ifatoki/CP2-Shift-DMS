@@ -8,6 +8,7 @@ import { documentsDefaultState } from '../reducers/initialStates';
  *
  * @param {Object} [state=documentsDefaultState] - Redux store state
  * @param {Object} action - Action triggered
+ *
  * @returns {object} state
  */
 function documents(state = documentsDefaultState, action) {

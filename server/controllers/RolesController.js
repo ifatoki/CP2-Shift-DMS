@@ -5,6 +5,7 @@ import { Role } from '../models';
  * @function returnServerError
  *
  * @param {Object} res - Server Response Object
+ *
  * @returns {void}
  */
 const returnServerError = res => (
@@ -18,6 +19,7 @@ const returnServerError = res => (
  * @function filterRole
  *
  * @param {Object} role - A Role Object
+ *
  * @returns {object} A filtered role
  */
 const filterRole = role => ({
@@ -27,13 +29,14 @@ const filterRole = role => ({
   createdAt: role.createdAt
 });
 
-const rolesController = {
+const RolesController = {
   /**
    * Create a new role using the passed data
    * @function create
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   create: (req, res) => {
@@ -60,6 +63,7 @@ const rolesController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   list: (req, res) => {
@@ -81,4 +85,4 @@ const rolesController = {
   }
 };
 
-export default rolesController;
+export default RolesController;

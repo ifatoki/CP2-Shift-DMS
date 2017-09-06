@@ -10,15 +10,15 @@ const { getDocument, deleteDocument } = documentActions;
 
 /**
  * A React Component to help create a single document
- *
- * @export
  * @class Document
+ *
  * @extends {React.Component}
  */
 export class Document extends React.Component {
   /**
    * Creates an instance of Document.
    * @param {Object} props - Component Props
+   *
    * @memberof Document
    */
   constructor(props) {
@@ -33,6 +33,7 @@ export class Document extends React.Component {
    * @method clickHandler
    *
    * @memberof Document
+   *
    * @returns {void}
    */
   clickHander() {
@@ -47,6 +48,7 @@ export class Document extends React.Component {
    * @method deleteDocument
    *
    * @memberof Document
+   *
    * @returns {void}
    */
   deleteDocument() {
@@ -58,6 +60,7 @@ export class Document extends React.Component {
    * @method render
    *
    * @returns {void}
+   *
    * @memberof Document
    */
   render() {

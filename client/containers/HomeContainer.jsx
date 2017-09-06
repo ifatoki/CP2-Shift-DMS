@@ -29,14 +29,17 @@ toastr.options = {
 
 /** The HomeContainer houses most of the apps functionality and
  * becomes visible on successful authentication
- * @export
+ * @export HomeContainer
+ *
  * @class HomeContainer
+ *
  * @extends {React.Component}
  */
 export class HomeContainer extends React.Component {
   /**
    * Creates an instance of HomeContainer.
    * @param {Object} props - Component Props
+   *
    * @memberof HomeContainer
    */
   constructor(props) {
@@ -58,6 +61,7 @@ export class HomeContainer extends React.Component {
    * @method componentDidMount
    *
    * @memberof HomeContainer
+   *
    * @returns {void}
    */
   componentDidMount() {
@@ -73,7 +77,9 @@ export class HomeContainer extends React.Component {
    * @method componentWillReceiveProps
    *
    * @param {Object} nextProps - Next props coming into Component
+   *
    * @memberof HomeContainer
+   *
    * @returns {void}
    */
   componentWillReceiveProps(nextProps) {
@@ -163,7 +169,9 @@ export class HomeContainer extends React.Component {
    * @method handleDocumentTypeChange
    *
    * @param {Object} event - onClick event
+   *
    * @memberof HomeContainer
+   *
    * @returns {void}
    */
   handleDocumentTypeChange(event) {
@@ -188,7 +196,9 @@ export class HomeContainer extends React.Component {
    * @method handlePageChange
    *
    * @param {Object} pageNumber - Object containing currentselected page
+   *
    * @memberof HomeContainer
+   *
    * @returns {void}
    */
   handlePageChange(pageNumber) {
@@ -204,6 +214,7 @@ export class HomeContainer extends React.Component {
    * @method showUserProfile
    *
    * @memberof HomeContainer
+   *
    * @returns {void}
    */
   showUserProfile() {
@@ -215,6 +226,7 @@ export class HomeContainer extends React.Component {
    * @method initializeNewDocument
    *
    * @memberof HomeContainer
+   *
    * @returns {void}
    */
   initializeNewDocument() {
@@ -247,7 +259,9 @@ export class HomeContainer extends React.Component {
    * @method logOut
    *
    * @param {Object} event - onClick event
+   *
    * @memberof HomeContainer
+   *
    * @returns {void}
    */
   logOut(event) {
@@ -259,6 +273,7 @@ export class HomeContainer extends React.Component {
    * @method render
    *
    * @returns {void}
+   *
    * @memberof HomeContainer
    */
   render() {
@@ -508,6 +523,7 @@ const mapDispatchToProps = {
  * @function mapStateToProps
  *
  * @param {Object} state - Redux state
+ *
  * @returns {object} props
  */
 const mapStateToProps = state => ({

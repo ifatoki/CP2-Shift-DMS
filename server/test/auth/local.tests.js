@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import local from '../../auth/local';
+import local from '../../auth/Local';
 
 describe('auth : local', () => {
   describe('encodeToken()', () => {

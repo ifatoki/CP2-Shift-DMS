@@ -3,13 +3,14 @@ const moment = require('moment');
 
 require('dotenv').config();
 
-const local = {
+const Local = {
   /**
    * Encodes the passed user object in a token
    * @function encodeToken
    *
    * @param {Object} user - User Object with basic id and username
    * @param {boolean} test - True to generate token that expires in 2ms
+   *
    * @returns {string} A token with encoded user details
    */
   encodeToken: (user, test) => {
@@ -28,6 +29,7 @@ const local = {
    *
    * @param {string} token - Token to be verified
    * @param {Callback} callback - Function callback on completion
+   *
    * @returns {void}
    */
   decodeToken: (token, callback) => {
@@ -40,4 +42,4 @@ const local = {
   }
 };
 
-export default local;
+export default Local;

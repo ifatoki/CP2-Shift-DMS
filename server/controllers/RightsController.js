@@ -5,6 +5,7 @@ import { Right, DocumentRole } from '../models';
  * @function returnServerError
  *
  * @param {Object} res - Server Response Object
+ *
  * @returns {void}
  */
 const returnServerError = res => (
@@ -13,13 +14,14 @@ const returnServerError = res => (
   })
 );
 
-const rightsController = {
+const RightsController = {
   /**
    * Create a new right with the passed data
    * @function create
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   create(req, res) {
@@ -42,7 +44,7 @@ const rightsController = {
               }))
               .catch(() => returnServerError());
           } else {
-            res.status(403).send({
+            res.status(409).send({
               message: 'right already exists'
             });
           }
@@ -61,6 +63,7 @@ const rightsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   list(req, res) {
@@ -75,4 +78,4 @@ const rightsController = {
   }
 };
 
-export default rightsController;
+export default RightsController;

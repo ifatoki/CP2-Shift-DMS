@@ -1,8 +1,8 @@
 import chai from 'chai';
 import request from 'supertest';
 import express from 'express';
-import authHelpers from '../../auth/helpers';
-import local from '../../auth/local';
+import AuthHelpers from '../../auth/AuthHelpers';
+import local from '../../auth/Local';
 import app from '../../app';
 
 const expect = chai.expect;
@@ -12,25 +12,25 @@ describe('auth : helpers', () => {
   const aWrongPassword = 'Smith';
   describe('Encrypt Password', () => {
     it('should return a string as the encrypted password', () => {
-      expect(authHelpers.encrypt(password)).to.be.a('string');
+      expect(AuthHelpers.encrypt(password)).to.be.a('string');
     });
     it(`should return null, when a null password or
     empty string is passed for encryption`,
     () => {
-      expect(authHelpers.encrypt(null)).to.eql(null);
-      expect(authHelpers.encrypt('')).to.eql(null);
+      expect(AuthHelpers.encrypt(null)).to.eql(null);
+      expect(AuthHelpers.encrypt('')).to.eql(null);
     });
   });
 
   describe('Compare Password', () => {
-    const encryptedPassword = authHelpers.encrypt(password);
+    const encryptedPassword = AuthHelpers.encrypt(password);
     it(`should throw Error('invalid password') when passwords
     don't match`, () => {
-      expect(() => authHelpers.comparePassword(aWrongPassword, password))
+      expect(() => AuthHelpers.comparePassword(aWrongPassword, password))
         .to.throw('invalid password');
     });
     it('should return TRUE when passwords match', () => {
-      expect(authHelpers.comparePassword(password, encryptedPassword))
+      expect(AuthHelpers.comparePassword(password, encryptedPassword))
         .to.eql(true);
     });
   });
@@ -53,7 +53,7 @@ describe('auth : helpers', () => {
     });
 
     const newApp = express();
-    newApp.get('/home', authHelpers.confirmAuthentication, (req, res) => {
+    newApp.get('/home', AuthHelpers.confirmAuthentication, (req, res) => {
       res.send({
         status: 'successful'
       });

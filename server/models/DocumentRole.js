@@ -1,24 +1,22 @@
 export default (sequelize, DataTypes) => {
-  const access = sequelize.define('Access', {
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
+  const DocumentRole = sequelize.define('DocumentRole', {
+    rightId: DataTypes.INTEGER
   }, {
     classMethods: {
       /**
        * @function associate
        *
        * @param {Object} models - Sequelize Models
+       *
        * @returns {void}
        */
       associate: (models) => {
         // associations can be defined here
-        access.hasMany(models.Document, {
-          foreignKey: 'accessId',
+        DocumentRole.belongsTo(models.Right, {
+          foreignKey: 'rightId'
         });
       }
     }
   });
-  return access;
+  return DocumentRole;
 };

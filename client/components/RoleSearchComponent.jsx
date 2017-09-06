@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
  * @function RoleSearchComponent
  *
  * @param {Object} props - Component Props
+ *
  * @returns {void}
  */
 const RoleSearchComponent = (props) => {

@@ -3,14 +3,14 @@ import assertArrays from 'chai-arrays';
 import request from 'supertest';
 import lodash from 'lodash';
 import app from '../../app';
-import tokens from '../helpers/tokens';
+import Tokens from '../helpers/Tokens';
 
 const { Role } = require('../../models');
 
 const expect = chai.expect;
 chai.use(assertArrays);
 
-const { overlordToken, userToken } = tokens;
+const { overlordToken, userToken } = Tokens;
 
 describe('Role Controllers:', () => {
   describe('Endpoints: Role', () => {

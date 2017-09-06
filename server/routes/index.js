@@ -1,12 +1,20 @@
 import confirmRole from '../controllers/middleware/confirmRole';
-import helpers from '../auth/helpers';
+import AuthHelpers from '../auth/AuthHelpers';
 import {
-  usersController,
-  documentsController,
-  rolesController,
-  rightsController
+  UsersController,
+  DocumentsController,
+  RolesController,
+  RightsController
 } from '../controllers';
 
+/**
+ * Function index that handles all endpoints
+ * @function index
+ *
+ * @param {any} app - instance of Express app
+ *
+ * @return {void}
+ */
 const index = (app) => {
   app.get('/api', (req, res) => res.status(200).send({
     message: 'Welcome to the Shift-DMS API!',
@@ -15,53 +23,53 @@ const index = (app) => {
   // USER END-POINTS
 
   // logs a user in
-  app.post('/api/v1/users/login', usersController.login);
+  app.post('/api/v1/users/login', UsersController.login);
   // creates a new user record
-  app.post('/api/v1/users', confirmRole, usersController.create);
+  app.post('/api/v1/users', confirmRole, UsersController.create);
 
   // From here on, middleware that confirms if a user is logged in.
 
   // logs a user out
   app.post(
     '/api/v1/users/logout',
-    helpers.confirmAuthentication,
-    usersController.logout
+    AuthHelpers.confirmAuthentication,
+    UsersController.logout
   );
   // find all users
   app.get(
     '/api/v1/users/',
-    helpers.confirmAuthentication,
-    usersController.fetch
+    AuthHelpers.confirmAuthentication,
+    UsersController.fetchAll
   );
   // find user with the specified id
   app.get(
     '/api/v1/users/:id',
-    helpers.confirmAuthentication,
-    usersController.fetchUser
+    AuthHelpers.confirmAuthentication,
+    UsersController.fetchOne
   );
   // update the user with the specified id's attributes
   app.put(
     '/api/v1/users/:id',
-    helpers.confirmAuthentication,
-    usersController.updateUser
+    AuthHelpers.confirmAuthentication,
+    UsersController.updateUser
   );
   // delete the specified user
   app.delete(
     '/api/v1/users/:id',
-    helpers.confirmAuthentication,
-    usersController.deleteUser
+    AuthHelpers.confirmAuthentication,
+    UsersController.deleteUser
   );
   // find all the documents belonging to the specified user
   app.get(
     '/api/v1/users/:id/documents',
-    helpers.confirmAuthentication,
-    usersController.fetchUserDocuments
+    AuthHelpers.confirmAuthentication,
+    UsersController.fetchUserDocuments
   );
   // search for user
   app.get(
     '/api/v1/search/users/',
-    helpers.confirmAuthentication,
-    usersController.search
+    AuthHelpers.confirmAuthentication,
+    UsersController.search
   );
 
 
@@ -70,43 +78,43 @@ const index = (app) => {
   // create a new document record
   app.post(
     '/api/v1/documents',
-    helpers.confirmAuthentication,
-    documentsController.create
+    AuthHelpers.confirmAuthentication,
+    DocumentsController.create
   );
   // find all documents
   app.get('/api/v1/documents/',
-    helpers.confirmAuthentication,
-    documentsController.fetchAll
+    AuthHelpers.confirmAuthentication,
+    DocumentsController.fetchAll
   );
   // find the specified document
   app.get(
     '/api/v1/documents/:id',
-    helpers.confirmAuthentication,
-    documentsController.fetchOne
+    AuthHelpers.confirmAuthentication,
+    DocumentsController.fetchOne
   );
   // update the specified documents attributes
   app.put(
     '/api/v1/documents/:id',
-    helpers.confirmAuthentication,
-    documentsController.update
+    AuthHelpers.confirmAuthentication,
+    DocumentsController.update
   );
   // delete the specified document
   app.delete(
     '/api/v1/documents/:id',
-    helpers.confirmAuthentication,
-    documentsController.delete
+    AuthHelpers.confirmAuthentication,
+    DocumentsController.delete
   );
   // search for a document
   app.get(
     '/api/v1/search/documents/',
-    helpers.confirmAuthentication,
-    documentsController.search
+    AuthHelpers.confirmAuthentication,
+    DocumentsController.search
   );
   // add a new role to the specified document
   app.post(
     '/api/v1/documents/:documentId',
-    helpers.confirmAuthentication,
-    documentsController.addUser
+    AuthHelpers.confirmAuthentication,
+    DocumentsController.addUser
   );
 
 
@@ -115,13 +123,13 @@ const index = (app) => {
   // create a new role record
   app.post(
     '/api/v1/roles',
-    helpers.confirmAuthentication,
-    rolesController.create
+    AuthHelpers.confirmAuthentication,
+    RolesController.create
   );
   // find all roles
   app.get(
     '/api/v1/roles',
-    rolesController.list
+    RolesController.list
   );
 
   // RIGHT END-POINTS
@@ -129,14 +137,14 @@ const index = (app) => {
   // create a new right record
   app.post(
     '/api/v1/rights',
-    helpers.confirmAuthentication,
-    rightsController.create
+    AuthHelpers.confirmAuthentication,
+    RightsController.create
   );
   // find all rights
   app.get(
     '/api/v1/rights',
-    helpers.confirmAuthentication,
-    rightsController.list
+    AuthHelpers.confirmAuthentication,
+    RightsController.list
   );
 };
 
