@@ -50,66 +50,94 @@ const getValidatorErrorMessage = errors => (
 );
 
 /**
+ * Confirms the role of the user.
+ * @function confirmRole
+ *
+ * @param {Object} req - Server Request Object
+ * @param {Object} user - A user object
+ * @returns {void}
+ */
+const confirmRole = (req, user) => {
+  if (req.body.roleId && req.body.roleId !== 1) {
+    return Role
+      .findById(req.body.roleId)
+      .then((role) => {
+        if (!role) {
+          throw new Error('no match found for the passed roleId');
+        } else {
+          return user;
+        }
+      })
+      .catch((error) => {
+        if (error.message !== 'no match found for the passed roleId') {
+          throw new Error('server error');
+        }
+        throw error;
+      });
+  }
+  return new Promise((resolve, reject) => {
+    if (req.body.roleId === 1) {
+      reject(new Error('user cannot be upgraded to overlord. change role Id'));
+    }
+    resolve(user);
+  });
+};
+
+/**
  * Update the user with the passed Id using the passed data
  * @function updateUser
  *
  * @param {Object} req - Server Request Object
  * @param {Object} res - Server Response Object
- * @param {Object} user -  A user Object
+ * @param {Object} unConfirmedUser -  A user Object
  * @return {void}
  */
-const updateUser = (req, res, user) => {
-  user.update({
-    username: req.body.username || user.username,
-    firstname: req.body.firstname || user.firstname,
-    lastname: req.body.lastname || user.lastname,
-    password: auth.encrypt(req.body.newPassword) || user.password,
-    roleId: req.body.roleId || user.roleId,
-    email: req.body.email || user.email
-  })
-  .then((updatedUser) => {
-    Role.findById(updatedUser.roleId)
-      .then((role) => {
-        const returnedUser = filterUser(user);
-
-        returnedUser.role = role.title;
-        res.status(200).send({
-          user: returnedUser
-        });
-      });
-  })
-  .catch(() => returnServerError(res));
-};
-
-/**
- * Confirms the role of the user.
- * @function confirmRole
- *
- * @param {Object} req - Server Request Object
- * @param {Object} res - Server Response Object
- * @param {Object} user - A user object
- * @returns {void}
- */
-const confirmRole = (req, res, user) => {
-  if (req.body.roleId && req.body.roleId !== 1) {
-    Role
-      .findById(req.body.roleId)
-      .then((role) => {
-        if (!role) {
-          res.status(404).send({
-            message: 'no match found for the passed roleId'
-          });
-        } else {
-          updateUser(req, res, user);
-        }
+const updateUser = (req, res, unConfirmedUser) => {
+  try {
+    confirmRole(req, unConfirmedUser)
+    .then((user) => {
+      user.update({
+        username: req.body.username || user.username,
+        firstname: req.body.firstname || user.firstname,
+        lastname: req.body.lastname || user.lastname,
+        password: auth.encrypt(req.body.newPassword) || user.password,
+        roleId: req.body.roleId || user.roleId,
+        email: req.body.email || user.email
       })
-      .catch(() => returnServerError(res));
-  } else if (req.body.roleId === 1) {
-    res.status(403).send({
-      message: 'user cannot be upgraded to overlord. change role Id'
-    });
-  } else {
-    updateUser(req, res, user);
+      .then((updatedUser) => {
+        Role.findById(updatedUser.roleId)
+          .then((role) => {
+            const returnedUser = filterUser(user);
+
+            returnedUser.role = role.title;
+            res.status(200).send({
+              user: returnedUser
+            });
+          });
+      })
+      .catch(() => {
+        throw new Error('server error');
+      });
+    })
+    .catch(((error) => {
+      const { message } = error;
+      if (message === 'no match found for the passed roleId') {
+        res.status(404).send({ message });
+      } else {
+        returnServerError(res);
+      }
+    }));
+  } catch (error) {
+    const { message } = error;
+    if (message === 'no match found for the passed roleId') {
+      res.status(404).send({ message });
+    } else if (
+      message === 'user cannot be upgraded to overlord. change role Id'
+    ) {
+      res.status(409).send({ message });
+    } else {
+      returnServerError(res);
+    }
   }
 };
 
@@ -417,12 +445,12 @@ const usersController = {
                         'a user already has that email address or username'
                     });
                   } else {
-                    confirmRole(req, res, user);
+                    updateUser(req, res, user);
                   }
                 })
                 .catch(() => returnServerError(res));
               } else {
-                confirmRole(req, res, user);
+                updateUser(req, res, user);
               }
             }
           })
