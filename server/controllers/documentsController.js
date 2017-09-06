@@ -189,14 +189,14 @@ const documentsController = {
       accessId,
       ownerId: req.userId,
     };
-    if (req.body.roles) {
-      documentData.accessId =
-        Object.keys(roles).length ? 3 : accessId;
-      documentData.rolesIds = Object.keys(roles);
-      documentData.roles = roles;
-    }
     const validation = Validator.validateNewDocument(documentData);
     if (validation.isValid) {
+      if (req.body.roles) {
+        documentData.accessId =
+          Object.keys(roles).length ? 3 : accessId;
+        documentData.rolesIds = Object.keys(roles);
+        documentData.roles = roles;
+      }
       Document
       .findOne({
         where: {
