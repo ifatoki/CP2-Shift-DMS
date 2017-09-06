@@ -151,29 +151,32 @@ const usersController = {
    * @returns {void}
    */
   create: (req, res) => {
+    const {
+      username, email, firstname, lastname, password, confirmPassword, roleId
+    } = req.body;
     const userData = {
-      username: req.body.username,
-      email: req.body.email,
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      password: req.body.password,
-      confirmPassword: req.body.confirmPassword,
-      roleId: req.body.roleId
+      username,
+      email,
+      firstname,
+      lastname,
+      password,
+      confirmPassword,
+      roleId
     };
 
     const validation = Validator.validateSignUp(userData);
     if (validation.isValid) {
-      Role.findById(req.body.roleId)
+      Role.findById(roleId)
       .then((role) => {
         if (role) {
           User
             .create({
-              username: req.body.username,
-              email: req.body.email,
-              firstname: req.body.firstname,
-              lastname: req.body.lastname,
-              password: auth.encrypt(req.body.password),
-              roleId: req.body.roleId
+              username,
+              email,
+              firstname,
+              lastname,
+              roleId,
+              password: auth.encrypt(password),
             })
             .then((user) => {
               const token = local.encodeToken({
@@ -402,15 +405,26 @@ const usersController = {
    * @returns {void}
    */
   updateUser: (req, res) => {
+    const {
+      username,
+      firstname,
+      lastname,
+      newPassword,
+      currentPassword,
+      confirmPassword,
+      roleId,
+      email
+    } = req.body;
+
     const userData = {
-      username: req.body.username,
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      newPassword: req.body.newPassword,
-      currentPassword: req.body.currentPassword,
-      confirmPassword: req.body.confirmPassword,
-      roleId: req.body.roleId,
-      email: req.body.email
+      username,
+      firstname,
+      lastname,
+      newPassword,
+      currentPassword,
+      confirmPassword,
+      roleId,
+      email
     };
     const validation = Validator.validateUserEdit(userData);
     if (validation.isValid) {
@@ -431,11 +445,9 @@ const usersController = {
               if (userData.email || userData.username) {
                 User.find({
                   where: {
-                    $or: [{
-                      email: req.body.email,
-                    }, {
-                      username: req.body.username
-                    }]
+                    $or: [
+                      { email }, { username }
+                    ]
                   }
                 })
                 .then((conflictingUser) => {
@@ -529,24 +541,25 @@ const usersController = {
    * @returns {void}
    */
   search: (req, res) => {
+    const query = req.query.q;
     User
     .findAll({
       where: {
         $or: [{
           username: {
-            $ilike: `%${req.query.q}%`
+            $ilike: `%${query}%`
           }
         }, {
           email: {
-            $ilike: `%${req.query.q}%`
+            $ilike: `%${query}%`
           }
         }, {
           firstname: {
-            $ilike: `%${req.query.q}%`
+            $ilike: `%${query}%`
           }
         }, {
           lastname: {
-            $ilike: `%${req.query.q}%`
+            $ilike: `%${query}%`
           }
         }],
         roleId: {
