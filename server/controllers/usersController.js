@@ -141,6 +141,19 @@ const updateUser = (req, res, unConfirmedUser) => {
   }
 };
 
+/**
+ * Return a 404 error and send a document not found error message
+ * @function returnUserNotFound
+ *
+ * @param {Object} res - Server Response Object
+ * @return {void}
+ */
+const returnUserNotFound = res => (
+  res.status(404).send({
+    message: 'user not found'
+  })
+);
+
 const usersController = {
   /**
    * Create a new user using passed data
@@ -326,9 +339,7 @@ const usersController = {
         .findById(req.params.id)
         .then((user) => {
           if (!user) {
-            res.status(404).send({
-              message: 'user not found'
-            });
+            returnUserNotFound(res);
           } else {
             Role.findById(user.roleId)
               .then((role) => {
@@ -369,9 +380,7 @@ const usersController = {
         })
         .then((user) => {
           if (!user) {
-            res.status(404).send({
-              message: 'user not found'
-            });
+            returnUserNotFound(res);
           } else if (parseInt(req.params.id, 10) !== req.userId) {
             res.status(403).send({
               message: "you can't fetch another users documents"
@@ -433,9 +442,7 @@ const usersController = {
           .findById(req.params.id)
           .then((user) => {
             if (!user) {
-              res.status(404).send({
-                message: 'user not found'
-              });
+              returnUserNotFound(res);
             } else {
               if (userData.newPassword) {
                 auth.comparePassword(
@@ -506,9 +513,7 @@ const usersController = {
           .findById(req.params.id)
           .then((user) => {
             if (!user) {
-              res.status(404).send({
-                message: 'user not found'
-              });
+              returnUserNotFound(res);
             } else {
               user.destroy({
                 cascade: true
