@@ -2,6 +2,13 @@ import lodash from 'lodash';
 import { User, Document, Role } from '../models';
 import Validator from '../utils/Validator';
 
+// Enum to hold all possible document types
+const documentTypesEnum = {
+  PRIVATE: 1,
+  PUBLIC: 2,
+  SHARED: 3
+};
+
 /**
  * Returns a 500 server error with the server response
  * @function returnServerError
@@ -246,14 +253,14 @@ const documentsController = {
     const query = {};
     switch (req.query.type) {
     case 'public':
-      query.accessId = 2;
+      query.accessId = documentTypesEnum.PUBLIC;
       break;
     case 'role':
     case 'shared':
       query.ownerId = req.userId;
       break;
     default:
-      query.accessId = 1;
+      query.accessId = documentTypesEnum.PRIVATE;
       query.ownerId = req.userId;
       break;
     }
