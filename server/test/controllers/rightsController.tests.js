@@ -63,7 +63,7 @@ describe('Right Controllers:', () => {
             done(err);
           });
       });
-      it(`should return 403 error when a right with the 
+      it(`should return 409 error when a right with the 
       same title already exists`, (done) => {
         request(app)
           .post('/api/v1/rights')
@@ -74,7 +74,7 @@ describe('Right Controllers:', () => {
             description: 'My awesome avatar'
           })
           .then((res) => {
-            expect(res.status).to.equal(403);
+            expect(res.status).to.equal(409);
             expect(res.body)
               .to.have.property('message')
               .which.equals('right already exists');

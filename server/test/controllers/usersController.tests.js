@@ -218,7 +218,7 @@ describe('User Controllers : ', () => {
               done(err);
             });
         });
-      it('should return 403 error when username already exists',
+      it('should return 409 error when username already exists',
         (done) => {
           request(app)
             .post('/api/v1/users')
@@ -228,7 +228,7 @@ describe('User Controllers : ', () => {
               username: 'itunuworks'
             })
             .then((res) => {
-              expect(res.status).to.equal(403);
+              expect(res.status).to.equal(409);
               expect(res.body)
                 .to.have.property('message')
                 .which.equals(
@@ -240,7 +240,7 @@ describe('User Controllers : ', () => {
               done(err);
             });
         });
-      it('should return 403 error when new overlord is requested created',
+      it('should return 409 error when new overlord is requested created',
         (done) => {
           request(app)
             .post('/api/v1/users')
@@ -250,7 +250,7 @@ describe('User Controllers : ', () => {
               roleId: 1
             })
             .then((res) => {
-              expect(res.status).to.equal(403);
+              expect(res.status).to.equal(409);
               expect(res.body)
                 .to.have.property('message')
                 .which.equals(
@@ -405,7 +405,7 @@ describe('User Controllers : ', () => {
             done(err);
           });
       });
-      it('should return 403 error when update email already exists',
+      it('should return 409 error when update email already exists',
         (done) => {
           const newEmail = users.admin.email;
           request(app)
@@ -416,7 +416,7 @@ describe('User Controllers : ', () => {
               email: newEmail
             })
             .then((res) => {
-              expect(res.status).to.equal(403);
+              expect(res.status).to.equal(409);
               expect(res.body)
                 .to.have.property('message').which
                 .equals('a user already has that email address or username');

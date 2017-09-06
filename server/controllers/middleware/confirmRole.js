@@ -32,7 +32,7 @@ function confirmUserDetails(req, res, next) {
       }
     })
     .catch((error) => {
-      res.status(403).send({
+      res.status(409).send({
         message: error.message
       });
     });
@@ -65,7 +65,7 @@ export default function confirmRole(req, res, next) {
         }
       })
       .catch((error) => {
-        res.status(403).send({
+        res.status(409).send({
           message: error.message
         });
       });

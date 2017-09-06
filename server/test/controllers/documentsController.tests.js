@@ -118,13 +118,13 @@ describe('Document Controllers :', () => {
             })
             .catch(err => done(err));
         });
-        it('should return error 403 when title already exists', (done) => {
+        it('should return error 409 when title already exists', (done) => {
           request(app)
             .post('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)
             .type('form')
             .send(privateDoc1)
-            .expect(403)
+            .expect(409)
             .then((res) => {
               expect(res.body)
                 .to.have.property('message')
@@ -133,13 +133,13 @@ describe('Document Controllers :', () => {
             })
             .catch(err => done(err));
         });
-        it('should return error 403 when title already exists', (done) => {
+        it('should return error 409 when title already exists', (done) => {
           request(app)
             .post('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)
             .type('form')
             .send(privateDoc1)
-            .expect(403)
+            .expect(409)
             .then((res) => {
               expect(res.body)
                 .to.have.property('message')

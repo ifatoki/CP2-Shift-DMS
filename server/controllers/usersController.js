@@ -459,7 +459,7 @@ const usersController = {
                 })
                 .then((conflictingUser) => {
                   if (conflictingUser) {
-                    res.status(403).send({
+                    res.status(409).send({
                       message:
                         'a user already has that email address or username'
                     });

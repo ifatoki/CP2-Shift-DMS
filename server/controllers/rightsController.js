@@ -42,7 +42,7 @@ const rightsController = {
               }))
               .catch(() => returnServerError());
           } else {
-            res.status(403).send({
+            res.status(409).send({
               message: 'right already exists'
             });
           }

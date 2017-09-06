@@ -205,7 +205,7 @@ const documentsController = {
       })
       .then((document) => {
         if (document) {
-          res.status(403).send({
+          res.status(409).send({
             message: 'a document with that title already exists'
           });
         } else {
@@ -425,7 +425,7 @@ const documentsController = {
             })
             .then((duplicateDocument) => {
               if (duplicateDocument) {
-                res.status(403).send({
+                res.status(409).send({
                   message: 'a document with that title already exists'
                 });
               } else if (document.ownerId === req.userId) {
