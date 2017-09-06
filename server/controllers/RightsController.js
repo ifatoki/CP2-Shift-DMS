@@ -13,7 +13,7 @@ const returnServerError = res => (
   })
 );
 
-const rightsController = {
+const RightsController = {
   /**
    * Create a new right with the passed data
    * @function create
@@ -75,4 +75,4 @@ const rightsController = {
   }
 };
 
-export default rightsController;
+export default RightsController;

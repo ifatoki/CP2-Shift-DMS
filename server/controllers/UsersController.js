@@ -1,7 +1,7 @@
 import lodash from 'lodash';
 import Validator from '../utils/Validator';
-import auth from '../auth/helpers';
-import local from '../auth/local';
+import AuthHelpers from '../auth/AuthHelpers';
+import local from '../auth/Local';
 import { User, Role } from '../models';
 
 /**
@@ -100,7 +100,7 @@ const updateUser = (req, res, unConfirmedUser) => {
         username: req.body.username || user.username,
         firstname: req.body.firstname || user.firstname,
         lastname: req.body.lastname || user.lastname,
-        password: auth.encrypt(req.body.newPassword) || user.password,
+        password: AuthHelpers.encrypt(req.body.newPassword) || user.password,
         roleId: req.body.roleId || user.roleId,
         email: req.body.email || user.email
       })
@@ -154,7 +154,7 @@ const returnUserNotFound = res => (
   })
 );
 
-const usersController = {
+const UsersController = {
   /**
    * Create a new user using passed data
    * @function create
@@ -189,7 +189,7 @@ const usersController = {
               firstname,
               lastname,
               roleId,
-              password: auth.encrypt(password),
+              password: AuthHelpers.encrypt(password),
             })
             .then((user) => {
               const token = local.encodeToken({
@@ -238,7 +238,7 @@ const usersController = {
       })
       .then((user) => {
         if (!user) throw new Error('user not found');
-        auth.comparePassword(req.body.password, user.password);
+        AuthHelpers.comparePassword(req.body.password, user.password);
         return user;
       })
       .then((user) => {
@@ -445,7 +445,7 @@ const usersController = {
               returnUserNotFound(res);
             } else {
               if (userData.newPassword) {
-                auth.comparePassword(
+                AuthHelpers.comparePassword(
                   userData.currentPassword, user.password
                 );
               }
@@ -580,4 +580,4 @@ const usersController = {
   }
 };
 
-export default usersController;
+export default UsersController;

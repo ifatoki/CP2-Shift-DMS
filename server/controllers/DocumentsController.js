@@ -176,7 +176,7 @@ const returnDocumentNotFound = res => (
   })
 );
 
-const documentsController = {
+const DocumentsController = {
   /**
    * Create a new document with the passed details
    * @function create
@@ -722,4 +722,4 @@ const documentsController = {
   }
 };
 
-export default documentsController;
+export default DocumentsController;

@@ -2,14 +2,14 @@ import chai from 'chai';
 import assertArrays from 'chai-arrays';
 import request from 'supertest';
 import app from '../../app';
-import tokens from '../helpers/tokens';
+import Tokens from '../helpers/Tokens';
 
 const { Right } = require('../../models');
 
 const expect = chai.expect;
 chai.use(assertArrays);
 
-const { overlordToken } = tokens;
+const { overlordToken } = Tokens;
 
 describe('Right Controllers:', () => {
   describe('Endpoints: Right', () => {

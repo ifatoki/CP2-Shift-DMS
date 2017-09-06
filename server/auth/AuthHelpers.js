@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
-import local from './local';
+import Local from './Local';
 import { User } from '../models';
 
-const helpers = {
+const AuthHelpers = {
   /**
    * Encrypts a password and returns the new encrypted one.
    * @function encrypt
@@ -56,7 +56,7 @@ const helpers = {
     // decode the token
     const header = req.headers.authorization.split(' ');
     const token = header[1];
-    local.decodeToken(token, (err, payload) => {
+    Local.decodeToken(token, (err, payload) => {
       let status;
       let statusMessage;
       if (err) {
@@ -90,4 +90,4 @@ const helpers = {
   }
 };
 
-export default helpers;
+export default AuthHelpers;

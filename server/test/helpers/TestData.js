@@ -16,8 +16,8 @@ const getUsers = lodash.reduce(roles, (users, role) => {
   return users;
 }, {});
 
-const testData = {
+const TestData = {
   users: getUsers
 };
 
-export default testData;
+export default TestData;

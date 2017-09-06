@@ -3,14 +3,14 @@ import assertArrays from 'chai-arrays';
 import request from 'supertest';
 import faker from 'faker';
 import app from '../../app';
-import tokens from '../helpers/tokens';
+import Tokens from '../helpers/Tokens';
 
 const { User, Document } = require('../../models');
 
 const expect = chai.expect;
 chai.use(assertArrays);
 
-const { overlordToken, userToken, nonExistingUserToken } = tokens;
+const { overlordToken, userToken, nonExistingUserToken } = Tokens;
 
 describe('Document Controllers :', () => {
   describe('Endpoints: Document', () => {

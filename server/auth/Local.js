@@ -3,7 +3,7 @@ const moment = require('moment');
 
 require('dotenv').config();
 
-const local = {
+const Local = {
   /**
    * Encodes the passed user object in a token
    * @function encodeToken
@@ -40,4 +40,4 @@ const local = {
   }
 };
 
-export default local;
+export default Local;

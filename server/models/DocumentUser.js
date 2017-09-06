@@ -1,9 +1,6 @@
 export default (sequelize, DataTypes) => {
-  const access = sequelize.define('Access', {
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
+  const DocumentUser = sequelize.define('DocumentUser', {
+    rightId: DataTypes.INTEGER
   }, {
     classMethods: {
       /**
@@ -13,12 +10,11 @@ export default (sequelize, DataTypes) => {
        * @returns {void}
        */
       associate: (models) => {
-        // associations can be defined here
-        access.hasMany(models.Document, {
-          foreignKey: 'accessId',
+        DocumentUser.belongsTo(models.Right, {
+          foreignKey: 'rightId'
         });
       }
     }
   });
-  return access;
+  return DocumentUser;
 };

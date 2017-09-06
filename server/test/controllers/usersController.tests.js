@@ -4,18 +4,18 @@ import request from 'supertest';
 import lodash from 'lodash';
 import faker from 'faker';
 import app from '../../app';
-import tokens from '../helpers/tokens';
-import testData from '../helpers/testData';
-import local from '../../auth/local';
-import helpers from '../../auth/helpers';
+import Tokens from '../helpers/Tokens';
+import TestData from '../helpers/TestData';
+import local from '../../auth/Local';
+import AuthHelpers from '../../auth/AuthHelpers';
 
 const { User } = require('../../models');
 
 const expect = chai.expect;
 chai.use(assertArrays);
 
-const { overlordToken, userToken, nonExistingUserToken } = tokens;
-const { users } = testData;
+const { overlordToken, userToken, nonExistingUserToken } = Tokens;
+const { users } = TestData;
 
 describe('User Controllers : ', () => {
   describe('Endpoints: User', () => {
@@ -510,7 +510,7 @@ describe('User Controllers : ', () => {
                   attributes: ['password']
                 })
                 .then((modifiedUser) => {
-                  expect(helpers
+                  expect(AuthHelpers
                     .comparePassword(newPassword, modifiedUser.password)
                   ).to.eql(true);
                 });

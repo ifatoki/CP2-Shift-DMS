@@ -27,7 +27,7 @@ const filterRole = role => ({
   createdAt: role.createdAt
 });
 
-const rolesController = {
+const RolesController = {
   /**
    * Create a new role using the passed data
    * @function create
@@ -81,4 +81,4 @@ const rolesController = {
   }
 };
 
-export default rolesController;
+export default RolesController;
