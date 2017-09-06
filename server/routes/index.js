@@ -31,13 +31,13 @@ const index = (app) => {
   app.get(
     '/api/v1/users/',
     helpers.confirmAuthentication,
-    usersController.fetch
+    usersController.fetchAll
   );
   // find user with the specified id
   app.get(
     '/api/v1/users/:id',
     helpers.confirmAuthentication,
-    usersController.fetchUser
+    usersController.fetchOne
   );
   // update the user with the specified id's attributes
   app.put(

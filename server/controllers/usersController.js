@@ -247,7 +247,7 @@ const usersController = {
    * @param {Object} res - Server Response Object
    * @returns {void}
    */
-  fetch: (req, res) => {
+  fetchAll: (req, res) => {
     if (req.roleId === 1) {
       User
         .findAll({
@@ -289,7 +289,7 @@ const usersController = {
    * @param {Object} res - Server Response Object
    * @returns {void}
    */
-  fetchUser: (req, res) => {
+  fetchOne: (req, res) => {
     if (!isNaN(parseInt(req.params.id, 10))) {
       User
         .findById(req.params.id)
