@@ -35,13 +35,10 @@ const getValidatorErrorMessage = errors => (
  * @param {Object} document - Document Object
  * @return {Object} A filtered document
  */
-const filterDocument = document => ({
-  id: document.id,
-  title: document.title,
-  content: document.content,
-  updatedAt: document.updatedAt,
-  ownerId: document.ownerId,
-  accessId: document.accessId
+const filterDocument = ({
+  id, title, content, updatedAt, ownerId, accessId
+}) => ({
+  id, title, content, updatedAt, ownerId, accessId
 });
 
 /**
@@ -182,24 +179,28 @@ const documentsController = {
    * @returns {void}
    */
   create: (req, res) => {
+    const {
+      title, content, accessId, roles
+    } = req.body;
+
     const documentData = {
-      title: req.body.title,
-      content: req.body.content,
+      title,
+      content,
+      accessId,
       ownerId: req.userId,
-      accessId: req.body.accessId
     };
     if (req.body.roles) {
       documentData.accessId =
-        Object.keys(req.body.roles).length ? 3 : req.body.accessId;
-      documentData.rolesIds = Object.keys(req.body.roles);
-      documentData.roles = req.body.roles;
+        Object.keys(roles).length ? 3 : accessId;
+      documentData.rolesIds = Object.keys(roles);
+      documentData.roles = roles;
     }
     const validation = Validator.validateNewDocument(documentData);
     if (validation.isValid) {
       Document
       .findOne({
         where: {
-          title: req.body.title
+          title,
         }
       })
       .then((document) => {
@@ -396,10 +397,13 @@ const documentsController = {
    * @return {void}
    */
   update: (req, res) => {
+    const {
+      title, content, accessId
+    } = req.body;
     const documentData = {
-      title: req.body.title,
-      content: req.body.content,
-      accessId: req.body.accessId
+      title,
+      content,
+      accessId,
     };
 
     const validation = Validator.validateDocumentEdit(documentData);
@@ -413,7 +417,7 @@ const documentsController = {
           Document
             .findOne({
               where: {
-                title: req.body.title,
+                title,
                 id: {
                   $ne: document.id
                 }
