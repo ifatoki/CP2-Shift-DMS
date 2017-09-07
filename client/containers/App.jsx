@@ -9,6 +9,7 @@ export /** The Root Application Component
  * @function App
  *
  * @param {Object} props - Component Props
+ *
  * @return {void}
  */
 const App = props => (

@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const documentUser = sequelize.define('DocumentUser', {
+  const DocumentUser = sequelize.define('DocumentUser', {
     rightId: DataTypes.INTEGER
   }, {
     classMethods: {
@@ -7,14 +7,15 @@ export default (sequelize, DataTypes) => {
        * @function associate
        *
        * @param {Object} models - Sequelize Models
+       *
        * @returns {void}
        */
       associate: (models) => {
-        documentUser.belongsTo(models.Right, {
+        DocumentUser.belongsTo(models.Right, {
           foreignKey: 'rightId'
         });
       }
     }
   });
-  return documentUser;
+  return DocumentUser;
 };

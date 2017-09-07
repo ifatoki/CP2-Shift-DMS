@@ -36,7 +36,9 @@ const server = http.createServer(app);
  * @function onError
  *
  * @param {Error} error - Error thrown
+ *
  * @throws {Error} when an error occurs
+ *
  * @return {void}
  */
 const onError = (error) => {
@@ -59,6 +61,7 @@ const onError = (error) => {
 /**
  * Handle successful listening
  * @function onListening
+ *
  * @returns {void}
  */
 const onListening = () => {

@@ -32,13 +32,16 @@ toastr.options = {
  * an environment to modify documents
  *
  * @export DocumentManager
+ *
  * @class DocumentManager
+ *
  * @extends {React.Component}
  */
 export class DocumentManager extends React.Component {
   /**
    * Creates an instance of DocumentManager.
    * @param {Object} props - Component Props
+   *
    * @memberof DocumentManager
    */
   constructor(props) {
@@ -119,7 +122,9 @@ export class DocumentManager extends React.Component {
    *
    * @param {Object} event - onClick event
    * @param {Object} data - onClick event data
+   *
    * @memberof DocumentManager
+   *
    * @returns {void}
    */
   onRolesChange(event, data) {
@@ -133,7 +138,9 @@ export class DocumentManager extends React.Component {
    * @method onChange
    *
    * @param {Object} event - onChange event
+   *
    * @memberof DocumentManager
+   *
    * @returns {void}
    */
   onChange(event) {
@@ -150,7 +157,9 @@ export class DocumentManager extends React.Component {
    *
    * @param {Object} event - onChange event
    * @param {Object} eventData - onChange event data
+   *
    * @memberof DocumentManager
+   *
    * @returns {void}
    */
   handleRadioButtonChange(event, { value }) {
@@ -169,7 +178,9 @@ export class DocumentManager extends React.Component {
    * @method saveDocument
    *
    * @param {Object} event - onClick event
+   *
    * @memberof DocumentManager
+   *
    * @returns {void}
    */
   saveDocument(event) {
@@ -218,8 +229,10 @@ export class DocumentManager extends React.Component {
    * @method editDocument
    *
    * @param {Object} event - onClick event
+   *
    * @memberof DocumentManager
    * @memberof DocumentManager
+   *
    * @returns {void}
    */
   editDocument(event) {
@@ -238,7 +251,9 @@ export class DocumentManager extends React.Component {
    * @method cancelNewDocument
    *
    * @param {Object} event - onClick event
+   *
    * @memberof DocumentManager
+   *
    * @returns {void}
    */
   cancelNewDocument(event) {
@@ -250,6 +265,7 @@ export class DocumentManager extends React.Component {
    * @method render
    *
    * @returns {void}
+   *
    * @memberof DocumentManager
    */
   render() {
@@ -432,6 +448,7 @@ const mapDispatchToProps = {
  * @function mapStateToProps
  *
  * @param {Object} state - Redux state
+ *
  * @return {object} props
  */
 const mapStateToProps = state => ({

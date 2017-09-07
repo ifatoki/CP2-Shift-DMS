@@ -8,6 +8,7 @@ import { usersDefaultState } from '../reducers/initialStates';
  *
  * @param {any} [state = initialState] - Redux store state
  * @param {any} action - Action triggered
+ *
  * @returns {object} state
  */
 function users(state = usersDefaultState, action) {

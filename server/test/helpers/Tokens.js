@@ -1,6 +1,6 @@
-import local from '../../auth/local';
+import local from '../../auth/Local';
 
-const tokens = {
+const Tokens = {
   overlordToken: local.encodeToken({
     id: 1,
     username: 'itunuworks',
@@ -17,4 +17,4 @@ const tokens = {
   })
 };
 
-export default tokens;
+export default Tokens;

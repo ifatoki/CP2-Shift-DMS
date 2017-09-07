@@ -3,14 +3,14 @@ import assertArrays from 'chai-arrays';
 import request from 'supertest';
 import faker from 'faker';
 import app from '../../app';
-import tokens from '../helpers/tokens';
+import Tokens from '../helpers/Tokens';
 
 const { User, Document } = require('../../models');
 
 const expect = chai.expect;
 chai.use(assertArrays);
 
-const { overlordToken, userToken, nonExistingUserToken } = tokens;
+const { overlordToken, userToken, nonExistingUserToken } = Tokens;
 
 describe('Document Controllers :', () => {
   describe('Endpoints: Document', () => {
@@ -118,13 +118,13 @@ describe('Document Controllers :', () => {
             })
             .catch(err => done(err));
         });
-        it('should return error 403 when title already exists', (done) => {
+        it('should return error 409 when title already exists', (done) => {
           request(app)
             .post('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)
             .type('form')
             .send(privateDoc1)
-            .expect(403)
+            .expect(409)
             .then((res) => {
               expect(res.body)
                 .to.have.property('message')
@@ -133,13 +133,13 @@ describe('Document Controllers :', () => {
             })
             .catch(err => done(err));
         });
-        it('should return error 403 when title already exists', (done) => {
+        it('should return error 409 when title already exists', (done) => {
           request(app)
             .post('/api/v1/documents')
             .set('authorization', `bearer ${userToken}`)
             .type('form')
             .send(privateDoc1)
-            .expect(403)
+            .expect(409)
             .then((res) => {
               expect(res.body)
                 .to.have.property('message')

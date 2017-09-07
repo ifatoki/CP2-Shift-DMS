@@ -1,7 +1,7 @@
 import lodash from 'lodash';
 import Validator from '../utils/Validator';
-import auth from '../auth/helpers';
-import local from '../auth/local';
+import AuthHelpers from '../auth/AuthHelpers';
+import local from '../auth/Local';
 import { User, Role } from '../models';
 
 /**
@@ -9,6 +9,7 @@ import { User, Role } from '../models';
  * @function returnServerError
  *
  * @param {Object} res - Server Response Object
+ *
  * @returns {void}
  */
 const returnServerError = res => (
@@ -22,6 +23,7 @@ const returnServerError = res => (
  * @function filterUser
  *
  * @param {Object} User - A User Object
+ *
  * @returns {Object} A filtered user object
  */
 const filterUser = ({
@@ -41,6 +43,7 @@ const filterUser = ({
  * @function getValidatorErrorMessage
  *
  * @param {Object} errors - An errors Object
+ *
  * @returns {string} A summary of all errors
  */
 const getValidatorErrorMessage = errors => (
@@ -50,102 +53,150 @@ const getValidatorErrorMessage = errors => (
 );
 
 /**
+ * Confirms the role of the user.
+ * @function confirmRole
+ *
+ * @param {Object} req - Server Request Object
+ * @param {Object} user - A user object
+ *
+ * @returns {void}
+ */
+const confirmRole = (req, user) => {
+  if (req.body.roleId && req.body.roleId !== 1) {
+    return Role
+      .findById(req.body.roleId)
+      .then((role) => {
+        if (!role) {
+          throw new Error('no match found for the passed roleId');
+        } else {
+          return user;
+        }
+      })
+      .catch((error) => {
+        if (error.message !== 'no match found for the passed roleId') {
+          throw new Error('server error');
+        }
+        throw error;
+      });
+  }
+  return new Promise((resolve, reject) => {
+    if (req.body.roleId === 1) {
+      reject(new Error('user cannot be upgraded to overlord. change role Id'));
+    }
+    resolve(user);
+  });
+};
+
+/**
  * Update the user with the passed Id using the passed data
  * @function updateUser
  *
  * @param {Object} req - Server Request Object
  * @param {Object} res - Server Response Object
- * @param {Object} user -  A user Object
+ * @param {Object} unConfirmedUser -  A user Object
+ *
  * @return {void}
  */
-const updateUser = (req, res, user) => {
-  user.update({
-    username: req.body.username || user.username,
-    firstname: req.body.firstname || user.firstname,
-    lastname: req.body.lastname || user.lastname,
-    password: auth.encrypt(req.body.newPassword) || user.password,
-    roleId: req.body.roleId || user.roleId,
-    email: req.body.email || user.email
-  })
-  .then((updatedUser) => {
-    Role.findById(updatedUser.roleId)
-      .then((role) => {
-        const returnedUser = filterUser(user);
-
-        returnedUser.role = role.title;
-        res.status(200).send({
-          user: returnedUser
-        });
-      });
-  })
-  .catch(() => returnServerError(res));
-};
-
-/**
- * Confirms the role of the user.
- * @function confirmRole
- *
- * @param {Object} req - Server Request Object
- * @param {Object} res - Server Response Object
- * @param {Object} user - A user object
- * @returns {void}
- */
-const confirmRole = (req, res, user) => {
-  if (req.body.roleId && req.body.roleId !== 1) {
-    Role
-      .findById(req.body.roleId)
-      .then((role) => {
-        if (!role) {
-          res.status(404).send({
-            message: 'no match found for the passed roleId'
-          });
-        } else {
-          updateUser(req, res, user);
-        }
+const updateUser = (req, res, unConfirmedUser) => {
+  try {
+    confirmRole(req, unConfirmedUser)
+    .then((user) => {
+      user.update({
+        username: req.body.username || user.username,
+        firstname: req.body.firstname || user.firstname,
+        lastname: req.body.lastname || user.lastname,
+        password: AuthHelpers.encrypt(req.body.newPassword) || user.password,
+        roleId: req.body.roleId || user.roleId,
+        email: req.body.email || user.email
       })
-      .catch(() => returnServerError(res));
-  } else if (req.body.roleId === 1) {
-    res.status(403).send({
-      message: 'user cannot be upgraded to overlord. change role Id'
-    });
-  } else {
-    updateUser(req, res, user);
+      .then((updatedUser) => {
+        Role.findById(updatedUser.roleId)
+          .then((role) => {
+            const returnedUser = filterUser(user);
+
+            returnedUser.role = role.title;
+            res.status(200).send({
+              user: returnedUser
+            });
+          });
+      })
+      .catch(() => {
+        throw new Error('server error');
+      });
+    })
+    .catch(((error) => {
+      const { message } = error;
+      if (message === 'no match found for the passed roleId') {
+        res.status(404).send({ message });
+      } else {
+        returnServerError(res);
+      }
+    }));
+  } catch (error) {
+    const { message } = error;
+    if (message === 'no match found for the passed roleId') {
+      res.status(404).send({ message });
+    } else if (
+      message === 'user cannot be upgraded to overlord. change role Id'
+    ) {
+      res.status(409).send({ message });
+    } else {
+      returnServerError(res);
+    }
   }
 };
 
-const usersController = {
+/**
+ * Return a 404 error and send a document not found error message
+ * @function returnUserNotFound
+ *
+ * @param {Object} res - Server Response Object
+ *
+ * @return {void}
+ */
+const returnUserNotFound = res => (
+  res.status(404).send({
+    message: 'user not found'
+  })
+);
+
+const UsersController = {
   /**
    * Create a new user using passed data
    * @function create
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   create: (req, res) => {
+    const {
+      username, email, firstname, lastname, password, confirmPassword, roleId
+    } = req.body;
     const userData = {
-      username: req.body.username,
-      email: req.body.email,
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      password: req.body.password,
-      confirmPassword: req.body.confirmPassword,
-      roleId: req.body.roleId
+      username,
+      email,
+      firstname,
+      lastname,
+      password,
+      confirmPassword,
+      roleId
     };
 
     const validation = Validator.validateSignUp(userData);
     if (validation.isValid) {
-      Role.findById(req.body.roleId)
+      Role.findById(roleId)
       .then((role) => {
         if (role) {
           User
             .create({
-              username: req.body.username,
-              email: req.body.email,
-              firstname: req.body.firstname,
-              lastname: req.body.lastname,
-              password: auth.encrypt(req.body.password),
-              roleId: req.body.roleId
+              username,
+              email,
+              firstname,
+              lastname,
+              roleId,
+              password: AuthHelpers.encrypt(password),
             })
             .then((user) => {
               const token = local.encodeToken({
@@ -180,6 +231,7 @@ const usersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   login: (req, res) => {
@@ -194,7 +246,7 @@ const usersController = {
       })
       .then((user) => {
         if (!user) throw new Error('user not found');
-        auth.comparePassword(req.body.password, user.password);
+        AuthHelpers.comparePassword(req.body.password, user.password);
         return user;
       })
       .then((user) => {
@@ -231,6 +283,7 @@ const usersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   logout: (req, res) => {
@@ -245,9 +298,10 @@ const usersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
-  fetch: (req, res) => {
+  fetchAll: (req, res) => {
     if (req.roleId === 1) {
       User
         .findAll({
@@ -287,17 +341,16 @@ const usersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
-  fetchUser: (req, res) => {
+  fetchOne: (req, res) => {
     if (!isNaN(parseInt(req.params.id, 10))) {
       User
         .findById(req.params.id)
         .then((user) => {
           if (!user) {
-            res.status(404).send({
-              message: 'user not found'
-            });
+            returnUserNotFound(res);
           } else {
             Role.findById(user.roleId)
               .then((role) => {
@@ -326,6 +379,7 @@ const usersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   fetchUserDocuments(req, res) {
@@ -338,9 +392,7 @@ const usersController = {
         })
         .then((user) => {
           if (!user) {
-            res.status(404).send({
-              message: 'user not found'
-            });
+            returnUserNotFound(res);
           } else if (parseInt(req.params.id, 10) !== req.userId) {
             res.status(403).send({
               message: "you can't fetch another users documents"
@@ -371,18 +423,30 @@ const usersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   updateUser: (req, res) => {
+    const {
+      username,
+      firstname,
+      lastname,
+      newPassword,
+      currentPassword,
+      confirmPassword,
+      roleId,
+      email
+    } = req.body;
+
     const userData = {
-      username: req.body.username,
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      newPassword: req.body.newPassword,
-      currentPassword: req.body.currentPassword,
-      confirmPassword: req.body.confirmPassword,
-      roleId: req.body.roleId,
-      email: req.body.email
+      username,
+      firstname,
+      lastname,
+      newPassword,
+      currentPassword,
+      confirmPassword,
+      roleId,
+      email
     };
     const validation = Validator.validateUserEdit(userData);
     if (validation.isValid) {
@@ -391,38 +455,34 @@ const usersController = {
           .findById(req.params.id)
           .then((user) => {
             if (!user) {
-              res.status(404).send({
-                message: 'user not found'
-              });
+              returnUserNotFound(res);
             } else {
               if (userData.newPassword) {
-                auth.comparePassword(
+                AuthHelpers.comparePassword(
                   userData.currentPassword, user.password
                 );
               }
               if (userData.email || userData.username) {
                 User.find({
                   where: {
-                    $or: [{
-                      email: req.body.email,
-                    }, {
-                      username: req.body.username
-                    }]
+                    $or: [
+                      { email }, { username }
+                    ]
                   }
                 })
                 .then((conflictingUser) => {
                   if (conflictingUser) {
-                    res.status(403).send({
+                    res.status(409).send({
                       message:
                         'a user already has that email address or username'
                     });
                   } else {
-                    confirmRole(req, res, user);
+                    updateUser(req, res, user);
                   }
                 })
                 .catch(() => returnServerError(res));
               } else {
-                confirmRole(req, res, user);
+                updateUser(req, res, user);
               }
             }
           })
@@ -453,6 +513,7 @@ const usersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   deleteUser: (req, res) => {
@@ -466,9 +527,7 @@ const usersController = {
           .findById(req.params.id)
           .then((user) => {
             if (!user) {
-              res.status(404).send({
-                message: 'user not found'
-              });
+              returnUserNotFound(res);
             } else {
               user.destroy({
                 cascade: true
@@ -498,27 +557,29 @@ const usersController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   search: (req, res) => {
+    const query = req.query.q;
     User
     .findAll({
       where: {
         $or: [{
           username: {
-            $ilike: `%${req.query.q}%`
+            $ilike: `%${query}%`
           }
         }, {
           email: {
-            $ilike: `%${req.query.q}%`
+            $ilike: `%${query}%`
           }
         }, {
           firstname: {
-            $ilike: `%${req.query.q}%`
+            $ilike: `%${query}%`
           }
         }, {
           lastname: {
-            $ilike: `%${req.query.q}%`
+            $ilike: `%${query}%`
           }
         }],
         roleId: {
@@ -534,4 +595,4 @@ const usersController = {
   }
 };
 
-export default usersController;
+export default UsersController;

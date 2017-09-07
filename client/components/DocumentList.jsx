@@ -72,6 +72,7 @@ DocumentList.defaultProps = {
  * @function mapStateToProps
  *
  * @param {Object} state - Redux State
+ *
  * @returns {object} props
  */
 const mapStateToProps = state => ({

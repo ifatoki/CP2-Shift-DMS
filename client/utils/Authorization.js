@@ -9,6 +9,7 @@ const { addUser } = usersActions;
  * A class that handles part of
  * the authentication needs of the application
  * @export Authorization
+ *
  * @class Authorization
  */
 export default class Authorization {
@@ -16,9 +17,12 @@ export default class Authorization {
    * @method decodeToken
    *
    * @static
+   *
    * @param {string} token - Token to be decoded
    * @param {Callback} callback - Callback function on completion
+   *
    * @memberof Authorization
+   *
    * @returns {void}
    */
   static decodeToken(token, callback) {
@@ -41,9 +45,12 @@ export default class Authorization {
    * @method setUser
    *
    * @static
+   *
    * @param {Object} user - User Object for localStorage
    * @param {string} token - User token for localStorage
+   *
    * @memberof Authorization
+   *
    * @returns {void}
    */
   static setUser(user, token) {

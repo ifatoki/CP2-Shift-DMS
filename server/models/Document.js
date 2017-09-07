@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const document = sequelize.define('Document', {
+  const Document = sequelize.define('Document', {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -21,27 +21,28 @@ export default (sequelize, DataTypes) => {
        * @function associate
        *
        * @param {Object} models - Sequelize Models
+       *
        * @returns {void}
        */
       associate(models) {
         // associations can be defined here
-        document.belongsToMany(models.User, {
+        Document.belongsToMany(models.User, {
           through: 'DocumentUser',
           foreignKey: 'documentId',
         });
-        document.belongsToMany(models.Role, {
+        Document.belongsToMany(models.Role, {
           through: 'DocumentRole',
           foreignKey: 'documentId'
         });
-        document.belongsTo(models.User, {
+        Document.belongsTo(models.User, {
           foreignKey: 'ownerId',
           onDelete: 'CASCADE'
         });
-        document.belongsTo(models.Access, {
+        Document.belongsTo(models.Access, {
           foreignKey: 'accessId',
         });
       }
     }
   });
-  return document;
+  return Document;
 };

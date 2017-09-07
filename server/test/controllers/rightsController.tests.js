@@ -2,14 +2,14 @@ import chai from 'chai';
 import assertArrays from 'chai-arrays';
 import request from 'supertest';
 import app from '../../app';
-import tokens from '../helpers/tokens';
+import Tokens from '../helpers/Tokens';
 
 const { Right } = require('../../models');
 
 const expect = chai.expect;
 chai.use(assertArrays);
 
-const { overlordToken } = tokens;
+const { overlordToken } = Tokens;
 
 describe('Right Controllers:', () => {
   describe('Endpoints: Right', () => {
@@ -63,7 +63,7 @@ describe('Right Controllers:', () => {
             done(err);
           });
       });
-      it(`should return 403 error when a right with the 
+      it(`should return 409 error when a right with the 
       same title already exists`, (done) => {
         request(app)
           .post('/api/v1/rights')
@@ -74,7 +74,7 @@ describe('Right Controllers:', () => {
             description: 'My awesome avatar'
           })
           .then((res) => {
-            expect(res.status).to.equal(403);
+            expect(res.status).to.equal(409);
             expect(res.body)
               .to.have.property('message')
               .which.equals('right already exists');

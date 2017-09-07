@@ -3,8 +3,6 @@ import isEmpty from 'lodash/isEmpty';
 
 /**
  * Validates server and client side requests.
- *
- * @export
  * @class Validator
  */
 export default class Validator {
@@ -13,8 +11,11 @@ export default class Validator {
    * @method validateLogin
    *
    * @static
+   *
    * @param {object} userData - User signin data
+   *
    * @returns {object} Contains an errors array and isValid boolean
+   *
    * @memberof Validator
    */
   static validateLogin({ username, password }) {
@@ -33,8 +34,11 @@ export default class Validator {
    * @method validateSignUp
    *
    * @static
+   *
    * @param {object} userData - User signup data
+   *
    * @returns {object} Contains an errors array and isValid boolean
+   *
    * @memberof Validator
    */
   static validateSignUp({
@@ -68,8 +72,11 @@ export default class Validator {
    * @method validateUserEdit
    *
    * @static
+   *
    * @param {object} userData
+   *
    * @returns {object} Contains an errors array and isValid boolean
+   *
    * @memberof Validator
    */
   static validateUserEdit({
@@ -113,8 +120,11 @@ export default class Validator {
    * @method validateNewDocument
    *
    * @static
+   *
    * @param {object} userData
+   *
    * @returns {object} Contains an errors array and isValid boolean
+   *
    * @memberof Validator
    */
   static validateNewDocument({ title, accessId }) {
@@ -135,8 +145,11 @@ export default class Validator {
    * @method validateDocumentEdit
    *
    * @static
+   *
    * @param {object} userData
+   *
    * @returns {object} Contains an errors array and isValid boolean
+   *
    * @memberof Validator
    */
   static validateDocumentEdit({ title, accessId }) {
@@ -159,7 +172,9 @@ export default class Validator {
    * @method reconcileErrors
    *
    * @static
+   *
    * @returns {object} Contains an errors array and isValid boolean
+   *
    * @memberof Validator
    */
   static reconcileErrors() {

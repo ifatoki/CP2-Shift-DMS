@@ -2,11 +2,19 @@ import lodash from 'lodash';
 import { User, Document, Role } from '../models';
 import Validator from '../utils/Validator';
 
+// Enum to hold all possible document types
+const documentTypesEnum = {
+  PRIVATE: 1,
+  PUBLIC: 2,
+  SHARED: 3
+};
+
 /**
  * Returns a 500 server error with the server response
  * @function returnServerError
  *
  * @param {Object} res - Server Response Object
+ *
  * @returns {void}
  */
 const returnServerError = res => (
@@ -20,6 +28,7 @@ const returnServerError = res => (
  * @function getValidatorErrorMessage
  *
  * @param {Object} errors - An errors Object
+ *
  * @returns {string} A compilation of the errors
  */
 const getValidatorErrorMessage = errors => (
@@ -33,15 +42,13 @@ const getValidatorErrorMessage = errors => (
  * @function filterDocument
  *
  * @param {Object} document - Document Object
+ *
  * @return {Object} A filtered document
  */
-const filterDocument = document => ({
-  id: document.id,
-  title: document.title,
-  content: document.content,
-  updatedAt: document.updatedAt,
-  ownerId: document.ownerId,
-  accessId: document.accessId
+const filterDocument = ({
+  id, title, content, updatedAt, ownerId, accessId
+}) => ({
+  id, title, content, updatedAt, ownerId, accessId
 });
 
 /**
@@ -51,6 +58,7 @@ const filterDocument = document => ({
  * @param {Object} document - Document Object
  * @param {Object} req - Server Request Object
  * @param {Object} res - Server Response Object
+ *
  * @return {void}
  */
 const deleteDocument = (document, req, res) => {
@@ -71,6 +79,7 @@ const deleteDocument = (document, req, res) => {
  * @param {Object} res - Server Response Object
  * @param {Object} newDocument - Document Object
  * @param {Object} documentData - Document Object
+ *
  * @returns {void}
  */
 const addRolesToDocument = (req, res, newDocument, documentData) => {
@@ -120,6 +129,7 @@ const addRolesToDocument = (req, res, newDocument, documentData) => {
  * @param {Object} document - Document Object
  * @param {Object} req - Server Request Object
  * @param {Object} res - Server Response Object
+ *
  * @returns {void}
  */
 const updateDocument = (document, req, res) => {
@@ -164,6 +174,7 @@ const updateDocument = (document, req, res) => {
  * @function returnDocumentNotFound
  *
  * @param {Object} res - Server Response Object
+ *
  * @return {void}
  */
 const returnDocumentNotFound = res => (
@@ -172,39 +183,44 @@ const returnDocumentNotFound = res => (
   })
 );
 
-const documentsController = {
+const DocumentsController = {
   /**
    * Create a new document with the passed details
    * @function create
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   create: (req, res) => {
+    const {
+      title, content, accessId, roles
+    } = req.body;
+
     const documentData = {
-      title: req.body.title,
-      content: req.body.content,
+      title,
+      content,
+      accessId,
       ownerId: req.userId,
-      accessId: req.body.accessId
     };
-    if (req.body.roles) {
-      documentData.accessId =
-        Object.keys(req.body.roles).length ? 3 : req.body.accessId;
-      documentData.rolesIds = Object.keys(req.body.roles);
-      documentData.roles = req.body.roles;
-    }
     const validation = Validator.validateNewDocument(documentData);
     if (validation.isValid) {
+      if (req.body.roles) {
+        documentData.accessId =
+          Object.keys(roles).length ? 3 : accessId;
+        documentData.rolesIds = Object.keys(roles);
+        documentData.roles = roles;
+      }
       Document
       .findOne({
         where: {
-          title: req.body.title
+          title,
         }
       })
       .then((document) => {
         if (document) {
-          res.status(403).send({
+          res.status(409).send({
             message: 'a document with that title already exists'
           });
         } else {
@@ -239,20 +255,21 @@ const documentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   fetchAll: (req, res) => {
     const query = {};
     switch (req.query.type) {
     case 'public':
-      query.accessId = 2;
+      query.accessId = documentTypesEnum.PUBLIC;
       break;
     case 'role':
     case 'shared':
       query.ownerId = req.userId;
       break;
     default:
-      query.accessId = 1;
+      query.accessId = documentTypesEnum.PRIVATE;
       query.ownerId = req.userId;
       break;
     }
@@ -307,6 +324,7 @@ const documentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   fetchOne: (req, res) => {
@@ -393,13 +411,17 @@ const documentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @return {void}
    */
   update: (req, res) => {
+    const {
+      title, content, accessId
+    } = req.body;
     const documentData = {
-      title: req.body.title,
-      content: req.body.content,
-      accessId: req.body.accessId
+      title,
+      content,
+      accessId,
     };
 
     const validation = Validator.validateDocumentEdit(documentData);
@@ -413,7 +435,7 @@ const documentsController = {
           Document
             .findOne({
               where: {
-                title: req.body.title,
+                title,
                 id: {
                   $ne: document.id
                 }
@@ -421,7 +443,7 @@ const documentsController = {
             })
             .then((duplicateDocument) => {
               if (duplicateDocument) {
-                res.status(403).send({
+                res.status(409).send({
                   message: 'a document with that title already exists'
                 });
               } else if (document.ownerId === req.userId) {
@@ -497,6 +519,7 @@ const documentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   delete: (req, res) => {
@@ -577,6 +600,7 @@ const documentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   search: (req, res) => {
@@ -685,6 +709,7 @@ const documentsController = {
    *
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
+   *
    * @returns {void}
    */
   addUser: (req, res) => {
@@ -711,4 +736,4 @@ const documentsController = {
   }
 };
 
-export default documentsController;
+export default DocumentsController;

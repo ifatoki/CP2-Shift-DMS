@@ -10,14 +10,17 @@ const { getUser, deleteUser } = usersActions;
 /**
  * A React component that helps display a single user
  *
- * @export
+ * @export User
+ *
  * @class User
+ *
  * @extends {React.Component}
  */
 export class User extends React.Component {
   /**
    * Creates an instance of User.
    * @param {Object} props - Component Props
+   *
    * @memberof User
    */
   constructor(props) {
@@ -32,6 +35,7 @@ export class User extends React.Component {
    * @method clickHandler
    *
    * @memberof User
+   *
    * @returns {void}
    */
   clickHandler() {
@@ -46,6 +50,7 @@ export class User extends React.Component {
    * @method deleteUser
    *
    * @memberof User
+   *
    * @returns {void}
    */
   deleteUser() {
@@ -57,6 +62,7 @@ export class User extends React.Component {
    * @method render
    *
    * @returns {void}
+   *
    * @memberof User
    */
   render() {

@@ -1,13 +1,14 @@
 import bcrypt from 'bcryptjs';
-import local from './local';
+import Local from './Local';
 import { User } from '../models';
 
-const helpers = {
+const AuthHelpers = {
   /**
    * Encrypts a password and returns the new encrypted one.
    * @function encrypt
    *
    * @param {string} password - Password to be encrypted
+   *
    * @returns {string|null} The encrypted password or null for an error
    */
   encrypt(password) {
@@ -25,7 +26,9 @@ const helpers = {
    *
    * @param {string} userPassword - Password entered by user
    * @param {string} databasePassword - Hashed password from database
+   *
    * @returns {true} when the passwords passed match
+   *
    * @throws {Error} when there is no match
    */
   comparePassword(userPassword, databasePassword) {
@@ -45,6 +48,7 @@ const helpers = {
    * @param {Object} req - Server Request Object
    * @param {Object} res - Server Response Object
    * @param {ResponseCallback} next - Server Middleware Callback
+   *
    * @returns {json} the response object
    */
   confirmAuthentication(req, res, next) {
@@ -56,7 +60,7 @@ const helpers = {
     // decode the token
     const header = req.headers.authorization.split(' ');
     const token = header[1];
-    local.decodeToken(token, (err, payload) => {
+    Local.decodeToken(token, (err, payload) => {
       let status;
       let statusMessage;
       if (err) {
@@ -90,4 +94,4 @@ const helpers = {
   }
 };
 
-export default helpers;
+export default AuthHelpers;
