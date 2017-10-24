@@ -10,7 +10,7 @@
     "test": "npm run test-server && npm run test-client",
     "dev": "nodemon --watch server ./server/bin/www --exec babel-node",
     "prestart": "npm run build",
-    "start": "node ./dist/bin/www",
+    "start": "NODE_ENV=production node ./dist/bin/www",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rimraf ./dist && babel ./server -d ./dist --copy-files"
   },

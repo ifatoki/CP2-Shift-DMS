@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "",
+    "username": "andeladeveloper",
     "password": null,
     "database": "shift-dms-dev",
     "host": "localhost",
@@ -8,19 +8,9 @@
     "dialect": "postgres"
   },
   "test": {
-    "username": "wtgvyalj",
-    "password": "HrSPNSOb6dByUNjzbN4YzBPJQ8rob3yr",
-    "database": "wtgvyalj",
-    "host": "stampy.db.elephantsql.com",
-    "port": 5432,
-    "dialect": "postgres"
+    "use_env_variable": "TEST_DATABASE_URL"
   },
   "production": {
-    "username": "glrqmkod",
-    "password": "XZL1Oe0yEVayDYOXR0Q2B1ZP2pQK48Zu",
-    "database": "glrqmkod",
-    "host": "stampy.db.elephantsql.com",
-    "port": 5432,
-    "dialect": "postgres"
+    "use_env_variable": "PROD_DATABASE_URL"
   }
 }
