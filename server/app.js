@@ -19,6 +19,7 @@ if (debug) {
   app.use(webpackHotMiddleware(compiler));
 
   // Log requests to the console.
+  // Just a small something so I can have something to commit and push. LOL
   app.use(logger('dev'));
 }
 

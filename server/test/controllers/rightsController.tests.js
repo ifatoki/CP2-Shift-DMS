@@ -24,7 +24,7 @@ describe('Right Controllers:', () => {
           .then((res) => {
             expect(res.body).to.have.a.property('rights');
             expect(res.body.rights).to.be.array().ofSize(3);
-            expect(res.body.rights[0]).to.have.property('title', 'delete');
+            expect(res.body.rights[0]).to.have.property('title', 'edit');
             done();
           })
           .catch((err) => {
