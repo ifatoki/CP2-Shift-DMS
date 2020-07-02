@@ -1,0 +1,11 @@
+node_modules
+coverage
+client/assets/js/client.min.js
+.DS_Store
+.nyc_output
+.env
+server/config/config.json.sample
+dist
+selenium-debug.log
+reports
+.idea
