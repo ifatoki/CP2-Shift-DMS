@@ -31,6 +31,13 @@ li {
 .ui.card .ui.content {
   padding-bottom: 0; }
 
+.ui.card .meta {
+  font-family: "Indie Flower"; }
+
+.ui.huge.header {
+  font-family: "Baloo Bhaijaan";
+  color: #696969; }
+
 .inherit {
   height: inherit; }
 

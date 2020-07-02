@@ -193,61 +193,61 @@ const DocumentsController = {
    *
    * @returns {void}
    */
-  create: (req, res) => {
-    const {
-      title, content, accessId, roles
-    } = req.body;
+  // create: (req, res) => {
+  //   const {
+  //     title, content, accessId, roles
+  //   } = req.body;
 
-    const documentData = {
-      title,
-      content,
-      accessId,
-      ownerId: req.userId,
-    };
-    const validation = Validator.validateNewDocument(documentData);
-    if (validation.isValid) {
-      if (req.body.roles) {
-        documentData.accessId =
-          Object.keys(roles).length ? 3 : accessId;
-        documentData.rolesIds = Object.keys(roles);
-        documentData.roles = roles;
-      }
-      Document
-      .findOne({
-        where: {
-          title,
-        }
-      })
-      .then((document) => {
-        if (document) {
-          res.status(409).send({
-            message: 'a document with that title already exists'
-          });
-        } else {
-          Document
-            .create(documentData)
-            .then((newDocument) => {
-              if (documentData.accessId === 3 &&
-                documentData.roles &&
-                documentData.rolesIds.length > 0
-              ) {
-                addRolesToDocument(req, res, newDocument, documentData);
-              } else {
-                res.status(201).send({
-                  document: filterDocument(newDocument)
-                });
-              }
-            })
-            .catch(() => returnServerError(res));
-        }
-      })
-      .catch(() => returnServerError(res));
-    } else {
-      res.status(400).send({
-        message: getValidatorErrorMessage(validation.errors)
-      });
-    }
-  },
+  //   const documentData = {
+  //     title,
+  //     content,
+  //     accessId,
+  //     ownerId: req.userId,
+  //   };
+  //   const validation = Validator.validateNewDocument(documentData);
+  //   if (validation.isValid) {
+  //     if (req.body.roles) {
+  //       documentData.accessId =
+  //         Object.keys(roles).length ? 3 : accessId;
+  //       documentData.rolesIds = Object.keys(roles);
+  //       documentData.roles = roles;
+  //     }
+  //     Document
+  //     .findOne({
+  //       where: {
+  //         title,
+  //       }
+  //     })
+  //     .then((document) => {
+  //       if (document) {
+  //         res.status(409).send({
+  //           message: 'a document with that title already exists'
+  //         });
+  //       } else {
+  //         Document
+  //           .create(documentData)
+  //           .then((newDocument) => {
+  //             if (documentData.accessId === 3 &&
+  //               documentData.roles &&
+  //               documentData.rolesIds.length > 0
+  //             ) {
+  //               addRolesToDocument(req, res, newDocument, documentData);
+  //             } else {
+  //               res.status(201).send({
+  //                 document: filterDocument(newDocument)
+  //               });
+  //             }
+  //           })
+  //           .catch(() => returnServerError(res));
+  //       }
+  //     })
+  //     .catch(() => returnServerError(res));
+  //   } else {
+  //     res.status(400).send({
+  //       message: getValidatorErrorMessage(validation.errors)
+  //     });
+  //   }
+  // },
 
   /**
    * Fetch and return all available documents
@@ -327,83 +327,83 @@ const DocumentsController = {
    *
    * @returns {void}
    */
-  fetchOne: (req, res) => {
-    if (!isNaN(parseInt(req.params.id, 10))) {
-      Document
-        .findById(req.params.id)
-        .then((document) => {
-          if (!document) {
-            returnDocumentNotFound(res);
-          } else {
-            const response = { document: filterDocument(document) };
-            if (document.ownerId === req.userId) {
-              response.rightId = 1;
-              if (document.accessId === 3) {
-                document.getRoles({
-                  joinTableAttributes: ['rightId']
-                })
-                .then((roles) => {
-                  const documentRoles = lodash.map(
-                    roles, role => role.dataValues.id);
-                  response.documentRoles = documentRoles;
-                  res.status(200).send(response);
-                })
-                .catch(() => returnServerError(res));
-              } else {
-                res.status(200).send(response);
-              }
-            } else if (document.accessId === 2) {
-              response.rightId = 3;
-              res.status(200).send(response);
-            } else {
-              document.getUsers({
-                where: {
-                  id: req.userId
-                },
-                joinTableAttributes: ['rightId']
-              })
-              .then((user) => {
-                if (user.length < 1) {
-                  document.getRoles({
-                    joinTableAttributes: ['rightId']
-                  })
-                  .then((roles) => {
-                    if (roles.length < 1) {
-                      res.status(401).send({
-                        message:
-                          'you are not authorized to access this document'
-                      });
-                    } else {
-                      const newRoles =
-                        lodash.map(roles, role => role.dataValues);
-                      const documentRoles = lodash.map(
-                        roles, role => role.dataValues.id);
-                      const userRole =
-                        lodash.find(newRoles, { 'id': req.roleId });
-                      response.rightId =
-                        userRole.DocumentRole.dataValues.rightId;
-                      response.documentRoles = documentRoles;
-                      res.status(200).send(response);
-                    }
-                  })
-                  .catch(() => returnServerError(res));
-                } else {
-                  response.rightId =
-                    user[0].dataValues.DocumentUser.dataValues.rightId;
-                  res.status(200).send(response);
-                }
-              })
-              .catch(() => returnServerError(res));
-            }
-          }
-        })
-        .catch(() => returnServerError(res));
-    } else {
-      res.status(400).send({
-        message: 'id must be an integer'
-      });
-    }
-  },
+  // fetchOne: (, res) => {
+  //   if (!isNaNreq(parseInt(req.params.id, 10))) {
+  //     Document
+  //       .findById(req.params.id)
+  //       .then((document) => {
+  //         if (!document) {
+  //           returnDocumentNotFound(res);
+  //         } else {
+  //           const response = { document: filterDocument(document) };
+  //           if (document.ownerId === req.userId) {
+  //             response.rightId = 1;
+  //             if (document.accessId === 3) {
+  //               document.getRoles({
+  //                 joinTableAttributes: ['rightId']
+  //               })
+  //               .then((roles) => {
+  //                 const documentRoles = lodash.map(
+  //                   roles, role => role.dataValues.id);
+  //                 response.documentRoles = documentRoles;
+  //                 res.status(200).send(response);
+  //               })
+  //               .catch(() => returnServerError(res));
+  //             } else {
+  //               res.status(200).send(response);
+  //             }
+  //           } else if (document.accessId === 2) {
+  //             response.rightId = 3;
+  //             res.status(200).send(response);
+  //           } else {
+  //             document.getUsers({
+  //               where: {
+  //                 id: req.userId
+  //               },
+  //               joinTableAttributes: ['rightId']
+  //             })
+  //             .then((user) => {
+  //               if (user.length < 1) {
+  //                 document.getRoles({
+  //                   joinTableAttributes: ['rightId']
+  //                 })
+  //                 .then((roles) => {
+  //                   if (roles.length < 1) {
+  //                     res.status(401).send({
+  //                       message:
+  //                         'you are not authorized to access this document'
+  //                     });
+  //                   } else {
+  //                     const newRoles =
+  //                       lodash.map(roles, role => role.dataValues);
+  //                     const documentRoles = lodash.map(
+  //                       roles, role => role.dataValues.id);
+  //                     const userRole =
+  //                       lodash.find(newRoles, { 'id': req.roleId });
+  //                     response.rightId =
+  //                       userRole.DocumentRole.dataValues.rightId;
+  //                     response.documentRoles = documentRoles;
+  //                     res.status(200).send(response);
+  //                   }
+  //                 })
+  //                 .catch(() => returnServerError(res));
+  //               } else {
+  //                 response.rightId =
+  //                   user[0].dataValues.DocumentUser.dataValues.rightId;
+  //                 res.status(200).send(response);
+  //               }
+  //             })
+  //             .catch(() => returnServerError(res));
+  //           }
+  //         }
+  //       })
+  //       .catch(() => returnServerError(res));
+  //   } else {
+  //     res.status(400).send({
+  //       message: 'id must be an integer'
+  //     });
+  //   }
+  // },
 
   /**
    * Modify the document with the passed id with the passed data

@@ -6,6 +6,7 @@ import {
   RolesController,
   RightsController
 } from '../controllers';
+import { fetchOne, create } from '../controllers/helpers/documents';
 
 /**
  * Function index that handles all endpoints
@@ -79,7 +80,8 @@ const index = (app) => {
   app.post(
     '/api/v1/documents',
     AuthHelpers.confirmAuthentication,
-    DocumentsController.create
+    // DocumentsController.create,
+    create
   );
   // find all documents
   app.get('/api/v1/documents/',
@@ -90,7 +92,7 @@ const index = (app) => {
   app.get(
     '/api/v1/documents/:id',
     AuthHelpers.confirmAuthentication,
-    DocumentsController.fetchOne
+    fetchOne
   );
   // update the specified documents attributes
   app.put(
